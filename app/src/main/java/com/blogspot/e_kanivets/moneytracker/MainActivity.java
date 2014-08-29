@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -69,7 +70,29 @@ public class MainActivity extends ActionBarActivity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setView(layout);
-        builder.show();
+
+        final AlertDialog dialog = builder.show();
+
+        TextView tvTitle = (TextView) layout.findViewById(R.id.tv_title);
+        tvTitle.setText(R.string.expense);
+        tvTitle.setBackgroundColor(getResources().getColor(R.color.red_light));
+
+        Button buttonAdd = (Button) layout.findViewById(R.id.b_add);
+        buttonAdd.setText(getResources().getString(R.string.add_expense));
+        buttonAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        Button buttonCancel = (Button) layout.findViewById(R.id.b_cancel);
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
     }
 
     private void showAddIncomeDialog() {
@@ -77,6 +100,28 @@ public class MainActivity extends ActionBarActivity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setView(layout);
-        builder.show();
+
+        final AlertDialog dialog = builder.show();
+
+        TextView tvTitle = (TextView) layout.findViewById(R.id.tv_title);
+        tvTitle.setText(R.string.income);
+        tvTitle.setBackgroundColor(getResources().getColor(R.color.green_light));
+
+        Button buttonAdd = (Button) layout.findViewById(R.id.b_add);
+        buttonAdd.setText(getResources().getString(R.string.add_income));
+        buttonAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        Button buttonCancel = (Button) layout.findViewById(R.id.b_cancel);
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
     }
 }

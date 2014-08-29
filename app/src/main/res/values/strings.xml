@@ -5,8 +5,9 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
+    <string name="title">Title</string>
     <string name="category">Category</string>
-    <string name="amount">Amount</string>
+    <string name="price">Price</string>
     <string name="add_income">Add income</string>
     <string name="add_expense">Add expense</string>
     <string name="income">INCOME</string>
