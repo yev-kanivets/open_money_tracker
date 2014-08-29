@@ -16,7 +16,7 @@ public class AddExpenseDialog extends AlertDialog {
 
     private Context context;
 
-    protected AddExpenseDialog(Context context) {
+    public AddExpenseDialog(Context context) {
         super(context);
         this.context = context;
     }

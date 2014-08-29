@@ -16,7 +16,7 @@ public class AddIncomeDialog extends AlertDialog {
 
     private Context context;
 
-    protected AddIncomeDialog(Context context) {
+    public AddIncomeDialog(Context context) {
         super(context);
         this.context = context;
     }
