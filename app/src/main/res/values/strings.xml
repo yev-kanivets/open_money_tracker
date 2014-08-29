@@ -7,7 +7,11 @@
 
     <string name="category">Category</string>
     <string name="amount">Amount</string>
+    <string name="add_income">Add income</string>
+    <string name="add_expense">Add expense</string>
     <string name="income">INCOME</string>
     <string name="expense">EXPENSE</string>
+    <string name="cancel">Cancel</string>
+    <string name="add">Add</string>
 
 </resources>
