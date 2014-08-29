@@ -1,14 +1,15 @@
 package com.blogspot.e_kanivets.moneytracker;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
+
+import com.blogspot.e_kanivets.moneytracker.ui.AddExpenseDialog;
+import com.blogspot.e_kanivets.moneytracker.ui.AddIncomeDialog;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -33,14 +34,14 @@ public class MainActivity extends ActionBarActivity {
         btnAddIncome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showAddIncomeDialog();
+                new AddIncomeDialog(activity).show();
             }
         });
 
         btnAddExpense.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showAddExpenseDialog();
+                new AddExpenseDialog(activity).show();
             }
         });
     }
@@ -63,65 +64,5 @@ public class MainActivity extends ActionBarActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void showAddExpenseDialog() {
-        View layout = getLayoutInflater().inflate(R.layout.dialog_add_record, null);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setView(layout);
-
-        final AlertDialog dialog = builder.show();
-
-        TextView tvTitle = (TextView) layout.findViewById(R.id.tv_title);
-        tvTitle.setText(R.string.expense);
-        tvTitle.setBackgroundColor(getResources().getColor(R.color.red_light));
-
-        Button buttonAdd = (Button) layout.findViewById(R.id.b_add);
-        buttonAdd.setText(getResources().getString(R.string.add_expense));
-        buttonAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        Button buttonCancel = (Button) layout.findViewById(R.id.b_cancel);
-        buttonCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-    }
-
-    private void showAddIncomeDialog() {
-        View layout = getLayoutInflater().inflate(R.layout.dialog_add_record, null);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setView(layout);
-
-        final AlertDialog dialog = builder.show();
-
-        TextView tvTitle = (TextView) layout.findViewById(R.id.tv_title);
-        tvTitle.setText(R.string.income);
-        tvTitle.setBackgroundColor(getResources().getColor(R.color.green_light));
-
-        Button buttonAdd = (Button) layout.findViewById(R.id.b_add);
-        buttonAdd.setText(getResources().getString(R.string.add_income));
-        buttonAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        Button buttonCancel = (Button) layout.findViewById(R.id.b_cancel);
-        buttonCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
     }
 }
