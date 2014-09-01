@@ -20,6 +20,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("create table " + Constants.TABLE_RECORDS + "("
             + "id integer primary key autoincrement,"
             + "time integer,"
+            + "type integer,"
             + "title text,"
             + "category_id integer,"
             + "price integer" + ");");

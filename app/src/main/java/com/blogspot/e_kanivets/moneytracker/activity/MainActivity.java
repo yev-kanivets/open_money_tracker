@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.helper.DBHelper;
@@ -21,6 +22,8 @@ public class MainActivity extends ActionBarActivity {
 
     private DBHelper dbHelper;
 
+    private ListView listView;
+
     private Button btnAddIncome;
     private Button btnAddExpense;
 
@@ -34,6 +37,8 @@ public class MainActivity extends ActionBarActivity {
         //Link views
         btnAddIncome = (Button) findViewById(R.id.b_add_income);
         btnAddExpense = (Button) findViewById(R.id.b_add_expense);
+
+        listView = (ListView) findViewById(R.id.listView);
 
         //Set listeners
         btnAddIncome.setOnClickListener(new View.OnClickListener() {
