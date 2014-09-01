@@ -17,6 +17,7 @@ import android.widget.ListView;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.adapter.RecordAdapter;
 import com.blogspot.e_kanivets.moneytracker.helper.DBHelper;
+import com.blogspot.e_kanivets.moneytracker.helper.MTHelper;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
 import com.blogspot.e_kanivets.moneytracker.ui.AddExpenseDialog;
 import com.blogspot.e_kanivets.moneytracker.ui.AddIncomeDialog;
@@ -25,13 +26,13 @@ import com.blogspot.e_kanivets.moneytracker.util.MTApp;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements Observer{
 
     private Activity activity;
-
-    private DBHelper dbHelper;
 
     private ListView listView;
 
@@ -44,7 +45,6 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         activity = this;
-        dbHelper = MTApp.get().getDbHelper();
 
         //Link views
         btnAddIncome = (Button) findViewById(R.id.b_add_income);
@@ -57,15 +57,6 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 AddIncomeDialog dialog = new AddIncomeDialog(activity);
-
-                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        Log.d(Constants.TAG, "onDismiss");
-                        retrieveDataFromDB();
-                    }
-                });
-
                 dialog.show();
             }
         });
@@ -74,20 +65,15 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 AddExpenseDialog dialog = new AddExpenseDialog(activity);
-
-                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        Log.d(Constants.TAG, "onDismiss");
-                        retrieveDataFromDB();
-                    }
-                });
-
                 dialog.show();
             }
         });
 
-        retrieveDataFromDB();
+        listView.setAdapter(new RecordAdapter(activity, MTHelper.getInstance().getRecords()));
+        ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
+
+        //Subscribe to helper
+        MTHelper.getInstance().addObserver(this);
     }
 
 
@@ -110,41 +96,9 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void retrieveDataFromDB() {
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-        Cursor cursor = db.query(Constants.TABLE_RECORDS, null, null, null, null, null, null);
-
-        final List<Record> records = new ArrayList<Record>();
-
-        if(cursor.moveToFirst()) {
-            //Get indexes of columns
-            int idColIndex = cursor.getColumnIndex("id");
-            int titleColIndex = cursor.getColumnIndex("title");
-            int categoryColIndex = cursor.getColumnIndex("category_id");
-            int priceColIndex = cursor.getColumnIndex("price");
-
-            do {
-                //Add record to list
-                records.add(new Record(cursor.getInt(idColIndex),
-                        cursor.getString(titleColIndex),
-                        Integer.toString(cursor.getInt(categoryColIndex)),
-                        cursor.getString(priceColIndex)));
-            } while (cursor.moveToNext());
-        }
-
-        db.close();
-
-        listView.setAdapter(new RecordAdapter(activity, records, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SQLiteDatabase db = dbHelper.getWritableDatabase();
-                db.delete(Constants.TABLE_RECORDS, "id=?",
-                        new String[] {Integer.toString(records.get((Integer)v.getTag()).getId())});
-                db.close();
-                retrieveDataFromDB();
-            }
-        }));
+    @Override
+    public void update(Observable observable, Object data) {
+        Log.d(Constants.TAG, "data has been changed");
         ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
     }
 }

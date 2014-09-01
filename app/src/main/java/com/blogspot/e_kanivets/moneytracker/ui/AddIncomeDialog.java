@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.helper.DBHelper;
+import com.blogspot.e_kanivets.moneytracker.helper.MTHelper;
 import com.blogspot.e_kanivets.moneytracker.util.Constants;
 import com.blogspot.e_kanivets.moneytracker.util.MTApp;
 
@@ -23,13 +24,10 @@ import com.blogspot.e_kanivets.moneytracker.util.MTApp;
 public class AddIncomeDialog extends AlertDialog {
 
     private Context context;
-    private DBHelper dbHelper;
 
     public AddIncomeDialog(Context context) {
         super(context);
         this.context = context;
-
-        dbHelper = MTApp.get().getDbHelper();
     }
 
     @Override
@@ -47,25 +45,11 @@ public class AddIncomeDialog extends AlertDialog {
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Init variables for inserting record to DB
-                ContentValues contentValues = new ContentValues();
-
                 String title = ((EditText) findViewById(R.id.et_title)).getText().toString();
                 String category = ((EditText) findViewById(R.id.et_category)).getText().toString();
-                String price = ((EditText) findViewById(R.id.et_price)).getText().toString();
+                int price = Integer.parseInt(((EditText) findViewById(R.id.et_price)).getText().toString());
 
-                SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-                contentValues.put("type", "0");
-                contentValues.put("title", title);
-                contentValues.put("category_id", 1);
-                contentValues.put("price", price);
-
-                long rowId = db.insert(Constants.TABLE_RECORDS, null, contentValues);
-
-                Log.d(Constants.TAG, "rowId = " + rowId);
-
-                db.close();
+                MTHelper.getInstance().addRecord(0, 0, title, 0, price);
 
                 dismiss();
             }

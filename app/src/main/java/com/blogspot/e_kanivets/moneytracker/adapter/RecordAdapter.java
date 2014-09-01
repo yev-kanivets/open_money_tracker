@@ -2,6 +2,7 @@ package com.blogspot.e_kanivets.moneytracker.adapter;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.helper.DBHelper;
+import com.blogspot.e_kanivets.moneytracker.helper.MTHelper;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
 import com.blogspot.e_kanivets.moneytracker.util.Constants;
 
@@ -24,12 +26,10 @@ public class RecordAdapter extends BaseAdapter{
     private Context context;
     private List<Record> records;
 
-    private View.OnClickListener onClickListener;
-
-    public RecordAdapter(Context context, List<Record> records, View.OnClickListener onClickListener) {
+    public RecordAdapter(Context context, List<Record> records) {
         this.context = context;
         this.records = records;
-        this.onClickListener = onClickListener;
+
     }
 
     @Override
@@ -58,12 +58,17 @@ public class RecordAdapter extends BaseAdapter{
 
         Button bRemove = (Button) convertView.findViewById(R.id.b_remove);
 
-        tvPrice.setText(records.get(position).getPrice());
+        tvPrice.setText(Integer.toString(records.get(position).getPrice()));
         tvTitle.setText(records.get(position).getTitle());
         tvCategory.setText(records.get(position).getCategory());
 
         bRemove.setTag(position);
-        bRemove.setOnClickListener(onClickListener);
+        bRemove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MTHelper.getInstance().deleteRecordById(Integer.parseInt(v.getTag().toString()));
+            }
+        });
 
         return convertView;
     }

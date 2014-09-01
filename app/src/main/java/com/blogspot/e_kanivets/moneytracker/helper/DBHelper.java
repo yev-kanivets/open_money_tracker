@@ -24,6 +24,10 @@ public class DBHelper extends SQLiteOpenHelper {
             + "title TEXT,"
             + "category_id INTEGER,"
             + "price INTEGER" + ");");
+
+        db.execSQL("CREATE TABLE " + Constants.TABLE_CATEGORIES + "("
+            + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + "name TEXT" + ");");
     }
 
     @Override
