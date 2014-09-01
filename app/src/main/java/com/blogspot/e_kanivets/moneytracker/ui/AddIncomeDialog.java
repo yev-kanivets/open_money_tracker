@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -40,6 +41,7 @@ public class AddIncomeDialog extends AlertDialog {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.dialog_add_record);
+
 
         TextView tvTitle = (TextView) findViewById(R.id.tv_title);
         tvTitle.setText(R.string.income);

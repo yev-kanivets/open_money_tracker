@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -68,6 +69,7 @@ public class AddExpenseDialog extends AlertDialog {
 
         //Horrible thing to show a software keyboard
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE|WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+
         setOnShowListener(new OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {

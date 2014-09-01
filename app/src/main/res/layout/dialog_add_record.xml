@@ -4,8 +4,7 @@
     android:orientation="vertical" android:layout_width="350dp"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    android:focusable="false"
-    android:focusableInTouchMode="false">
+    android:layout_gravity="center">
 
     <LinearLayout
         android:layout_weight="1"
