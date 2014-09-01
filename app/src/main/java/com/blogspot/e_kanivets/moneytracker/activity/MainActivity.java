@@ -1,4 +1,4 @@
-package com.blogspot.e_kanivets.moneytracker;
+package com.blogspot.e_kanivets.moneytracker.activity;
 
 import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
@@ -8,13 +8,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.blogspot.e_kanivets.moneytracker.R;
+import com.blogspot.e_kanivets.moneytracker.helper.DBHelper;
 import com.blogspot.e_kanivets.moneytracker.ui.AddExpenseDialog;
 import com.blogspot.e_kanivets.moneytracker.ui.AddIncomeDialog;
+import com.blogspot.e_kanivets.moneytracker.util.MTApp;
 
 
 public class MainActivity extends ActionBarActivity {
 
     private Activity activity;
+
+    private DBHelper dbHelper;
 
     private Button btnAddIncome;
     private Button btnAddExpense;
@@ -44,6 +49,8 @@ public class MainActivity extends ActionBarActivity {
                 new AddExpenseDialog(activity).show();
             }
         });
+
+        dbHelper = MTApp.get().getDbHelper();
     }
 
 

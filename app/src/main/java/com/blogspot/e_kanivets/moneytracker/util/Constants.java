@@ -1,4 +1,4 @@
-package com.blogspot.e_kanivets.moneytracker;
+package com.blogspot.e_kanivets.moneytracker.util;
 
 /**
  * Created by eugene on 29/08/14.

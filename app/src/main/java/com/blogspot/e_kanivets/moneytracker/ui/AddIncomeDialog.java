@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.blogspot.e_kanivets.moneytracker.R;
+import com.blogspot.e_kanivets.moneytracker.helper.DBHelper;
+import com.blogspot.e_kanivets.moneytracker.util.MTApp;
 
 /**
  * Created by eugene on 29/08/14.
@@ -15,10 +17,13 @@ import com.blogspot.e_kanivets.moneytracker.R;
 public class AddIncomeDialog extends AlertDialog {
 
     private Context context;
+    private DBHelper dbHelper;
 
     public AddIncomeDialog(Context context) {
         super(context);
         this.context = context;
+
+        dbHelper = MTApp.get().getDbHelper();
     }
 
     @Override

@@ -1,9 +1,10 @@
-package com.blogspot.e_kanivets.moneytracker;
+package com.blogspot.e_kanivets.moneytracker.helper;
 
-import android.app.Activity;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.blogspot.e_kanivets.moneytracker.util.Constants;
 
 /**
  * Created by eugene on 29/08/14.
