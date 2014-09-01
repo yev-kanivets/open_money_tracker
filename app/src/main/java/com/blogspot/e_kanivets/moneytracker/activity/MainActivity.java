@@ -98,7 +98,6 @@ public class MainActivity extends ActionBarActivity implements Observer{
 
     @Override
     public void update(Observable observable, Object data) {
-        Log.d(Constants.TAG, "data has been changed");
         ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
     }
 }

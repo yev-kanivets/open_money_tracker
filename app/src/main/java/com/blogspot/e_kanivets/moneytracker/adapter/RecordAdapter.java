@@ -62,11 +62,10 @@ public class RecordAdapter extends BaseAdapter{
         tvTitle.setText(records.get(position).getTitle());
         tvCategory.setText(records.get(position).getCategory());
 
-        bRemove.setTag(position);
         bRemove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MTHelper.getInstance().deleteRecordById(Integer.parseInt(v.getTag().toString()));
+                MTHelper.getInstance().deleteRecordById(records.get(position).getId());
             }
         });
 
