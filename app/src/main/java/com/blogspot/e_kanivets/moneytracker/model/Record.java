@@ -5,14 +5,21 @@ package com.blogspot.e_kanivets.moneytracker.model;
  */
 public class Record {
 
+    private int id;
+
     private String title;
     private String category;
     private String price;
 
-    public Record(String title, String category, String price) {
+    public Record(int id, String title, String category, String price) {
+        this.id = id;
         this.title = title;
         this.category = category;
         this.price = price;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getTitle() {

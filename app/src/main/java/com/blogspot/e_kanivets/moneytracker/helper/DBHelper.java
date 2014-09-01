@@ -17,13 +17,13 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("create table " + Constants.TABLE_RECORDS + "("
-            + "id integer primary key autoincrement,"
-            + "time integer,"
-            + "type integer,"
-            + "title text,"
-            + "category_id integer,"
-            + "price integer" + ");");
+        db.execSQL("CREATE TABLE " + Constants.TABLE_RECORDS + "("
+            + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + "time INTEGER,"
+            + "type INTEGER,"
+            + "title TEXT,"
+            + "category_id INTEGER,"
+            + "price INTEGER" + ");");
     }
 
     @Override

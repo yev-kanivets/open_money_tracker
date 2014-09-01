@@ -115,17 +115,19 @@ public class MainActivity extends ActionBarActivity {
 
         Cursor cursor = db.query(Constants.TABLE_RECORDS, null, null, null, null, null, null);
 
-        List<Record> records = new ArrayList<Record>();
+        final List<Record> records = new ArrayList<Record>();
 
         if(cursor.moveToFirst()) {
             //Get indexes of columns
+            int idColIndex = cursor.getColumnIndex("id");
             int titleColIndex = cursor.getColumnIndex("title");
             int categoryColIndex = cursor.getColumnIndex("category_id");
             int priceColIndex = cursor.getColumnIndex("price");
 
             do {
                 //Add record to list
-                records.add(new Record(cursor.getString(titleColIndex),
+                records.add(new Record(cursor.getInt(idColIndex),
+                        cursor.getString(titleColIndex),
                         Integer.toString(cursor.getInt(categoryColIndex)),
                         cursor.getString(priceColIndex)));
             } while (cursor.moveToNext());
@@ -133,7 +135,16 @@ public class MainActivity extends ActionBarActivity {
 
         db.close();
 
-        listView.setAdapter(new RecordAdapter(activity, records));
+        listView.setAdapter(new RecordAdapter(activity, records, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SQLiteDatabase db = dbHelper.getWritableDatabase();
+                db.delete(Constants.TABLE_RECORDS, "id=?",
+                        new String[] {Integer.toString(records.get((Integer)v.getTag()).getId())});
+                db.close();
+                retrieveDataFromDB();
+            }
+        }));
         ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
     }
 }
