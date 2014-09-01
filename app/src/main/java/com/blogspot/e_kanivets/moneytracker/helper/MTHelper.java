@@ -131,6 +131,8 @@ public class MTHelper extends Observable {
                 //notify observers
                 setChanged();
                 notifyObservers();
+
+                break;
             }
         }
     }
