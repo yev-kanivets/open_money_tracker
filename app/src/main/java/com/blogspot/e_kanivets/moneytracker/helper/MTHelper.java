@@ -1,6 +1,7 @@
 package com.blogspot.e_kanivets.moneytracker.helper;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -94,24 +95,27 @@ public class MTHelper extends Observable {
         return records;
     }
 
-    public void addRecord(int time, int type, String title, int category_id, int price) {
+    public void addRecord(int time, int type, String title, String category, int price) {
         //Add record to DB
-        ContentValues contentValues = new ContentValues();
-
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
+        ContentValues contentValues = new ContentValues();
         contentValues.put("type", "1");
         contentValues.put("title", title);
         contentValues.put("category_id", 1);
         contentValues.put("price", price);
 
-        int Id = (int)db.insert(Constants.TABLE_RECORDS, null, contentValues);
-        Log.d(Constants.TAG, "Id = " + Id);
+        int id = (int) db.insert(Constants.TABLE_RECORDS, null, contentValues);
 
         db.close();
 
+        if(getCategoryIdByName(category) == -1) {
+            addCategory(category);
+        }
+        int category_id = getCategoryIdByName(category);
+
         //Add record to app list
-        records.add(new Record(Id, time, type, title, category_id, price));
+        records.add(new Record(id, time, type, title, category_id, price));
 
         //notify observers
         setChanged();
@@ -137,11 +141,52 @@ public class MTHelper extends Observable {
         }
     }
 
+    public int addCategory(String name) {
+        //Add category to DB
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("name", name);
+
+        int id = (int) db.insert(Constants.TABLE_CATEGORIES, null, contentValues);
+
+        db.close();
+
+        //Add category to app list
+        categories.add(new Category(id, name));
+
+        return id;
+    }
+
+    public void deleteCategoryById(int id) {
+        for(Category category : categories) {
+            if(category.getId() == id) {
+                SQLiteDatabase db = dbHelper.getWritableDatabase();
+                db.delete(Constants.TABLE_CATEGORIES, "id=?",
+                        new String[] {Integer.toString(id)});
+
+                categories.remove(category);
+
+                break;
+            }
+        }
+    }
+
     public String getCategoryById(int id) {
         for (Category category : categories) {
             if(category.getId() == id) return category.getName();
         }
 
         return null;
+    }
+
+    public int getCategoryIdByName(String name) {
+        for(Category category : categories) {
+            if(category.getName().equals(name)) {
+                return category.getId();
+            }
+        }
+
+        return -1;
     }
 }

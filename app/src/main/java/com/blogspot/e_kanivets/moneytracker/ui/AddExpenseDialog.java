@@ -49,7 +49,7 @@ public class AddExpenseDialog extends AlertDialog {
                 String category = ((EditText) findViewById(R.id.et_category)).getText().toString();
                 int price = Integer.parseInt(((EditText) findViewById(R.id.et_price)).getText().toString());
 
-                MTHelper.getInstance().addRecord(0, 1, title, 0, price);
+                MTHelper.getInstance().addRecord(0, 1, title, category, price);
 
                 dismiss();
             }

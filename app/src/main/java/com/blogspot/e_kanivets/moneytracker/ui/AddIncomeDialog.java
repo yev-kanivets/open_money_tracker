@@ -49,7 +49,7 @@ public class AddIncomeDialog extends AlertDialog {
                 String category = ((EditText) findViewById(R.id.et_category)).getText().toString();
                 int price = Integer.parseInt(((EditText) findViewById(R.id.et_price)).getText().toString());
 
-                MTHelper.getInstance().addRecord(0, 0, title, 0, price);
+                MTHelper.getInstance().addRecord(0, 0, title, category, price);
 
                 dismiss();
             }
