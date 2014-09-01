@@ -43,7 +43,7 @@ public class RecordAdapter extends BaseAdapter{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        convertView = layoutInflater.inflate(R.layout.view_record, parent);
+        convertView = layoutInflater.inflate(R.layout.view_record, null);
 
         TextView tvPrice = (TextView) convertView.findViewById(R.id.tv_price);
         TextView tvTitle = (TextView) convertView.findViewById(R.id.tv_title);

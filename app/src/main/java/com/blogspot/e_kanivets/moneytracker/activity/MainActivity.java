@@ -1,19 +1,30 @@
 package com.blogspot.e_kanivets.moneytracker.activity;
 
 import android.app.Activity;
+import android.content.DialogInterface;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
 import com.blogspot.e_kanivets.moneytracker.R;
+import com.blogspot.e_kanivets.moneytracker.adapter.RecordAdapter;
 import com.blogspot.e_kanivets.moneytracker.helper.DBHelper;
+import com.blogspot.e_kanivets.moneytracker.model.Record;
 import com.blogspot.e_kanivets.moneytracker.ui.AddExpenseDialog;
 import com.blogspot.e_kanivets.moneytracker.ui.AddIncomeDialog;
+import com.blogspot.e_kanivets.moneytracker.util.Constants;
 import com.blogspot.e_kanivets.moneytracker.util.MTApp;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -33,6 +44,7 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
 
         activity = this;
+        dbHelper = MTApp.get().getDbHelper();
 
         //Link views
         btnAddIncome = (Button) findViewById(R.id.b_add_income);
@@ -44,18 +56,38 @@ public class MainActivity extends ActionBarActivity {
         btnAddIncome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AddIncomeDialog(activity).show();
+                AddIncomeDialog dialog = new AddIncomeDialog(activity);
+
+                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        Log.d(Constants.TAG, "onDismiss");
+                        retrieveDataFromDB();
+                    }
+                });
+
+                dialog.show();
             }
         });
 
         btnAddExpense.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AddExpenseDialog(activity).show();
+                AddExpenseDialog dialog = new AddExpenseDialog(activity);
+
+                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        Log.d(Constants.TAG, "onDismiss");
+                        retrieveDataFromDB();
+                    }
+                });
+
+                dialog.show();
             }
         });
 
-        dbHelper = MTApp.get().getDbHelper();
+        retrieveDataFromDB();
     }
 
 
@@ -76,5 +108,32 @@ public class MainActivity extends ActionBarActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void retrieveDataFromDB() {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        Cursor cursor = db.query(Constants.TABLE_RECORDS, null, null, null, null, null, null);
+
+        List<Record> records = new ArrayList<Record>();
+
+        if(cursor.moveToFirst()) {
+            //Get indexes of columns
+            int titleColIndex = cursor.getColumnIndex("title");
+            int categoryColIndex = cursor.getColumnIndex("category_id");
+            int priceColIndex = cursor.getColumnIndex("price");
+
+            do {
+                //Add record to list
+                records.add(new Record(cursor.getString(titleColIndex),
+                        Integer.toString(cursor.getInt(categoryColIndex)),
+                        cursor.getString(priceColIndex)));
+            } while (cursor.moveToNext());
+        }
+
+        db.close();
+
+        listView.setAdapter(new RecordAdapter(activity, records));
+        ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
     }
 }

@@ -1,6 +1,7 @@
 package com.blogspot.e_kanivets.moneytracker.ui;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -35,18 +36,13 @@ public class AddIncomeDialog extends AlertDialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final View layout = getLayoutInflater().inflate(R.layout.dialog_add_record, null);
+        setContentView(R.layout.dialog_add_record);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setView(layout);
-
-        final AlertDialog dialog = builder.show();
-
-        TextView tvTitle = (TextView) layout.findViewById(R.id.tv_title);
+        TextView tvTitle = (TextView) findViewById(R.id.tv_title);
         tvTitle.setText(R.string.income);
         tvTitle.setBackgroundColor(context.getResources().getColor(R.color.green_light));
 
-        Button buttonAdd = (Button) layout.findViewById(R.id.b_add);
+        Button buttonAdd = (Button) findViewById(R.id.b_add);
         buttonAdd.setText(context.getResources().getString(R.string.add_income));
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,9 +50,9 @@ public class AddIncomeDialog extends AlertDialog {
                 //Init variables for inserting record to DB
                 ContentValues contentValues = new ContentValues();
 
-                String title = ((EditText) layout.findViewById(R.id.et_title)).getText().toString();
-                String category = ((EditText) layout.findViewById(R.id.et_category)).getText().toString();
-                String price = ((EditText) layout.findViewById(R.id.et_price)).getText().toString();
+                String title = ((EditText) findViewById(R.id.et_title)).getText().toString();
+                String category = ((EditText) findViewById(R.id.et_category)).getText().toString();
+                String price = ((EditText) findViewById(R.id.et_price)).getText().toString();
 
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -71,15 +67,15 @@ public class AddIncomeDialog extends AlertDialog {
 
                 db.close();
 
-                dialog.dismiss();
+                dismiss();
             }
         });
 
-        Button buttonCancel = (Button) layout.findViewById(R.id.b_cancel);
+        Button buttonCancel = (Button) findViewById(R.id.b_cancel);
         buttonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.dismiss();
+                dismiss();
             }
         });
     }
