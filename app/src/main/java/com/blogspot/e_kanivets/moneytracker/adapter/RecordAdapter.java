@@ -54,11 +54,6 @@ public class RecordAdapter extends BaseAdapter{
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView = layoutInflater.inflate(R.layout.view_record, null);
 
-        //Set background color of view according to type
-        convertView.setBackgroundColor(records.get(position).isIncome() ?
-                context.getResources().getColor(R.color.white_green) :
-                context.getResources().getColor(R.color.white_red));
-
         TextView tvTime = (TextView) convertView.findViewById(R.id.tv_date_and_time);
         TextView tvSign = (TextView) convertView.findViewById(R.id.tv_sign);
         TextView tvPrice = (TextView) convertView.findViewById(R.id.tv_price);
@@ -67,6 +62,20 @@ public class RecordAdapter extends BaseAdapter{
 
         Button bRemove = (Button) convertView.findViewById(R.id.b_remove);
 
+        //Set background color of view according to type
+        convertView.setBackgroundColor(records.get(position).isIncome() ?
+                context.getResources().getColor(R.color.white_green) :
+                context.getResources().getColor(R.color.white_red));
+
+        //Set color of price and its sign
+        tvSign.setTextColor(records.get(position).isIncome() ?
+                context.getResources().getColor(R.color.green) :
+                context.getResources().getColor(R.color.red));
+        tvPrice.setTextColor(records.get(position).isIncome() ?
+                context.getResources().getColor(R.color.green) :
+                context.getResources().getColor(R.color.red));
+
+        //Format date of record to display it on screen
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         tvTime.setText(dateFormat.format(new Date(records.get(position).getTime())));
 
