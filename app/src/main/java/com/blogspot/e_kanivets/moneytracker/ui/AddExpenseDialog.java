@@ -7,18 +7,22 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.helper.DBHelper;
 import com.blogspot.e_kanivets.moneytracker.helper.MTHelper;
+import com.blogspot.e_kanivets.moneytracker.util.AppUtils;
 import com.blogspot.e_kanivets.moneytracker.util.Constants;
 import com.blogspot.e_kanivets.moneytracker.util.MTApp;
 
@@ -38,7 +42,14 @@ public class AddExpenseDialog extends AlertDialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.dialog_add_record);
+        //Justify width of dialog
+        View view = getLayoutInflater().inflate(R.layout.dialog_add_record, null);
+        setContentView(view);
+
+        ViewGroup.LayoutParams params = view.getLayoutParams();
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        params.width = Math.min(metrics.widthPixels-20, AppUtils.scaleValue(context, 700));
+        view.setLayoutParams(params);
 
         TextView tvTitle = (TextView) findViewById(R.id.tv_title);
         tvTitle.setText(R.string.expense);
