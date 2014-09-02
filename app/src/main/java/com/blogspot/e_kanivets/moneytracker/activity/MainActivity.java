@@ -2,6 +2,7 @@ package com.blogspot.e_kanivets.moneytracker.activity;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.pm.FeatureInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBarActivity;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -30,7 +32,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 
-public class MainActivity extends ActionBarActivity implements Observer{
+public class MainActivity extends Activity implements Observer{
 
     private Activity activity;
 
@@ -42,6 +44,9 @@ public class MainActivity extends ActionBarActivity implements Observer{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         setContentView(R.layout.activity_main);
 
         activity = this;
@@ -74,26 +79,6 @@ public class MainActivity extends ActionBarActivity implements Observer{
 
         //Subscribe to helper
         MTHelper.getInstance().addObserver(this);
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
