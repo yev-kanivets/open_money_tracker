@@ -86,6 +86,11 @@ public class AddIncomeDialog extends AlertDialog {
             public void onShow(DialogInterface dialog) {
                 InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.showSoftInput(findViewById(R.id.et_title), InputMethodManager.SHOW_IMPLICIT);
+
+                //Set width of dialog to match a width of content
+                DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+                getWindow().setLayout(Math.min(metrics.widthPixels-20, AppUtils.scaleValue(context, 700)), LinearLayout.LayoutParams.WRAP_CONTENT);
+                getWindow().setGravity(Gravity.CENTER_HORIZONTAL);
             }
         });
     }
