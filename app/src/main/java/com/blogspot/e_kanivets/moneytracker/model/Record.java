@@ -41,4 +41,8 @@ public class Record {
     public int getPrice() {
         return price;
     }
+
+    public boolean isIncome() {
+        return type == 0;
+    }
 }

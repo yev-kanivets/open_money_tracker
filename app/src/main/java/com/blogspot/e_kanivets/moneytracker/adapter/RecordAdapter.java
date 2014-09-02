@@ -52,13 +52,15 @@ public class RecordAdapter extends BaseAdapter{
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView = layoutInflater.inflate(R.layout.view_record, null);
 
+        TextView tvTime = (TextView) convertView.findViewById(R.id.tv_date_and_time);
         TextView tvPrice = (TextView) convertView.findViewById(R.id.tv_price);
         TextView tvTitle = (TextView) convertView.findViewById(R.id.tv_title);
         TextView tvCategory = (TextView) convertView.findViewById(R.id.tv_category);
 
         Button bRemove = (Button) convertView.findViewById(R.id.b_remove);
 
-        tvPrice.setText(Integer.toString(records.get(position).getPrice()));
+        tvPrice.setText((records.get(position).isIncome() ? "+ " : "- ")
+                + Integer.toString(records.get(position).getPrice()));
         tvTitle.setText(records.get(position).getTitle());
         tvCategory.setText(records.get(position).getCategory());
 

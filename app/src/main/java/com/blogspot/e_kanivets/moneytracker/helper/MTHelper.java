@@ -100,7 +100,7 @@ public class MTHelper extends Observable {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
-        contentValues.put("type", "1");
+        contentValues.put("type", type);
         contentValues.put("title", title);
         contentValues.put("category_id", 1);
         contentValues.put("price", price);
