@@ -95,11 +95,12 @@ public class MTHelper extends Observable {
         return records;
     }
 
-    public void addRecord(int time, int type, String title, String category, int price) {
+    public void addRecord(long time, int type, String title, String category, int price) {
         //Add record to DB
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
+        contentValues.put("time", time);
         contentValues.put("type", type);
         contentValues.put("title", title);
         contentValues.put("category_id", 1);

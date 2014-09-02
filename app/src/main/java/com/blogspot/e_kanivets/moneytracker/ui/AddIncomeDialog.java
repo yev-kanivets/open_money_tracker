@@ -27,6 +27,9 @@ import com.blogspot.e_kanivets.moneytracker.util.AppUtils;
 import com.blogspot.e_kanivets.moneytracker.util.Constants;
 import com.blogspot.e_kanivets.moneytracker.util.MTApp;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by eugene on 29/08/14.
  */
@@ -65,7 +68,7 @@ public class AddIncomeDialog extends AlertDialog {
                 String category = ((EditText) findViewById(R.id.et_category)).getText().toString();
                 int price = Integer.parseInt(((EditText) findViewById(R.id.et_price)).getText().toString());
 
-                MTHelper.getInstance().addRecord(0, 0, title, category, price);
+                MTHelper.getInstance().addRecord(new Date().getTime(), 0, title, category, price);
 
                 dismiss();
             }

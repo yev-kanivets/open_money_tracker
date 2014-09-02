@@ -8,14 +8,14 @@ import com.blogspot.e_kanivets.moneytracker.helper.MTHelper;
 public class Record {
 
     private int id;
-    private int time;
+    private long time;
     private int type;
     private String title;
     private int categoryId;
     private String category;
     private int price;
 
-    public Record(int id, int time, int type, String title, int categoryId, int price) {
+    public Record(int id, long time, int type, String title, int categoryId, int price) {
         this.id = id;
         this.time = time;
         this.type = type;
@@ -40,6 +40,10 @@ public class Record {
 
     public int getPrice() {
         return price;
+    }
+
+    public long getTime() {
+        return time;
     }
 
     public boolean isIncome() {

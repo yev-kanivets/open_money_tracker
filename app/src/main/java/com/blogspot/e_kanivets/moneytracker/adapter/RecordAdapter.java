@@ -16,6 +16,8 @@ import com.blogspot.e_kanivets.moneytracker.helper.MTHelper;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
 import com.blogspot.e_kanivets.moneytracker.util.Constants;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -58,6 +60,9 @@ public class RecordAdapter extends BaseAdapter{
         TextView tvCategory = (TextView) convertView.findViewById(R.id.tv_category);
 
         Button bRemove = (Button) convertView.findViewById(R.id.b_remove);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        tvTime.setText(dateFormat.format(new Date(records.get(position).getTime())));
 
         tvPrice.setText((records.get(position).isIncome() ? "+ " : "- ")
                 + Integer.toString(records.get(position).getPrice()));
