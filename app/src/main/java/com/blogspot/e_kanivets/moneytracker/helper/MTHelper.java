@@ -99,7 +99,6 @@ public class MTHelper extends Observable {
         //Add record to DB
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        Log.d(Constants.TAG, "add time = " + time);
         ContentValues contentValues = new ContentValues();
         contentValues.put("time", time);
         contentValues.put("type", type);

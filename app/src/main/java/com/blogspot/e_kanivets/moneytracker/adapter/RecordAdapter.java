@@ -54,6 +54,11 @@ public class RecordAdapter extends BaseAdapter{
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView = layoutInflater.inflate(R.layout.view_record, null);
 
+        //Set background color of view according to type
+        convertView.setBackgroundColor(records.get(position).isIncome() ?
+                context.getResources().getColor(R.color.white_green) :
+                context.getResources().getColor(R.color.white_red));
+
         TextView tvTime = (TextView) convertView.findViewById(R.id.tv_date_and_time);
         TextView tvSign = (TextView) convertView.findViewById(R.id.tv_sign);
         TextView tvPrice = (TextView) convertView.findViewById(R.id.tv_price);
