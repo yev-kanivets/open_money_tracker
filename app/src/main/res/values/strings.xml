@@ -14,5 +14,7 @@
     <string name="expense">EXPENSE</string>
     <string name="cancel">Cancel</string>
     <string name="add">Add</string>
+    
+    <string name="wrong_number_text">Sorry, but entered data is wrong!</string>
 
 </resources>

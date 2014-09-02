@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.helper.DBHelper;
@@ -64,9 +65,21 @@ public class AddExpenseDialog extends AlertDialog {
             public void onClick(View v) {
                 String title = ((EditText) findViewById(R.id.et_title)).getText().toString();
                 String category = ((EditText) findViewById(R.id.et_category)).getText().toString();
-                int price = Integer.parseInt(((EditText) findViewById(R.id.et_price)).getText().toString());
 
-                MTHelper.getInstance().addRecord(new Date().getTime(), 1, title, category, price);
+                //Check if price is valid
+                int price = 0;
+                try {
+                    price = Integer.parseInt(((EditText) findViewById(R.id.et_price)).getText().toString());
+                    if(price >= 0 && price <= 1000000000) {
+                        MTHelper.getInstance().addRecord(new Date().getTime(), 1, title, category, price);
+                        dismiss();
+                    } else {
+                        throw new NumberFormatException();
+                    }
+                } catch (NumberFormatException e) {
+                    Toast.makeText(context, context.getResources().getString(R.string.wrong_number_text),
+                            Toast.LENGTH_SHORT).show();
+                }
 
                 dismiss();
             }
