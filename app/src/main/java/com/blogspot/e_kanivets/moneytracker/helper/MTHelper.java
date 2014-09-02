@@ -77,7 +77,7 @@ public class MTHelper extends Observable {
             do {
                 //Read a record from DB
                 Record record = new Record(cursor.getInt(idColIndex),
-                        cursor.getInt(timeColIndex),
+                        cursor.getLong(timeColIndex),
                         cursor.getInt(typeColIndex),
                         cursor.getString(titleColIndex),
                         cursor.getInt(categoryColIndex),
@@ -99,11 +99,12 @@ public class MTHelper extends Observable {
         //Add record to DB
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
+        Log.d(Constants.TAG, "add time = " + time);
         ContentValues contentValues = new ContentValues();
         contentValues.put("time", time);
         contentValues.put("type", type);
         contentValues.put("title", title);
-        contentValues.put("category_id", 1);
+        contentValues.put("category_id", MTHelper.getInstance().getCategoryIdByName(category));
         contentValues.put("price", price);
 
         int id = (int) db.insert(Constants.TABLE_RECORDS, null, contentValues);

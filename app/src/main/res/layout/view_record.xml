@@ -20,35 +20,47 @@
             android:layout_gravity="center">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/tv_price"
-            android:textSize="20dp"
-            android:layout_weight="1.15"
-            android:gravity="center|left"
-            android:layout_gravity="center_vertical"
+            android:layout_width="20dp"
+            android:layout_height="match_parent"
+            android:text="+"
+            android:id="@+id/tv_sign"
+            android:textSize="18dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:minWidth="5dp"
             android:layout_marginLeft="10dp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="New Text"
-            android:id="@+id/tv_title"
-            android:textSize="20dp"
-            android:layout_weight="1"
-            android:gravity="center"
+            android:id="@+id/tv_price"
+            android:textSize="18dp"
+            android:layout_weight="1.15"
+            android:gravity="center|left"
             android:layout_gravity="center_vertical" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="New Text"
-            android:id="@+id/tv_category"
-            android:textSize="20dp"
+            android:id="@+id/tv_title"
+            android:textSize="18dp"
             android:layout_weight="1"
-            android:gravity="center"
-            android:layout_gravity="center_vertical" />
+            android:layout_gravity="center_vertical"
+            android:gravity="left"
+            android:layout_marginLeft="2dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:id="@+id/tv_category"
+            android:textSize="18dp"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:gravity="left"
+            android:layout_marginLeft="2dp" />
 
         <Button
             android:layout_width="30dp"

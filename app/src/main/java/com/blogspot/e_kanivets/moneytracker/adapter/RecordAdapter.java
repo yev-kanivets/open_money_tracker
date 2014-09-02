@@ -55,6 +55,7 @@ public class RecordAdapter extends BaseAdapter{
         convertView = layoutInflater.inflate(R.layout.view_record, null);
 
         TextView tvTime = (TextView) convertView.findViewById(R.id.tv_date_and_time);
+        TextView tvSign = (TextView) convertView.findViewById(R.id.tv_sign);
         TextView tvPrice = (TextView) convertView.findViewById(R.id.tv_price);
         TextView tvTitle = (TextView) convertView.findViewById(R.id.tv_title);
         TextView tvCategory = (TextView) convertView.findViewById(R.id.tv_category);
@@ -64,8 +65,8 @@ public class RecordAdapter extends BaseAdapter{
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         tvTime.setText(dateFormat.format(new Date(records.get(position).getTime())));
 
-        tvPrice.setText((records.get(position).isIncome() ? "+ " : "- ")
-                + Integer.toString(records.get(position).getPrice()));
+        tvSign.setText(records.get(position).isIncome() ? "+ " : "- ");
+        tvPrice.setText(Integer.toString(records.get(position).getPrice()));
         tvTitle.setText(records.get(position).getTitle());
         tvCategory.setText(records.get(position).getCategory());
 

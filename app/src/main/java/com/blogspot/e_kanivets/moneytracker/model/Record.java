@@ -1,6 +1,9 @@
 package com.blogspot.e_kanivets.moneytracker.model;
 
+import android.util.Log;
+
 import com.blogspot.e_kanivets.moneytracker.helper.MTHelper;
+import com.blogspot.e_kanivets.moneytracker.util.Constants;
 
 /**
  * Created by eugene on 01/09/14.
@@ -24,6 +27,8 @@ public class Record {
         this.price = price;
 
         category = MTHelper.getInstance().getCategoryById(categoryId);
+
+        Log.d(Constants.TAG, "id = " + categoryId + " category = " + category);
     }
 
     public int getId() {
