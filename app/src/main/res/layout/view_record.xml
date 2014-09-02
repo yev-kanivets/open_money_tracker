@@ -2,7 +2,8 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/trans">
 
     <TextView
         android:layout_width="wrap_content"
@@ -11,13 +12,15 @@
         android:text="Small Text"
         android:id="@+id/tv_date_and_time"
         android:layout_gravity="right"
-        android:layout_marginRight="10dp" />
+        android:layout_marginRight="10dp"
+        android:background="@color/trans" />
 
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+        android:background="@color/trans">
 
         <TextView
             android:layout_width="20dp"
@@ -28,7 +31,8 @@
             android:gravity="center"
             android:layout_gravity="center"
             android:minWidth="5dp"
-            android:layout_marginLeft="10dp" />
+            android:layout_marginLeft="10dp"
+            android:background="@color/trans" />
 
         <TextView
             android:layout_width="match_parent"
@@ -38,7 +42,8 @@
             android:textSize="18dp"
             android:layout_weight="1.15"
             android:gravity="center|left"
-            android:layout_gravity="center_vertical" />
+            android:layout_gravity="center_vertical"
+            android:background="@color/trans" />
 
         <TextView
             android:layout_width="match_parent"
@@ -49,7 +54,8 @@
             android:layout_weight="1"
             android:layout_gravity="center_vertical"
             android:gravity="left"
-            android:layout_marginLeft="2dp" />
+            android:layout_marginLeft="2dp"
+            android:background="@color/trans" />
 
         <TextView
             android:layout_width="match_parent"
@@ -60,13 +66,14 @@
             android:layout_weight="1"
             android:layout_gravity="center_vertical"
             android:gravity="left"
-            android:layout_marginLeft="2dp" />
+            android:layout_marginLeft="2dp"
+            android:background="@color/trans" />
 
         <Button
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:id="@+id/b_remove"
-            android:background="@drawable/ic_action_remove"
+            android:background="@color/trans"
             android:layout_gravity="center|right"
             android:layout_margin="5dp" />
 
