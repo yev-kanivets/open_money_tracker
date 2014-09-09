@@ -53,6 +53,8 @@ public class MTHelper extends Observable {
                 //Read a record from DB
                 Category category = new Category(cursor.getInt(idColIndex),
                         cursor.getString(nameColIndex));
+                Log.d(Constants.TAG, "id = " + cursor.getInt(idColIndex) +
+                        " name = " + cursor.getString(nameColIndex));
 
                 //Add record to list
                 categories.add(category);
@@ -82,6 +84,12 @@ public class MTHelper extends Observable {
                         cursor.getString(titleColIndex),
                         cursor.getInt(categoryColIndex),
                         cursor.getInt(priceColIndex));
+                Log.d(Constants.TAG, "id = " + cursor.getInt(idColIndex) +
+                    " time = " + cursor.getLong(timeColIndex) +
+                    " type = " + cursor.getInt(typeColIndex) +
+                    " title = " + cursor.getString(titleColIndex) +
+                    " category = " + cursor.getInt(categoryColIndex) +
+                    " price = " + cursor.getInt(priceColIndex));
 
                 //Add record to list
                 records.add(record);
@@ -96,6 +104,12 @@ public class MTHelper extends Observable {
     }
 
     public void addRecord(long time, int type, String title, String category, int price) {
+        //Add category if it does not exist yet
+        if(getCategoryIdByName(category) == -1) {
+            addCategory(category);
+        }
+        int category_id = getCategoryIdByName(category);
+
         //Add record to DB
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -109,11 +123,6 @@ public class MTHelper extends Observable {
         int id = (int) db.insert(Constants.TABLE_RECORDS, null, contentValues);
 
         db.close();
-
-        if(getCategoryIdByName(category) == -1) {
-            addCategory(category);
-        }
-        int category_id = getCategoryIdByName(category);
 
         //Add record to app list
         records.add(new Record(id, time, type, title, category_id, price));
@@ -183,6 +192,7 @@ public class MTHelper extends Observable {
 
     public int getCategoryIdByName(String name) {
         for(Category category : categories) {
+            Log.d(Constants.TAG, name + " " + category.getName() + " " + category.getName().equals(name));
             if(category.getName().equals(name)) {
                 return category.getId();
             }

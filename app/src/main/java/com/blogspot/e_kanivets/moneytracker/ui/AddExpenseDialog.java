@@ -45,10 +45,11 @@ public class AddExpenseDialog extends AlertDialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Justify width of dialog
+
         View view = getLayoutInflater().inflate(R.layout.dialog_add_record, null);
         setContentView(view);
 
+        /* Justify width of dialog */
         ViewGroup.LayoutParams params = view.getLayoutParams();
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         params.width = Math.min(metrics.widthPixels-20, AppUtils.scaleValue(context, 700));
