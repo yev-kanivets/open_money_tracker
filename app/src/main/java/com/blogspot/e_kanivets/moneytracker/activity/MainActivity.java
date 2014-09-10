@@ -15,6 +15,7 @@ import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.adapter.RecordAdapter;
@@ -40,6 +41,9 @@ public class MainActivity extends Activity implements Observer{
 
     private Button btnAddIncome;
     private Button btnAddExpense;
+    private Button btnReport;
+    private TextView tvFromDate;
+    private TextView tvToDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +56,18 @@ public class MainActivity extends Activity implements Observer{
         activity = this;
 
         //Link views
-        btnAddIncome = (Button) findViewById(R.id.b_add_income);
-        btnAddExpense = (Button) findViewById(R.id.b_add_expense);
+        btnAddIncome = (Button) findViewById(R.id.btn_add_income);
+        btnAddExpense = (Button) findViewById(R.id.btn_add_expense);
+        btnReport = (Button) findViewById(R.id.btn_report);
+
+        tvFromDate = (TextView) findViewById(R.id.tv_from_date);
+        tvToDate = (TextView) findViewById(R.id.tv_to_date);
 
         listView = (ListView) findViewById(R.id.listView);
+
+        //Set dates of current week
+        tvFromDate.setText(MTHelper.getInstance().getFirstDayOfWeek());
+        tvToDate.setText(MTHelper.getInstance().getLastDayOfWeek());
 
         //Set listeners
         btnAddIncome.setOnClickListener(new View.OnClickListener() {

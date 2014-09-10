@@ -11,7 +11,10 @@ import com.blogspot.e_kanivets.moneytracker.model.Record;
 import com.blogspot.e_kanivets.moneytracker.util.Constants;
 import com.blogspot.e_kanivets.moneytracker.util.MTApp;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Observable;
 
@@ -53,8 +56,8 @@ public class MTHelper extends Observable {
                 //Read a record from DB
                 Category category = new Category(cursor.getInt(idColIndex),
                         cursor.getString(nameColIndex));
-                Log.d(Constants.TAG, "id = " + cursor.getInt(idColIndex) +
-                        " name = " + cursor.getString(nameColIndex));
+                /*Log.d(Constants.TAG, "id = " + cursor.getInt(idColIndex) +
+                        " name = " + cursor.getString(nameColIndex));*/
 
                 //Add record to list
                 categories.add(category);
@@ -84,12 +87,12 @@ public class MTHelper extends Observable {
                         cursor.getString(titleColIndex),
                         cursor.getInt(categoryColIndex),
                         cursor.getInt(priceColIndex));
-                Log.d(Constants.TAG, "id = " + cursor.getInt(idColIndex) +
+                /*Log.d(Constants.TAG, "id = " + cursor.getInt(idColIndex) +
                     " time = " + cursor.getLong(timeColIndex) +
                     " type = " + cursor.getInt(typeColIndex) +
                     " title = " + cursor.getString(titleColIndex) +
                     " category = " + cursor.getInt(categoryColIndex) +
-                    " price = " + cursor.getInt(priceColIndex));
+                    " price = " + cursor.getInt(priceColIndex));*/
 
                 //Add record to list
                 records.add(record);
@@ -192,12 +195,45 @@ public class MTHelper extends Observable {
 
     public int getCategoryIdByName(String name) {
         for(Category category : categories) {
-            Log.d(Constants.TAG, name + " " + category.getName() + " " + category.getName().equals(name));
+            //Log.d(Constants.TAG, name + " " + category.getName() + " " + category.getName().equals(name));
             if(category.getName().equals(name)) {
                 return category.getId();
             }
         }
 
         return -1;
+    }
+
+    public String getFirstDayOfWeek() {
+        // get today and clear time of day
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 0); // ! clear would not reset the hour of day !
+        cal.clear(Calendar.MINUTE);
+        cal.clear(Calendar.SECOND);
+        cal.clear(Calendar.MILLISECOND);
+
+        // set first day of week
+        cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        return dateFormat.format(cal.getTime());
+    }
+
+    public String getLastDayOfWeek() {
+        // get today and clear time of day
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 0); // ! clear would not reset the hour of day !
+        cal.clear(Calendar.MINUTE);
+        cal.clear(Calendar.SECOND);
+        cal.clear(Calendar.MILLISECOND);
+
+        // set first day of week
+        cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek() + 6);
+        cal.set(Calendar.HOUR_OF_DAY, 23);
+        cal.set(Calendar.MINUTE, 59);
+        cal.set(Calendar.SECOND, 59);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        return dateFormat.format(cal.getTime());
     }
 }
