@@ -71,8 +71,8 @@ public class MainActivity extends Activity implements Observer{
         listView = (ListView) findViewById(R.id.listView);
 
         //Set dates of current week
-        tvFromDate.setText(MTHelper.getInstance().getFirstDayOfWeek());
-        tvToDate.setText(MTHelper.getInstance().getLastDayOfWeek());
+        tvFromDate.setText(MTHelper.getInstance().getFirstDay());
+        tvToDate.setText(MTHelper.getInstance().getLastDay());
 
         //Set listeners
         btnAddIncome.setOnClickListener(new View.OnClickListener() {
@@ -98,11 +98,10 @@ public class MainActivity extends Activity implements Observer{
                         MTHelper.getInstance().getPeriod().getFirst(), new ChangeDateDialog.OnDateChangedListener() {
                     @Override
                     public void OnDataChanged(Date date) {
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                        tvFromDate.setText(dateFormat.format(date));
-
                         MTHelper.getInstance().getPeriod().setFirst(date);
                         MTHelper.getInstance().update();
+
+                        tvFromDate.setText(MTHelper.getInstance().getFirstDay());
                     }
                 });
                 dialog.show();
@@ -116,11 +115,10 @@ public class MainActivity extends Activity implements Observer{
                         MTHelper.getInstance().getPeriod().getLast(), new ChangeDateDialog.OnDateChangedListener() {
                     @Override
                     public void OnDataChanged(Date date) {
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                        tvToDate.setText(dateFormat.format(date));
-
                         MTHelper.getInstance().getPeriod().setLast(date);
                         MTHelper.getInstance().update();
+
+                        tvToDate.setText(MTHelper.getInstance().getLastDay());
                     }
                 });
                 dialog.show();

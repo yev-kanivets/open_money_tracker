@@ -256,13 +256,13 @@ public class MTHelper extends Observable {
         period = new Period(first, last);
     }
 
-    public String getFirstDayOfWeek() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    public String getFirstDay() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         return dateFormat.format(period.getFirst());
     }
 
-    public String getLastDayOfWeek() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    public String getLastDay() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         return dateFormat.format(period.getLast());
     }
 }
