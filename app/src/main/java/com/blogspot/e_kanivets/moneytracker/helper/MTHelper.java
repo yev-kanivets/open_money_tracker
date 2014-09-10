@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.blogspot.e_kanivets.moneytracker.model.Category;
+import com.blogspot.e_kanivets.moneytracker.model.Period;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
 import com.blogspot.e_kanivets.moneytracker.util.Constants;
 import com.blogspot.e_kanivets.moneytracker.util.MTApp;
@@ -30,6 +31,8 @@ public class MTHelper extends Observable {
     private List<Category> categories;
     private List<Record> records;
 
+    private Period period;
+
     public static MTHelper getInstance() {
         if(mtHelper == null) {
             mtHelper = new MTHelper();
@@ -39,6 +42,8 @@ public class MTHelper extends Observable {
 
     private MTHelper() {
         dbHelper = new DBHelper(MTApp.get());
+
+        initPeriod();
     }
 
     public void initialize() {
@@ -204,7 +209,11 @@ public class MTHelper extends Observable {
         return -1;
     }
 
-    public String getFirstDayOfWeek() {
+    public Period getPeriod() {
+        return period;
+    }
+
+    private void initPeriod() {
         // get today and clear time of day
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 0); // ! clear would not reset the hour of day !
@@ -215,13 +224,8 @@ public class MTHelper extends Observable {
         // set first day of week
         cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        return dateFormat.format(cal.getTime());
-    }
+        Date first = cal.getTime();
 
-    public String getLastDayOfWeek() {
-        // get today and clear time of day
-        Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 0); // ! clear would not reset the hour of day !
         cal.clear(Calendar.MINUTE);
         cal.clear(Calendar.SECOND);
@@ -233,7 +237,18 @@ public class MTHelper extends Observable {
         cal.set(Calendar.MINUTE, 59);
         cal.set(Calendar.SECOND, 59);
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        return dateFormat.format(cal.getTime());
+        Date last = cal.getTime();
+
+        period = new Period(first, last);
+    }
+
+    public String getFirstDayOfWeek() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return dateFormat.format(period.getFirst());
+    }
+
+    public String getLastDayOfWeek() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return dateFormat.format(period.getLast());
     }
 }
