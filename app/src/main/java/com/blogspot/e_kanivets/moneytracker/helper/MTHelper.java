@@ -71,8 +71,12 @@ public class MTHelper extends Observable {
 
         cursor.close();
 
+        //Form args to select only needed records according to period
+        String[] args = new String[] {Long.toString(period.getFirst().getTime()),
+                Long.toString(period.getLast().getTime())};
+
         //Read records table from db
-        cursor = db.query(Constants.TABLE_RECORDS, null, null, null, null, null, null);
+        cursor = db.query(Constants.TABLE_RECORDS, null, "time BETWEEN ? AND ?", args, null, null, null);
         records = new ArrayList<Record>();
 
         if(cursor.moveToFirst()) {
