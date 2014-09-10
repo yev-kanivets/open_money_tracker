@@ -21,4 +21,12 @@ public class Period {
     public Date getLast() {
         return last;
     }
+
+    public void setFirst(Date first) {
+        this.first = first;
+    }
+
+    public void setLast(Date last) {
+        this.last = last;
+    }
 }

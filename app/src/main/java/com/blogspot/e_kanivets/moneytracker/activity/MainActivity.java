@@ -1,6 +1,7 @@
 package com.blogspot.e_kanivets.moneytracker.activity;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.pm.FeatureInfo;
 import android.database.Cursor;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -24,10 +26,13 @@ import com.blogspot.e_kanivets.moneytracker.helper.MTHelper;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
 import com.blogspot.e_kanivets.moneytracker.ui.AddExpenseDialog;
 import com.blogspot.e_kanivets.moneytracker.ui.AddIncomeDialog;
+import com.blogspot.e_kanivets.moneytracker.ui.ChangeDateDialog;
 import com.blogspot.e_kanivets.moneytracker.util.Constants;
 import com.blogspot.e_kanivets.moneytracker.util.MTApp;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -82,6 +87,42 @@ public class MainActivity extends Activity implements Observer{
             @Override
             public void onClick(View v) {
                 AddExpenseDialog dialog = new AddExpenseDialog(activity);
+                dialog.show();
+            }
+        });
+
+        tvFromDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ChangeDateDialog dialog = new ChangeDateDialog(activity,
+                        MTHelper.getInstance().getPeriod().getFirst(), new ChangeDateDialog.OnDateChangedListener() {
+                    @Override
+                    public void OnDataChanged(Date date) {
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        tvFromDate.setText(dateFormat.format(date));
+
+                        MTHelper.getInstance().getPeriod().setFirst(date);
+                        MTHelper.getInstance().update();
+                    }
+                });
+                dialog.show();
+            }
+        });
+
+        tvToDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ChangeDateDialog dialog = new ChangeDateDialog(activity,
+                        MTHelper.getInstance().getPeriod().getLast(), new ChangeDateDialog.OnDateChangedListener() {
+                    @Override
+                    public void OnDataChanged(Date date) {
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        tvToDate.setText(dateFormat.format(date));
+
+                        MTHelper.getInstance().getPeriod().setLast(date);
+                        MTHelper.getInstance().update();
+                    }
+                });
                 dialog.show();
             }
         });

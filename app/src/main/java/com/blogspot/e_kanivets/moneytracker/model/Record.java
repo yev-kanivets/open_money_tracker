@@ -28,7 +28,7 @@ public class Record {
 
         category = MTHelper.getInstance().getCategoryById(categoryId);
 
-        Log.d(Constants.TAG, "id = " + categoryId + " category = " + category);
+        //Log.d(Constants.TAG, "id = " + categoryId + " category = " + category);
     }
 
     public int getId() {

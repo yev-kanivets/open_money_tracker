@@ -44,6 +44,8 @@ public class MTHelper extends Observable {
         dbHelper = new DBHelper(MTApp.get());
 
         initPeriod();
+        categories = new ArrayList<Category>();
+        records = new ArrayList<Record>();
     }
 
     public void initialize() {
@@ -51,7 +53,7 @@ public class MTHelper extends Observable {
 
         //Read categories table from db
         Cursor cursor = db.query(Constants.TABLE_CATEGORIES, null, null, null, null, null, null);
-        categories = new ArrayList<Category>();
+        categories.clear();
 
         if(cursor.moveToFirst()) {
             int idColIndex = cursor.getColumnIndex("id");
@@ -77,7 +79,7 @@ public class MTHelper extends Observable {
 
         //Read records table from db
         cursor = db.query(Constants.TABLE_RECORDS, null, "time BETWEEN ? AND ?", args, null, null, null);
-        records = new ArrayList<Record>();
+        records.clear();
 
         if(cursor.moveToFirst()) {
             //Get indexes of columns
@@ -109,6 +111,14 @@ public class MTHelper extends Observable {
         }
 
         db.close();
+    }
+
+    public void update() {
+        initialize();
+
+        //notify observers
+        setChanged();
+        notifyObservers();
     }
 
     public List<Record> getRecords() {
