@@ -2,13 +2,15 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/light_grey">
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
+        android:layout_gravity="center_horizontal"
+        android:background="@color/grey">
 
         <TextView
             android:layout_width="wrap_content"
@@ -16,6 +18,7 @@
             android:text="New Text"
             android:id="@+id/tv_from_date"
             android:layout_weight="1"
+            android:background="@drawable/selector_change_date"
             android:gravity="center" />
 
         <TextView
@@ -24,13 +27,16 @@
             android:text="New Text"
             android:id="@+id/tv_to_date"
             android:layout_weight="1"
+            android:background="@drawable/selector_change_date"
             android:gravity="center" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/report"
-            android:id="@+id/btn_report" />
+            android:id="@+id/btn_report"
+            android:background="@drawable/selector_report"
+            android:padding="15dp" />
     </LinearLayout>
 
     <ListView
