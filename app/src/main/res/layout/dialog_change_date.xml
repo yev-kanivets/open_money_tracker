@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/change_date"
-        android:background="@color/blue"
+        android:background="@color/yellow_light"
         android:textColor="@color/white"
         android:gravity="center"
         android:textAllCaps="true"
