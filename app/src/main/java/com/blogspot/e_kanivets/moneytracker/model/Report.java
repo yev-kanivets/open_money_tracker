@@ -41,10 +41,17 @@ public class Report {
             }
         }
 
+        // Calculate total of all records
+        int total = 0;
+
         //Convert HashMap to ArrayList
         reportList = new ArrayList<Pair<String, Integer>>();
         for(String name : map.keySet()) {
             reportList.add(new Pair<String, Integer>(name, map.get(name)));
+            total += map.get(name);
         }
+
+        //Add summary row to list
+        reportList.add(new Pair<String, Integer>("In total:", total));
     }
 }
