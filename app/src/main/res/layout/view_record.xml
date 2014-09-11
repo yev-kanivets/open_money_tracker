@@ -11,9 +11,9 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Small Text"
         android:id="@+id/tv_date_and_time"
-        android:layout_gravity="right"
-        android:layout_marginRight="10dp"
-        android:background="@color/trans" />
+        android:layout_gravity="left"
+        android:background="@color/trans"
+        android:layout_marginLeft="10dp" />
 
     <LinearLayout
             android:orientation="horizontal"
@@ -21,26 +21,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@color/trans">
-
-        <TextView
-            android:layout_width="20dp"
-            android:layout_height="wrap_content"
-            android:text="+"
-            android:id="@+id/tv_sign"
-            android:textSize="18dp"
-            android:layout_marginLeft="10dp"
-            android:background="@color/trans"
-            android:gravity="center_horizontal|top" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/tv_price"
-            android:textSize="18dp"
-            android:layout_weight="1.15"
-            android:gravity="center|left"
-            android:background="@color/trans" />
 
         <TextView
             android:layout_width="match_parent"
@@ -51,7 +31,7 @@
             android:layout_weight="1"
             android:layout_gravity="center_vertical|top"
             android:gravity="left"
-            android:layout_marginLeft="2dp"
+            android:layout_marginLeft="10dp"
             android:background="@color/trans"
             android:paddingBottom="5dp" />
 
@@ -68,13 +48,16 @@
             android:background="@color/trans"
             android:paddingBottom="5dp" />
 
-        <Button
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:id="@+id/b_remove"
-            android:background="@drawable/ic_action_remove"
-            android:layout_gravity="center|right|top"
-            android:layout_margin="5dp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:id="@+id/tv_price"
+            android:textSize="18dp"
+            android:layout_weight="1.15"
+            android:background="@color/trans"
+            android:gravity="right"
+            android:layout_marginRight="10dp" />
 
     </LinearLayout>
 

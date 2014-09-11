@@ -57,8 +57,13 @@ public class ReportItemAdapter extends BaseAdapter {
         TextView tvCategory = (TextView) view.findViewById(R.id.tv_category);
         TextView tvTotal = (TextView) view.findViewById(R.id.tv_total);
 
+        //Set color of total
+        tvTotal.setTextColor(records.get(i).second >= 0 ?
+                context.getResources().getColor(R.color.green) :
+                context.getResources().getColor(R.color.red));
+
         tvCategory.setText(records.get(i).first);
-        tvTotal.setText(records.get(i).second.toString());
+        tvTotal.setText((records.get(i).second >= 0 ? "+ " : "- ") + Math.abs(records.get(i).second));
 
         return view;
     }

@@ -55,22 +55,16 @@ public class RecordAdapter extends BaseAdapter{
         convertView = layoutInflater.inflate(R.layout.view_record, null);
 
         TextView tvTime = (TextView) convertView.findViewById(R.id.tv_date_and_time);
-        TextView tvSign = (TextView) convertView.findViewById(R.id.tv_sign);
         TextView tvPrice = (TextView) convertView.findViewById(R.id.tv_price);
         TextView tvTitle = (TextView) convertView.findViewById(R.id.tv_title);
         TextView tvCategory = (TextView) convertView.findViewById(R.id.tv_category);
-
-        Button bRemove = (Button) convertView.findViewById(R.id.b_remove);
 
         //Set background color of view according to type
         convertView.setBackgroundColor(records.get(position).isIncome() ?
                 context.getResources().getColor(R.color.white_green) :
                 context.getResources().getColor(R.color.white_red));
 
-        //Set color of price and its sign
-        tvSign.setTextColor(records.get(position).isIncome() ?
-                context.getResources().getColor(R.color.green) :
-                context.getResources().getColor(R.color.red));
+        //Set color of price
         tvPrice.setTextColor(records.get(position).isIncome() ?
                 context.getResources().getColor(R.color.green) :
                 context.getResources().getColor(R.color.red));
@@ -79,17 +73,17 @@ public class RecordAdapter extends BaseAdapter{
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         tvTime.setText(dateFormat.format(new Date(records.get(position).getTime())));
 
-        tvSign.setText(records.get(position).isIncome() ? "+ " : "- ");
-        tvPrice.setText(Integer.toString(records.get(position).getPrice()));
+        tvPrice.setText((records.get(position).isIncome() ? "+ " : "- ")
+                + Integer.toString(records.get(position).getPrice()));
         tvTitle.setText(records.get(position).getTitle());
         tvCategory.setText(records.get(position).getCategory());
 
-        bRemove.setOnClickListener(new View.OnClickListener() {
+        /*bRemove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MTHelper.getInstance().deleteRecordById(records.get(position).getId());
             }
-        });
+        });*/
 
         return convertView;
     }

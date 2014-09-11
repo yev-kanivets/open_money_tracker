@@ -2,6 +2,9 @@ package com.blogspot.e_kanivets.moneytracker.model;
 
 import android.util.Pair;
 
+import com.blogspot.e_kanivets.moneytracker.R;
+import com.blogspot.e_kanivets.moneytracker.util.MTApp;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,6 +55,7 @@ public class Report {
         }
 
         //Add summary row to list
-        reportList.add(new Pair<String, Integer>("In total:", total));
+        reportList.add(new Pair<String, Integer>(
+                MTApp.get().getResources().getString(R.string.total) + " :", total));
     }
 }

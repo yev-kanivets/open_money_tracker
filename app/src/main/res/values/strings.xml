@@ -19,5 +19,6 @@
     <string name="wrong_number_text">Sorry, but entered data is wrong!</string>
     <string name="report">Report</string>
     <string name="change_date">CHANGE THE DATE</string>
+    <string name="total">TOTAL</string>
 
 </resources>
