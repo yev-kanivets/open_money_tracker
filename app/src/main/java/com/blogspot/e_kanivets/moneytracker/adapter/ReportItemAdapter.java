@@ -47,6 +47,13 @@ public class ReportItemAdapter extends BaseAdapter {
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         view = layoutInflater.inflate(R.layout.view_report_item, null);
 
+        //Customize view to fit to model and UI
+        if(i == getCount()-1) {
+            view.findViewById(R.id.line).setVisibility(View.VISIBLE);
+        }
+        view.setBackgroundColor(records.get(i).second < 0 ? context.getResources().getColor(R.color.white_red) :
+                context.getResources().getColor(R.color.white_green));
+
         TextView tvCategory = (TextView) view.findViewById(R.id.tv_category);
         TextView tvTotal = (TextView) view.findViewById(R.id.tv_total);
 
