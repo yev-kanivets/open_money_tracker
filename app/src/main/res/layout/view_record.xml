@@ -20,19 +20,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-        android:background="@color/trans">
+            android:background="@color/trans">
 
         <TextView
             android:layout_width="20dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:text="+"
             android:id="@+id/tv_sign"
             android:textSize="18dp"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:minWidth="5dp"
             android:layout_marginLeft="10dp"
-            android:background="@color/trans" />
+            android:background="@color/trans"
+            android:gravity="center_horizontal|top" />
 
         <TextView
             android:layout_width="match_parent"
@@ -42,7 +40,6 @@
             android:textSize="18dp"
             android:layout_weight="1.15"
             android:gravity="center|left"
-            android:layout_gravity="center_vertical"
             android:background="@color/trans" />
 
         <TextView
@@ -52,10 +49,11 @@
             android:id="@+id/tv_title"
             android:textSize="18dp"
             android:layout_weight="1"
-            android:layout_gravity="center_vertical"
+            android:layout_gravity="center_vertical|top"
             android:gravity="left"
             android:layout_marginLeft="2dp"
-            android:background="@color/trans" />
+            android:background="@color/trans"
+            android:paddingBottom="5dp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -64,17 +62,18 @@
             android:id="@+id/tv_category"
             android:textSize="18dp"
             android:layout_weight="1"
-            android:layout_gravity="center_vertical"
+            android:layout_gravity="center_vertical|top"
             android:gravity="left"
             android:layout_marginLeft="2dp"
-            android:background="@color/trans" />
+            android:background="@color/trans"
+            android:paddingBottom="5dp" />
 
         <Button
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:id="@+id/b_remove"
             android:background="@drawable/ic_action_remove"
-            android:layout_gravity="center|right"
+            android:layout_gravity="center|right|top"
             android:layout_margin="5dp" />
 
     </LinearLayout>
