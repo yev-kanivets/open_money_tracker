@@ -10,10 +10,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -136,9 +138,35 @@ public class MainActivity extends Activity implements Observer{
 
         listView.setAdapter(new RecordAdapter(activity, MTHelper.getInstance().getRecords()));
         ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
+        registerForContextMenu(listView);
 
         //Subscribe to helper
         MTHelper.getInstance().addObserver(this);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        getMenuInflater().inflate(R.menu.menu_record, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+
+        switch (item.getItemId()) {
+            case R.id.edit:
+                return true;
+            case R.id.delete:
+                Log.d(Constants.TAG, "pos = " + info.position + " id = " + MTHelper.getInstance().getRecords().
+                        get(info.position).getId());
+                MTHelper.getInstance().deleteRecordById(MTHelper.getInstance().getRecords().
+                        get(info.position).getId());
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
     }
 
     @Override

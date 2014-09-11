@@ -20,5 +20,7 @@
     <string name="report">Report</string>
     <string name="change_date">CHANGE THE DATE</string>
     <string name="total">TOTAL</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 
 </resources>
