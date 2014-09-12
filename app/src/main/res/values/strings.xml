@@ -22,5 +22,6 @@
     <string name="total">TOTAL</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="save">Save</string>
 
 </resources>

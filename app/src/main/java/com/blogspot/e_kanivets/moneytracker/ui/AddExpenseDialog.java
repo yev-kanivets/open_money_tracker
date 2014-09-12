@@ -109,6 +109,8 @@ public class AddExpenseDialog extends AlertDialog {
             ((EditText) findViewById(R.id.et_title)).setText(record.getTitle());
             ((EditText) findViewById(R.id.et_category)).setText(record.getCategory());
             ((EditText) findViewById(R.id.et_price)).setText(Integer.toString(record.getPrice()));
+
+            buttonAdd.setText(context.getResources().getString(R.string.save));
         }
 
         //Horrible thing to show a software keyboard
