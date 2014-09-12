@@ -81,7 +81,7 @@ public class MainActivity extends Activity implements Observer{
         btnAddIncome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddIncomeDialog dialog = new AddIncomeDialog(activity);
+                AddIncomeDialog dialog = new AddIncomeDialog(activity, null, AddIncomeDialog.Mode.MODE_ADD);
                 dialog.show();
             }
         });
@@ -89,7 +89,7 @@ public class MainActivity extends Activity implements Observer{
         btnAddExpense.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddExpenseDialog dialog = new AddExpenseDialog(activity);
+                AddExpenseDialog dialog = new AddExpenseDialog(activity, null, AddExpenseDialog.Mode.MODE_ADD);
                 dialog.show();
             }
         });
@@ -157,10 +157,18 @@ public class MainActivity extends Activity implements Observer{
 
         switch (item.getItemId()) {
             case R.id.edit:
+                Record record  = MTHelper.getInstance().getRecords().get(info.position);
+                if(record.isIncome()) {
+                    AddIncomeDialog dialog = new AddIncomeDialog(activity, record, AddIncomeDialog.Mode.MODE_EDIT);
+                    dialog.show();
+                } else {
+                    AddExpenseDialog dialog = new AddExpenseDialog(activity, record, AddExpenseDialog.Mode.MODE_EDIT);
+                    dialog.show();
+                }
                 return true;
             case R.id.delete:
-                Log.d(Constants.TAG, "pos = " + info.position + " id = " + MTHelper.getInstance().getRecords().
-                        get(info.position).getId());
+                /*Log.d(Constants.TAG, "pos = " + info.position + " id = " + MTHelper.getInstance().getRecords().
+                        get(info.position).getId());*/
                 MTHelper.getInstance().deleteRecordById(MTHelper.getInstance().getRecords().
                         get(info.position).getId());
                 return true;

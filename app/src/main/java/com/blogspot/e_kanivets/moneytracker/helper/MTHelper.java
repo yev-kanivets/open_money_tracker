@@ -130,7 +130,7 @@ public class MTHelper extends Observable {
         if(getCategoryIdByName(category) == -1) {
             addCategory(category);
         }
-        int category_id = getCategoryIdByName(category);
+        int categoryId = getCategoryIdByName(category);
 
         //Add record to DB
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -139,7 +139,7 @@ public class MTHelper extends Observable {
         contentValues.put("time", time);
         contentValues.put("type", type);
         contentValues.put("title", title);
-        contentValues.put("category_id", MTHelper.getInstance().getCategoryIdByName(category));
+        contentValues.put("category_id", categoryId);
         contentValues.put("price", price);
 
         int id = (int) db.insert(Constants.TABLE_RECORDS, null, contentValues);
@@ -147,7 +147,38 @@ public class MTHelper extends Observable {
         db.close();
 
         //Add record to app list
-        records.add(new Record(id, time, type, title, category_id, price));
+        records.add(new Record(id, time, type, title, categoryId, price));
+
+        //notify observers
+        setChanged();
+        notifyObservers();
+    }
+
+    public void updateRecordById(int id, String title, String category, int price) {
+        //Add category if it does not exist yet
+        if(getCategoryIdByName(category) == -1) {
+            addCategory(category);
+        }
+        int categoryId = getCategoryIdByName(category);
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("title", title);
+        contentValues.put("category_id", categoryId);
+        contentValues.put("price", price);
+
+        db.update(Constants.TABLE_RECORDS, contentValues, "id=?", new String[] {new Integer(id).toString()});
+
+        //Change particular record
+        for(Record record : records) {
+            if(record.getId() == id) {
+                record.setTitle(title);
+                record.setCategoryId(categoryId);
+                record.setCategory(category);
+                record.setPrice(price);
+            }
+        }
 
         //notify observers
         setChanged();

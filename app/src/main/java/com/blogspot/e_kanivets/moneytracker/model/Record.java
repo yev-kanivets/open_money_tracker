@@ -54,4 +54,20 @@ public class Record {
     public boolean isIncome() {
         return type == 0;
     }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
 }

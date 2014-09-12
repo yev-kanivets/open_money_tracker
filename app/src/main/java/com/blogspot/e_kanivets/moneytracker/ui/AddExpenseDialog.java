@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.helper.DBHelper;
 import com.blogspot.e_kanivets.moneytracker.helper.MTHelper;
+import com.blogspot.e_kanivets.moneytracker.model.Record;
 import com.blogspot.e_kanivets.moneytracker.util.AppUtils;
 import com.blogspot.e_kanivets.moneytracker.util.Constants;
 import com.blogspot.e_kanivets.moneytracker.util.MTApp;
@@ -36,15 +37,19 @@ public class AddExpenseDialog extends AlertDialog {
 
     private Context context;
 
-    public AddExpenseDialog(Context context) {
+    private Record record;
+    private Mode mode;
+
+    public AddExpenseDialog(Context context, Record record, Mode mode) {
         super(context);
         this.context = context;
+        this.record = record;
+        this.mode = mode;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
         View view = getLayoutInflater().inflate(R.layout.dialog_add_record, null);
         setContentView(view);
@@ -72,7 +77,12 @@ public class AddExpenseDialog extends AlertDialog {
                 try {
                     price = Integer.parseInt(((EditText) findViewById(R.id.et_price)).getText().toString());
                     if(price >= 0 && price <= 1000000000) {
-                        MTHelper.getInstance().addRecord(new Date().getTime(), 1, title, category, price);
+                        if(mode == Mode.MODE_ADD) {
+                            MTHelper.getInstance().addRecord(new Date().getTime(), 1, title, category, price);
+                        }
+                        if(mode == Mode.MODE_EDIT) {
+                            MTHelper.getInstance().updateRecordById(record.getId(), title, category, price);
+                        }
                         dismiss();
                     } else {
                         throw new NumberFormatException();
@@ -94,6 +104,13 @@ public class AddExpenseDialog extends AlertDialog {
             }
         });
 
+        //Add texts to dialog if it's edit dialog
+        if(mode == Mode.MODE_EDIT) {
+            ((EditText) findViewById(R.id.et_title)).setText(record.getTitle());
+            ((EditText) findViewById(R.id.et_category)).setText(record.getCategory());
+            ((EditText) findViewById(R.id.et_price)).setText(Integer.toString(record.getPrice()));
+        }
+
         //Horrible thing to show a software keyboard
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE|WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
 
@@ -110,4 +127,6 @@ public class AddExpenseDialog extends AlertDialog {
             }
         });
     }
+
+    public enum Mode {MODE_ADD, MODE_EDIT}
 }
