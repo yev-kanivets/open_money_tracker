@@ -74,7 +74,7 @@ public class RecordAdapter extends BaseAdapter{
         tvTime.setText(dateFormat.format(new Date(records.get(position).getTime())));
 
         tvPrice.setText((records.get(position).isIncome() ? "+ " : "- ")
-                + "$" + Integer.toString(records.get(position).getPrice()));
+                + Integer.toString(records.get(position).getPrice()));
         tvTitle.setText(records.get(position).getTitle());
         tvCategory.setText(records.get(position).getCategory());
 

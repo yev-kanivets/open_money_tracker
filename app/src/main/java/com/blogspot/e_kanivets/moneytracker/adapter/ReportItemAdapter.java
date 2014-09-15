@@ -51,6 +51,9 @@ public class ReportItemAdapter extends BaseAdapter {
         if(i == getCount()-1) {
             view.findViewById(R.id.line).setVisibility(View.VISIBLE);
         }
+        if(i == getCount()-3) {
+            view.findViewById(R.id.line).setVisibility(View.VISIBLE);
+        }
         view.setBackgroundColor(records.get(i).second < 0 ? context.getResources().getColor(R.color.white_red) :
                 context.getResources().getColor(R.color.white_green));
 
