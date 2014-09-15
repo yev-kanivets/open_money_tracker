@@ -45,17 +45,26 @@ public class Report {
         }
 
         // Calculate total of all records
-        int total = 0;
+        int totalIncome = 0, totalExpense = 0;
 
         //Convert HashMap to ArrayList
         reportList = new ArrayList<Pair<String, Integer>>();
         for(String name : map.keySet()) {
             reportList.add(new Pair<String, Integer>(name, map.get(name)));
-            total += map.get(name);
+            if(map.get(name) > 0) {
+                totalIncome += map.get(name);
+            }
+            else {
+                totalExpense += map.get(name);
+            }
         }
 
         //Add summary row to list
         reportList.add(new Pair<String, Integer>(
-                MTApp.get().getResources().getString(R.string.total) + " :", total));
+                MTApp.get().getResources().getString(R.string.total_incomes) + " :", totalIncome));
+        reportList.add(new Pair<String, Integer>(
+                MTApp.get().getResources().getString(R.string.total_expenses) + " :", totalExpense));
+        reportList.add(new Pair<String, Integer>(
+                MTApp.get().getResources().getString(R.string.total) + " :", totalExpense + totalIncome));
     }
 }

@@ -20,6 +20,8 @@
     <string name="report">Report</string>
     <string name="change_date">CHANGE THE DATE</string>
     <string name="total">TOTAL</string>
+    <string name="total_incomes">Total incomes</string>
+    <string name="total_expenses">Total expenses</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="save">Save</string>
