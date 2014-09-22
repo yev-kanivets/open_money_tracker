@@ -80,7 +80,7 @@ public class AddIncomeDialog extends AlertDialog {
                     price = Integer.parseInt(((EditText) findViewById(R.id.et_price)).getText().toString());
                     if(price >= 0 && price <= 1000000000) {
                         if(mode == Mode.MODE_ADD) {
-                            MTHelper.getInstance().addRecord(new Date().getTime(), 1, title, category, price);
+                            MTHelper.getInstance().addRecord(new Date().getTime(), 0, title, category, price);
                         }
                         if(mode == Mode.MODE_EDIT) {
                             MTHelper.getInstance().updateRecordById(record.getId(), title, category, price);
