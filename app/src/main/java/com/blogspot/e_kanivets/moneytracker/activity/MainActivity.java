@@ -1,17 +1,10 @@
 package com.blogspot.e_kanivets.moneytracker.activity;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.FeatureInfo;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.widget.PopupMenu;
 import android.view.ContextMenu;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -19,28 +12,22 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.adapter.RecordAdapter;
-import com.blogspot.e_kanivets.moneytracker.helper.DBHelper;
 import com.blogspot.e_kanivets.moneytracker.helper.MTHelper;
+import com.blogspot.e_kanivets.moneytracker.helper.PeriodHelper;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
 import com.blogspot.e_kanivets.moneytracker.ui.AddExpenseDialog;
 import com.blogspot.e_kanivets.moneytracker.ui.AddIncomeDialog;
 import com.blogspot.e_kanivets.moneytracker.ui.ChangeDateDialog;
-import com.blogspot.e_kanivets.moneytracker.util.Constants;
-import com.blogspot.e_kanivets.moneytracker.util.MTApp;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-
 
 public class MainActivity extends Activity implements Observer{
 
@@ -48,9 +35,6 @@ public class MainActivity extends Activity implements Observer{
 
     private ListView listView;
 
-    private Button btnAddIncome;
-    private Button btnAddExpense;
-    private Button btnReport;
     private TextView tvFromDate;
     private TextView tvToDate;
 
@@ -64,10 +48,16 @@ public class MainActivity extends Activity implements Observer{
 
         activity = this;
 
+        Button btnAddIncome;
+        Button btnAddExpense;
+        Button btnReport;
+        Button btnSelectPeriod;
+
         //Link views
         btnAddIncome = (Button) findViewById(R.id.btn_add_income);
         btnAddExpense = (Button) findViewById(R.id.btn_add_expense);
         btnReport = (Button) findViewById(R.id.btn_report);
+        btnSelectPeriod = (Button) findViewById(R.id.btn_select_period);
 
         tvFromDate = (TextView) findViewById(R.id.tv_from_date);
         tvToDate = (TextView) findViewById(R.id.tv_to_date);
@@ -92,6 +82,12 @@ public class MainActivity extends Activity implements Observer{
             public void onClick(View v) {
                 AddExpenseDialog dialog = new AddExpenseDialog(activity, null, AddExpenseDialog.Mode.MODE_ADD);
                 dialog.show();
+            }
+        });
+        btnSelectPeriod.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showSelectPopupMenu(view);
             }
         });
 
@@ -181,8 +177,6 @@ public class MainActivity extends Activity implements Observer{
                 }
                 return true;
             case R.id.delete:
-                /*Log.d(Constants.TAG, "pos = " + info.position + " id = " + MTHelper.getInstance().getRecords().
-                        get(info.position).getId());*/
                 MTHelper.getInstance().deleteRecordById(MTHelper.getInstance().getRecords().
                         get(info.position).getId());
                 return true;
@@ -199,5 +193,46 @@ public class MainActivity extends Activity implements Observer{
     @Override
     public void update(Observable observable, Object data) {
         ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
+    }
+
+    private void showSelectPopupMenu(View view) {
+        PopupMenu popupMenu = new PopupMenu(activity, view);
+        popupMenu.getMenuInflater().inflate(R.menu.menu_popup, popupMenu.getMenu());
+
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.clear(Calendar.MINUTE);
+                calendar.clear(Calendar.SECOND);
+                calendar.clear(Calendar.MILLISECOND);
+
+                switch (menuItem.getItemId()) {
+                    case R.id.period_day:
+                        MTHelper.getInstance().setPeriod(PeriodHelper.getInstance().getDayPeriod());
+                        break;
+                    case R.id.period_week:
+                        MTHelper.getInstance().setPeriod(PeriodHelper.getInstance().getWeekPeriod());
+                        break;
+                    case R.id.period_month:
+                        MTHelper.getInstance().setPeriod(PeriodHelper.getInstance().getMonthPeriod());
+                        break;
+                    case R.id.period_year:
+                        MTHelper.getInstance().setPeriod(PeriodHelper.getInstance().getYearPeriod());
+                        break;
+                    default:
+                        break;
+                }
+
+                MTHelper.getInstance().update();
+
+                tvFromDate.setText(MTHelper.getInstance().getFirstDay());
+                tvToDate.setText(MTHelper.getInstance().getLastDay());
+
+                return false;
+            }
+        });
+
+        popupMenu.show();
     }
 }

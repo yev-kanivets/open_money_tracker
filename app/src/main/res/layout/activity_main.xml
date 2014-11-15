@@ -21,6 +21,14 @@
             android:background="@drawable/selector_change_date"
             android:gravity="center" />
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_select_period"
+            android:background="@drawable/selector_select_period"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"

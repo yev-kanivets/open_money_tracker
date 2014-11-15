@@ -2,6 +2,7 @@ package com.blogspot.e_kanivets.moneytracker.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.Window;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -23,6 +24,9 @@ public class ReportActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         setContentView(R.layout.activity_report);
 
         activity = this;

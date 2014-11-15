@@ -258,6 +258,10 @@ public class MTHelper extends Observable {
         return period;
     }
 
+    public void setPeriod(Period period) {
+        this.period = period;
+    }
+
     private void initPeriod() {
         // get today and clear time of day
         Calendar cal = Calendar.getInstance();
