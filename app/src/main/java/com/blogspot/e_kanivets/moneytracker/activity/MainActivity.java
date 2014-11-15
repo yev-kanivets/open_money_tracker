@@ -14,6 +14,7 @@ import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -140,6 +141,19 @@ public class MainActivity extends Activity implements Observer{
         ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
         registerForContextMenu(listView);
 
+        /* Scroll list to bottom only once at start */
+        listView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            private boolean isFirst = true;
+
+            @Override
+            public void onGlobalLayout() {
+                if(isFirst) {
+                    isFirst = false;
+                    listView.setSelection(listView.getCount()-1);
+                }
+            }
+        });
+
         //Subscribe to helper
         MTHelper.getInstance().addObserver(this);
     }
@@ -175,6 +189,11 @@ public class MainActivity extends Activity implements Observer{
             default:
                 return super.onContextItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override
