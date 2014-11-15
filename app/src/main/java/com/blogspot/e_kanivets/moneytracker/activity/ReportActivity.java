@@ -2,6 +2,7 @@ package com.blogspot.e_kanivets.moneytracker.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -39,5 +40,18 @@ public class ReportActivity extends Activity {
 
         listView.setAdapter(new ReportItemAdapter(activity,
                 new Report(MTHelper.getInstance().getRecords()).getReportList()));
+
+        /* Scroll list to bottom only once at start */
+        listView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            private boolean isFirst = true;
+
+            @Override
+            public void onGlobalLayout() {
+                if(isFirst) {
+                    isFirst = false;
+                    listView.setSelection(listView.getCount()-1);
+                }
+            }
+        });
     }
 }
