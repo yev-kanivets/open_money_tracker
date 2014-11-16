@@ -18,6 +18,7 @@
     
     <string name="wrong_number_text">Sorry, but entered data is wrong!</string>
     <string name="report">Report</string>
+    <string name="report_caps">REPORT</string>
     <string name="change_date">CHANGE THE DATE</string>
     <string name="total">TOTAL</string>
     <string name="total_incomes">Total incomes</string>
@@ -36,4 +37,9 @@
     <string name="maybe_later">Maybe Later</string>
     <string name="no_thank_you">No Thank You</string>
     <string name="yes_very">Yes!</string>
+
+    <string name="thank_author_caps">THANK AUTHOR</string>
+    <string name="this_is_free_app">This is the free app,\n so author do not plan to earn a lot of money)\n But if you want thank the author\n you can do following steps:</string>
+    <string name="watch_video">Watch an short video ad</string>
+    <string name="your_contribution">Your contribution:</string>
 </resources>

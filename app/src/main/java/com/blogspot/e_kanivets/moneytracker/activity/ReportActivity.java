@@ -1,9 +1,12 @@
 package com.blogspot.e_kanivets.moneytracker.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -19,24 +22,31 @@ public class ReportActivity extends Activity {
 
     private Activity activity;
 
-    private TextView tvTitle;
     private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-
         setContentView(R.layout.activity_report);
 
         activity = this;
 
-        tvTitle = (TextView) findViewById(R.id.tv_title);
+        Button btnThankAuthor;
+
+        btnThankAuthor = (Button) findViewById(R.id.btn_thank_author);
         listView = (ListView) findViewById(R.id.listView);
 
         /*tvTitle.setText("REPORT (" + MTHelper.getInstance().getFirstDay() + " - "
                 + MTHelper.getInstance().getLastDay() + ")");*/
+
+        btnThankAuthor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ReportActivity.this, ThankAuthorActivity.class);
+                startActivity(intent);
+            }
+        });
 
         listView.setAdapter(new ReportItemAdapter(activity,
                 new Report(MTHelper.getInstance().getRecords()).getReportList()));

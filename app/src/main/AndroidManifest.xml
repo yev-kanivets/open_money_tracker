@@ -19,7 +19,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.ReportActivity"></activity>
+        <activity android:name=".activity.ReportActivity"/>
+        <activity android:name=".activity.ThankAuthorActivity"/>
     </application>
 
 </manifest>

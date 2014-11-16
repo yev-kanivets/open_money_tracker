@@ -44,4 +44,16 @@ public class AppUtils {
         editor.putBoolean(Constants.APP_RATED, true);
         editor.commit();
     }
+
+    public static void addContribution(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences(Constants.APP_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt(Constants.CONTRIBUTION, preferences.getInt(Constants.CONTRIBUTION, 0) + 1);
+        editor.commit();
+    }
+
+    public static int getContribution(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences(Constants.APP_NAME, Context.MODE_PRIVATE);
+        return  preferences.getInt(Constants.CONTRIBUTION, 0);
+    }
 }

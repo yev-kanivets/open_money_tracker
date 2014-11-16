@@ -17,4 +17,5 @@ public class Constants {
     public static final String APP_RATED = "app_rated";
     public static final String LAUNCH_COUNT = "launch_count";
     public static final int RATE_PERIOD = 5;
+    public static final String CONTRIBUTION = "contribution";
 }
