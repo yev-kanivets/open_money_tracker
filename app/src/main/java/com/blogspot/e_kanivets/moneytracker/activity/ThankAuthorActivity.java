@@ -81,6 +81,7 @@ public class ThankAuthorActivity extends Activity {
                     vunglePub.playAd();
                     shouldPlay = false;
                 }
+                progressBar.setVisibility(View.INVISIBLE);
             }
 
             @Override
