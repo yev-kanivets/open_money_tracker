@@ -30,4 +30,10 @@
     <string name="week">Week</string>
     <string name="month">Month</string>
     <string name="year">Year</string>
+
+    <string name="like_money_tracker">Do you like MoneyTracker?</string>
+    <string name="rate_it_on_gp">Rate it on Google Play!</string>
+    <string name="maybe_later">Maybe Later</string>
+    <string name="no_thank_you">No Thank You</string>
+    <string name="yes_very">Yes!</string>
 </resources>

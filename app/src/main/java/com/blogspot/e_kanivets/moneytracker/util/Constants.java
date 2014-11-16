@@ -11,4 +11,10 @@ public class Constants {
     public static final int DB_VERSION = 1;
     public static final String TABLE_RECORDS = "records";
     public static final String TABLE_CATEGORIES = "categories";
+
+    public static final String APP_NAME = "com.blogspot.e_kanivets.moneytracker";
+    public static final String GP_MARKET = "market://details?id=";
+    public static final String APP_RATED = "app_rated";
+    public static final String LAUNCH_COUNT = "launch_count";
+    public static final int RATE_PERIOD = 5;
 }

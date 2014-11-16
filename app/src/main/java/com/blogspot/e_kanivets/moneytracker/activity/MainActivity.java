@@ -22,7 +22,9 @@ import com.blogspot.e_kanivets.moneytracker.helper.PeriodHelper;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
 import com.blogspot.e_kanivets.moneytracker.ui.AddExpenseDialog;
 import com.blogspot.e_kanivets.moneytracker.ui.AddIncomeDialog;
+import com.blogspot.e_kanivets.moneytracker.ui.AppRateDialog;
 import com.blogspot.e_kanivets.moneytracker.ui.ChangeDateDialog;
+import com.blogspot.e_kanivets.moneytracker.util.AppUtils;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -47,6 +49,9 @@ public class MainActivity extends Activity implements Observer{
         setContentView(R.layout.activity_main);
 
         activity = this;
+
+        /* Increment launch count */
+        AppUtils.addLaunchCount(activity);
 
         Button btnAddIncome;
         Button btnAddExpense;
@@ -146,6 +151,11 @@ public class MainActivity extends Activity implements Observer{
                 if(isFirst) {
                     isFirst = false;
                     listView.setSelection(listView.getCount()-1);
+                    if(AppUtils.checkRateDialog(activity)) {
+                        AppRateDialog dialog = new AppRateDialog(activity);
+                        dialog.setCanceledOnTouchOutside(false);
+                        dialog.show();
+                    }
                 }
             }
         });
