@@ -11,11 +11,44 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
     buildTypes {
         release {
             runProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    signingConfigs {
+        releaseConfig {
+            storeFile file("mt_keystore.jks");
+            storePassword ("moneytracker");
+            keyAlias "moneytracker"
+            keyPassword "moneytracker";
+        }
+    }
+
+    buildTypes {
+        release {
+            debuggable false
+            runProguard false
+            signingConfig signingConfigs.releaseConfig
+        }
+
+        debug {
+            debuggable true
+            runProguard false
+            signingConfig signingConfigs.releaseConfig
+        }
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+
+    dexOptions {
+        preDexLibraries = false
     }
 }
 
