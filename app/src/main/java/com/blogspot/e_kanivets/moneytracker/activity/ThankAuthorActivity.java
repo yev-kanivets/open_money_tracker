@@ -50,7 +50,7 @@ public class ThankAuthorActivity extends Activity {
             @Override
             public void onClick(View view) {
                 if(vunglePub.isCachedAdAvailable()) {
-                    vunglePub.playAd();
+                    if(!shouldPlay) vunglePub.playAd();
                 } else {
                     progressBar.setVisibility(View.VISIBLE);
                     shouldPlay = true;

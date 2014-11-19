@@ -53,6 +53,7 @@ public class AppRateDialog extends AlertDialog {
             @Override
             public void onClick(View view) {
                 AppUtils.appRated(context);
+                dismiss();
             }
         });
     }

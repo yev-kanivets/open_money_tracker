@@ -2,7 +2,6 @@
 <resources>
 
     <string name="app_name">Money Tracker</string>
-
     <string name="title">Title</string>
     <string name="category">Category</string>
     <string name="price">Price</string>
@@ -13,7 +12,6 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="add">Add</string>
-    
     <string name="wrong_number_text">Sorry, but entered data is wrong!</string>
     <string name="report">Report</string>
     <string name="report_caps">REPORT</string>
@@ -24,18 +22,15 @@
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="save">Save</string>
-
     <string name="day">Day</string>
     <string name="week">Week</string>
     <string name="month">Month</string>
     <string name="year">Year</string>
-
     <string name="like_money_tracker">Do you like MoneyTracker?</string>
     <string name="rate_it_on_gp">Rate it on Google Play!</string>
     <string name="maybe_later">Maybe Later</string>
     <string name="no_thank_you">No Thank You</string>
     <string name="yes_very">Yes!</string>
-
     <string name="thank_author_caps">THANK THE AUTHOR</string>
     <string name="this_is_free_app">This is the free app,\n
         so author do not plan to earn a lot of money)\n
@@ -43,4 +38,8 @@
         you can do following steps:</string>
     <string name="watch_video">Watch an short video ad</string>
     <string name="your_contribution">Your contribution:</string>
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
 </resources>
