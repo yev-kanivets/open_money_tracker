@@ -52,7 +52,8 @@
         android:layout_height="match_parent"
         android:id="@+id/listView"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:background="@android:color/transparent" />
 
     <LinearLayout
         android:orientation="horizontal"

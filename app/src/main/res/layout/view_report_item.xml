@@ -3,7 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/trans">
+    android:background="@android:color/transparent">
 
     <View
         android:id="@+id/line"
@@ -16,7 +16,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/trans">
+        android:background="@android:color/transparent">
 
         <TextView
             android:layout_width="match_parent"
@@ -27,7 +27,7 @@
             android:layout_gravity="center"
             android:minWidth="5dp"
             android:layout_marginLeft="10dp"
-            android:background="@color/trans"
+            android:background="@android:color/transparent"
             android:layout_weight="1"
             android:layout_margin="10dp"
             android:gravity="left" />
@@ -39,7 +39,7 @@
             android:id="@+id/tv_total"
             android:textSize="18dp"
             android:layout_gravity="center_vertical"
-            android:background="@color/trans"
+            android:background="@android:color/transparent"
             android:layout_weight="1"
             android:layout_margin="10dp"
             android:gravity="right" />

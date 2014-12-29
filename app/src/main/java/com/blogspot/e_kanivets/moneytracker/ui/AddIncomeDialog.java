@@ -67,7 +67,7 @@ public class AddIncomeDialog extends AlertDialog {
         tvTitle.setBackgroundColor(context.getResources().getColor(R.color.green_light));
 
         Button buttonAdd = (Button) findViewById(R.id.b_add);
-        buttonAdd.setText(context.getResources().getString(R.string.add_income));
+        //buttonAdd.setText(context.getResources().getString(R.string.add_income));
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

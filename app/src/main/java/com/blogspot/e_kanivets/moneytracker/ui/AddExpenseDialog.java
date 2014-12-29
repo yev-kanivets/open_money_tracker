@@ -65,7 +65,7 @@ public class AddExpenseDialog extends AlertDialog {
         tvTitle.setBackgroundColor(context.getResources().getColor(R.color.red_light));
 
         Button buttonAdd = (Button) findViewById(R.id.b_add);
-        buttonAdd.setText(context.getResources().getString(R.string.add_expense));
+        //buttonAdd.setText(context.getResources().getString(R.string.add_expense));
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
