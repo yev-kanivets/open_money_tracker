@@ -43,6 +43,10 @@ public class Record {
         return category;
     }
 
+    public int getCategoryId() {
+        return categoryId;
+    }
+
     public int getPrice() {
         return price;
     }
