@@ -18,6 +18,7 @@ public class Report {
 
     private List<Record> records;
     private List<Pair<String, Integer>> reportList;
+    private List<Pair<String, Integer>> summaryReportList;
 
     public Report(List<Record> records) {
         this.records = records;
@@ -26,6 +27,10 @@ public class Report {
 
     public List<Pair<String, Integer>> getReportList() {
         return reportList;
+    }
+
+    public List<Pair<String, Integer>> getSummaryReportList() {
+        return summaryReportList;
     }
 
     private void makeReport() {
@@ -73,11 +78,12 @@ public class Report {
         reportList.addAll(reportExpenses);
 
         //Add summary row to list
-        reportList.add(new Pair<String, Integer>(
+        summaryReportList = new ArrayList<Pair<String, Integer>>();
+        summaryReportList.add(new Pair<String, Integer>(
                 MTApp.get().getResources().getString(R.string.total_incomes) + " :", totalIncome));
-        reportList.add(new Pair<String, Integer>(
+        summaryReportList.add(new Pair<String, Integer>(
                 MTApp.get().getResources().getString(R.string.total_expenses) + " :", totalExpense));
-        reportList.add(new Pair<String, Integer>(
+        summaryReportList.add(new Pair<String, Integer>(
                 MTApp.get().getResources().getString(R.string.total) + " :", totalExpense + totalIncome));
     }
 

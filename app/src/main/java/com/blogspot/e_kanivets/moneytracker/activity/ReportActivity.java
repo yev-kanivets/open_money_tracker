@@ -3,21 +3,22 @@ package com.blogspot.e_kanivets.moneytracker.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Pair;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
-import android.widget.SimpleExpandableListAdapter;
+import android.widget.TextView;
 
 import com.blogspot.e_kanivets.moneytracker.R;
+import com.blogspot.e_kanivets.moneytracker.adapter.ExpandableListReportAdapter;
 import com.blogspot.e_kanivets.moneytracker.adapter.ReportItemAdapter;
 import com.blogspot.e_kanivets.moneytracker.helper.MTHelper;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
 import com.blogspot.e_kanivets.moneytracker.model.Report;
+import com.blogspot.e_kanivets.moneytracker.util.Constants;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,7 +31,6 @@ import java.util.Map;
 public class ReportActivity extends Activity {
 
     private static final String TAG = ReportActivity.class.getSimpleName();
-    private static final String TITLE_PARAM_NAME = "title";
 
     private Activity activity;
     private Report report;
@@ -102,15 +102,16 @@ public class ReportActivity extends Activity {
         for (Pair<String, Integer> item : report.getReportList()) {
             /* Fill up attribute names for each group */
             m = new HashMap<String, String>();
-            m.put(TITLE_PARAM_NAME, item.first);
+            m.put(Constants.TITLE_PARAM_NAME, item.first);
+            m.put(Constants.PRICE_PARAM_NAME, Integer.toString(item.second));
 
             groupData.add(m);
         }
 
         /* List of attributes of groups for reading  */
-        String groupFrom[] = new String[]{TITLE_PARAM_NAME};
+        String groupFrom[] = new String[]{Constants.TITLE_PARAM_NAME, Constants.PRICE_PARAM_NAME};
         /* List of view IDs for information insertion */
-        int groupTo[] = new int[]{android.R.id.text1};
+        int groupTo[] = new int[]{R.id.tv_category, R.id.tv_total};
 
         /* Create list for childDataItems */
         childData = new ArrayList<List<Map<String, String>>>();
@@ -119,10 +120,16 @@ public class ReportActivity extends Activity {
             childDataItem = new ArrayList<Map<String, String>>();
             /* Fill up attribute names for each child item */
             for (Record record : MTHelper.getInstance().getRecords()) {
-                if (record.getCategory().equals(group.get(TITLE_PARAM_NAME))) {
-                    Log.d(TAG, record.getCategory());
+                if (record.getCategory().equals(group.get(Constants.TITLE_PARAM_NAME))) {
+                    int price = record.getPrice();
+                    if (!record.isIncome()) {
+                        price *= -1;
+                    }
+
                     m = new HashMap<String, String>();
-                    m.put(TITLE_PARAM_NAME, record.getTitle());
+                    m.put(Constants.TITLE_PARAM_NAME, record.getTitle());
+                    m.put(Constants.PRICE_PARAM_NAME, Integer.toString(price));
+
                     childDataItem.add(m);
                 }
             }
@@ -132,19 +139,33 @@ public class ReportActivity extends Activity {
         }
 
         /* List of attributes of childItems for reading  */
-        String childFrom[] = new String[]{TITLE_PARAM_NAME};
+        String childFrom[] = new String[]{Constants.TITLE_PARAM_NAME, Constants.PRICE_PARAM_NAME};
         /* List of view IDs for information insertion */
-        int childTo[] = new int[]{android.R.id.text1};
+        int childTo[] = new int[]{R.id.tv_category, R.id.tv_total};
 
-        expandableListView.setAdapter(new SimpleExpandableListAdapter(
+        expandableListView.addFooterView(getSummaryReportView(report.getSummaryReportList()));
+        expandableListView.setAdapter(new ExpandableListReportAdapter(
                 activity,
                 groupData,
-                android.R.layout.simple_expandable_list_item_1,
+                R.layout.view_report_item_exp,
                 groupFrom,
                 groupTo,
                 childData,
-                android.R.layout.simple_list_item_1,
+                R.layout.view_report_item,
                 childFrom,
-                childTo));
+                childTo) {
+        });
+    }
+
+    private View getSummaryReportView(List<Pair<String, Integer>> summaryReportList) {
+        ViewGroup viewGroup = (ViewGroup) getLayoutInflater().inflate(R.layout.view_summary_report, null);
+
+        ReportItemAdapter adapter = new ReportItemAdapter(activity, summaryReportList);
+
+        for (int i = 0; i < adapter.getCount(); i++) {
+            viewGroup.addView(adapter.getView(i, null, null));
+        }
+
+        return viewGroup;
     }
 }

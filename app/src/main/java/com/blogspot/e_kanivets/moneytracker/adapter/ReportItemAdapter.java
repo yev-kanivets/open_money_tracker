@@ -10,8 +10,6 @@ import android.widget.TextView;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
 /**
@@ -19,8 +17,8 @@ import java.util.List;
  */
 public class ReportItemAdapter extends BaseAdapter {
 
-    Context context;
-    List<Pair<String, Integer>> records;
+    private Context context;
+    private List<Pair<String, Integer>> records;
 
     public ReportItemAdapter(Context context, List<Pair<String, Integer>> records) {
         this.context = context;
@@ -45,13 +43,13 @@ public class ReportItemAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        view = layoutInflater.inflate(R.layout.view_report_item, null);
+        view = layoutInflater.inflate(R.layout.view_summary_report_item, null);
 
         //Customize view to fit to model and UI
-        if(i == getCount()-1) {
+        if (i == getCount() - 1) {
             view.findViewById(R.id.line).setVisibility(View.VISIBLE);
         }
-        if(i == getCount()-3) {
+        if (i == getCount() - 3) {
             view.findViewById(R.id.line).setVisibility(View.VISIBLE);
         }
         view.setBackgroundColor(records.get(i).second < 0 ? context.getResources().getColor(R.color.white_red) :

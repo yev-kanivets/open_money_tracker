@@ -18,4 +18,7 @@ public class Constants {
     public static final String LAUNCH_COUNT = "launch_count";
     public static final int RATE_PERIOD = 5;
     public static final String CONTRIBUTION = "contribution";
+
+    public static final String TITLE_PARAM_NAME = "title";
+    public static final String PRICE_PARAM_NAME = "price";
 }
