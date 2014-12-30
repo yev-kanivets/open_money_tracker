@@ -119,7 +119,7 @@ public class ReportActivity extends Activity {
         for (Map<String, String> group : groupData) {
             childDataItem = new ArrayList<Map<String, String>>();
             /* Fill up attribute names for each child item */
-            for (Record record : MTHelper.getInstance().getRecords()) {
+            for (Record record : report.getSummaryRecordList()) {
                 if (record.getCategory().equals(group.get(Constants.TITLE_PARAM_NAME))) {
                     int price = record.getPrice();
                     if (!record.isIncome()) {

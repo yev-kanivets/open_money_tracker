@@ -30,16 +30,17 @@ public class Report {
         return reportList;
     }
 
-
-
     public List<Pair<String, Integer>> getSummaryReportList() {
         return summaryReportList;
+    }
+
+    public List<Record> getSummaryRecordList() {
+        return summaryRecordList;
     }
 
     private void makeReport() {
         HashMap<String, Integer> map = new HashMap<>();
         HashMap<String, Record> recordMap = new HashMap<>();
-        summaryRecordList = new ArrayList<>();
 
         // Calculate total of all records
         int totalIncome = 0, totalExpense = 0;
@@ -64,7 +65,7 @@ public class Report {
             Record summaryRecord = recordMap.get(key);
             int price = record.getPrice();
 
-            if(!record.isIncome()) {
+            if (record.isIncome()) {
                 price *= -1;
             }
 
@@ -77,10 +78,12 @@ public class Report {
             recordMap.put(key, summaryRecord);
         }
 
-        for(String key : recordMap.keySet()) {
-            summaryRecordList.add(recordMap.get(key));
-        }
+        fillReportList(map);
+        fillSummaryReportList(totalIncome, totalExpense);
+        fillRecordList(recordMap);
+    }
 
+    private void fillReportList(HashMap<String, Integer> map) {
         //Sort reportList
         List<Pair<String, Integer>> reportIncomes = new ArrayList<Pair<String, Integer>>();
         List<Pair<String, Integer>> reportExpenses = new ArrayList<Pair<String, Integer>>();
@@ -100,7 +103,9 @@ public class Report {
         reportList = new ArrayList<Pair<String, Integer>>();
         reportList.addAll(reportIncomes);
         reportList.addAll(reportExpenses);
+    }
 
+    private void fillSummaryReportList(int totalIncome, int totalExpense) {
         //Add summary row to list
         summaryReportList = new ArrayList<Pair<String, Integer>>();
         summaryReportList.add(new Pair<String, Integer>(
@@ -111,6 +116,30 @@ public class Report {
                 MTApp.get().getResources().getString(R.string.total) + " :", totalExpense + totalIncome));
     }
 
+    private void fillRecordList(HashMap<String, Record> recordMap) {
+        //Sort reportList
+        List<Record> recordIncomes = new ArrayList<>();
+        List<Record> recordExpenses = new ArrayList<>();
+
+        for (String name : recordMap.keySet()) {
+            if (recordMap.get(name).getPrice() > 0) {
+                recordIncomes.add(recordMap.get(name));
+            } else {
+                recordExpenses.add(recordMap.get(name));
+            }
+        }
+
+        sortRecordList(recordIncomes);
+        sortRecordList(recordExpenses);
+
+        //Added incomes and expenses to ArrayList
+        summaryRecordList = new ArrayList<>();
+        summaryRecordList.addAll(recordIncomes);
+        summaryRecordList.addAll(recordExpenses);
+
+        sortRecordList(summaryRecordList);
+    }
+
     private void sortList(List<Pair<String, Integer>> list) {
         int n = list.size();
 
@@ -118,6 +147,20 @@ public class Report {
             for (int j = 0; j < n - i - 1; j++) {
                 if (Math.abs(list.get(j).second) < Math.abs(list.get(j + 1).second)) {
                     Pair<String, Integer> tmp = list.get(j);
+                    list.set(j, list.get(j + 1));
+                    list.set(j + 1, tmp);
+                }
+            }
+        }
+    }
+
+    private void sortRecordList(List<Record> list) {
+        int n = list.size();
+
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                if (Math.abs(list.get(j).getPrice()) < Math.abs(list.get(j + 1).getPrice())) {
+                    Record tmp = list.get(j);
                     list.set(j, list.get(j + 1));
                     list.set(j + 1, tmp);
                 }

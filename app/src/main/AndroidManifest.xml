@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.blogspot.e_kanivets.moneytracker"
-    android:versionCode="1"
-    android:versionName="1.0" >
+    package="com.blogspot.e_kanivets.moneytracker" >
 
     <!-- permissions to download and cache video ads for playback -->
     <uses-permission android:name="android.permission.INTERNET" />
