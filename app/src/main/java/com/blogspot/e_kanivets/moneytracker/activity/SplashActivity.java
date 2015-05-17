@@ -16,7 +16,7 @@ public class SplashActivity extends Activity {
     Handler handler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
-            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+            Intent intent = new Intent(SplashActivity.this, NavDrawerActivity.class);
             startActivity(intent);
             finish();
             return false;
