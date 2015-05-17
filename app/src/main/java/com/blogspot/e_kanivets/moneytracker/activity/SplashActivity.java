@@ -11,7 +11,7 @@ import android.view.MenuItem;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 
-public class SplashActivity extends Activity {
+public class SplashActivity extends ActionBarActivity {
 
     Handler handler = new Handler(new Handler.Callback() {
         @Override

@@ -39,7 +39,8 @@
 
         <activity
             android:name=".activity.NavDrawerActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Default">
         </activity>
     </application>
 
