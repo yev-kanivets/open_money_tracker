@@ -5,15 +5,15 @@
     <color name="white">#ffffff</color>
     <color name="blue">#8dc6d9</color>
 
-    <color name="white_green">#f0f8db</color>
-    <color name="green_light">#99cc00</color>
-    <color name="green">#7caf00</color>
-    <color name="green_dark">#669900</color>
+    <color name="white_green">#f1f8e9</color>
+    <color name="green_light">#8bc34a</color>
+    <color name="green">#689f38</color>
+    <color name="green_dark">#33691e</color>
 
-    <color name="white_red">#ffe4e4</color>
-    <color name="red_light">#ff4444</color>
-    <color name="red">#e21d1d</color>
-    <color name="red_dark">#cc0000</color>
+    <color name="white_red">#ffebee</color>
+    <color name="red_light">#f44336</color>
+    <color name="red">#d32f2f</color>
+    <color name="red_dark">#b71c1c</color>
 
     <color name="light_grey">#f6f6f6</color>
     <color name="grey">#e8e8e8</color>
