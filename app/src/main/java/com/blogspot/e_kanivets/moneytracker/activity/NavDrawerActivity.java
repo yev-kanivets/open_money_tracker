@@ -6,12 +6,16 @@ import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
+import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.fragment.ExportFragment;
@@ -48,6 +52,8 @@ public class NavDrawerActivity extends ActionBarActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+        initActionBar();
     }
 
     @Override
@@ -85,6 +91,26 @@ public class NavDrawerActivity extends ActionBarActivity
             default:
                 break;
         }
+    }
+
+    private void initActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setTitle(mTitle);
+
+        ActionBar.LayoutParams lp = new ActionBar.LayoutParams(
+                ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT,
+                Gravity.RIGHT | Gravity.CENTER_VERTICAL);
+        View customNav = LayoutInflater.from(this).inflate(R.layout.view_action_bar, null);
+
+        Spinner spinner = (Spinner) customNav.findViewById(R.id.spinner_period);
+        spinner.setAdapter(new ArrayAdapter<>(NavDrawerActivity.this,
+                android.R.layout.simple_list_item_1, new String[] {"Year", "Month"}));
+        spinner.setSelection(1);
+
+        actionBar.setCustomView(customNav, lp);
+        actionBar.setDisplayShowCustomEnabled(true);
     }
 
     public void restoreActionBar() {
