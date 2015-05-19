@@ -263,6 +263,7 @@ public class NavigationDrawerFragment extends Fragment {
         //noinspection deprecation
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setTitle(R.string.app_name);
+        actionBar.setDisplayShowCustomEnabled(false);
     }
 
     private ActionBar getActionBar() {

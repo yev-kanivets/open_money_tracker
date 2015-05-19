@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.util.DisplayMetrics;
 
 /**
+ * Util class for application
  * Created by eugene on 02/09/14.
  */
 public class AppUtils {
@@ -20,7 +21,7 @@ public class AppUtils {
         SharedPreferences preferences = context.getSharedPreferences(Constants.APP_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt(Constants.LAUNCH_COUNT, preferences.getInt(Constants.LAUNCH_COUNT, 0) + 1);
-        editor.commit();
+        editor.apply();
     }
 
     public static boolean checkRateDialog(Context context) {
@@ -42,18 +43,30 @@ public class AppUtils {
         SharedPreferences preferences = context.getSharedPreferences(Constants.APP_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(Constants.APP_RATED, true);
-        editor.commit();
+        editor.apply();
     }
 
     public static void addContribution(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(Constants.APP_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt(Constants.CONTRIBUTION, preferences.getInt(Constants.CONTRIBUTION, 0) + 1);
-        editor.commit();
+        editor.apply();
     }
 
     public static int getContribution(Context context) {
         SharedPreferences preferences = context.getSharedPreferences(Constants.APP_NAME, Context.MODE_PRIVATE);
         return  preferences.getInt(Constants.CONTRIBUTION, 0);
+    }
+
+    public static int readUsedPeriod(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences(Constants.APP_NAME, Context.MODE_PRIVATE);
+        return  preferences.getInt(Constants.KEY_USED_PERIOD, Constants.DEFAULT_USED_PERIOD);
+    }
+
+    public static void writeUsedPeriod(Context context, int usedPeriod) {
+        SharedPreferences preferences = context.getSharedPreferences(Constants.APP_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt(Constants.KEY_USED_PERIOD, usedPeriod);
+        editor.apply();
     }
 }

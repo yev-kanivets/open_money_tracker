@@ -4,17 +4,22 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.PopupMenu;
 import android.view.ContextMenu;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.blogspot.e_kanivets.moneytracker.R;
@@ -40,7 +45,7 @@ import java.util.Observer;
  * Use the {@link RecordsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RecordsFragment extends Fragment implements View.OnClickListener, Observer {
+public class RecordsFragment extends Fragment implements View.OnClickListener, Observer, AdapterView.OnItemSelectedListener {
     private static final String KEY_POSITION = "key_position";
 
     private int position;
@@ -84,6 +89,7 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_records, container, false);
         initViews(rootView);
+        initActionBar();
         return rootView;
     }
 
@@ -107,8 +113,8 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
 
         switch (item.getItemId()) {
             case R.id.edit:
-                Record record  = MTHelper.getInstance().getRecords().get(info.position);
-                if(record.isIncome()) {
+                Record record = MTHelper.getInstance().getRecords().get(info.position);
+                if (record.isIncome()) {
                     AddIncomeDialog dialog = new AddIncomeDialog(getActivity(), record, AddIncomeDialog.Mode.MODE_EDIT);
                     dialog.show();
                 } else {
@@ -136,10 +142,6 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
                 showAddIncomeDialog();
                 break;
 
-            case R.id.btn_select_period:
-                showSelectPopupMenu(view);
-                break;
-
             case R.id.btn_report:
                 Intent intent = new Intent(getActivity(), ReportActivity.class);
                 startActivity(intent);
@@ -159,6 +161,47 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
     }
 
     @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.clear(Calendar.MINUTE);
+        calendar.clear(Calendar.SECOND);
+        calendar.clear(Calendar.MILLISECOND);
+
+        switch (position) {
+            // Day period
+            case 0:
+                MTHelper.getInstance().setPeriod(PeriodHelper.getInstance().getDayPeriod());
+                break;
+            // Week period
+            case 1:
+                MTHelper.getInstance().setPeriod(PeriodHelper.getInstance().getWeekPeriod());
+                break;
+            // Month period
+            case 2:
+                MTHelper.getInstance().setPeriod(PeriodHelper.getInstance().getMonthPeriod());
+                break;
+            // Year period
+            case 3:
+                MTHelper.getInstance().setPeriod(PeriodHelper.getInstance().getYearPeriod());
+                break;
+            default:
+                break;
+        }
+
+        AppUtils.writeUsedPeriod(getActivity(), position);
+
+        MTHelper.getInstance().update();
+
+        tvFromDate.setText(MTHelper.getInstance().getFirstDay());
+        tvToDate.setText(MTHelper.getInstance().getLastDay());
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    @Override
     public void update(Observable observable, Object o) {
         ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
     }
@@ -168,7 +211,6 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
             View btnAddIncome = rootView.findViewById(R.id.btn_add_income);
             View btnAddExpense = rootView.findViewById(R.id.btn_add_expense);
             View btnReport = rootView.findViewById(R.id.btn_report);
-            View btnSelectPeriod = rootView.findViewById(R.id.btn_select_period);
 
             tvFromDate = (TextView) rootView.findViewById(R.id.tv_from_date);
             tvToDate = (TextView) rootView.findViewById(R.id.tv_to_date);
@@ -182,7 +224,6 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
             //Set listeners
             btnAddIncome.setOnClickListener(RecordsFragment.this);
             btnAddExpense.setOnClickListener(RecordsFragment.this);
-            btnSelectPeriod.setOnClickListener(RecordsFragment.this);
             tvFromDate.setOnClickListener(RecordsFragment.this);
             tvToDate.setOnClickListener(RecordsFragment.this);
             btnReport.setOnClickListener(RecordsFragment.this);
@@ -197,10 +238,10 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
 
                 @Override
                 public void onGlobalLayout() {
-                    if(isFirst) {
+                    if (isFirst) {
                         isFirst = false;
-                        listView.setSelection(listView.getCount()-1);
-                        if(AppUtils.checkRateDialog(getActivity())) {
+                        listView.setSelection(listView.getCount() - 1);
+                        if (AppUtils.checkRateDialog(getActivity())) {
                             showAppRateDialog();
                         }
                     }
@@ -212,6 +253,23 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
         }
     }
 
+    private void initActionBar() {
+        ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
+
+        ActionBar.LayoutParams lp = new ActionBar.LayoutParams(
+                ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT,
+                Gravity.RIGHT | Gravity.CENTER_VERTICAL);
+        View customNav = LayoutInflater.from(getActivity()).inflate(R.layout.view_action_bar, null);
+
+        Spinner spinner = (Spinner) customNav.findViewById(R.id.spinner_period);
+        spinner.setAdapter(new ArrayAdapter<>(getActivity(),
+                android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.array_periods)));
+        spinner.setSelection(AppUtils.readUsedPeriod(getActivity()));
+        spinner.setOnItemSelectedListener(this);
+
+        actionBar.setCustomView(customNav, lp);
+    }
+
     private void showAddIncomeDialog() {
         AddIncomeDialog dialog = new AddIncomeDialog(getActivity(), null, AddIncomeDialog.Mode.MODE_ADD);
         dialog.show();
@@ -220,47 +278,6 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
     private void showAddExpenseDialog() {
         AddExpenseDialog dialog = new AddExpenseDialog(getActivity(), null, AddExpenseDialog.Mode.MODE_ADD);
         dialog.show();
-    }
-
-    private void showSelectPopupMenu(View view) {
-        PopupMenu popupMenu = new PopupMenu(getActivity(), view);
-        popupMenu.getMenuInflater().inflate(R.menu.menu_popup, popupMenu.getMenu());
-
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.clear(Calendar.MINUTE);
-                calendar.clear(Calendar.SECOND);
-                calendar.clear(Calendar.MILLISECOND);
-
-                switch (menuItem.getItemId()) {
-                    case R.id.period_day:
-                        MTHelper.getInstance().setPeriod(PeriodHelper.getInstance().getDayPeriod());
-                        break;
-                    case R.id.period_week:
-                        MTHelper.getInstance().setPeriod(PeriodHelper.getInstance().getWeekPeriod());
-                        break;
-                    case R.id.period_month:
-                        MTHelper.getInstance().setPeriod(PeriodHelper.getInstance().getMonthPeriod());
-                        break;
-                    case R.id.period_year:
-                        MTHelper.getInstance().setPeriod(PeriodHelper.getInstance().getYearPeriod());
-                        break;
-                    default:
-                        break;
-                }
-
-                MTHelper.getInstance().update();
-
-                tvFromDate.setText(MTHelper.getInstance().getFirstDay());
-                tvToDate.setText(MTHelper.getInstance().getLastDay());
-
-                return false;
-            }
-        });
-
-        popupMenu.show();
     }
 
     private void showChangeFromDateDialog() {

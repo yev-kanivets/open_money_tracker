@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
-    <style name="Theme.Default" parent="@style/Theme.AppCompat.Light">
 
+    <style name="Theme.Default" parent="@style/Theme.AppCompat.Light">
         <!-- Support library compatibility -->
         <item name="actionBarStyle">@style/MyActionBar</item>
         <item name="actionBarTabTextStyle">@style/MyActionBarTabText</item>
@@ -12,8 +12,7 @@
         <item name="colorAccent">@color/white</item>
     </style>
 
-    <style name="Theme.NoTitle" parent="@style/Theme.AppCompat.Light.NoActionBar">
-    </style>
+    <style name="Theme.NoTitle" parent="@style/Theme.AppCompat.Light.NoActionBar"></style>
 
     <style name="Theme.FullScreen" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowNoTitle">true</item>

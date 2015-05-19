@@ -21,14 +21,6 @@
             android:gravity="center"
             android:text="New Text" />
 
-        <Button
-            android:id="@+id/btn_select_period"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:background="@drawable/selector_select_period" />
-
         <TextView
             android:id="@+id/tv_to_date"
             android:layout_width="wrap_content"

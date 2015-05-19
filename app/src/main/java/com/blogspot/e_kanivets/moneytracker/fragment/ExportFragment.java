@@ -3,9 +3,14 @@ package com.blogspot.e_kanivets.moneytracker.fragment;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.NavDrawerActivity;
@@ -52,6 +57,7 @@ public class ExportFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        initActionBar();
         return inflater.inflate(R.layout.fragment_export, container, false);
     }
 
@@ -60,5 +66,10 @@ public class ExportFragment extends Fragment {
         super.onAttach(activity);
 
         ((NavDrawerActivity) activity).onSectionAttached(position);
+    }
+
+    private void initActionBar() {
+        ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
+        actionBar.setCustomView(null);
     }
 }
