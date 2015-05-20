@@ -5,9 +5,6 @@ package com.blogspot.e_kanivets.moneytracker.util;
  * Created by eugene on 29/08/14.
  */
 public class Constants {
-
-    public static final String TAG = "Unique";
-
     public static final String DB_NAME = "database";
     public static final int DB_VERSION = 1;
     public static final String TABLE_RECORDS = "records";
@@ -25,4 +22,6 @@ public class Constants {
 
     public static final String TITLE_PARAM_NAME = "title";
     public static final String PRICE_PARAM_NAME = "price";
+
+    public static final String DEFAULT_EXPORT_FILE_NAME = "money_tracker.csv";
 }

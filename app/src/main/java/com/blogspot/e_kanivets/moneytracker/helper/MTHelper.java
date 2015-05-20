@@ -1,10 +1,8 @@
 package com.blogspot.e_kanivets.moneytracker.helper;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.blogspot.e_kanivets.moneytracker.model.Category;
 import com.blogspot.e_kanivets.moneytracker.model.Period;
@@ -20,6 +18,7 @@ import java.util.List;
 import java.util.Observable;
 
 /**
+ * Helper class for Money Tracker application. Singleton.
  * Created by eugene on 01/09/14.
  */
 public class MTHelper extends Observable {
@@ -34,7 +33,7 @@ public class MTHelper extends Observable {
     private Period period;
 
     public static MTHelper getInstance() {
-        if(mtHelper == null) {
+        if (mtHelper == null) {
             mtHelper = new MTHelper();
         }
         return mtHelper;
@@ -44,8 +43,8 @@ public class MTHelper extends Observable {
         dbHelper = new DBHelper(MTApp.get());
 
         initPeriod();
-        categories = new ArrayList<Category>();
-        records = new ArrayList<Record>();
+        categories = new ArrayList<>();
+        records = new ArrayList<>();
     }
 
     public void initialize() {
@@ -55,7 +54,7 @@ public class MTHelper extends Observable {
         Cursor cursor = db.query(Constants.TABLE_CATEGORIES, null, null, null, null, null, null);
         categories.clear();
 
-        if(cursor.moveToFirst()) {
+        if (cursor.moveToFirst()) {
             int idColIndex = cursor.getColumnIndex("id");
             int nameColIndex = cursor.getColumnIndex("name");
 
@@ -74,14 +73,14 @@ public class MTHelper extends Observable {
         cursor.close();
 
         //Form args to select only needed records according to period
-        String[] args = new String[] {Long.toString(period.getFirst().getTime()),
+        String[] args = new String[]{Long.toString(period.getFirst().getTime()),
                 Long.toString(period.getLast().getTime())};
 
         //Read records table from db
         cursor = db.query(Constants.TABLE_RECORDS, null, "time BETWEEN ? AND ?", args, null, null, null);
         records.clear();
 
-        if(cursor.moveToFirst()) {
+        if (cursor.moveToFirst()) {
             //Get indexes of columns
             int idColIndex = cursor.getColumnIndex("id");
             int timeColIndex = cursor.getColumnIndex("time");
@@ -113,6 +112,65 @@ public class MTHelper extends Observable {
         db.close();
     }
 
+    public List<String> getRecordsForExport(long fromDate, long toDate) {
+        final String DELIMITER = ";";
+        List<String> result = new ArrayList<>();
+
+        /* First of all add a header */
+        @SuppressWarnings("StringBufferReplaceableByString")
+        StringBuilder sb = new StringBuilder();
+        sb.append(DBHelper.ID_COLUMN).append(DELIMITER);
+        sb.append(DBHelper.TIME_COLUMN).append(DELIMITER);
+        sb.append(DBHelper.TITLE_COLUMN).append(DELIMITER);
+        sb.append("category").append(DELIMITER);
+        sb.append(DBHelper.PRICE_COLUMN);
+
+        result.add(sb.toString());
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        //Form args to select only needed records according to period
+        String[] args = new String[]{Long.toString(fromDate),
+                Long.toString(toDate)};
+
+        //Read records table from db
+        Cursor cursor = db.query(Constants.TABLE_RECORDS, null, "time BETWEEN ? AND ?", args, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            //Get indexes of columns
+            int idColIndex = cursor.getColumnIndex("id");
+            int timeColIndex = cursor.getColumnIndex("time");
+            int typeColIndex = cursor.getColumnIndex("type");
+            int titleColIndex = cursor.getColumnIndex("title");
+            int categoryColIndex = cursor.getColumnIndex("category_id");
+            int priceColIndex = cursor.getColumnIndex("price");
+
+            do {
+                //Read a record from DB
+                int id = cursor.getInt(idColIndex);
+                long time = cursor.getLong(timeColIndex);
+                int type = cursor.getInt(typeColIndex);
+                String title = cursor.getString(titleColIndex);
+                int categoryId = cursor.getInt(categoryColIndex);
+                int price = cursor.getInt(priceColIndex);
+
+                sb = new StringBuilder();
+                sb.append(id).append(DELIMITER);
+                sb.append(time).append(DELIMITER);
+                sb.append(title).append(DELIMITER);
+                sb.append(getCategoryById(categoryId)).append(DELIMITER);
+                sb.append(type == 0 ? price : -price);
+
+                result.add(sb.toString());
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+
+        return result;
+    }
+
     public void update() {
         initialize();
 
@@ -127,7 +185,7 @@ public class MTHelper extends Observable {
 
     public void addRecord(long time, int type, String title, String category, int price) {
         //Add category if it does not exist yet
-        if(getCategoryIdByName(category) == -1) {
+        if (getCategoryIdByName(category) == -1) {
             addCategory(category);
         }
         int categoryId = getCategoryIdByName(category);
@@ -156,7 +214,7 @@ public class MTHelper extends Observable {
 
     public void updateRecordById(int id, String title, String category, int price) {
         //Add category if it does not exist yet
-        if(getCategoryIdByName(category) == -1) {
+        if (getCategoryIdByName(category) == -1) {
             addCategory(category);
         }
         int categoryId = getCategoryIdByName(category);
@@ -168,11 +226,11 @@ public class MTHelper extends Observable {
         contentValues.put("category_id", categoryId);
         contentValues.put("price", price);
 
-        db.update(Constants.TABLE_RECORDS, contentValues, "id=?", new String[] {new Integer(id).toString()});
+        db.update(Constants.TABLE_RECORDS, contentValues, "id=?", new String[]{Integer.valueOf(id).toString()});
 
         //Change particular record
-        for(Record record : records) {
-            if(record.getId() == id) {
+        for (Record record : records) {
+            if (record.getId() == id) {
                 record.setTitle(title);
                 record.setCategoryId(categoryId);
                 record.setCategory(category);
@@ -187,10 +245,10 @@ public class MTHelper extends Observable {
 
     public void deleteRecordById(int id) {
         for (Record record : records) {
-            if(record.getId() == id) {
+            if (record.getId() == id) {
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
                 db.delete(Constants.TABLE_RECORDS, "id=?",
-                        new String[] {Integer.toString(id)});
+                        new String[]{Integer.toString(id)});
                 db.close();
 
                 records.remove(record);
@@ -222,11 +280,11 @@ public class MTHelper extends Observable {
     }
 
     public void deleteCategoryById(int id) {
-        for(Category category : categories) {
-            if(category.getId() == id) {
+        for (Category category : categories) {
+            if (category.getId() == id) {
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
                 db.delete(Constants.TABLE_CATEGORIES, "id=?",
-                        new String[] {Integer.toString(id)});
+                        new String[]{Integer.toString(id)});
 
                 categories.remove(category);
 
@@ -237,16 +295,16 @@ public class MTHelper extends Observable {
 
     public String getCategoryById(int id) {
         for (Category category : categories) {
-            if(category.getId() == id) return category.getName();
+            if (category.getId() == id) return category.getName();
         }
 
         return null;
     }
 
     public int getCategoryIdByName(String name) {
-        for(Category category : categories) {
+        for (Category category : categories) {
             //Log.d(Constants.TAG, name + " " + category.getName() + " " + category.getName().equals(name));
-            if(category.getName().equals(name)) {
+            if (category.getName().equals(name)) {
                 return category.getId();
             }
         }
