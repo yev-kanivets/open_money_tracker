@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.blogspot.e_kanivets.moneytracker.model.Account;
 import com.blogspot.e_kanivets.moneytracker.model.Category;
 import com.blogspot.e_kanivets.moneytracker.model.Period;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
@@ -29,6 +30,7 @@ public class MTHelper extends Observable {
 
     private List<Category> categories;
     private List<Record> records;
+    private List<Account> accounts;
 
     private Period period;
 
@@ -45,6 +47,7 @@ public class MTHelper extends Observable {
         initPeriod();
         categories = new ArrayList<>();
         records = new ArrayList<>();
+        accounts = new ArrayList<>();
     }
 
     public void initialize() {
@@ -106,6 +109,27 @@ public class MTHelper extends Observable {
 
                 //Add record to list
                 records.add(record);
+            } while (cursor.moveToNext());
+        }
+
+        // Read accounts table from db
+        cursor = db.query(DBHelper.TABLE_ACCOUNTS, null, null, null, null, null, null);
+        accounts.clear();
+
+        if (cursor.moveToFirst()) {
+            // Get indexes of columns
+            int idColIndex = cursor.getColumnIndex(DBHelper.ID_COLUMN);
+            int titleColIndex = cursor.getColumnIndex(DBHelper.TITLE_COLUMN);
+            int curSumColIndex = cursor.getColumnIndex(DBHelper.CUR_SUM_COLUMN);
+
+            do {
+                // Read a account from DB
+                Account account = new Account(cursor.getInt(idColIndex),
+                        cursor.getString(titleColIndex),
+                        cursor.getInt(curSumColIndex));
+
+                //Add account to list
+                accounts.add(account);
             } while (cursor.moveToNext());
         }
 
@@ -181,6 +205,10 @@ public class MTHelper extends Observable {
 
     public List<Record> getRecords() {
         return records;
+    }
+
+    public List<Account> getAccounts() {
+        return accounts;
     }
 
     public void addRecord(long time, int type, String title, String category, int price) {
@@ -357,5 +385,22 @@ public class MTHelper extends Observable {
     public String getLastDay() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         return dateFormat.format(period.getLast());
+    }
+
+    public void addAccount(String title, int curSum) {
+        //Add account to DB
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DBHelper.TITLE_COLUMN, title);
+        contentValues.put(DBHelper.CUR_SUM_COLUMN, curSum);
+
+        int id = (int) db.insert(DBHelper.TABLE_ACCOUNTS, null, contentValues);
+
+        db.close();
+
+        //notify observers
+        setChanged();
+        notifyObservers();
     }
 }
