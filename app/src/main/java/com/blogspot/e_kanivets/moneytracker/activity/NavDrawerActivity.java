@@ -96,11 +96,13 @@ public class NavDrawerActivity extends ActionBarActivity
 
     public void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
-        //noinspection deprecation
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
-        actionBar.setDisplayShowCustomEnabled(true);
+        if (actionBar != null) {
+            //noinspection deprecation
+            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+            actionBar.setDisplayShowTitleEnabled(true);
+            actionBar.setTitle(mTitle);
+            actionBar.setDisplayShowCustomEnabled(true);
+        }
     }
 
     @Override
