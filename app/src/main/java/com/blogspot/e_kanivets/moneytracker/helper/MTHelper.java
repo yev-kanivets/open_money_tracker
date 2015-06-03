@@ -51,7 +51,7 @@ public class MTHelper extends Observable {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         //Read categories table from db
-        Cursor cursor = db.query(Constants.TABLE_CATEGORIES, null, null, null, null, null, null);
+        Cursor cursor = db.query(DBHelper.TABLE_CATEGORIES, null, null, null, null, null, null);
         categories.clear();
 
         if (cursor.moveToFirst()) {
@@ -77,7 +77,7 @@ public class MTHelper extends Observable {
                 Long.toString(period.getLast().getTime())};
 
         //Read records table from db
-        cursor = db.query(Constants.TABLE_RECORDS, null, "time BETWEEN ? AND ?", args, null, null, null);
+        cursor = db.query(DBHelper.TABLE_RECORDS, null, "time BETWEEN ? AND ?", args, null, null, null);
         records.clear();
 
         if (cursor.moveToFirst()) {
@@ -134,7 +134,7 @@ public class MTHelper extends Observable {
                 Long.toString(toDate)};
 
         //Read records table from db
-        Cursor cursor = db.query(Constants.TABLE_RECORDS, null, "time BETWEEN ? AND ?", args, null, null, null);
+        Cursor cursor = db.query(DBHelper.TABLE_RECORDS, null, "time BETWEEN ? AND ?", args, null, null, null);
 
         if (cursor.moveToFirst()) {
             //Get indexes of columns
@@ -200,7 +200,7 @@ public class MTHelper extends Observable {
         contentValues.put("category_id", categoryId);
         contentValues.put("price", price);
 
-        int id = (int) db.insert(Constants.TABLE_RECORDS, null, contentValues);
+        int id = (int) db.insert(DBHelper.TABLE_RECORDS, null, contentValues);
 
         db.close();
 
@@ -226,7 +226,7 @@ public class MTHelper extends Observable {
         contentValues.put("category_id", categoryId);
         contentValues.put("price", price);
 
-        db.update(Constants.TABLE_RECORDS, contentValues, "id=?", new String[]{Integer.valueOf(id).toString()});
+        db.update(DBHelper.TABLE_RECORDS, contentValues, "id=?", new String[]{Integer.valueOf(id).toString()});
 
         //Change particular record
         for (Record record : records) {
@@ -247,7 +247,7 @@ public class MTHelper extends Observable {
         for (Record record : records) {
             if (record.getId() == id) {
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
-                db.delete(Constants.TABLE_RECORDS, "id=?",
+                db.delete(DBHelper.TABLE_RECORDS, "id=?",
                         new String[]{Integer.toString(id)});
                 db.close();
 
@@ -269,7 +269,7 @@ public class MTHelper extends Observable {
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", name);
 
-        int id = (int) db.insert(Constants.TABLE_CATEGORIES, null, contentValues);
+        int id = (int) db.insert(DBHelper.TABLE_CATEGORIES, null, contentValues);
 
         db.close();
 
@@ -283,7 +283,7 @@ public class MTHelper extends Observable {
         for (Category category : categories) {
             if (category.getId() == id) {
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
-                db.delete(Constants.TABLE_CATEGORIES, "id=?",
+                db.delete(DBHelper.TABLE_CATEGORIES, "id=?",
                         new String[]{Integer.toString(id)});
 
                 categories.remove(category);

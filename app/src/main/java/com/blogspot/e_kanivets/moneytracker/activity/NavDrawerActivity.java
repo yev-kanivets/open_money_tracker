@@ -1,23 +1,16 @@
 package com.blogspot.e_kanivets.moneytracker.activity;
 
-import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
 
 import com.blogspot.e_kanivets.moneytracker.R;
+import com.blogspot.e_kanivets.moneytracker.fragment.AccountsFragment;
 import com.blogspot.e_kanivets.moneytracker.fragment.ExportFragment;
 import com.blogspot.e_kanivets.moneytracker.fragment.NavigationDrawerFragment;
 import com.blogspot.e_kanivets.moneytracker.fragment.RecordsFragment;
@@ -65,6 +58,10 @@ public class NavDrawerActivity extends ActionBarActivity
                 break;
 
             case 2:
+                fragment = AccountsFragment.newInstance(position + 1);
+                break;
+
+            case 3:
                 fragment = ExportFragment.newInstance(position + 1);
                 break;
 
@@ -83,9 +80,15 @@ public class NavDrawerActivity extends ActionBarActivity
             case 1:
                 mTitle = getString(R.string.title_records);
                 break;
+
             case 2:
+                mTitle = getString(R.string.title_accounts);
+                break;
+
+            case 3:
                 mTitle = getString(R.string.title_export);
                 break;
+
             default:
                 break;
         }

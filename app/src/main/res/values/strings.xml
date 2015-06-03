@@ -45,11 +45,15 @@
 
     <!-- Not translated strings -->
     <string name="title_records">Records</string>
+    <string name="title_accounts">Accounts</string>
     <string name="title_export">Export</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="export">Export</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
