@@ -16,6 +16,7 @@ import com.blogspot.e_kanivets.moneytracker.fragment.AddIncomeFragment;
 import com.blogspot.e_kanivets.moneytracker.fragment.ExportFragment;
 import com.blogspot.e_kanivets.moneytracker.fragment.NavigationDrawerFragment;
 import com.blogspot.e_kanivets.moneytracker.fragment.RecordsFragment;
+import com.blogspot.e_kanivets.moneytracker.ui.AddIncomeDialog;
 import com.blogspot.e_kanivets.moneytracker.util.AppUtils;
 
 public class NavDrawerActivity extends ActionBarActivity
@@ -153,7 +154,7 @@ public class NavDrawerActivity extends ActionBarActivity
     public void onAddExpensePressed() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, AddExpenseFragment.newInstance())
+                .replace(R.id.container, AddExpenseFragment.newInstance(null, AddExpenseFragment.Mode.MODE_ADD))
                 .addToBackStack("")
                 .commit();
     }

@@ -5,10 +5,12 @@ import android.util.Log;
 import com.blogspot.e_kanivets.moneytracker.helper.MTHelper;
 import com.blogspot.e_kanivets.moneytracker.util.Constants;
 
+import java.io.Serializable;
+
 /**
  * Created by eugene on 01/09/14.
  */
-public class Record {
+public class Record implements Serializable {
 
     private int id;
     private long time;
