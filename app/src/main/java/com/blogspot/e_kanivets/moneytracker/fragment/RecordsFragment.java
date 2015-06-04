@@ -46,14 +46,14 @@ import java.util.Observer;
  * create an instance of this fragment.
  */
 public class RecordsFragment extends Fragment implements View.OnClickListener, Observer, AdapterView.OnItemSelectedListener {
-    private static final String KEY_POSITION = "key_position";
-
-    private int position;
+    public static final String TAG = "RecordsFragment";
 
     private ListView listView;
 
     private TextView tvFromDate;
     private TextView tvToDate;
+
+    private OnFragmentInteractionListener listener;
 
     /**
      * Use this factory method to create a new instance of
@@ -61,12 +61,10 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
      *
      * @return A new instance of fragment RecordsFragment.
      */
-    public static RecordsFragment newInstance(int position) {
+    public static RecordsFragment newInstance() {
         RecordsFragment fragment = new RecordsFragment();
         Bundle args = new Bundle();
-        args.putInt(KEY_POSITION, position);
         fragment.setArguments(args);
-        fragment.position = position;
         return fragment;
     }
 
@@ -79,7 +77,6 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            position = getArguments().getInt(KEY_POSITION);
         }
     }
 
@@ -97,7 +94,14 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        ((NavDrawerActivity) activity).onSectionAttached(position);
+        try {
+            listener = (OnFragmentInteractionListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+
+        ((NavDrawerActivity) activity).onSectionAttached(TAG);
     }
 
     @Override
@@ -135,11 +139,13 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_add_expense:
-                showAddExpenseDialog();
+                //showAddExpenseDialog();
+                listener.onAddExpensePressed();
                 break;
 
             case R.id.btn_add_income:
-                showAddIncomeDialog();
+                //showAddIncomeDialog();
+                listener.onAddIncomePressed();
                 break;
 
             case R.id.btn_report:
@@ -267,7 +273,9 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
         spinner.setSelection(AppUtils.readUsedPeriod(getActivity()));
         spinner.setOnItemSelectedListener(this);
 
-        actionBar.setCustomView(customNav, lp);
+        if (actionBar != null) {
+            actionBar.setCustomView(customNav, lp);
+        }
     }
 
     private void showAddIncomeDialog() {
@@ -312,5 +320,10 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
         AppRateDialog dialog = new AppRateDialog(getActivity());
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
+    }
+
+    public interface OnFragmentInteractionListener {
+        void onAddIncomePressed();
+        void onAddExpensePressed();
     }
 }

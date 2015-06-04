@@ -11,13 +11,16 @@ import android.support.v4.widget.DrawerLayout;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.fragment.AccountsFragment;
+import com.blogspot.e_kanivets.moneytracker.fragment.AddExpenseFragment;
+import com.blogspot.e_kanivets.moneytracker.fragment.AddIncomeFragment;
 import com.blogspot.e_kanivets.moneytracker.fragment.ExportFragment;
 import com.blogspot.e_kanivets.moneytracker.fragment.NavigationDrawerFragment;
 import com.blogspot.e_kanivets.moneytracker.fragment.RecordsFragment;
 import com.blogspot.e_kanivets.moneytracker.util.AppUtils;
 
 public class NavDrawerActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks,
+        RecordsFragment.OnFragmentInteractionListener {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -54,15 +57,15 @@ public class NavDrawerActivity extends ActionBarActivity
 
         switch (position + 1) {
             case 1:
-                fragment = RecordsFragment.newInstance(position + 1);
+                fragment = RecordsFragment.newInstance();
                 break;
 
             case 2:
-                fragment = AccountsFragment.newInstance(position + 1);
+                fragment = AccountsFragment.newInstance();
                 break;
 
             case 3:
-                fragment = ExportFragment.newInstance(position + 1);
+                fragment = ExportFragment.newInstance();
                 break;
 
             default:
@@ -75,23 +78,33 @@ public class NavDrawerActivity extends ActionBarActivity
                 .commit();
     }
 
-    public void onSectionAttached(int number) {
-        switch (number) {
-            case 1:
-                mTitle = getString(R.string.title_records);
-                break;
-
-            case 2:
+    public void onSectionAttached(String tag) {
+        switch (tag) {
+            case AccountsFragment.TAG:
                 mTitle = getString(R.string.title_accounts);
                 break;
 
-            case 3:
+            case AddExpenseFragment.TAG:
+                mTitle = getString(R.string.title_add_expense);
+                break;
+
+            case AddIncomeFragment.TAG:
+                mTitle = getString(R.string.title_add_income);
+                break;
+
+            case ExportFragment.TAG:
                 mTitle = getString(R.string.title_export);
+                break;
+
+            case RecordsFragment.TAG:
+                mTitle = getString(R.string.title_records);
                 break;
 
             default:
                 break;
         }
+
+        restoreActionBar();
     }
 
     public void restoreActionBar() {
@@ -125,5 +138,23 @@ public class NavDrawerActivity extends ActionBarActivity
         int id = item.getItemId();
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onAddIncomePressed() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, AddIncomeFragment.newInstance())
+                .addToBackStack("")
+                .commit();
+    }
+
+    @Override
+    public void onAddExpensePressed() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, AddExpenseFragment.newInstance())
+                .addToBackStack("")
+                .commit();
     }
 }

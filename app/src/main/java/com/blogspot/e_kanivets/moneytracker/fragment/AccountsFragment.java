@@ -23,11 +23,7 @@ import com.blogspot.e_kanivets.moneytracker.helper.MTHelper;
  * create an instance of this fragment.
  */
 public class AccountsFragment extends Fragment implements View.OnClickListener {
-    private static final String KEY_POSITION = "key_position";
-
-    private int position;
-
-    private ListView listView;
+    public static final String TAG = "AccountsFragment";
 
     /**
      * Use this factory method to create a new instance of
@@ -35,12 +31,10 @@ public class AccountsFragment extends Fragment implements View.OnClickListener {
      *
      * @return A new instance of fragment AccountsFragment.
      */
-    public static AccountsFragment newInstance(int position) {
+    public static AccountsFragment newInstance() {
         AccountsFragment fragment = new AccountsFragment();
         Bundle args = new Bundle();
-        args.putInt(KEY_POSITION, position);
         fragment.setArguments(args);
-        fragment.position = position;
         return fragment;
     }
 
@@ -52,7 +46,6 @@ public class AccountsFragment extends Fragment implements View.OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            position = getArguments().getInt(KEY_POSITION);
         }
     }
 
@@ -70,7 +63,7 @@ public class AccountsFragment extends Fragment implements View.OnClickListener {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        ((NavDrawerActivity) activity).onSectionAttached(position);
+        ((NavDrawerActivity) activity).onSectionAttached(TAG);
     }
 
     @Override
@@ -87,7 +80,7 @@ public class AccountsFragment extends Fragment implements View.OnClickListener {
 
     private void initViews(View rootView) {
         if (rootView != null) {
-            listView = (ListView) rootView.findViewById(R.id.list_view);
+            ListView listView = (ListView) rootView.findViewById(R.id.list_view);
 
             rootView.findViewById(R.id.btn_add_account).setOnClickListener(this);
 

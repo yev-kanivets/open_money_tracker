@@ -29,9 +29,7 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class ExportFragment extends Fragment implements View.OnClickListener {
-    private static final String KEY_POSITION = "key_position";
-
-    private int position;
+    public static final String TAG = "ExportFragment";
 
     /**
      * Use this factory method to create a new instance of
@@ -39,12 +37,10 @@ public class ExportFragment extends Fragment implements View.OnClickListener {
      *
      * @return A new instance of fragment ExportFragment.
      */
-    public static ExportFragment newInstance(int position) {
+    public static ExportFragment newInstance() {
         ExportFragment fragment = new ExportFragment();
         Bundle args = new Bundle();
-        args.putInt(KEY_POSITION, position);
         fragment.setArguments(args);
-        fragment.position = position;
         return fragment;
     }
 
@@ -57,7 +53,6 @@ public class ExportFragment extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            position = getArguments().getInt(KEY_POSITION);
         }
     }
 
@@ -75,7 +70,7 @@ public class ExportFragment extends Fragment implements View.OnClickListener {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        ((NavDrawerActivity) activity).onSectionAttached(position);
+        ((NavDrawerActivity) activity).onSectionAttached(TAG);
     }
 
     @Override
