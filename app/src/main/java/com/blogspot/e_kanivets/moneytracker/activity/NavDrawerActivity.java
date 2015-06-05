@@ -16,7 +16,7 @@ import com.blogspot.e_kanivets.moneytracker.fragment.AddIncomeFragment;
 import com.blogspot.e_kanivets.moneytracker.fragment.ExportFragment;
 import com.blogspot.e_kanivets.moneytracker.fragment.NavigationDrawerFragment;
 import com.blogspot.e_kanivets.moneytracker.fragment.RecordsFragment;
-import com.blogspot.e_kanivets.moneytracker.ui.AddIncomeDialog;
+import com.blogspot.e_kanivets.moneytracker.model.Record;
 import com.blogspot.e_kanivets.moneytracker.util.AppUtils;
 
 public class NavDrawerActivity extends ActionBarActivity
@@ -143,18 +143,35 @@ public class NavDrawerActivity extends ActionBarActivity
 
     @Override
     public void onAddIncomePressed() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, AddIncomeFragment.newInstance(null, AddIncomeFragment.Mode.MODE_ADD))
-                .addToBackStack("")
-                .commit();
+        showAddIncomeFragment(null, AddIncomeFragment.Mode.MODE_ADD);
     }
 
     @Override
     public void onAddExpensePressed() {
+        showAddExpenseFragment(null, AddExpenseFragment.Mode.MODE_ADD);
+    }
+
+    @Override
+    public void onEditRecord(Record record) {
+        if (record.isIncome()) {
+            showAddIncomeFragment(record, AddIncomeFragment.Mode.MODE_EDIT);
+        } else {
+            showAddExpenseFragment(record, AddExpenseFragment.Mode.MODE_EDIT);
+        }
+    }
+
+    private void showAddIncomeFragment(Record record, AddIncomeFragment.Mode mode) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, AddExpenseFragment.newInstance(null, AddExpenseFragment.Mode.MODE_ADD))
+                .replace(R.id.container, AddIncomeFragment.newInstance(record, mode))
+                .addToBackStack("")
+                .commit();
+    }
+
+    private void showAddExpenseFragment(Record record, AddExpenseFragment.Mode mode) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, AddExpenseFragment.newInstance(record, mode))
                 .addToBackStack("")
                 .commit();
     }

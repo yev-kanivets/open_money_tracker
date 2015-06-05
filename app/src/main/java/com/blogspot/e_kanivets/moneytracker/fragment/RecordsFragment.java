@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.PopupMenu;
 import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -17,7 +16,6 @@ import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -29,8 +27,6 @@ import com.blogspot.e_kanivets.moneytracker.adapter.RecordAdapter;
 import com.blogspot.e_kanivets.moneytracker.helper.MTHelper;
 import com.blogspot.e_kanivets.moneytracker.helper.PeriodHelper;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
-import com.blogspot.e_kanivets.moneytracker.ui.AddExpenseDialog;
-import com.blogspot.e_kanivets.moneytracker.ui.AddIncomeDialog;
 import com.blogspot.e_kanivets.moneytracker.ui.AppRateDialog;
 import com.blogspot.e_kanivets.moneytracker.ui.ChangeDateDialog;
 import com.blogspot.e_kanivets.moneytracker.util.AppUtils;
@@ -118,13 +114,7 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
         switch (item.getItemId()) {
             case R.id.edit:
                 Record record = MTHelper.getInstance().getRecords().get(info.position);
-                if (record.isIncome()) {
-                    AddIncomeDialog dialog = new AddIncomeDialog(getActivity(), record, AddIncomeDialog.Mode.MODE_EDIT);
-                    dialog.show();
-                } else {
-                    AddExpenseDialog dialog = new AddExpenseDialog(getActivity(), record, AddExpenseDialog.Mode.MODE_EDIT);
-                    dialog.show();
-                }
+                listener.onEditRecord(record);
                 return true;
             case R.id.delete:
                 MTHelper.getInstance().deleteRecordById(MTHelper.getInstance().getRecords().
@@ -278,16 +268,6 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
         }
     }
 
-    private void showAddIncomeDialog() {
-        AddIncomeDialog dialog = new AddIncomeDialog(getActivity(), null, AddIncomeDialog.Mode.MODE_ADD);
-        dialog.show();
-    }
-
-    private void showAddExpenseDialog() {
-        AddExpenseDialog dialog = new AddExpenseDialog(getActivity(), null, AddExpenseDialog.Mode.MODE_ADD);
-        dialog.show();
-    }
-
     private void showChangeFromDateDialog() {
         ChangeDateDialog dialog = new ChangeDateDialog(getActivity(),
                 MTHelper.getInstance().getPeriod().getFirst(), new ChangeDateDialog.OnDateChangedListener() {
@@ -325,5 +305,6 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
     public interface OnFragmentInteractionListener {
         void onAddIncomePressed();
         void onAddExpensePressed();
+        void onEditRecord(Record record);
     }
 }
