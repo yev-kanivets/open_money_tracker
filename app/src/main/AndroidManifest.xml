@@ -23,7 +23,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.ReportActivity" />
-        <activity android:name=".activity.ThankAuthorActivity" />
         <activity
             android:name="com.vungle.publisher.FullScreenAdActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"

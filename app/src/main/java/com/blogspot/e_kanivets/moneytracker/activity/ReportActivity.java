@@ -54,17 +54,6 @@ public class ReportActivity extends Activity {
         listView = (ListView) findViewById(R.id.listView);
         expandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
 
-        /*tvTitle.setText("REPORT (" + MTHelper.getInstance().getFirstDay() + " - "
-                + MTHelper.getInstance().getLastDay() + ")");*/
-
-        findViewById(R.id.btn_thank_author).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ReportActivity.this, ThankAuthorActivity.class);
-                startActivity(intent);
-            }
-        });
-
         listView.setAdapter(new ReportItemAdapter(activity,
                 new Report(MTHelper.getInstance().getRecords()).getReportList()));
 
