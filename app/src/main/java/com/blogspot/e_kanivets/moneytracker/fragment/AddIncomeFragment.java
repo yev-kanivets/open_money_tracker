@@ -3,6 +3,8 @@ package com.blogspot.e_kanivets.moneytracker.fragment;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,6 +71,7 @@ public class AddIncomeFragment extends Fragment implements View.OnClickListener 
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_add_income, container, false);
         initViews(rootView);
+        initActionBar();
         return rootView;
     }
 
@@ -135,6 +138,13 @@ public class AddIncomeFragment extends Fragment implements View.OnClickListener 
 
             buttonAdd.setOnClickListener(this);
             rootView.findViewById(R.id.btn_cancel).setOnClickListener(this);
+        }
+    }
+
+    private void initActionBar() {
+        ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setCustomView(null);
         }
     }
 

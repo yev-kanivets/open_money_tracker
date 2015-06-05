@@ -246,6 +246,8 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
 
             //Subscribe to helper
             MTHelper.getInstance().addObserver(this);
+
+            ((NavDrawerActivity) getActivity()).onSectionAttached(TAG);
         }
     }
 
