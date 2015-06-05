@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.blogspot.e_kanivets.moneytracker.R;
@@ -23,7 +22,7 @@ import java.util.Date;
  * Use the {@link AddExpenseFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AddExpenseFragment extends Fragment {
+public class AddExpenseFragment extends Fragment implements View.OnClickListener {
     public static final String TAG = "AddExpenseFragment";
 
     private static final String KEY_RECORD = "key_record";
@@ -31,6 +30,10 @@ public class AddExpenseFragment extends Fragment {
 
     private Record record;
     private Mode mode;
+
+    private EditText etTitle;
+    private EditText etCategory;
+    private EditText etPrice;
 
     /**
      * Use this factory method to create a new instance of
@@ -76,60 +79,64 @@ public class AddExpenseFragment extends Fragment {
         ((NavDrawerActivity) activity).onSectionAttached(TAG);
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_add:
+                String title = etTitle.getText().toString();
+                String category = etCategory.getText().toString();
+
+                //Check if price is valid
+                int price = 0;
+                try {
+                    price = Integer.parseInt(etPrice.getText().toString());
+                    if (price >= 0 && price <= 1000000000) {
+                        if (mode == Mode.MODE_ADD) {
+                            MTHelper.getInstance().addRecord(new Date().getTime(), 1, title, category, price);
+                        }
+                        if (mode == Mode.MODE_EDIT) {
+                            MTHelper.getInstance().updateRecordById(record.getId(), title, category, price);
+                        }
+
+                    } else {
+                        throw new NumberFormatException();
+                    }
+                } catch (NumberFormatException e) {
+                    Toast.makeText(getActivity(), getResources().getString(R.string.wrong_number_text),
+                            Toast.LENGTH_SHORT).show();
+                }
+
+                finish();
+                break;
+
+            case R.id.btn_cancel:
+                finish();
+                break;
+
+            default:
+                break;
+        }
+    }
+
     private void initViews(final View rootView) {
         if (rootView != null) {
-            TextView tvTitle = (TextView) rootView.findViewById(R.id.tv_title);
+            etTitle = (EditText) rootView.findViewById(R.id.et_title);
+            etCategory = (EditText) rootView.findViewById(R.id.et_category);
+            etPrice = (EditText) rootView.findViewById(R.id.et_price);
 
-            tvTitle.setText(R.string.expense);
-            tvTitle.setBackgroundColor(getResources().getColor(R.color.red_light));
-
-            Button buttonAdd = (Button) rootView.findViewById(R.id.b_add);
-            buttonAdd.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String title = ((EditText) rootView.findViewById(R.id.et_title)).getText().toString();
-                    String category = ((EditText) rootView.findViewById(R.id.et_category)).getText().toString();
-
-                    //Check if price is valid
-                    int price = 0;
-                    try {
-                        price = Integer.parseInt(((EditText) rootView.findViewById(R.id.et_price)).getText().toString());
-                        if (price >= 0 && price <= 1000000000) {
-                            if (mode == Mode.MODE_ADD) {
-                                MTHelper.getInstance().addRecord(new Date().getTime(), 1, title, category, price);
-                            }
-                            if (mode == Mode.MODE_EDIT) {
-                                MTHelper.getInstance().updateRecordById(record.getId(), title, category, price);
-                            }
-
-                        } else {
-                            throw new NumberFormatException();
-                        }
-                    } catch (NumberFormatException e) {
-                        Toast.makeText(getActivity(), getResources().getString(R.string.wrong_number_text),
-                                Toast.LENGTH_SHORT).show();
-                    }
-
-                    finish();
-                }
-            });
-
-            Button buttonCancel = (Button) rootView.findViewById(R.id.b_cancel);
-            buttonCancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    finish();
-                }
-            });
+            Button buttonAdd = (Button) rootView.findViewById(R.id.btn_add);
 
             //Add texts to dialog if it's edit dialog
             if (mode == Mode.MODE_EDIT) {
-                ((EditText) rootView.findViewById(R.id.et_title)).setText(record.getTitle());
-                ((EditText) rootView.findViewById(R.id.et_category)).setText(record.getCategory());
-                ((EditText) rootView.findViewById(R.id.et_price)).setText(Integer.toString(record.getPrice()));
+                etTitle.setText(record.getTitle());
+                etCategory.setText(record.getCategory());
+                etPrice.setText(Integer.toString(record.getPrice()));
 
                 buttonAdd.setText(getResources().getString(R.string.save));
             }
+
+            buttonAdd.setOnClickListener(this);
+            rootView.findViewById(R.id.btn_cancel).setOnClickListener(this);
         }
     }
 
