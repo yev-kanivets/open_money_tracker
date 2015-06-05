@@ -6,9 +6,11 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -24,7 +26,7 @@ import java.util.Date;
  * Use the {@link AddExpenseFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AddExpenseFragment extends Fragment implements View.OnClickListener {
+public class AddExpenseFragment extends Fragment {
     public static final String TAG = "AddExpenseFragment";
 
     private static final String KEY_RECORD = "key_record";
@@ -72,6 +74,7 @@ public class AddExpenseFragment extends Fragment implements View.OnClickListener
         View rootView = inflater.inflate(R.layout.fragment_add_expense, container, false);
         initViews(rootView);
         initActionBar();
+        setHasOptionsMenu(true);
         return rootView;
     }
 
@@ -83,9 +86,15 @@ public class AddExpenseFragment extends Fragment implements View.OnClickListener
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_add:
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_add_record, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_done:
                 String title = etTitle.getText().toString();
                 String category = etCategory.getText().toString();
 
@@ -110,14 +119,14 @@ public class AddExpenseFragment extends Fragment implements View.OnClickListener
                 }
 
                 finish();
-                break;
+                return true;
 
-            case R.id.btn_cancel:
+            case R.id.action_close:
                 finish();
-                break;
+                return true;
 
             default:
-                break;
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -127,19 +136,12 @@ public class AddExpenseFragment extends Fragment implements View.OnClickListener
             etCategory = (EditText) rootView.findViewById(R.id.et_category);
             etPrice = (EditText) rootView.findViewById(R.id.et_price);
 
-            Button buttonAdd = (Button) rootView.findViewById(R.id.btn_add);
-
             //Add texts to dialog if it's edit dialog
             if (mode == Mode.MODE_EDIT) {
                 etTitle.setText(record.getTitle());
                 etCategory.setText(record.getCategory());
                 etPrice.setText(Integer.toString(record.getPrice()));
-
-                buttonAdd.setText(getResources().getString(R.string.save));
             }
-
-            buttonAdd.setOnClickListener(this);
-            rootView.findViewById(R.id.btn_cancel).setOnClickListener(this);
         }
     }
 
