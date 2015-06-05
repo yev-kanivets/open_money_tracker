@@ -145,7 +145,7 @@ public class NavDrawerActivity extends ActionBarActivity
     public void onAddIncomePressed() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, AddIncomeFragment.newInstance())
+                .replace(R.id.container, AddIncomeFragment.newInstance(null, AddIncomeFragment.Mode.MODE_ADD))
                 .addToBackStack("")
                 .commit();
     }
