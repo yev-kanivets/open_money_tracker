@@ -71,7 +71,7 @@ public class AddExpenseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_add_expense, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_add_record, container, false);
         initViews(rootView);
         initActionBar();
         setHasOptionsMenu(true);

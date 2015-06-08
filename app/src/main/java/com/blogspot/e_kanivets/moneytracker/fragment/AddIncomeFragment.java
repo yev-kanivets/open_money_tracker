@@ -72,7 +72,7 @@ public class AddIncomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_add_income, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_add_record, container, false);
         initViews(rootView);
         initActionBar();
         setHasOptionsMenu(true);
