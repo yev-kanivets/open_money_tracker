@@ -85,12 +85,13 @@ public class MTHelper extends Observable {
 
         if (cursor.moveToFirst()) {
             //Get indexes of columns
-            int idColIndex = cursor.getColumnIndex("id");
-            int timeColIndex = cursor.getColumnIndex("time");
-            int typeColIndex = cursor.getColumnIndex("type");
-            int titleColIndex = cursor.getColumnIndex("title");
-            int categoryColIndex = cursor.getColumnIndex("category_id");
-            int priceColIndex = cursor.getColumnIndex("price");
+            int idColIndex = cursor.getColumnIndex(DBHelper.ID_COLUMN);
+            int timeColIndex = cursor.getColumnIndex(DBHelper.TIME_COLUMN);
+            int typeColIndex = cursor.getColumnIndex(DBHelper.TYPE_COLUMN);
+            int titleColIndex = cursor.getColumnIndex(DBHelper.TITLE_COLUMN);
+            int categoryColIndex = cursor.getColumnIndex(DBHelper.CATEGORY_ID_COLUMN);
+            int priceColIndex = cursor.getColumnIndex(DBHelper.PRICE_COLUMN);
+            int accountIdColIndex = cursor.getColumnIndex(DBHelper.ACCOUNT_ID_COLUMN);
 
             do {
                 //Read a record from DB
@@ -99,7 +100,8 @@ public class MTHelper extends Observable {
                         cursor.getInt(typeColIndex),
                         cursor.getString(titleColIndex),
                         cursor.getInt(categoryColIndex),
-                        cursor.getInt(priceColIndex));
+                        cursor.getInt(priceColIndex),
+                        cursor.getInt(accountIdColIndex));
                 /*Log.d(Constants.TAG, "id = " + cursor.getInt(idColIndex) +
                     " time = " + cursor.getLong(timeColIndex) +
                     " type = " + cursor.getInt(typeColIndex) +
@@ -211,7 +213,7 @@ public class MTHelper extends Observable {
         return accounts;
     }
 
-    public void addRecord(long time, int type, String title, String category, int price) {
+    public void addRecord(long time, int type, String title, String category, int price, int accountId, int diff) {
         //Add category if it does not exist yet
         if (getCategoryIdByName(category) == -1) {
             addCategory(category);
@@ -227,20 +229,23 @@ public class MTHelper extends Observable {
         contentValues.put("title", title);
         contentValues.put("category_id", categoryId);
         contentValues.put("price", price);
+        contentValues.put(DBHelper.ACCOUNT_ID_COLUMN, accountId);
 
         int id = (int) db.insert(DBHelper.TABLE_RECORDS, null, contentValues);
+
+        updateAccountById(accountId, diff);
 
         db.close();
 
         //Add record to app list
-        records.add(new Record(id, time, type, title, categoryId, price));
+        records.add(new Record(id, time, type, title, categoryId, price, accountId));
 
         //notify observers
         setChanged();
         notifyObservers();
     }
 
-    public void updateRecordById(int id, String title, String category, int price) {
+    public void updateRecordById(int id, String title, String category, int price, int accountId, int diff) {
         //Add category if it does not exist yet
         if (getCategoryIdByName(category) == -1) {
             addCategory(category);
@@ -253,8 +258,11 @@ public class MTHelper extends Observable {
         contentValues.put("title", title);
         contentValues.put("category_id", categoryId);
         contentValues.put("price", price);
+        contentValues.put(DBHelper.ACCOUNT_ID_COLUMN, accountId);
 
         db.update(DBHelper.TABLE_RECORDS, contentValues, "id=?", new String[]{Integer.valueOf(id).toString()});
+
+        updateAccountById(accountId, diff);
 
         //Change particular record
         for (Record record : records) {
@@ -263,6 +271,44 @@ public class MTHelper extends Observable {
                 record.setCategoryId(categoryId);
                 record.setCategory(category);
                 record.setPrice(price);
+                record.setAccountId(accountId);
+            }
+        }
+
+        //notify observers
+        setChanged();
+        notifyObservers();
+    }
+
+    public void updateAccountById(int id, int diff) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        // Read account from db
+        Cursor cursor = db.query(DBHelper.TABLE_ACCOUNTS, null, "id=?", new String[]{Integer.valueOf(id).toString()}, null, null, null);
+        Account account = null;
+        if (cursor.moveToFirst()) {
+            // Get indexes of columns
+            int idColIndex = cursor.getColumnIndex(DBHelper.ID_COLUMN);
+            int titleColIndex = cursor.getColumnIndex(DBHelper.TITLE_COLUMN);
+            int curSumColIndex = cursor.getColumnIndex(DBHelper.CUR_SUM_COLUMN);
+
+            account = new Account(cursor.getInt(idColIndex),
+                    cursor.getString(titleColIndex),
+                    cursor.getInt(curSumColIndex));
+        }
+
+        cursor.close();
+
+        if (account != null) {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(DBHelper.CUR_SUM_COLUMN, account.getCurSum() + diff);
+
+            db.update(DBHelper.TABLE_ACCOUNTS, contentValues, "id=?", new String[]{Integer.valueOf(id).toString()});
+
+            for (Account one : accounts) {
+                if (one.getId() == account.getId()) {
+                    one.setCurSum(account.getCurSum() + diff);
+                }
             }
         }
 
@@ -280,6 +326,9 @@ public class MTHelper extends Observable {
                 db.close();
 
                 records.remove(record);
+
+                updateAccountById(record.getAccountId(), record.isIncome() ?
+                        -record.getPrice() : record.getPrice());
 
                 //notify observers
                 setChanged();

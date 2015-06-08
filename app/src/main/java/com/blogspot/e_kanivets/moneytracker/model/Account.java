@@ -10,8 +10,13 @@ public class Account {
     private int curSum;
 
     public Account(int id, String title, int curSum) {
+        this.id = id;
         this.title = title;
         this.curSum = curSum;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getTitle() {

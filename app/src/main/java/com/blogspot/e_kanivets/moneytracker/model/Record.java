@@ -8,6 +8,7 @@ import com.blogspot.e_kanivets.moneytracker.util.Constants;
 import java.io.Serializable;
 
 /**
+ * Entity class.
  * Created by eugene on 01/09/14.
  */
 public class Record implements Serializable {
@@ -19,14 +20,16 @@ public class Record implements Serializable {
     private int categoryId;
     private String category;
     private int price;
+    private int accountId;
 
-    public Record(int id, long time, int type, String title, int categoryId, int price) {
+    public Record(int id, long time, int type, String title, int categoryId, int price, int accountId) {
         this.id = id;
         this.time = time;
         this.type = type;
         this.title = title;
         this.categoryId = categoryId;
         this.price = price;
+        this.accountId = accountId;
 
         category = MTHelper.getInstance().getCategoryById(categoryId);
 
@@ -75,5 +78,13 @@ public class Record implements Serializable {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public int getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
     }
 }

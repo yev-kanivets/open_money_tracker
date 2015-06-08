@@ -2,7 +2,10 @@ package com.blogspot.e_kanivets.moneytracker.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
 import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.View;
 
 /**
  * Util class for application
@@ -68,5 +71,19 @@ public class AppUtils {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt(Constants.KEY_USED_PERIOD, usedPeriod);
         editor.apply();
+    }
+
+    public static boolean isKeyboardShown(View rootView) {
+        /* 128dp = 32dp * 4, minimum button height 32dp and generic 4 rows soft keyboard */
+        final int SOFT_KEYBOARD_HEIGHT_DP_THRESHOLD = 128;
+
+        Rect r = new Rect();
+        rootView.getWindowVisibleDisplayFrame(r);
+        DisplayMetrics dm = rootView.getResources().getDisplayMetrics();
+        /* heightDiff = rootView height - status bar height (r.top) - visible frame height (r.bottom - r.top) */
+        int heightDiff = rootView.getBottom() - r.bottom;
+        /* Threshold size: dp to pixels, multiply with display density */
+
+        return heightDiff > SOFT_KEYBOARD_HEIGHT_DP_THRESHOLD * dm.density;
     }
 }

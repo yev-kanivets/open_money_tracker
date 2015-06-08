@@ -70,7 +70,8 @@ public class Report {
             }
 
             if (summaryRecord == null) {
-                summaryRecord = new Record(-1, -1, -1, record.getTitle(), record.getCategoryId(), price);
+                summaryRecord = new Record(-1, -1, -1, record.getTitle(), record.getCategoryId(),
+                        price, record.getAccountId());
             } else {
                 summaryRecord.setPrice(summaryRecord.getPrice() + price);
             }
