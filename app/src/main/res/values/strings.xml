@@ -49,11 +49,13 @@
     <string name="title_export">Export</string>
     <string name="title_add_income">Add income</string>
     <string name="title_add_expense">Add expense</string>
+    <string name="title_add_account">Add account</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="export">Export</string>
     <string name="add_account">Add account</string>
+    <string name="initial_sum">Initial sum</string>
 
 </resources>

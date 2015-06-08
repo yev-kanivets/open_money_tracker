@@ -17,13 +17,18 @@ import com.blogspot.e_kanivets.moneytracker.adapter.AccountAdapter;
 import com.blogspot.e_kanivets.moneytracker.adapter.RecordAdapter;
 import com.blogspot.e_kanivets.moneytracker.helper.MTHelper;
 
+import java.util.Observable;
+import java.util.Observer;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link AccountsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AccountsFragment extends Fragment implements View.OnClickListener {
+public class AccountsFragment extends Fragment implements View.OnClickListener, Observer {
     public static final String TAG = "AccountsFragment";
+
+    private ListView listView;
 
     /**
      * Use this factory method to create a new instance of
@@ -55,13 +60,14 @@ public class AccountsFragment extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_accounts, container, false);
         initViews(rootView);
-        initActionBar();
         return rootView;
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+
+        initActionBar();
 
         ((NavDrawerActivity) activity).onSectionAttached(TAG);
     }
@@ -70,7 +76,7 @@ public class AccountsFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_add_account:
-                MTHelper.getInstance().addAccount("Cash", 2000);
+                ((NavDrawerActivity) getActivity()).showAddAccountFragment();
                 break;
 
             default:
@@ -78,14 +84,24 @@ public class AccountsFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    @Override
+    public void update(Observable observable, Object data) {
+        ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
+    }
+
     private void initViews(View rootView) {
         if (rootView != null) {
-            ListView listView = (ListView) rootView.findViewById(R.id.list_view);
+            listView = (ListView) rootView.findViewById(R.id.list_view);
 
             rootView.findViewById(R.id.btn_add_account).setOnClickListener(this);
 
             listView.setAdapter(new AccountAdapter(getActivity(), MTHelper.getInstance().getAccounts()));
             ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
+
+            //Subscribe to helper
+            MTHelper.getInstance().addObserver(this);
+
+            ((NavDrawerActivity) getActivity()).onSectionAttached(TAG);
         }
     }
 

@@ -399,6 +399,9 @@ public class MTHelper extends Observable {
 
         db.close();
 
+        //Add account to app list
+        accounts.add(new Account(id, title, curSum));
+
         //notify observers
         setChanged();
         notifyObservers();

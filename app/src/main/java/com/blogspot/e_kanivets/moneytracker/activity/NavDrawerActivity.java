@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.fragment.AccountsFragment;
+import com.blogspot.e_kanivets.moneytracker.fragment.AddAccountFragment;
 import com.blogspot.e_kanivets.moneytracker.fragment.AddExpenseFragment;
 import com.blogspot.e_kanivets.moneytracker.fragment.AddIncomeFragment;
 import com.blogspot.e_kanivets.moneytracker.fragment.ExportFragment;
@@ -83,6 +84,10 @@ public class NavDrawerActivity extends ActionBarActivity
         switch (tag) {
             case AccountsFragment.TAG:
                 mTitle = getString(R.string.title_accounts);
+                break;
+
+            case AddAccountFragment.TAG:
+                mTitle = getString(R.string.title_add_account);
                 break;
 
             case AddExpenseFragment.TAG:
@@ -173,6 +178,14 @@ public class NavDrawerActivity extends ActionBarActivity
         fragmentManager.beginTransaction()
                 .replace(R.id.container, AddExpenseFragment.newInstance(record, mode))
                 .addToBackStack("")
+                .commit();
+    }
+
+    public void showAddAccountFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, AddAccountFragment.newInstance())
+                .addToBackStack(AddAccountFragment.TAG)
                 .commit();
     }
 }
