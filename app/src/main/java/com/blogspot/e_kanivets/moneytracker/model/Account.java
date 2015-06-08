@@ -34,4 +34,14 @@ public class Account {
     public void setCurSum(int curSum) {
         this.curSum = curSum;
     }
+
+    @SuppressWarnings("SimplifiableIfStatement")
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Account) {
+            return ((Account) o).getId() == getId();
+        } else {
+            return false;
+        }
+    }
 }

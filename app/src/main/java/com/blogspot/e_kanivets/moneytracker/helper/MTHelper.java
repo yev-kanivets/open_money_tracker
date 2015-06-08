@@ -317,6 +317,25 @@ public class MTHelper extends Observable {
         notifyObservers();
     }
 
+    /**
+     * Deletes an account from DB and app cash. Uses the account id from @account.
+     * @param account to determine which account should be deleted.
+     */
+    public void deleteAccount(Account account) {
+        // Delete the account from DB
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.delete(DBHelper.TABLE_ACCOUNTS, "id=?",
+                new String[]{Integer.toString(account.getId())});
+        db.close();
+
+        // Delete the account from app list
+        accounts.remove(account);
+
+        //notify observers
+        setChanged();
+        notifyObservers();
+    }
+
     public void deleteRecordById(int id) {
         for (Record record : records) {
             if (record.getId() == id) {
