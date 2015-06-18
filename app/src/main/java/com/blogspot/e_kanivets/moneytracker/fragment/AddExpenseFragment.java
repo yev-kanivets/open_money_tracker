@@ -96,6 +96,14 @@ public class AddExpenseFragment extends Fragment {
     }
 
     @Override
+    public void onDetach() {
+        /* hide keyboard */
+        ((InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE))
+                .toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
+        super.onDetach();
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_add_record, menu);
         super.onCreateOptionsMenu(menu, inflater);

@@ -6,12 +6,14 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -93,6 +95,15 @@ public class AddIncomeFragment extends Fragment {
 
         ((NavDrawerActivity) activity).onSectionAttached(TAG);
     }
+
+    @Override
+    public void onDetach() {
+        /* hide keyboard */
+        ((InputMethodManager) getActivity().getSystemService(Activity.INPUT_METHOD_SERVICE))
+                .toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
+        super.onDetach();
+    }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
