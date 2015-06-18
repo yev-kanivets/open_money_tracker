@@ -170,6 +170,11 @@ public class AddIncomeFragment extends Fragment {
                     }
                 }
             }
+
+            /* Show keyboard and set focus on etTitle */
+            InputMethodManager inputMethodManager = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+            etTitle.requestFocus();
         }
     }
 
