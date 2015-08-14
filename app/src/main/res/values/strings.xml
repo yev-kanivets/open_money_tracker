@@ -58,5 +58,7 @@
     <string name="add_account">Add account</string>
     <string name="initial_sum">Initial sum</string>
     <string name="account">Account</string>
+    <string name="title_activity_add_expense">AddExpenseActivity</string>
+    <string name="title_activity_add_income">AddIncomeActivity</string>
 
 </resources>

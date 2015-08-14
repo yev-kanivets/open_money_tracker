@@ -1,17 +1,14 @@
 package com.blogspot.e_kanivets.moneytracker.activity;
 
-import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.app.AppCompatActivity;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 
-public class SplashActivity extends ActionBarActivity {
+public class SplashActivity extends AppCompatActivity {
 
     Handler handler = new Handler(new Handler.Callback() {
         @Override

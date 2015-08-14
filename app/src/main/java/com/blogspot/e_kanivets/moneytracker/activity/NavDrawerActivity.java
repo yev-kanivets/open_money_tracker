@@ -1,26 +1,25 @@
 package com.blogspot.e_kanivets.moneytracker.activity;
 
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.support.v4.widget.DrawerLayout;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.fragment.AccountsFragment;
 import com.blogspot.e_kanivets.moneytracker.fragment.AddAccountFragment;
-import com.blogspot.e_kanivets.moneytracker.fragment.AddExpenseFragment;
-import com.blogspot.e_kanivets.moneytracker.fragment.AddIncomeFragment;
 import com.blogspot.e_kanivets.moneytracker.fragment.ExportFragment;
 import com.blogspot.e_kanivets.moneytracker.fragment.NavigationDrawerFragment;
 import com.blogspot.e_kanivets.moneytracker.fragment.RecordsFragment;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
 import com.blogspot.e_kanivets.moneytracker.util.AppUtils;
 
-public class NavDrawerActivity extends ActionBarActivity
+public class NavDrawerActivity extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,
         RecordsFragment.OnFragmentInteractionListener {
 
@@ -90,14 +89,6 @@ public class NavDrawerActivity extends ActionBarActivity
                 mTitle = getString(R.string.title_add_account);
                 break;
 
-            case AddExpenseFragment.TAG:
-                mTitle = getString(R.string.title_add_expense);
-                break;
-
-            case AddIncomeFragment.TAG:
-                mTitle = getString(R.string.title_add_income);
-                break;
-
             case ExportFragment.TAG:
                 mTitle = getString(R.string.title_export);
                 break;
@@ -148,37 +139,21 @@ public class NavDrawerActivity extends ActionBarActivity
 
     @Override
     public void onAddIncomePressed() {
-        showAddIncomeFragment(null, AddIncomeFragment.Mode.MODE_ADD);
+        startAddIncomeActivity(null, AddIncomeActivity.Mode.MODE_ADD);
     }
 
     @Override
     public void onAddExpensePressed() {
-        showAddExpenseFragment(null, AddExpenseFragment.Mode.MODE_ADD);
+        startAddExpenseActivity(null, AddExpenseActivity.Mode.MODE_ADD);
     }
 
     @Override
     public void onEditRecord(Record record) {
         if (record.isIncome()) {
-            showAddIncomeFragment(record, AddIncomeFragment.Mode.MODE_EDIT);
+            startAddIncomeActivity(record, AddIncomeActivity.Mode.MODE_EDIT);
         } else {
-            showAddExpenseFragment(record, AddExpenseFragment.Mode.MODE_EDIT);
+            startAddExpenseActivity(record, AddExpenseActivity.Mode.MODE_EDIT);
         }
-    }
-
-    private void showAddIncomeFragment(Record record, AddIncomeFragment.Mode mode) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, AddIncomeFragment.newInstance(record, mode))
-                .addToBackStack("")
-                .commit();
-    }
-
-    private void showAddExpenseFragment(Record record, AddExpenseFragment.Mode mode) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, AddExpenseFragment.newInstance(record, mode))
-                .addToBackStack("")
-                .commit();
     }
 
     public void showAddAccountFragment() {
@@ -187,5 +162,19 @@ public class NavDrawerActivity extends ActionBarActivity
                 .replace(R.id.container, AddAccountFragment.newInstance())
                 .addToBackStack(AddAccountFragment.TAG)
                 .commit();
+    }
+
+    private void startAddIncomeActivity(Record record, AddIncomeActivity.Mode mode) {
+        Intent intent = new Intent(NavDrawerActivity.this, AddIncomeActivity.class);
+        intent.putExtra(AddExpenseActivity.KEY_RECORD, record);
+        intent.putExtra(AddExpenseActivity.KEY_MODE, mode);
+        startActivity(intent);
+    }
+
+    private void startAddExpenseActivity(Record record, AddExpenseActivity.Mode mode) {
+        Intent intent = new Intent(NavDrawerActivity.this, AddExpenseActivity.class);
+        intent.putExtra(AddExpenseActivity.KEY_RECORD, record);
+        intent.putExtra(AddExpenseActivity.KEY_MODE, mode);
+        startActivity(intent);
     }
 }

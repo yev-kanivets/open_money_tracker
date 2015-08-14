@@ -5,8 +5,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.blogspot.e_kanivets.moneytracker.util.Constants;
-
 /**
  * DB Helper class
  * Created by eugene on 29/08/14.
@@ -96,7 +94,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 + TYPE_COLUMN + " INTEGER,"
                 + TITLE_COLUMN + " TEXT,"
                 + CATEGORY_ID_COLUMN + " INTEGER,"
-                + PRICE_COLUMN + " INTEGER"
+                + PRICE_COLUMN + " INTEGER,"
                 + ACCOUNT_ID_COLUMN + " INTEGER" + ");");
 
         db.execSQL("CREATE TABLE " + TABLE_CATEGORIES + "("

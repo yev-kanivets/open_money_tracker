@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -252,7 +252,7 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
     }
 
     private void initActionBar() {
-        ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
 
         ActionBar.LayoutParams lp = new ActionBar.LayoutParams(
                 ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT,

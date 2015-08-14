@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -17,9 +17,7 @@ import android.widget.ListView;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.NavDrawerActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.AccountAdapter;
-import com.blogspot.e_kanivets.moneytracker.adapter.RecordAdapter;
 import com.blogspot.e_kanivets.moneytracker.helper.MTHelper;
-import com.blogspot.e_kanivets.moneytracker.model.Record;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -132,7 +130,7 @@ public class AccountsFragment extends Fragment implements View.OnClickListener, 
     }
 
     private void initActionBar() {
-        ActionBar actionBar = ((ActionBarActivity) getActivity()).getSupportActionBar();
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (actionBar != null) {
             actionBar.setCustomView(null);
         }
