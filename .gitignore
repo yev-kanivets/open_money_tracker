@@ -1,7 +1,6 @@
 /build
 
 .DS_Store
-gradle/
 .gradle/
 local.properties
 app/app.iml
