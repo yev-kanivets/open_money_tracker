@@ -29,3 +29,11 @@ before_script:
   - emulator -avd test -no-skin -no-audio -no-window &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
+
+deploy:
+  provider: releases
+  api_key: "cd4e940299fb298808e2fbc7969593a53c195bd0"
+  file: "/app/build/outputs/app-release.apk"
+  skip_cleanup: true
+  on:
+    tags: true
