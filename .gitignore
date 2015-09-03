@@ -8,3 +8,4 @@ app/app.iml
 .idea/
 ._.DS_Store
 money_tracker.iml
+*.iml
