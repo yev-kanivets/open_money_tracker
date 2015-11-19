@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.blogspot.e_kanivets.moneytracker" >
+    package="com.blogspot.e_kanivets.moneytracker">
 
     <!-- permissions to download and cache video ads for playback -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -10,11 +10,13 @@
     <application
         android:name="com.blogspot.e_kanivets.moneytracker.util.MTApp"
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.AppCompat.Light" >
-        <activity android:name=".activity.SplashActivity"
-            android:theme="@style/Theme.NoTitle">
+        android:theme="@style/Theme.AppCompat.Light">
+
+        <activity
+            android:name="com.blogspot.e_kanivets.moneytracker.activity.MainActivity"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -22,23 +24,7 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name="com.blogspot.e_kanivets.moneytracker.activity.MainActivity"
-            android:label="@string/app_name" >
-        </activity>
-
         <activity android:name="com.blogspot.e_kanivets.moneytracker.activity.ReportActivity" />
-
-        <activity android:name="com.blogspot.e_kanivets.moneytracker.activity.ThankAuthorActivity" />
-
-        <activity
-            android:name="com.vungle.publisher.FullScreenAdActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-
-        <service
-            android:name="com.vungle.publisher.VungleService"
-            android:exported="false" />
 
         <meta-data
             android:name="com.google.android.gms.version"

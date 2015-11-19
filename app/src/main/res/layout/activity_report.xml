@@ -12,16 +12,6 @@
         android:layout_height="wrap_content"
         android:background="@color/yellow_light">
 
-        <Button
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:background="@drawable/selector_thank_author"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
-            android:visibility="invisible"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="10dp" />
-
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -39,15 +29,6 @@
             android:background="@drawable/selector_report"
             android:padding="15dp" />
 
-        <Button
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:id="@+id/btn_thank_author"
-            android:background="@drawable/selector_thank_author"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginRight="10dp" />
     </LinearLayout>
 
     <ListView
