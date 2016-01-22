@@ -6,10 +6,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
- * DB Helper class
- * Created by eugene on 29/08/14.
+ * DB Helper class.
+ * Created on 29/08/14.
+ *
+ * @author Evgenii Kanivets
  */
-public class DBHelper extends SQLiteOpenHelper {
+public class DbHelper extends SQLiteOpenHelper {
 
     /* DB_VERSION = 1 */
     public static final String DB_NAME = "database";
@@ -32,7 +34,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String CUR_SUM_COLUMN = "cur_sum";
     public static final String DEFAULT_ACCOUNT = "default_account";
 
-    public DBHelper(Context context) {
+    public DbHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
@@ -65,7 +67,7 @@ public class DBHelper extends SQLiteOpenHelper {
             /* Set the default account for all records from DB_VERSION = 1 */
             contentValues = new ContentValues();
             contentValues.put(ACCOUNT_ID_COLUMN, id);
-            db.update(DBHelper.TABLE_RECORDS, contentValues, null, null);
+            db.update(DbHelper.TABLE_RECORDS, contentValues, null, null);
 
             db.setTransactionSuccessful();
 
@@ -73,6 +75,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
+    @SuppressWarnings("unused")
     private void createDbVersion1(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + TABLE_RECORDS + "("
                 + ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT,"

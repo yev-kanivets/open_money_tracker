@@ -1,20 +1,14 @@
 package com.blogspot.e_kanivets.moneytracker.adapter;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.helper.DBHelper;
-import com.blogspot.e_kanivets.moneytracker.helper.MTHelper;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
-import com.blogspot.e_kanivets.moneytracker.util.Constants;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
