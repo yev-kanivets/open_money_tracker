@@ -52,8 +52,7 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
     private OnFragmentInteractionListener listener;
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
+     * Use this factory method to create a new instance of this fragment using the provided parameters.
      *
      * @return A new instance of fragment RecordsFragment.
      */
@@ -66,14 +65,6 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
 
     public RecordsFragment() {
         // Required empty public constructor
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-        }
     }
 
     @Override
@@ -199,6 +190,7 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
 
     @Override
     public void update(Observable observable, Object o) {
+        listView.setAdapter(new RecordAdapter(getActivity(), MTHelper.getInstance().getRecords()));
         ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
     }
 
@@ -226,7 +218,6 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
 
             listView.setAdapter(new RecordAdapter(getActivity(), MTHelper.getInstance().getRecords()));
             ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
-            registerForContextMenu(listView);
 
             /* Scroll list to bottom only once at start */
             listView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {

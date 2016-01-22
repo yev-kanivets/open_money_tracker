@@ -19,17 +19,15 @@ import java.util.Observable;
 
 /**
  * Helper class for Money Tracker application. Singleton.
- * Created by eugene on 01/09/14.
+ * Created on 01/09/14.
+ *
+ * @author Evgenii Kanivets
  */
 public class MTHelper extends Observable {
 
     private static MTHelper mtHelper;
 
     private DbHelper dbHelper;
-
-    private List<Category> categories;
-    private List<Record> records;
-    private List<Account> accounts;
 
     private Period period;
 
@@ -44,89 +42,6 @@ public class MTHelper extends Observable {
         dbHelper = new DbHelper(MTApp.get());
 
         initPeriod();
-        categories = new ArrayList<>();
-        records = new ArrayList<>();
-        accounts = new ArrayList<>();
-    }
-
-    public void initialize() {
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-        //Read categories table from db
-        Cursor cursor = db.query(DbHelper.TABLE_CATEGORIES, null, null, null, null, null, null);
-        categories.clear();
-
-        if (cursor.moveToFirst()) {
-            int idColIndex = cursor.getColumnIndex(DbHelper.ID_COLUMN);
-            int nameColIndex = cursor.getColumnIndex(DbHelper.NAME_COLUMN);
-
-            do {
-                //Read a record from DB
-                Category category = new Category(cursor.getInt(idColIndex),
-                        cursor.getString(nameColIndex));
-
-                //Add record to list
-                categories.add(category);
-            } while (cursor.moveToNext());
-        }
-
-        cursor.close();
-
-        //Form args to select only needed records according to period
-        String[] args = new String[]{Long.toString(period.getFirst().getTime()),
-                Long.toString(period.getLast().getTime())};
-
-        //Read records table from db
-        cursor = db.query(DbHelper.TABLE_RECORDS, null, "time BETWEEN ? AND ?", args, null, null, null);
-        records.clear();
-
-        if (cursor.moveToFirst()) {
-            //Get indexes of columns
-            int idColIndex = cursor.getColumnIndex(DbHelper.ID_COLUMN);
-            int timeColIndex = cursor.getColumnIndex(DbHelper.TIME_COLUMN);
-            int typeColIndex = cursor.getColumnIndex(DbHelper.TYPE_COLUMN);
-            int titleColIndex = cursor.getColumnIndex(DbHelper.TITLE_COLUMN);
-            int categoryColIndex = cursor.getColumnIndex(DbHelper.CATEGORY_ID_COLUMN);
-            int priceColIndex = cursor.getColumnIndex(DbHelper.PRICE_COLUMN);
-            int accountIdColIndex = cursor.getColumnIndex(DbHelper.ACCOUNT_ID_COLUMN);
-
-            do {
-                //Read a record from DB
-                Record record = new Record(cursor.getInt(idColIndex),
-                        cursor.getLong(timeColIndex),
-                        cursor.getInt(typeColIndex),
-                        cursor.getString(titleColIndex),
-                        cursor.getInt(categoryColIndex),
-                        cursor.getInt(priceColIndex),
-                        cursor.getInt(accountIdColIndex));
-
-                //Add record to list
-                records.add(record);
-            } while (cursor.moveToNext());
-        }
-
-        // Read accounts table from db
-        cursor = db.query(DbHelper.TABLE_ACCOUNTS, null, null, null, null, null, null);
-        accounts.clear();
-
-        if (cursor.moveToFirst()) {
-            // Get indexes of columns
-            int idColIndex = cursor.getColumnIndex(DbHelper.ID_COLUMN);
-            int titleColIndex = cursor.getColumnIndex(DbHelper.TITLE_COLUMN);
-            int curSumColIndex = cursor.getColumnIndex(DbHelper.CUR_SUM_COLUMN);
-
-            do {
-                // Read a account from DB
-                Account account = new Account(cursor.getInt(idColIndex),
-                        cursor.getString(titleColIndex),
-                        cursor.getInt(curSumColIndex));
-
-                //Add account to list
-                accounts.add(account);
-            } while (cursor.moveToNext());
-        }
-
-        db.close();
     }
 
     public List<String> getRecordsForExport(long fromDate, long toDate) {
@@ -189,26 +104,116 @@ public class MTHelper extends Observable {
     }
 
     public void update() {
-        initialize();
-
         //notify observers
         setChanged();
         notifyObservers();
     }
 
+    public List<Category> getCategories() {
+        List<Category> categoryList = new ArrayList<>();
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        //Read categories table from db
+        Cursor cursor = db.query(DbHelper.TABLE_CATEGORIES, null, null, null, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            int idColIndex = cursor.getColumnIndex(DbHelper.ID_COLUMN);
+            int nameColIndex = cursor.getColumnIndex(DbHelper.NAME_COLUMN);
+
+            do {
+                //Read a record from DB
+                Category category = new Category(cursor.getInt(idColIndex),
+                        cursor.getString(nameColIndex));
+
+                //Add record to list
+                categoryList.add(category);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+
+        return categoryList;
+    }
+
     public List<Record> getRecords() {
-        return records;
+        List<Record> recordList = new ArrayList<>();
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        //Form args to select only needed records according to period
+        String[] args = new String[]{Long.toString(period.getFirst().getTime()),
+                Long.toString(period.getLast().getTime())};
+
+        //Read records table from db
+        Cursor cursor = db.query(DbHelper.TABLE_RECORDS, null, "time BETWEEN ? AND ?", args, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            //Get indexes of columns
+            int idColIndex = cursor.getColumnIndex(DbHelper.ID_COLUMN);
+            int timeColIndex = cursor.getColumnIndex(DbHelper.TIME_COLUMN);
+            int typeColIndex = cursor.getColumnIndex(DbHelper.TYPE_COLUMN);
+            int titleColIndex = cursor.getColumnIndex(DbHelper.TITLE_COLUMN);
+            int categoryColIndex = cursor.getColumnIndex(DbHelper.CATEGORY_ID_COLUMN);
+            int priceColIndex = cursor.getColumnIndex(DbHelper.PRICE_COLUMN);
+            int accountIdColIndex = cursor.getColumnIndex(DbHelper.ACCOUNT_ID_COLUMN);
+
+            do {
+                //Read a record from DB
+                Record record = new Record(cursor.getInt(idColIndex),
+                        cursor.getLong(timeColIndex),
+                        cursor.getInt(typeColIndex),
+                        cursor.getString(titleColIndex),
+                        cursor.getInt(categoryColIndex),
+                        cursor.getInt(priceColIndex),
+                        cursor.getInt(accountIdColIndex));
+
+                //Add record to list
+                recordList.add(record);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+
+        return recordList;
     }
 
     public List<Account> getAccounts() {
-        return accounts;
+        List<Account> accountList = new ArrayList<>();
+
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        // Read accounts table from db
+        Cursor cursor = db.query(DbHelper.TABLE_ACCOUNTS, null, null, null, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            // Get indexes of columns
+            int idColIndex = cursor.getColumnIndex(DbHelper.ID_COLUMN);
+            int titleColIndex = cursor.getColumnIndex(DbHelper.TITLE_COLUMN);
+            int curSumColIndex = cursor.getColumnIndex(DbHelper.CUR_SUM_COLUMN);
+
+            do {
+                // Read a account from DB
+                Account account = new Account(cursor.getInt(idColIndex),
+                        cursor.getString(titleColIndex),
+                        cursor.getInt(curSumColIndex));
+
+                //Add account to list
+                accountList.add(account);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+
+        return accountList;
     }
 
     public void addRecord(long time, int type, String title, String category, int price, int accountId, int diff) {
         //Add category if it does not exist yet
-        if (getCategoryIdByName(category) == -1) {
-            addCategory(category);
-        }
+        if (getCategoryIdByName(category) == -1) addCategory(category);
         int categoryId = getCategoryIdByName(category);
 
         //Add record to DB
@@ -228,12 +233,7 @@ public class MTHelper extends Observable {
 
         db.close();
 
-        //Add record to app list
-        records.add(new Record(id, time, type, title, categoryId, price, accountId));
-
-        //notify observers
-        setChanged();
-        notifyObservers();
+        update();
     }
 
     public void updateRecordById(int id, String title, String category, int price, int accountId, int diff) {
@@ -255,20 +255,7 @@ public class MTHelper extends Observable {
 
         updateAccountById(accountId, diff);
 
-        //Change particular record
-        for (Record record : records) {
-            if (record.getId() == id) {
-                record.setTitle(title);
-                record.setCategoryId(categoryId);
-                record.setCategory(category);
-                record.setPrice(price);
-                record.setAccountId(accountId);
-            }
-        }
-
-        //notify observers
-        setChanged();
-        notifyObservers();
+        update();
     }
 
     public void updateAccountById(int id, int diff) {
@@ -295,17 +282,9 @@ public class MTHelper extends Observable {
             contentValues.put(DbHelper.CUR_SUM_COLUMN, account.getCurSum() + diff);
 
             db.update(DbHelper.TABLE_ACCOUNTS, contentValues, "id=?", new String[]{Integer.valueOf(id).toString()});
-
-            for (Account one : accounts) {
-                if (one.getId() == account.getId()) {
-                    one.setCurSum(account.getCurSum() + diff);
-                }
-            }
         }
 
-        //notify observers
-        setChanged();
-        notifyObservers();
+        update();
     }
 
     /**
@@ -320,31 +299,21 @@ public class MTHelper extends Observable {
                 new String[]{Integer.toString(account.getId())});
         db.close();
 
-        // Delete the account from app list
-        accounts.remove(account);
-
-        //notify observers
-        setChanged();
-        notifyObservers();
+        update();
     }
 
     public void deleteRecordById(int id) {
-        for (Record record : records) {
+        for (Record record : getRecords()) {
             if (record.getId() == id) {
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
                 db.delete(DbHelper.TABLE_RECORDS, "id=?",
                         new String[]{Integer.toString(id)});
                 db.close();
 
-                records.remove(record);
-
                 updateAccountById(record.getAccountId(), record.isIncome() ?
                         -record.getPrice() : record.getPrice());
 
-                //notify observers
-                setChanged();
-                notifyObservers();
-
+                update();
                 break;
             }
         }
@@ -361,20 +330,18 @@ public class MTHelper extends Observable {
 
         db.close();
 
-        //Add category to app list
-        categories.add(new Category(id, name));
+        update();
 
         return id;
     }
 
     public void deleteCategoryById(int id) {
-        for (Category category : categories) {
+        for (Category category : getCategories()) {
             if (category.getId() == id) {
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
-                db.delete(DbHelper.TABLE_CATEGORIES, "id=?",
-                        new String[]{Integer.toString(id)});
+                db.delete(DbHelper.TABLE_CATEGORIES, "id=?", new String[]{Integer.toString(id)});
 
-                categories.remove(category);
+                update();
 
                 break;
             }
@@ -382,7 +349,7 @@ public class MTHelper extends Observable {
     }
 
     public String getCategoryById(int id) {
-        for (Category category : categories) {
+        for (Category category : getCategories()) {
             if (category.getId() == id) return category.getName();
         }
 
@@ -390,11 +357,8 @@ public class MTHelper extends Observable {
     }
 
     public int getCategoryIdByName(String name) {
-        for (Category category : categories) {
-            //Log.d(Constants.TAG, name + " " + category.getName() + " " + category.getName().equals(name));
-            if (category.getName().equals(name)) {
-                return category.getId();
-            }
+        for (Category category : getCategories()) {
+            if (category.getName().equals(name)) return category.getId();
         }
 
         return -1;
@@ -459,11 +423,6 @@ public class MTHelper extends Observable {
 
         db.close();
 
-        //Add account to app list
-        accounts.add(new Account(id, title, curSum));
-
-        //notify observers
-        setChanged();
-        notifyObservers();
+        update();
     }
 }

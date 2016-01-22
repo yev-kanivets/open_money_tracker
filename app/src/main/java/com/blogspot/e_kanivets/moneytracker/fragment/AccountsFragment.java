@@ -50,13 +50,6 @@ public class AccountsFragment extends Fragment implements View.OnClickListener, 
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-        }
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -109,6 +102,7 @@ public class AccountsFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void update(Observable observable, Object data) {
+        listView.setAdapter(new AccountAdapter(getActivity(), MTHelper.getInstance().getAccounts()));
         ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
     }
 
