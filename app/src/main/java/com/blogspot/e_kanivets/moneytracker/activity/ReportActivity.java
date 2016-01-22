@@ -1,7 +1,6 @@
 package com.blogspot.e_kanivets.moneytracker.activity;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.View;
@@ -10,12 +9,13 @@ import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.adapter.ExpandableListReportAdapter;
 import com.blogspot.e_kanivets.moneytracker.adapter.ReportItemAdapter;
-import com.blogspot.e_kanivets.moneytracker.helper.MTHelper;
+import com.blogspot.e_kanivets.moneytracker.controller.RecordController;
+import com.blogspot.e_kanivets.moneytracker.helper.DbHelper;
+import com.blogspot.e_kanivets.moneytracker.helper.MtHelper;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
 import com.blogspot.e_kanivets.moneytracker.model.Report;
 import com.blogspot.e_kanivets.moneytracker.util.Constants;
@@ -38,14 +38,19 @@ public class ReportActivity extends Activity {
     private ListView listView;
     private ExpandableListView expandableListView;
 
+    private RecordController recordController;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_report);
 
+        recordController = new RecordController(new DbHelper(ReportActivity.this),
+                MtHelper.getInstance());
+
         activity = this;
-        report = new Report(MTHelper.getInstance().getRecords());
+        report = new Report(recordController.getRecords());
 
         initViews();
     }
@@ -55,7 +60,7 @@ public class ReportActivity extends Activity {
         expandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
 
         listView.setAdapter(new ReportItemAdapter(activity,
-                new Report(MTHelper.getInstance().getRecords()).getReportList()));
+                new Report(recordController.getRecords()).getReportList()));
 
         /* Scroll list to bottom only once at start */
         listView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {

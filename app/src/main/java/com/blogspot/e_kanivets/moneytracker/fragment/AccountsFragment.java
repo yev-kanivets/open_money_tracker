@@ -19,7 +19,7 @@ import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.AddAccountActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.NavDrawerActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.AccountAdapter;
-import com.blogspot.e_kanivets.moneytracker.helper.MTHelper;
+import com.blogspot.e_kanivets.moneytracker.helper.MtHelper;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -94,8 +94,8 @@ public class AccountsFragment extends Fragment implements View.OnClickListener, 
 
         switch (item.getItemId()) {
             case R.id.delete:
-                MTHelper.getInstance().deleteAccount(
-                        MTHelper.getInstance().getAccounts().get(info.position));
+                MtHelper.getInstance().deleteAccount(
+                        MtHelper.getInstance().getAccounts().get(info.position));
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -104,7 +104,7 @@ public class AccountsFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void update(Observable observable, Object data) {
-        listView.setAdapter(new AccountAdapter(getActivity(), MTHelper.getInstance().getAccounts()));
+        listView.setAdapter(new AccountAdapter(getActivity(), MtHelper.getInstance().getAccounts()));
         ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
     }
 
@@ -114,12 +114,12 @@ public class AccountsFragment extends Fragment implements View.OnClickListener, 
 
             rootView.findViewById(R.id.btn_add_account).setOnClickListener(this);
 
-            listView.setAdapter(new AccountAdapter(getActivity(), MTHelper.getInstance().getAccounts()));
+            listView.setAdapter(new AccountAdapter(getActivity(), MtHelper.getInstance().getAccounts()));
             ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
             registerForContextMenu(listView);
 
             //Subscribe to helper
-            MTHelper.getInstance().addObserver(this);
+            MtHelper.getInstance().addObserver(this);
 
             ((NavDrawerActivity) getActivity()).onSectionAttached(TAG);
         }

@@ -12,7 +12,9 @@ import android.view.ViewGroup;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.NavDrawerActivity;
-import com.blogspot.e_kanivets.moneytracker.helper.MTHelper;
+import com.blogspot.e_kanivets.moneytracker.controller.RecordController;
+import com.blogspot.e_kanivets.moneytracker.helper.DbHelper;
+import com.blogspot.e_kanivets.moneytracker.helper.MtHelper;
 import com.blogspot.e_kanivets.moneytracker.util.Constants;
 
 import java.io.File;
@@ -96,7 +98,8 @@ public class ExportFragment extends Fragment implements View.OnClickListener {
     }
 
     private void exportRecords() {
-        List<String> records = MTHelper.getInstance().getRecordsForExport(0, Long.MAX_VALUE);
+        RecordController recordController = new RecordController(new DbHelper(getActivity()), MtHelper.getInstance());
+        List<String> records = recordController.getRecordsForExport(0, Long.MAX_VALUE);
 
         File outFile = new File(Environment.getExternalStorageDirectory(), Constants.DEFAULT_EXPORT_FILE_NAME);
         PrintWriter pw = null;

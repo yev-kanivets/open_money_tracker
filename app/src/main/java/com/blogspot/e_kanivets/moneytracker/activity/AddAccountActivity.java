@@ -7,7 +7,7 @@ import android.view.MenuItem;
 import android.widget.EditText;
 
 import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.helper.MTHelper;
+import com.blogspot.e_kanivets.moneytracker.helper.MtHelper;
 
 public class AddAccountActivity extends AppCompatActivity {
     @SuppressWarnings("unused")
@@ -38,7 +38,7 @@ public class AddAccountActivity extends AppCompatActivity {
                 String title = etTitle.getText().toString();
                 int initSum = Integer.parseInt(etInitSum.getText().toString());
 
-                MTHelper.getInstance().addAccount(title, initSum);
+                MtHelper.getInstance().addAccount(title, initSum);
 
                 finish();
                 return true;
