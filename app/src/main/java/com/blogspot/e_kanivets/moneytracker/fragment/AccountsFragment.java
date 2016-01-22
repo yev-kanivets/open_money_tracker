@@ -71,7 +71,7 @@ public class AccountsFragment extends Fragment implements View.OnClickListener, 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_add_account:
-                ((NavDrawerActivity) getActivity()).showAddAccountFragment();
+                ((NavDrawerActivity) getActivity()).showAddAccountActivity();
                 break;
 
             default:

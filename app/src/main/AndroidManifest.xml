@@ -17,7 +17,6 @@
             android:name=".activity.ReportActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Default" />
-
         <activity
             android:name=".activity.NavDrawerActivity"
             android:label="@string/app_name"
@@ -39,6 +38,10 @@
             android:label="@string/title_add_income"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Default" />
+        <activity
+            android:name=".activity.AddAccountActivity"
+            android:label="@string/title_add_account"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Default" />
     </application>
-
 </manifest>
