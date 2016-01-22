@@ -1,6 +1,7 @@
 package com.blogspot.e_kanivets.moneytracker.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -15,6 +16,7 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 
 import com.blogspot.e_kanivets.moneytracker.R;
+import com.blogspot.e_kanivets.moneytracker.activity.AddAccountActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.NavDrawerActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.AccountAdapter;
 import com.blogspot.e_kanivets.moneytracker.helper.MTHelper;
@@ -71,7 +73,7 @@ public class AccountsFragment extends Fragment implements View.OnClickListener, 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_add_account:
-                ((NavDrawerActivity) getActivity()).showAddAccountActivity();
+                startActivity(new Intent(getActivity(), AddAccountActivity.class));
                 break;
 
             default:

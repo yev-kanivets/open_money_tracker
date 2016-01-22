@@ -21,6 +21,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.blogspot.e_kanivets.moneytracker.R;
+import com.blogspot.e_kanivets.moneytracker.activity.AddExpenseActivity;
+import com.blogspot.e_kanivets.moneytracker.activity.AddIncomeActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.NavDrawerActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.ReportActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.RecordAdapter;
@@ -49,13 +51,6 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
     private TextView tvFromDate;
     private TextView tvToDate;
 
-    private OnFragmentInteractionListener listener;
-
-    /**
-     * Use this factory method to create a new instance of this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment RecordsFragment.
-     */
     public static RecordsFragment newInstance() {
         RecordsFragment fragment = new RecordsFragment();
         Bundle args = new Bundle();
@@ -81,13 +76,6 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        try {
-            listener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-
         ((NavDrawerActivity) activity).onSectionAttached(TAG);
     }
 
@@ -105,7 +93,9 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
         switch (item.getItemId()) {
             case R.id.edit:
                 Record record = MTHelper.getInstance().getRecords().get(info.position);
-                listener.onEditRecord(record);
+                if (record.isIncome())
+                    startAddIncomeActivity(record, AddIncomeActivity.Mode.MODE_EDIT);
+                else startAddExpenseActivity(record, AddExpenseActivity.Mode.MODE_EDIT);
                 return true;
             case R.id.delete:
                 MTHelper.getInstance().deleteRecordById(MTHelper.getInstance().getRecords().
@@ -120,13 +110,11 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_add_expense:
-                //showAddExpenseDialog();
-                listener.onAddExpensePressed();
+                startAddExpenseActivity(null, AddExpenseActivity.Mode.MODE_ADD);
                 break;
 
             case R.id.btn_add_income:
-                //showAddIncomeDialog();
-                listener.onAddIncomePressed();
+                startAddIncomeActivity(null, AddIncomeActivity.Mode.MODE_ADD);
                 break;
 
             case R.id.btn_report:
@@ -295,9 +283,17 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
         dialog.show();
     }
 
-    public interface OnFragmentInteractionListener {
-        void onAddIncomePressed();
-        void onAddExpensePressed();
-        void onEditRecord(Record record);
+    private void startAddIncomeActivity(Record record, AddIncomeActivity.Mode mode) {
+        Intent intent = new Intent(getActivity(), AddIncomeActivity.class);
+        intent.putExtra(AddExpenseActivity.KEY_RECORD, record);
+        intent.putExtra(AddExpenseActivity.KEY_MODE, mode);
+        startActivity(intent);
+    }
+
+    private void startAddExpenseActivity(Record record, AddExpenseActivity.Mode mode) {
+        Intent intent = new Intent(getActivity(), AddExpenseActivity.class);
+        intent.putExtra(AddExpenseActivity.KEY_RECORD, record);
+        intent.putExtra(AddExpenseActivity.KEY_MODE, mode);
+        startActivity(intent);
     }
 }
