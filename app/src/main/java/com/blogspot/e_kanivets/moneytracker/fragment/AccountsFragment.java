@@ -3,6 +3,7 @@ package com.blogspot.e_kanivets.moneytracker.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,8 @@ import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.AddAccountActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.NavDrawerActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.AccountAdapter;
+import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
+import com.blogspot.e_kanivets.moneytracker.helper.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.helper.MtHelper;
 
 import java.util.Observable;
@@ -33,6 +36,8 @@ public class AccountsFragment extends Fragment implements View.OnClickListener, 
     public static final String TAG = "AccountsFragment";
 
     private ListView listView;
+
+    private AccountController accountController;
 
     /**
      * Use this factory method to create a new instance of
@@ -49,6 +54,13 @@ public class AccountsFragment extends Fragment implements View.OnClickListener, 
 
     public AccountsFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        accountController = new AccountController(new DbHelper(getActivity()), MtHelper.getInstance());
     }
 
     @Override
@@ -94,8 +106,7 @@ public class AccountsFragment extends Fragment implements View.OnClickListener, 
 
         switch (item.getItemId()) {
             case R.id.delete:
-                MtHelper.getInstance().deleteAccount(
-                        MtHelper.getInstance().getAccounts().get(info.position));
+                accountController.deleteAccount(accountController.getAccounts().get(info.position));
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -104,7 +115,7 @@ public class AccountsFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void update(Observable observable, Object data) {
-        listView.setAdapter(new AccountAdapter(getActivity(), MtHelper.getInstance().getAccounts()));
+        listView.setAdapter(new AccountAdapter(getActivity(), accountController.getAccounts()));
         ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
     }
 
@@ -114,7 +125,7 @@ public class AccountsFragment extends Fragment implements View.OnClickListener, 
 
             rootView.findViewById(R.id.btn_add_account).setOnClickListener(this);
 
-            listView.setAdapter(new AccountAdapter(getActivity(), MtHelper.getInstance().getAccounts()));
+            listView.setAdapter(new AccountAdapter(getActivity(), accountController.getAccounts()));
             ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
             registerForContextMenu(listView);
 

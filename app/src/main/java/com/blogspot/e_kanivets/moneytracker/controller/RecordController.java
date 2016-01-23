@@ -20,11 +20,13 @@ import java.util.List;
 public class RecordController {
     private DbHelper dbHelper;
     private MtHelper mtHelper;
+    private AccountController accountController;
     private final CategoryController categoryController;
 
     public RecordController(DbHelper dbHelper, MtHelper mtHelper) {
         this.dbHelper = dbHelper;
         this.mtHelper = mtHelper;
+        this.accountController = new AccountController(dbHelper, mtHelper);
         categoryController = new CategoryController(dbHelper, mtHelper);
     }
 
@@ -90,7 +92,7 @@ public class RecordController {
 
         int id = (int) db.insert(DbHelper.TABLE_RECORDS, null, contentValues);
 
-        mtHelper.updateAccountById(accountId, diff);
+        accountController.updateAccountById(accountId, diff);
 
         db.close();
 
@@ -113,7 +115,7 @@ public class RecordController {
 
         db.update(DbHelper.TABLE_RECORDS, contentValues, "id=?", new String[]{Integer.valueOf(id).toString()});
 
-        mtHelper.updateAccountById(accountId, diff);
+        accountController.updateAccountById(accountId, diff);
 
         mtHelper.update();
     }
@@ -126,7 +128,7 @@ public class RecordController {
                         new String[]{Integer.toString(id)});
                 db.close();
 
-                mtHelper.updateAccountById(record.getAccountId(), record.isIncome() ?
+                accountController.updateAccountById(record.getAccountId(), record.isIncome() ?
                         -record.getPrice() : record.getPrice());
 
                 mtHelper.update();

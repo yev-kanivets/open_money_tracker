@@ -11,6 +11,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.blogspot.e_kanivets.moneytracker.R;
+import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.RecordController;
 import com.blogspot.e_kanivets.moneytracker.helper.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.helper.MtHelper;
@@ -37,6 +38,7 @@ public class AddIncomeActivity extends AppCompatActivity {
     private Spinner spinnerAccount;
 
     private RecordController recordController;
+    private AccountController accountController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,8 @@ public class AddIncomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_record);
 
         recordController = new RecordController(new DbHelper(AddIncomeActivity.this),
+                MtHelper.getInstance());
+        accountController = new AccountController(new DbHelper(AddIncomeActivity.this),
                 MtHelper.getInstance());
 
         if (getIntent() != null) {
@@ -75,7 +79,7 @@ public class AddIncomeActivity extends AppCompatActivity {
                 try {
                     price = Integer.parseInt(etPrice.getText().toString());
                     if (price >= 0 && price <= 1000000000) {
-                        Account account = MtHelper.getInstance().getAccounts().get(spinnerAccount.getSelectedItemPosition());
+                        Account account = accountController.getAccounts().get(spinnerAccount.getSelectedItemPosition());
 
                         if (mode == Mode.MODE_ADD) recordController.addRecord(new Date().getTime(),
                                 0, title, category, price, account.getId(), price);
@@ -104,8 +108,10 @@ public class AddIncomeActivity extends AppCompatActivity {
         etCategory = (EditText) findViewById(R.id.et_category);
         etPrice = (EditText) findViewById(R.id.et_price);
 
+        List<Account> accountList = accountController.getAccounts();
+
         List<String> accounts = new ArrayList<>();
-        for (Account account : MtHelper.getInstance().getAccounts()) {
+        for (Account account : accountList) {
             accounts.add(account.getTitle());
         }
 
@@ -119,8 +125,8 @@ public class AddIncomeActivity extends AppCompatActivity {
             etCategory.setText(record.getCategory());
             etPrice.setText(Integer.toString(record.getPrice()));
 
-            for (int i = 0; i < MtHelper.getInstance().getAccounts().size(); i++) {
-                Account account = MtHelper.getInstance().getAccounts().get(i);
+            for (int i = 0; i < accountList.size(); i++) {
+                Account account = accountList.get(i);
                 if (account.getId() == record.getAccountId()) {
                     spinnerAccount.setSelection(i);
                 }
