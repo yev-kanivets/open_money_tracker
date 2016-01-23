@@ -49,34 +49,6 @@ public class MtHelper extends Observable {
         notifyObservers();
     }
 
-    public List<Category> getCategories() {
-        List<Category> categoryList = new ArrayList<>();
-
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-        //Read categories table from db
-        Cursor cursor = db.query(DbHelper.TABLE_CATEGORIES, null, null, null, null, null, null);
-
-        if (cursor.moveToFirst()) {
-            int idColIndex = cursor.getColumnIndex(DbHelper.ID_COLUMN);
-            int nameColIndex = cursor.getColumnIndex(DbHelper.NAME_COLUMN);
-
-            do {
-                //Read a record from DB
-                Category category = new Category(cursor.getInt(idColIndex),
-                        cursor.getString(nameColIndex));
-
-                //Add record to list
-                categoryList.add(category);
-            } while (cursor.moveToNext());
-        }
-
-        cursor.close();
-        db.close();
-
-        return categoryList;
-    }
-
     public List<Account> getAccounts() {
         List<Account> accountList = new ArrayList<>();
 
@@ -145,51 +117,6 @@ public class MtHelper extends Observable {
         db.close();
 
         update();
-    }
-
-    public int addCategory(String name) {
-        //Add category to DB
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(DbHelper.NAME_COLUMN, name);
-
-        int id = (int) db.insert(DbHelper.TABLE_CATEGORIES, null, contentValues);
-
-        db.close();
-
-        update();
-
-        return id;
-    }
-
-    public void deleteCategoryById(int id) {
-        for (Category category : getCategories()) {
-            if (category.getId() == id) {
-                SQLiteDatabase db = dbHelper.getWritableDatabase();
-                db.delete(DbHelper.TABLE_CATEGORIES, "id=?", new String[]{Integer.toString(id)});
-
-                update();
-
-                break;
-            }
-        }
-    }
-
-    public String getCategoryById(int id) {
-        for (Category category : getCategories()) {
-            if (category.getId() == id) return category.getName();
-        }
-
-        return null;
-    }
-
-    public int getCategoryIdByName(String name) {
-        for (Category category : getCategories()) {
-            if (category.getName().equals(name)) return category.getId();
-        }
-
-        return -1;
     }
 
     public Period getPeriod() {

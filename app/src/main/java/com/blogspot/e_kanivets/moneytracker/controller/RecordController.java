@@ -20,10 +20,12 @@ import java.util.List;
 public class RecordController {
     private DbHelper dbHelper;
     private MtHelper mtHelper;
+    private final CategoryController categoryController;
 
     public RecordController(DbHelper dbHelper, MtHelper mtHelper) {
         this.dbHelper = dbHelper;
         this.mtHelper = mtHelper;
+        categoryController = new CategoryController(dbHelper, mtHelper);
     }
 
     public List<Record> getRecords() {
@@ -71,8 +73,9 @@ public class RecordController {
 
     public void addRecord(long time, int type, String title, String category, int price, int accountId, int diff) {
         //Add category if it does not exist yet
-        if (mtHelper.getCategoryIdByName(category) == -1) mtHelper.addCategory(category);
-        int categoryId = mtHelper.getCategoryIdByName(category);
+        if (categoryController.getCategoryIdByName(category) == -1)
+            categoryController.addCategory(category);
+        int categoryId = categoryController.getCategoryIdByName(category);
 
         //Add record to DB
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -96,8 +99,9 @@ public class RecordController {
 
     public void updateRecordById(int id, String title, String category, int price, int accountId, int diff) {
         //Add category if it does not exist yet
-        if (mtHelper.getCategoryIdByName(category) == -1) mtHelper.addCategory(category);
-        int categoryId = mtHelper.getCategoryIdByName(category);
+        if (categoryController.getCategoryIdByName(category) == -1)
+            categoryController.addCategory(category);
+        int categoryId = categoryController.getCategoryIdByName(category);
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -177,7 +181,7 @@ public class RecordController {
                 sb.append(id).append(DELIMITER);
                 sb.append(time).append(DELIMITER);
                 sb.append(title).append(DELIMITER);
-                sb.append(MtHelper.getInstance().getCategoryById(categoryId)).append(DELIMITER);
+                sb.append(categoryController.getCategoryById(categoryId)).append(DELIMITER);
                 sb.append(type == 0 ? price : -price);
 
                 result.add(sb.toString());
