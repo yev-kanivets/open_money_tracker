@@ -9,11 +9,10 @@ import android.view.View;
 import android.widget.Button;
 
 import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.util.AppUtils;
+import com.blogspot.e_kanivets.moneytracker.util.PrefUtils;
 import com.blogspot.e_kanivets.moneytracker.util.Constants;
 
 public class AppRateDialog extends AlertDialog {
-
     private Context context;
 
     public AppRateDialog(Context context) {
@@ -36,8 +35,8 @@ public class AppRateDialog extends AlertDialog {
             @Override
             public void onClick(View view) {
                 context.startActivity(new Intent(Intent.ACTION_VIEW,
-                        Uri.parse(Constants.GP_MARKET + Constants.APP_NAME)));
-                AppUtils.appRated(context);
+                        Uri.parse(Constants.GP_MARKET + context.getPackageName())));
+                PrefUtils.appRated();
                 dismiss();
             }
         });
@@ -52,7 +51,7 @@ public class AppRateDialog extends AlertDialog {
         thanksButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AppUtils.appRated(context);
+                PrefUtils.appRated();
                 dismiss();
             }
         });

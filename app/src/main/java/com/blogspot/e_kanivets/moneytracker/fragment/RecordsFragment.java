@@ -34,7 +34,7 @@ import com.blogspot.e_kanivets.moneytracker.helper.PeriodHelper;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
 import com.blogspot.e_kanivets.moneytracker.ui.AppRateDialog;
 import com.blogspot.e_kanivets.moneytracker.ui.ChangeDateDialog;
-import com.blogspot.e_kanivets.moneytracker.util.AppUtils;
+import com.blogspot.e_kanivets.moneytracker.util.PrefUtils;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -180,7 +180,7 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, A
                 break;
         }
 
-        AppUtils.writeUsedPeriod(getActivity(), position);
+        PrefUtils.writeUsedPeriod(position);
 
         update();
 
@@ -250,9 +250,7 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, A
                     if (isFirst) {
                         isFirst = false;
                         listView.setSelection(listView.getCount() - 1);
-                        if (AppUtils.checkRateDialog(getActivity())) {
-                            showAppRateDialog();
-                        }
+                        if (PrefUtils.checkRateDialog()) showAppRateDialog();
                     }
                 }
             });
@@ -274,7 +272,7 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, A
         Spinner spinner = (Spinner) customNav.findViewById(R.id.spinner_period);
         spinner.setAdapter(new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.array_periods)));
-        spinner.setSelection(AppUtils.readUsedPeriod(getActivity()));
+        spinner.setSelection(PrefUtils.readUsedPeriod());
         spinner.setOnItemSelectedListener(this);
 
         if (actionBar != null) {

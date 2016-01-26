@@ -13,7 +13,7 @@ import com.blogspot.e_kanivets.moneytracker.fragment.AccountsFragment;
 import com.blogspot.e_kanivets.moneytracker.fragment.ExportFragment;
 import com.blogspot.e_kanivets.moneytracker.fragment.NavigationDrawerFragment;
 import com.blogspot.e_kanivets.moneytracker.fragment.RecordsFragment;
-import com.blogspot.e_kanivets.moneytracker.util.AppUtils;
+import com.blogspot.e_kanivets.moneytracker.util.PrefUtils;
 
 public class NavDrawerActivity extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -35,7 +35,7 @@ public class NavDrawerActivity extends AppCompatActivity
         setContentView(R.layout.activity_nav_drawer);
 
         /* Increment launch count */
-        AppUtils.addLaunchCount(NavDrawerActivity.this);
+        PrefUtils.addLaunchCount();
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);

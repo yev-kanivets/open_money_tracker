@@ -3,11 +3,9 @@ package com.blogspot.e_kanivets.moneytracker.model;
 import android.util.Pair;
 
 import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.util.MTApp;
+import com.blogspot.e_kanivets.moneytracker.util.MtApp;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -110,11 +108,11 @@ public class Report {
         //Add summary row to list
         summaryReportList = new ArrayList<Pair<String, Integer>>();
         summaryReportList.add(new Pair<String, Integer>(
-                MTApp.get().getResources().getString(R.string.total_incomes) + " :", totalIncome));
+                MtApp.get().getResources().getString(R.string.total_incomes) + " :", totalIncome));
         summaryReportList.add(new Pair<String, Integer>(
-                MTApp.get().getResources().getString(R.string.total_expenses) + " :", totalExpense));
+                MtApp.get().getResources().getString(R.string.total_expenses) + " :", totalExpense));
         summaryReportList.add(new Pair<String, Integer>(
-                MTApp.get().getResources().getString(R.string.total) + " :", totalExpense + totalIncome));
+                MtApp.get().getResources().getString(R.string.total) + " :", totalExpense + totalIncome));
     }
 
     private void fillRecordList(HashMap<String, Record> recordMap) {

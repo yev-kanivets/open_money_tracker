@@ -2,7 +2,7 @@ package com.blogspot.e_kanivets.moneytracker.model;
 
 import com.blogspot.e_kanivets.moneytracker.controller.CategoryController;
 import com.blogspot.e_kanivets.moneytracker.helper.DbHelper;
-import com.blogspot.e_kanivets.moneytracker.util.MTApp;
+import com.blogspot.e_kanivets.moneytracker.util.MtApp;
 
 import java.io.Serializable;
 
@@ -30,7 +30,7 @@ public class Record implements Serializable {
         this.price = price;
         this.accountId = accountId;
 
-        category = new CategoryController(new DbHelper(MTApp.get())).getCategoryById(categoryId);
+        category = new CategoryController(new DbHelper(MtApp.get())).getCategoryById(categoryId);
     }
 
     public int getId() {
