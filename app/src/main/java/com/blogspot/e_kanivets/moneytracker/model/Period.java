@@ -1,12 +1,18 @@
 package com.blogspot.e_kanivets.moneytracker.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Created by eugene on 10/09/14.
+ * Entity class for Period which consists from two dates.
+ * Created on 10/09/14.
+ *
+ * @author Evgenii Kanivets
  */
-public class Period {
+public class Period implements Parcelable {
     private Date first;
     private Date last;
 
@@ -14,6 +20,23 @@ public class Period {
         this.first = first;
         this.last = last;
     }
+
+    protected Period(Parcel in) {
+        first = new Date(in.readLong());
+        last = new Date(in.readLong());
+    }
+
+    public static final Creator<Period> CREATOR = new Creator<Period>() {
+        @Override
+        public Period createFromParcel(Parcel in) {
+            return new Period(in);
+        }
+
+        @Override
+        public Period[] newArray(int size) {
+            return new Period[size];
+        }
+    };
 
     public Date getFirst() {
         return first;
@@ -43,5 +66,16 @@ public class Period {
         cal.set(Calendar.SECOND, 59);
 
         this.last = cal.getTime();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(first.getTime());
+        dest.writeLong(last.getTime());
     }
 }

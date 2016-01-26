@@ -11,7 +11,9 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.helper.MTHelper;
+import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
+import com.blogspot.e_kanivets.moneytracker.controller.RecordController;
+import com.blogspot.e_kanivets.moneytracker.helper.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.model.Account;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
 
@@ -34,10 +36,16 @@ public class AddIncomeActivity extends AppCompatActivity {
     private EditText etPrice;
     private Spinner spinnerAccount;
 
+    private RecordController recordController;
+    private AccountController accountController;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_record);
+
+        recordController = new RecordController(new DbHelper(AddIncomeActivity.this));
+        accountController = new AccountController(new DbHelper(AddIncomeActivity.this));
 
         if (getIntent() != null) {
             record = (Record) getIntent().getSerializableExtra(KEY_RECORD);
@@ -68,23 +76,19 @@ public class AddIncomeActivity extends AppCompatActivity {
                 try {
                     price = Integer.parseInt(etPrice.getText().toString());
                     if (price >= 0 && price <= 1000000000) {
-                        Account account = MTHelper.getInstance().getAccounts().get(spinnerAccount.getSelectedItemPosition());
+                        Account account = accountController.getAccounts().get(spinnerAccount.getSelectedItemPosition());
 
-                        if (mode == Mode.MODE_ADD) {
-                            MTHelper.getInstance().addRecord(new Date().getTime(), 0, title, category,
-                                    price, account.getId(), price);
-                        }
-                        if (mode == Mode.MODE_EDIT) {
-                            MTHelper.getInstance().updateRecordById(record.getId(), title, category,
-                                    price, account.getId(), price - record.getPrice());
-                        }
-                    } else {
-                        throw new NumberFormatException();
-                    }
+                        if (mode == Mode.MODE_ADD) recordController.addRecord(new Date().getTime(),
+                                0, title, category, price, account.getId(), price);
+                        if (mode == Mode.MODE_EDIT) recordController.updateRecordById(record.getId(),
+                                title, category, price, account.getId(), price - record.getPrice());
+                    } else throw new NumberFormatException();
                 } catch (NumberFormatException e) {
                     Toast.makeText(AddIncomeActivity.this, getResources().getString(R.string.wrong_number_text),
                             Toast.LENGTH_SHORT).show();
                 }
+
+                setResult(RESULT_OK);
                 finish();
 
                 return true;
@@ -103,8 +107,10 @@ public class AddIncomeActivity extends AppCompatActivity {
         etCategory = (EditText) findViewById(R.id.et_category);
         etPrice = (EditText) findViewById(R.id.et_price);
 
+        List<Account> accountList = accountController.getAccounts();
+
         List<String> accounts = new ArrayList<>();
-        for (Account account : MTHelper.getInstance().getAccounts()) {
+        for (Account account : accountList) {
             accounts.add(account.getTitle());
         }
 
@@ -118,8 +124,8 @@ public class AddIncomeActivity extends AppCompatActivity {
             etCategory.setText(record.getCategory());
             etPrice.setText(Integer.toString(record.getPrice()));
 
-            for (int i = 0; i < MTHelper.getInstance().getAccounts().size(); i++) {
-                Account account = MTHelper.getInstance().getAccounts().get(i);
+            for (int i = 0; i < accountList.size(); i++) {
+                Account account = accountList.get(i);
                 if (account.getId() == record.getAccountId()) {
                     spinnerAccount.setSelection(i);
                 }

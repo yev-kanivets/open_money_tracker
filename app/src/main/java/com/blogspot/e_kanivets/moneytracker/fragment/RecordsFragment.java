@@ -3,6 +3,7 @@ package com.blogspot.e_kanivets.moneytracker.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -21,10 +22,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.blogspot.e_kanivets.moneytracker.R;
+import com.blogspot.e_kanivets.moneytracker.activity.AddExpenseActivity;
+import com.blogspot.e_kanivets.moneytracker.activity.AddIncomeActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.NavDrawerActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.ReportActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.RecordAdapter;
-import com.blogspot.e_kanivets.moneytracker.helper.MTHelper;
+import com.blogspot.e_kanivets.moneytracker.controller.PeriodController;
+import com.blogspot.e_kanivets.moneytracker.controller.RecordController;
+import com.blogspot.e_kanivets.moneytracker.helper.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.helper.PeriodHelper;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
 import com.blogspot.e_kanivets.moneytracker.ui.AppRateDialog;
@@ -33,30 +38,25 @@ import com.blogspot.e_kanivets.moneytracker.util.AppUtils;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Observable;
-import java.util.Observer;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link RecordsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RecordsFragment extends Fragment implements View.OnClickListener, Observer, AdapterView.OnItemSelectedListener {
+public class RecordsFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
     public static final String TAG = "RecordsFragment";
+
+    private static final int REQUEST_ACTION_RECORD = 1;
 
     private ListView listView;
 
     private TextView tvFromDate;
     private TextView tvToDate;
 
-    private OnFragmentInteractionListener listener;
+    private RecordController recordController;
+    private PeriodController periodController;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment RecordsFragment.
-     */
     public static RecordsFragment newInstance() {
         RecordsFragment fragment = new RecordsFragment();
         Bundle args = new Bundle();
@@ -69,11 +69,11 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
-        }
+        periodController = new PeriodController();
+        recordController = new RecordController(new DbHelper(getActivity()));
     }
 
     @Override
@@ -89,13 +89,6 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-
-        try {
-            listener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
 
         ((NavDrawerActivity) activity).onSectionAttached(TAG);
     }
@@ -113,12 +106,16 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
 
         switch (item.getItemId()) {
             case R.id.edit:
-                Record record = MTHelper.getInstance().getRecords().get(info.position);
-                listener.onEditRecord(record);
+                Record record = recordController.
+                        getRecords(periodController.getPeriod()).get(info.position);
+                if (record.isIncome())
+                    startAddIncomeActivity(record, AddIncomeActivity.Mode.MODE_EDIT);
+                else startAddExpenseActivity(record, AddExpenseActivity.Mode.MODE_EDIT);
                 return true;
             case R.id.delete:
-                MTHelper.getInstance().deleteRecordById(MTHelper.getInstance().getRecords().
-                        get(info.position).getId());
+                recordController.deleteRecord(recordController.
+                        getRecords(periodController.getPeriod()).get(info.position));
+                update();
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -129,17 +126,16 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_add_expense:
-                //showAddExpenseDialog();
-                listener.onAddExpensePressed();
+                startAddExpenseActivity(null, AddExpenseActivity.Mode.MODE_ADD);
                 break;
 
             case R.id.btn_add_income:
-                //showAddIncomeDialog();
-                listener.onAddIncomePressed();
+                startAddIncomeActivity(null, AddIncomeActivity.Mode.MODE_ADD);
                 break;
 
             case R.id.btn_report:
                 Intent intent = new Intent(getActivity(), ReportActivity.class);
+                intent.putExtra(ReportActivity.KEY_PERIOD, periodController.getPeriod());
                 startActivity(intent);
                 break;
 
@@ -166,19 +162,19 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
         switch (position) {
             // Day period
             case 0:
-                MTHelper.getInstance().setPeriod(PeriodHelper.getInstance().getDayPeriod());
+                periodController.setPeriod(PeriodHelper.getInstance().getDayPeriod());
                 break;
             // Week period
             case 1:
-                MTHelper.getInstance().setPeriod(PeriodHelper.getInstance().getWeekPeriod());
+                periodController.setPeriod(PeriodHelper.getInstance().getWeekPeriod());
                 break;
             // Month period
             case 2:
-                MTHelper.getInstance().setPeriod(PeriodHelper.getInstance().getMonthPeriod());
+                periodController.setPeriod(PeriodHelper.getInstance().getMonthPeriod());
                 break;
             // Year period
             case 3:
-                MTHelper.getInstance().setPeriod(PeriodHelper.getInstance().getYearPeriod());
+                periodController.setPeriod(PeriodHelper.getInstance().getYearPeriod());
                 break;
             default:
                 break;
@@ -186,10 +182,10 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
 
         AppUtils.writeUsedPeriod(getActivity(), position);
 
-        MTHelper.getInstance().update();
+        update();
 
-        tvFromDate.setText(MTHelper.getInstance().getFirstDay());
-        tvToDate.setText(MTHelper.getInstance().getLastDay());
+        tvFromDate.setText(periodController.getFirstDay());
+        tvToDate.setText(periodController.getLastDay());
     }
 
     @Override
@@ -198,7 +194,24 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
     }
 
     @Override
-    public void update(Observable observable, Object o) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == AppCompatActivity.RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_ACTION_RECORD:
+                    update();
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+
+    private void update() {
+        listView.setAdapter(new RecordAdapter(getActivity(),
+                recordController.getRecords(periodController.getPeriod())));
         ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
     }
 
@@ -214,8 +227,8 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
             listView = (ListView) rootView.findViewById(R.id.listView);
 
             //Set dates of current week
-            tvFromDate.setText(MTHelper.getInstance().getFirstDay());
-            tvToDate.setText(MTHelper.getInstance().getLastDay());
+            tvFromDate.setText(periodController.getFirstDay());
+            tvToDate.setText(periodController.getLastDay());
 
             //Set listeners
             btnAddIncome.setOnClickListener(RecordsFragment.this);
@@ -224,9 +237,9 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
             tvToDate.setOnClickListener(RecordsFragment.this);
             btnReport.setOnClickListener(RecordsFragment.this);
 
-            listView.setAdapter(new RecordAdapter(getActivity(), MTHelper.getInstance().getRecords()));
+            listView.setAdapter(new RecordAdapter(getActivity(),
+                    recordController.getRecords(periodController.getPeriod())));
             ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
-            registerForContextMenu(listView);
 
             /* Scroll list to bottom only once at start */
             listView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -244,8 +257,7 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
                 }
             });
 
-            //Subscribe to helper
-            MTHelper.getInstance().addObserver(this);
+            registerForContextMenu(listView);
 
             ((NavDrawerActivity) getActivity()).onSectionAttached(TAG);
         }
@@ -272,13 +284,13 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
 
     private void showChangeFromDateDialog() {
         ChangeDateDialog dialog = new ChangeDateDialog(getActivity(),
-                MTHelper.getInstance().getPeriod().getFirst(), new ChangeDateDialog.OnDateChangedListener() {
+                periodController.getPeriod().getFirst(), new ChangeDateDialog.OnDateChangedListener() {
             @Override
             public void OnDataChanged(Date date) {
-                MTHelper.getInstance().getPeriod().setFirst(date);
-                MTHelper.getInstance().update();
+                periodController.getPeriod().setFirst(date);
+                update();
 
-                tvFromDate.setText(MTHelper.getInstance().getFirstDay());
+                tvFromDate.setText(periodController.getFirstDay());
             }
         });
         dialog.show();
@@ -286,13 +298,13 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
 
     private void showChangeToDateDialog() {
         ChangeDateDialog dialog = new ChangeDateDialog(getActivity(),
-                MTHelper.getInstance().getPeriod().getLast(), new ChangeDateDialog.OnDateChangedListener() {
+                periodController.getPeriod().getLast(), new ChangeDateDialog.OnDateChangedListener() {
             @Override
             public void OnDataChanged(Date date) {
-                MTHelper.getInstance().getPeriod().setLast(date);
-                MTHelper.getInstance().update();
+                periodController.getPeriod().setLast(date);
+                update();
 
-                tvToDate.setText(MTHelper.getInstance().getLastDay());
+                tvToDate.setText(periodController.getLastDay());
             }
         });
         dialog.show();
@@ -304,9 +316,17 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
         dialog.show();
     }
 
-    public interface OnFragmentInteractionListener {
-        void onAddIncomePressed();
-        void onAddExpensePressed();
-        void onEditRecord(Record record);
+    private void startAddIncomeActivity(Record record, AddIncomeActivity.Mode mode) {
+        Intent intent = new Intent(getActivity(), AddIncomeActivity.class);
+        intent.putExtra(AddExpenseActivity.KEY_RECORD, record);
+        intent.putExtra(AddExpenseActivity.KEY_MODE, mode);
+        startActivityForResult(intent, REQUEST_ACTION_RECORD);
+    }
+
+    private void startAddExpenseActivity(Record record, AddExpenseActivity.Mode mode) {
+        Intent intent = new Intent(getActivity(), AddExpenseActivity.class);
+        intent.putExtra(AddExpenseActivity.KEY_RECORD, record);
+        intent.putExtra(AddExpenseActivity.KEY_MODE, mode);
+        startActivityForResult(intent, REQUEST_ACTION_RECORD);
     }
 }

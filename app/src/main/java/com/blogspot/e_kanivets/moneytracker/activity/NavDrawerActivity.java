@@ -1,6 +1,5 @@
 package com.blogspot.e_kanivets.moneytracker.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,21 +7,18 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
-import android.view.MenuItem;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.fragment.AccountsFragment;
-import com.blogspot.e_kanivets.moneytracker.fragment.AddAccountFragment;
 import com.blogspot.e_kanivets.moneytracker.fragment.ExportFragment;
 import com.blogspot.e_kanivets.moneytracker.fragment.NavigationDrawerFragment;
 import com.blogspot.e_kanivets.moneytracker.fragment.RecordsFragment;
-import com.blogspot.e_kanivets.moneytracker.model.Record;
 import com.blogspot.e_kanivets.moneytracker.util.AppUtils;
 
 public class NavDrawerActivity extends AppCompatActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks,
-        RecordsFragment.OnFragmentInteractionListener {
-
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+    @SuppressWarnings("unused")
+    private static final String TAG = "NavDrawerActivity";
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -85,10 +81,6 @@ public class NavDrawerActivity extends AppCompatActivity
                 mTitle = getString(R.string.title_accounts);
                 break;
 
-            case AddAccountFragment.TAG:
-                mTitle = getString(R.string.title_add_account);
-                break;
-
             case ExportFragment.TAG:
                 mTitle = getString(R.string.title_export);
                 break;
@@ -124,57 +116,7 @@ public class NavDrawerActivity extends AppCompatActivity
             restoreActionBar();
             return true;
         }
+
         return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onAddIncomePressed() {
-        startAddIncomeActivity(null, AddIncomeActivity.Mode.MODE_ADD);
-    }
-
-    @Override
-    public void onAddExpensePressed() {
-        startAddExpenseActivity(null, AddExpenseActivity.Mode.MODE_ADD);
-    }
-
-    @Override
-    public void onEditRecord(Record record) {
-        if (record.isIncome()) {
-            startAddIncomeActivity(record, AddIncomeActivity.Mode.MODE_EDIT);
-        } else {
-            startAddExpenseActivity(record, AddExpenseActivity.Mode.MODE_EDIT);
-        }
-    }
-
-    public void showAddAccountFragment() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, AddAccountFragment.newInstance())
-                .addToBackStack(AddAccountFragment.TAG)
-                .commit();
-    }
-
-    private void startAddIncomeActivity(Record record, AddIncomeActivity.Mode mode) {
-        Intent intent = new Intent(NavDrawerActivity.this, AddIncomeActivity.class);
-        intent.putExtra(AddExpenseActivity.KEY_RECORD, record);
-        intent.putExtra(AddExpenseActivity.KEY_MODE, mode);
-        startActivity(intent);
-    }
-
-    private void startAddExpenseActivity(Record record, AddExpenseActivity.Mode mode) {
-        Intent intent = new Intent(NavDrawerActivity.this, AddExpenseActivity.class);
-        intent.putExtra(AddExpenseActivity.KEY_RECORD, record);
-        intent.putExtra(AddExpenseActivity.KEY_MODE, mode);
-        startActivity(intent);
     }
 }

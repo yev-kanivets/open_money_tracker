@@ -6,7 +6,10 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Created by fess on 15.11.2014.
+ * Helper class for periods.
+ * Created on 15.11.2014.
+ *
+ * @author Evgenii Kanivets
  */
 public class PeriodHelper {
 
