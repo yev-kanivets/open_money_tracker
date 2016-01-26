@@ -14,7 +14,6 @@ import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.RecordController;
 import com.blogspot.e_kanivets.moneytracker.helper.DbHelper;
-import com.blogspot.e_kanivets.moneytracker.helper.MtHelper;
 import com.blogspot.e_kanivets.moneytracker.model.Account;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
 
@@ -45,10 +44,8 @@ public class AddExpenseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_record);
 
-        recordController = new RecordController(new DbHelper(AddExpenseActivity.this),
-                MtHelper.getInstance());
-        accountController = new AccountController(new DbHelper(AddExpenseActivity.this),
-                MtHelper.getInstance());
+        recordController = new RecordController(new DbHelper(AddExpenseActivity.this));
+        accountController = new AccountController(new DbHelper(AddExpenseActivity.this));
 
         if (getIntent() != null) {
             record = (Record) getIntent().getSerializableExtra(KEY_RECORD);
@@ -92,6 +89,7 @@ public class AddExpenseActivity extends AppCompatActivity {
                             Toast.LENGTH_SHORT).show();
                 }
 
+                setResult(RESULT_OK);
                 finish();
                 return true;
 

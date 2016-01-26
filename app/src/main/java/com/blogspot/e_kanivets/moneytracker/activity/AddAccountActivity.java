@@ -9,7 +9,6 @@ import android.widget.EditText;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.helper.DbHelper;
-import com.blogspot.e_kanivets.moneytracker.helper.MtHelper;
 
 public class AddAccountActivity extends AppCompatActivity {
     @SuppressWarnings("unused")
@@ -40,9 +39,9 @@ public class AddAccountActivity extends AppCompatActivity {
                 String title = etTitle.getText().toString();
                 int initSum = Integer.parseInt(etInitSum.getText().toString());
 
-                new AccountController(new DbHelper(AddAccountActivity.this), MtHelper.getInstance())
-                        .addAccount(title, initSum);
+                new AccountController(new DbHelper(AddAccountActivity.this)).addAccount(title, initSum);
 
+                setResult(RESULT_OK);
                 finish();
                 return true;
 

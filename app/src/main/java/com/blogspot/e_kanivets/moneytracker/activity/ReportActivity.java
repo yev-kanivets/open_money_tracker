@@ -15,8 +15,6 @@ import com.blogspot.e_kanivets.moneytracker.adapter.ExpandableListReportAdapter;
 import com.blogspot.e_kanivets.moneytracker.adapter.ReportItemAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.RecordController;
 import com.blogspot.e_kanivets.moneytracker.helper.DbHelper;
-import com.blogspot.e_kanivets.moneytracker.helper.MtHelper;
-import com.blogspot.e_kanivets.moneytracker.helper.PeriodHelper;
 import com.blogspot.e_kanivets.moneytracker.model.Period;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
 import com.blogspot.e_kanivets.moneytracker.model.Report;
@@ -48,8 +46,7 @@ public class ReportActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_report);
 
-        recordController = new RecordController(new DbHelper(ReportActivity.this),
-                MtHelper.getInstance());
+        recordController = new RecordController(new DbHelper(ReportActivity.this));
 
         period = getIntent().getParcelableExtra(KEY_PERIOD);
         if (period == null) {

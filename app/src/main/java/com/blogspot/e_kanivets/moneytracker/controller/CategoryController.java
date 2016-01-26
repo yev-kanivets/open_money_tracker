@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.blogspot.e_kanivets.moneytracker.helper.DbHelper;
-import com.blogspot.e_kanivets.moneytracker.helper.MtHelper;
 import com.blogspot.e_kanivets.moneytracker.model.Category;
 
 import java.util.ArrayList;
@@ -19,11 +18,9 @@ import java.util.List;
  */
 public class CategoryController {
     private DbHelper dbHelper;
-    private MtHelper mtHelper;
 
-    public CategoryController(DbHelper dbHelper, MtHelper mtHelper) {
+    public CategoryController(DbHelper dbHelper) {
         this.dbHelper = dbHelper;
-        this.mtHelper = mtHelper;
     }
 
     public List<Category> getCategories() {
@@ -65,8 +62,6 @@ public class CategoryController {
 
         db.close();
 
-        mtHelper.update();
-
         return id;
     }
 
@@ -75,8 +70,6 @@ public class CategoryController {
             if (category.getId() == id) {
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
                 db.delete(DbHelper.TABLE_CATEGORIES, "id=?", new String[]{Integer.toString(id)});
-
-                mtHelper.update();
                 break;
             }
         }

@@ -30,7 +30,6 @@ import com.blogspot.e_kanivets.moneytracker.adapter.RecordAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.PeriodController;
 import com.blogspot.e_kanivets.moneytracker.controller.RecordController;
 import com.blogspot.e_kanivets.moneytracker.helper.DbHelper;
-import com.blogspot.e_kanivets.moneytracker.helper.MtHelper;
 import com.blogspot.e_kanivets.moneytracker.helper.PeriodHelper;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
 import com.blogspot.e_kanivets.moneytracker.ui.AppRateDialog;
@@ -39,16 +38,16 @@ import com.blogspot.e_kanivets.moneytracker.util.AppUtils;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Observable;
-import java.util.Observer;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link RecordsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RecordsFragment extends Fragment implements View.OnClickListener, Observer, AdapterView.OnItemSelectedListener {
+public class RecordsFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
     public static final String TAG = "RecordsFragment";
+
+    private static final int REQUEST_ACTION_RECORD = 1;
 
     private ListView listView;
 
@@ -74,7 +73,7 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
         super.onCreate(savedInstanceState);
 
         periodController = new PeriodController();
-        recordController = new RecordController(new DbHelper(getActivity()), MtHelper.getInstance());
+        recordController = new RecordController(new DbHelper(getActivity()));
     }
 
     @Override
@@ -116,6 +115,7 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
             case R.id.delete:
                 recordController.deleteRecord(recordController.
                         getRecords(periodController.getPeriod()).get(info.position));
+                update();
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -182,7 +182,7 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
 
         AppUtils.writeUsedPeriod(getActivity(), position);
 
-        MtHelper.getInstance().update();
+        update();
 
         tvFromDate.setText(periodController.getFirstDay());
         tvToDate.setText(periodController.getLastDay());
@@ -194,7 +194,22 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
     }
 
     @Override
-    public void update(Observable observable, Object o) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == AppCompatActivity.RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_ACTION_RECORD:
+                    update();
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+
+    private void update() {
         listView.setAdapter(new RecordAdapter(getActivity(),
                 recordController.getRecords(periodController.getPeriod())));
         ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
@@ -242,8 +257,7 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
                 }
             });
 
-            //Subscribe to helper
-            MtHelper.getInstance().addObserver(this);
+            registerForContextMenu(listView);
 
             ((NavDrawerActivity) getActivity()).onSectionAttached(TAG);
         }
@@ -274,7 +288,7 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
             @Override
             public void OnDataChanged(Date date) {
                 periodController.getPeriod().setFirst(date);
-                MtHelper.getInstance().update();
+                update();
 
                 tvFromDate.setText(periodController.getFirstDay());
             }
@@ -288,7 +302,7 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
             @Override
             public void OnDataChanged(Date date) {
                 periodController.getPeriod().setLast(date);
-                MtHelper.getInstance().update();
+                update();
 
                 tvToDate.setText(periodController.getLastDay());
             }
@@ -306,13 +320,13 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, O
         Intent intent = new Intent(getActivity(), AddIncomeActivity.class);
         intent.putExtra(AddExpenseActivity.KEY_RECORD, record);
         intent.putExtra(AddExpenseActivity.KEY_MODE, mode);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_ACTION_RECORD);
     }
 
     private void startAddExpenseActivity(Record record, AddExpenseActivity.Mode mode) {
         Intent intent = new Intent(getActivity(), AddExpenseActivity.class);
         intent.putExtra(AddExpenseActivity.KEY_RECORD, record);
         intent.putExtra(AddExpenseActivity.KEY_MODE, mode);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_ACTION_RECORD);
     }
 }

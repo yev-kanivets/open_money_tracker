@@ -5,9 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.blogspot.e_kanivets.moneytracker.helper.DbHelper;
-import com.blogspot.e_kanivets.moneytracker.helper.MtHelper;
 import com.blogspot.e_kanivets.moneytracker.model.Account;
-import com.blogspot.e_kanivets.moneytracker.model.Category;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,11 +18,9 @@ import java.util.List;
  */
 public class AccountController {
     private DbHelper dbHelper;
-    private MtHelper mtHelper;
 
-    public AccountController(DbHelper dbHelper, MtHelper mtHelper) {
+    public AccountController(DbHelper dbHelper) {
         this.dbHelper = dbHelper;
-        this.mtHelper = mtHelper;
     }
 
     public List<Account> getAccounts() {
@@ -83,8 +79,6 @@ public class AccountController {
 
             db.update(DbHelper.TABLE_ACCOUNTS, contentValues, "id=?", new String[]{Integer.valueOf(id).toString()});
         }
-
-        mtHelper.update();
     }
 
     public void deleteAccount(Account account) {
@@ -93,8 +87,6 @@ public class AccountController {
         db.delete(DbHelper.TABLE_ACCOUNTS, "id=?",
                 new String[]{Integer.toString(account.getId())});
         db.close();
-
-        mtHelper.update();
     }
 
     public void addAccount(String title, int curSum) {
@@ -108,7 +100,5 @@ public class AccountController {
         int id = (int) db.insert(DbHelper.TABLE_ACCOUNTS, null, contentValues);
 
         db.close();
-
-        mtHelper.update();
     }
 }

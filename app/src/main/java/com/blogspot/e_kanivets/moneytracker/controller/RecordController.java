@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.blogspot.e_kanivets.moneytracker.helper.DbHelper;
-import com.blogspot.e_kanivets.moneytracker.helper.MtHelper;
 import com.blogspot.e_kanivets.moneytracker.model.Period;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
 
@@ -20,15 +19,13 @@ import java.util.List;
  */
 public class RecordController {
     private DbHelper dbHelper;
-    private MtHelper mtHelper;
     private AccountController accountController;
     private final CategoryController categoryController;
 
-    public RecordController(DbHelper dbHelper, MtHelper mtHelper) {
+    public RecordController(DbHelper dbHelper) {
         this.dbHelper = dbHelper;
-        this.mtHelper = mtHelper;
-        this.accountController = new AccountController(dbHelper, mtHelper);
-        categoryController = new CategoryController(dbHelper, mtHelper);
+        this.accountController = new AccountController(dbHelper);
+        categoryController = new CategoryController(dbHelper);
     }
 
     public List<Record> getRecords(Period period) {
@@ -96,8 +93,6 @@ public class RecordController {
         accountController.updateAccountById(accountId, diff);
 
         db.close();
-
-        mtHelper.update();
     }
 
     public void updateRecordById(int id, String title, String category, int price, int accountId, int diff) {
@@ -117,8 +112,6 @@ public class RecordController {
         db.update(DbHelper.TABLE_RECORDS, contentValues, "id=?", new String[]{Integer.valueOf(id).toString()});
 
         accountController.updateAccountById(accountId, diff);
-
-        mtHelper.update();
     }
 
     public void deleteRecord(Record record) {
@@ -129,8 +122,6 @@ public class RecordController {
 
         accountController.updateAccountById(record.getAccountId(), record.isIncome() ?
                 -record.getPrice() : record.getPrice());
-
-        mtHelper.update();
     }
 
     public List<String> getRecordsForExport(long fromDate, long toDate) {

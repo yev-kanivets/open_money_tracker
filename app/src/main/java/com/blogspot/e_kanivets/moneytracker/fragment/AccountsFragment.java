@@ -22,18 +22,16 @@ import com.blogspot.e_kanivets.moneytracker.activity.NavDrawerActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.AccountAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.helper.DbHelper;
-import com.blogspot.e_kanivets.moneytracker.helper.MtHelper;
-
-import java.util.Observable;
-import java.util.Observer;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link AccountsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AccountsFragment extends Fragment implements View.OnClickListener, Observer {
+public class AccountsFragment extends Fragment implements View.OnClickListener {
     public static final String TAG = "AccountsFragment";
+
+    private static final int REQUEST_ADD_ACCOUNT = 1;
 
     private ListView listView;
 
@@ -60,7 +58,7 @@ public class AccountsFragment extends Fragment implements View.OnClickListener, 
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        accountController = new AccountController(new DbHelper(getActivity()), MtHelper.getInstance());
+        accountController = new AccountController(new DbHelper(getActivity()));
     }
 
     @Override
@@ -85,7 +83,8 @@ public class AccountsFragment extends Fragment implements View.OnClickListener, 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_add_account:
-                startActivity(new Intent(getActivity(), AddAccountActivity.class));
+                Intent intent = new Intent(getActivity(), AddAccountActivity.class);
+                startActivityForResult(intent, REQUEST_ADD_ACCOUNT);
                 break;
 
             default:
@@ -107,6 +106,7 @@ public class AccountsFragment extends Fragment implements View.OnClickListener, 
         switch (item.getItemId()) {
             case R.id.delete:
                 accountController.deleteAccount(accountController.getAccounts().get(info.position));
+                update();
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -114,7 +114,22 @@ public class AccountsFragment extends Fragment implements View.OnClickListener, 
     }
 
     @Override
-    public void update(Observable observable, Object data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == AppCompatActivity.RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_ADD_ACCOUNT:
+                    update();
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+
+    private void update() {
         listView.setAdapter(new AccountAdapter(getActivity(), accountController.getAccounts()));
         ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
     }
@@ -128,9 +143,6 @@ public class AccountsFragment extends Fragment implements View.OnClickListener, 
             listView.setAdapter(new AccountAdapter(getActivity(), accountController.getAccounts()));
             ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
             registerForContextMenu(listView);
-
-            //Subscribe to helper
-            MtHelper.getInstance().addObserver(this);
 
             ((NavDrawerActivity) getActivity()).onSectionAttached(TAG);
         }
