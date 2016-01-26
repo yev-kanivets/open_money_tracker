@@ -16,6 +16,8 @@ import com.blogspot.e_kanivets.moneytracker.adapter.ReportItemAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.RecordController;
 import com.blogspot.e_kanivets.moneytracker.helper.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.helper.MtHelper;
+import com.blogspot.e_kanivets.moneytracker.helper.PeriodHelper;
+import com.blogspot.e_kanivets.moneytracker.model.Period;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
 import com.blogspot.e_kanivets.moneytracker.model.Report;
 import com.blogspot.e_kanivets.moneytracker.util.Constants;
@@ -25,12 +27,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by eugene on 11/09/14.
- */
 public class ReportActivity extends Activity {
+    @SuppressWarnings("unused")
+    private static final String TAG = "ReportActivity";
 
-    private static final String TAG = ReportActivity.class.getSimpleName();
+    public static final String KEY_PERIOD = "key_period";
 
     private Activity activity;
     private Report report;
@@ -39,6 +40,7 @@ public class ReportActivity extends Activity {
     private ExpandableListView expandableListView;
 
     private RecordController recordController;
+    private Period period;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +51,14 @@ public class ReportActivity extends Activity {
         recordController = new RecordController(new DbHelper(ReportActivity.this),
                 MtHelper.getInstance());
 
+        period = getIntent().getParcelableExtra(KEY_PERIOD);
+        if (period == null) {
+            finish();
+            return;
+        }
+
         activity = this;
-        report = new Report(recordController.getRecords());
+        report = new Report(recordController.getRecords(period));
 
         initViews();
     }
@@ -60,7 +68,7 @@ public class ReportActivity extends Activity {
         expandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
 
         listView.setAdapter(new ReportItemAdapter(activity,
-                new Report(recordController.getRecords()).getReportList()));
+                new Report(recordController.getRecords(period)).getReportList()));
 
         /* Scroll list to bottom only once at start */
         listView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {

@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.blogspot.e_kanivets.moneytracker.helper.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.helper.MtHelper;
+import com.blogspot.e_kanivets.moneytracker.model.Period;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
 
 import java.util.ArrayList;
@@ -30,14 +31,14 @@ public class RecordController {
         categoryController = new CategoryController(dbHelper, mtHelper);
     }
 
-    public List<Record> getRecords() {
+    public List<Record> getRecords(Period period) {
         List<Record> recordList = new ArrayList<>();
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        //Form args to select only needed records according to period
-        String[] args = new String[]{Long.toString(mtHelper.getPeriod().getFirst().getTime()),
-                Long.toString(mtHelper.getPeriod().getLast().getTime())};
+        // Form args to select only needed records according to period
+        String[] args = new String[]{Long.toString(period.getFirst().getTime()),
+                Long.toString(period.getLast().getTime())};
 
         //Read records table from db
         Cursor cursor = db.query(DbHelper.TABLE_RECORDS, null, "time BETWEEN ? AND ?", args, null, null, null);
@@ -120,21 +121,16 @@ public class RecordController {
         mtHelper.update();
     }
 
-    public void deleteRecordById(int id) {
-        for (Record record : getRecords()) {
-            if (record.getId() == id) {
-                SQLiteDatabase db = dbHelper.getWritableDatabase();
-                db.delete(DbHelper.TABLE_RECORDS, "id=?",
-                        new String[]{Integer.toString(id)});
-                db.close();
+    public void deleteRecord(Record record) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.delete(DbHelper.TABLE_RECORDS, "id=?",
+                new String[]{Integer.toString(record.getId())});
+        db.close();
 
-                accountController.updateAccountById(record.getAccountId(), record.isIncome() ?
-                        -record.getPrice() : record.getPrice());
+        accountController.updateAccountById(record.getAccountId(), record.isIncome() ?
+                -record.getPrice() : record.getPrice());
 
-                mtHelper.update();
-                break;
-            }
-        }
+        mtHelper.update();
     }
 
     public List<String> getRecordsForExport(long fromDate, long toDate) {
