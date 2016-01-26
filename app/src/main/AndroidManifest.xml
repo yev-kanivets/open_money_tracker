@@ -15,6 +15,7 @@
         android:theme="@style/Theme.Default">
         <activity
             android:name=".activity.ReportActivity"
+            android:label="@string/report"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Default" />
         <activity

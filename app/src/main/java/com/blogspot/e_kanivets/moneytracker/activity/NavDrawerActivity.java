@@ -1,21 +1,20 @@
 package com.blogspot.e_kanivets.moneytracker.activity;
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 
 import com.blogspot.e_kanivets.moneytracker.R;
+import com.blogspot.e_kanivets.moneytracker.activity.base.BaseActivity;
 import com.blogspot.e_kanivets.moneytracker.fragment.AccountsFragment;
 import com.blogspot.e_kanivets.moneytracker.fragment.ExportFragment;
 import com.blogspot.e_kanivets.moneytracker.fragment.NavigationDrawerFragment;
 import com.blogspot.e_kanivets.moneytracker.fragment.RecordsFragment;
 import com.blogspot.e_kanivets.moneytracker.util.PrefUtils;
 
-public class NavDrawerActivity extends AppCompatActivity
+public class NavDrawerActivity extends BaseActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
     @SuppressWarnings("unused")
     private static final String TAG = "NavDrawerActivity";
@@ -30,20 +29,26 @@ public class NavDrawerActivity extends AppCompatActivity
     private CharSequence mTitle;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_nav_drawer);
+    protected int getContentViewId() {
+        return R.layout.activity_nav_drawer;
+    }
 
-        /* Increment launch count */
+    @Override
+    protected boolean initData() {
         PrefUtils.addLaunchCount();
+        return true;
+    }
+
+    @Override
+    protected void initViews() {
+        super.initViews();
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
 
         // Set up the drawer.
-        mNavigationDrawerFragment.setUp(
-                R.id.navigation_drawer,
+        mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
     }
 
