@@ -1,14 +1,11 @@
 package com.blogspot.e_kanivets.moneytracker.activity;
 
-import android.os.Bundle;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import android.annotation.SuppressLint;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
@@ -21,7 +18,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class AddExpenseActivity extends AppCompatActivity {
+import butterknife.Bind;
+
+public class AddExpenseActivity extends BaseActivity {
     @SuppressWarnings("unused")
     private static final String TAG = "AddExpenseActivity";
 
@@ -31,81 +30,40 @@ public class AddExpenseActivity extends AppCompatActivity {
     private Record record;
     private Mode mode;
 
-    private EditText etTitle;
-    private EditText etCategory;
-    private EditText etPrice;
-    private Spinner spinnerAccount;
+    @Bind(R.id.et_title)
+    EditText etTitle;
+    @Bind(R.id.et_category)
+    EditText etCategory;
+    @Bind(R.id.et_price)
+    EditText etPrice;
+    @Bind(R.id.spinner_account)
+    Spinner spinnerAccount;
 
     private RecordController recordController;
     private AccountController accountController;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_record);
+    protected int getContentViewId() {
+        return R.layout.activity_add_record;
+    }
+
+    @Override
+    protected boolean initData() {
+        super.initData();
 
         recordController = new RecordController(new DbHelper(AddExpenseActivity.this));
         accountController = new AccountController(new DbHelper(AddExpenseActivity.this));
 
-        if (getIntent() != null) {
-            record = (Record) getIntent().getSerializableExtra(KEY_RECORD);
-            mode = (Mode) getIntent().getSerializableExtra(KEY_MODE);
-        }
+        record = (Record) getIntent().getSerializableExtra(KEY_RECORD);
+        mode = (Mode) getIntent().getSerializableExtra(KEY_MODE);
 
-        initViews();
-        initActionBar();
+        return mode != null && (!mode.equals(Mode.MODE_EDIT) || record != null);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_add_record, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_done:
-                String title = etTitle.getText().toString();
-                String category = etCategory.getText().toString();
-
-                //Check if price is valid
-                //noinspection UnusedAssignment
-                int price = 0;
-                try {
-                    price = Integer.parseInt(etPrice.getText().toString());
-                    if (price >= 0 && price <= 1000000000) {
-                        Account account = accountController.getAccounts().get(spinnerAccount.getSelectedItemPosition());
-
-                        if (mode == Mode.MODE_ADD) recordController.addRecord(new Date().getTime(),
-                                1, title, category, price, account.getId(), -price);
-                        if (mode == Mode.MODE_EDIT)
-                            recordController.updateRecordById(record.getId(),
-                                    title, category, price, account.getId(), -(price - record.getPrice()));
-                    } else throw new NumberFormatException();
-                } catch (NumberFormatException e) {
-                    Toast.makeText(AddExpenseActivity.this, getResources().getString(R.string.wrong_number_text),
-                            Toast.LENGTH_SHORT).show();
-                }
-
-                setResult(RESULT_OK);
-                finish();
-                return true;
-
-            case R.id.action_close:
-                finish();
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private void initViews() {
-        etTitle = (EditText) findViewById(R.id.et_title);
-        etCategory = (EditText) findViewById(R.id.et_category);
-        etPrice = (EditText) findViewById(R.id.et_price);
+    protected void initViews() {
+        super.initViews();
 
         List<Account> accountList = accountController.getAccounts();
 
@@ -133,11 +91,55 @@ public class AddExpenseActivity extends AppCompatActivity {
         }
     }
 
-    private void initActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setCustomView(null);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_add_record, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_done:
+                if (doExpense()) {
+                    setResult(RESULT_OK);
+                    finish();
+                } else showToast(R.string.wrong_number_text);
+                return true;
+
+            case R.id.action_close:
+                finish();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
+    }
+
+    private boolean doExpense() {
+        String title = etTitle.getText().toString().trim();
+        String category = etCategory.getText().toString().trim();
+
+        //Check if price is valid
+        //noinspection UnusedAssignment
+        int price = -1;
+        try {
+            price = Integer.parseInt(etPrice.getText().toString());
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+
+        if (price >= 0 && price <= 1000000000) {
+            Account account = accountController.getAccounts().get(spinnerAccount.getSelectedItemPosition());
+
+            if (mode == Mode.MODE_ADD) recordController.addRecord(new Date().getTime(),
+                    1, title, category, price, account.getId(), -price);
+            if (mode == Mode.MODE_EDIT)
+                recordController.updateRecordById(record.getId(),
+                        title, category, price, account.getId(), -(price - record.getPrice()));
+        } else return false;
+
+        return true;
     }
 
     public enum Mode {MODE_ADD, MODE_EDIT}

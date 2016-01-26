@@ -25,11 +25,16 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(getContentViewId());
 
-        initViews();
+        if (initData()) initViews();
+        else finish();
     }
 
     @LayoutRes
     protected abstract int getContentViewId();
+
+    protected boolean initData() {
+        return true;
+    }
 
     protected void initViews() {
         ButterKnife.bind(BaseActivity.this);
