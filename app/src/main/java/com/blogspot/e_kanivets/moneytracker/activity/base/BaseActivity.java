@@ -1,4 +1,4 @@
-package com.blogspot.e_kanivets.moneytracker.activity;
+package com.blogspot.e_kanivets.moneytracker.activity.base;
 
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
