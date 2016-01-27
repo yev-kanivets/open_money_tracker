@@ -1,4 +1,4 @@
-package com.blogspot.e_kanivets.moneytracker.util;
+package com.blogspot.e_kanivets.moneytracker;
 
 import android.app.Application;
 
