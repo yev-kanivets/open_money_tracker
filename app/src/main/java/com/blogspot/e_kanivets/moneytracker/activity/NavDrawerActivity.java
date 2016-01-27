@@ -14,10 +14,16 @@ import com.blogspot.e_kanivets.moneytracker.fragment.NavigationDrawerFragment;
 import com.blogspot.e_kanivets.moneytracker.fragment.RecordsFragment;
 import com.blogspot.e_kanivets.moneytracker.util.PrefUtils;
 
+import butterknife.Bind;
+
 public class NavDrawerActivity extends BaseActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
     @SuppressWarnings("unused")
     private static final String TAG = "NavDrawerActivity";
+
+    @Bind(R.id.drawer_layout)
+    DrawerLayout drawerLayout;
+
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -48,8 +54,7 @@ public class NavDrawerActivity extends BaseActivity
         mTitle = getTitle();
 
         // Set up the drawer.
-        mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout));
+        mNavigationDrawerFragment.setUp(R.id.navigation_drawer, drawerLayout);
     }
 
     @Override

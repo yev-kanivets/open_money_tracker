@@ -78,7 +78,6 @@ public abstract class AddRecordBaseActivity extends BaseActivity {
             accounts.add(account.getTitle());
         }
 
-        spinnerAccount = (Spinner) findViewById(R.id.spinner_account);
         spinnerAccount.setAdapter(new ArrayAdapter<>(AddRecordBaseActivity.this,
                 android.R.layout.simple_list_item_1, accounts));
 
