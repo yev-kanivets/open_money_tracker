@@ -88,7 +88,7 @@ public class RecordController {
         contentValues.put(DbHelper.PRICE_COLUMN, price);
         contentValues.put(DbHelper.ACCOUNT_ID_COLUMN, accountId);
 
-        int id = (int) db.insert(DbHelper.TABLE_RECORDS, null, contentValues);
+        db.insert(DbHelper.TABLE_RECORDS, null, contentValues);
 
         accountController.updateAccountById(accountId, diff);
 

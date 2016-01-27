@@ -97,7 +97,7 @@ public class AccountController {
         contentValues.put(DbHelper.TITLE_COLUMN, title);
         contentValues.put(DbHelper.CUR_SUM_COLUMN, curSum);
 
-        int id = (int) db.insert(DbHelper.TABLE_ACCOUNTS, null, contentValues);
+        db.insert(DbHelper.TABLE_ACCOUNTS, null, contentValues);
 
         db.close();
     }

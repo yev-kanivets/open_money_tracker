@@ -8,22 +8,18 @@
     <string name="price">Цена</string>
     <string name="add_income">Добавить доход</string>
     <string name="add_expense">Добавить расход</string>
-    <string name="income">ДОХОД</string>
-    <string name="expense">РАСХОД</string>
     <string name="ok">OK</string>
     <string name="cancel">Отмена</string>
     <string name="add">Добавить</string>
 
     <string name="wrong_number_text">Извините, но введенные данные не верны!</string>
     <string name="report">Отчет</string>
-    <string name="report_caps">ОТЧЕТ</string>
     <string name="change_date">ИЗМЕНИТЬ ДАТУ</string>
     <string name="total">СУММА</string>
     <string name="total_incomes">Суммарный доход</string>
     <string name="total_expenses">Суммарный расход</string>
     <string name="edit">Редактировать</string>
     <string name="delete">Удалить</string>
-    <string name="save">Сохранить</string>
 
     <string name="day">День</string>
     <string name="week">Неделя</string>
@@ -36,11 +32,4 @@
     <string name="no_thank_you">Нет, спасибо</string>
     <string name="yes_very">Да!</string>
 
-    <string name="thank_author_caps">ОТБЛАГОДАРИТЬ АВТОРА</string>
-    <string name="this_is_free_app">Это приложение бесплатно,\n
-        а значит автор не планирует заработать много денег)\n
-        Но если вы хотите отблагодарить автора,\n
-        Вы можете сделать следующее:</string>
-    <string name="watch_video">Посмотреть короткое рекламное видео</string>
-    <string name="your_contribution">Ваше пожертвование:</string>
 </resources>

@@ -1,7 +1,5 @@
 package com.blogspot.e_kanivets.moneytracker.model;
 
-import java.util.Calendar;
-
 /**
  * Created by eugene on 01/09/14.
  */

@@ -10,7 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Created by eugene on 11/09/14.
+ * Created on 11/09/14.
+ *
+ * @author Evgenii Kanivets
  */
 public class Report {
 
@@ -84,34 +86,31 @@ public class Report {
 
     private void fillReportList(HashMap<String, Integer> map) {
         //Sort reportList
-        List<Pair<String, Integer>> reportIncomes = new ArrayList<Pair<String, Integer>>();
-        List<Pair<String, Integer>> reportExpenses = new ArrayList<Pair<String, Integer>>();
+        List<Pair<String, Integer>> reportIncomes = new ArrayList<>();
+        List<Pair<String, Integer>> reportExpenses = new ArrayList<>();
 
         for (String name : map.keySet()) {
-            if (map.get(name) > 0) {
-                reportIncomes.add(new Pair<String, Integer>(name, map.get(name)));
-            } else {
-                reportExpenses.add(new Pair<String, Integer>(name, map.get(name)));
-            }
+            if (map.get(name) > 0) reportIncomes.add(new Pair<>(name, map.get(name)));
+            else reportExpenses.add(new Pair<>(name, map.get(name)));
         }
 
         sortList(reportIncomes);
         sortList(reportExpenses);
 
         //Added incomes and expenses to ArrayList
-        reportList = new ArrayList<Pair<String, Integer>>();
+        reportList = new ArrayList<>();
         reportList.addAll(reportIncomes);
         reportList.addAll(reportExpenses);
     }
 
     private void fillSummaryReportList(int totalIncome, int totalExpense) {
         //Add summary row to list
-        summaryReportList = new ArrayList<Pair<String, Integer>>();
-        summaryReportList.add(new Pair<String, Integer>(
+        summaryReportList = new ArrayList<>();
+        summaryReportList.add(new Pair<>(
                 MtApp.get().getResources().getString(R.string.total_incomes) + " :", totalIncome));
-        summaryReportList.add(new Pair<String, Integer>(
+        summaryReportList.add(new Pair<>(
                 MtApp.get().getResources().getString(R.string.total_expenses) + " :", totalExpense));
-        summaryReportList.add(new Pair<String, Integer>(
+        summaryReportList.add(new Pair<>(
                 MtApp.get().getResources().getString(R.string.total) + " :", totalExpense + totalIncome));
     }
 
