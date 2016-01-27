@@ -3,7 +3,7 @@ package com.blogspot.e_kanivets.moneytracker.model;
 import android.util.Pair;
 
 import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.util.MtApp;
+import com.blogspot.e_kanivets.moneytracker.MtApp;
 
 import java.util.ArrayList;
 import java.util.HashMap;

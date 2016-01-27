@@ -1,16 +1,14 @@
 package com.blogspot.e_kanivets.moneytracker.activity;
 
-import android.app.Activity;
-import android.os.Bundle;
 import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.Window;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 
 import com.blogspot.e_kanivets.moneytracker.R;
+import com.blogspot.e_kanivets.moneytracker.activity.base.BaseActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.ExpandableListReportAdapter;
 import com.blogspot.e_kanivets.moneytracker.adapter.ReportItemAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.RecordController;
@@ -25,46 +23,46 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ReportActivity extends Activity {
+import butterknife.Bind;
+
+public class ReportActivity extends BaseActivity {
     @SuppressWarnings("unused")
     private static final String TAG = "ReportActivity";
 
     public static final String KEY_PERIOD = "key_period";
 
-    private Activity activity;
     private Report report;
 
-    private ListView listView;
-    private ExpandableListView expandableListView;
+    @Bind(R.id.list_view)
+    ListView listView;
+    @Bind(R.id.exp_list_view)
+    ExpandableListView expandableListView;
 
     private RecordController recordController;
     private Period period;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_report);
+    protected int getContentViewId() {
+        return R.layout.activity_report;
+    }
+
+    @Override
+    protected boolean initData() {
+        super.initData();
 
         recordController = new RecordController(new DbHelper(ReportActivity.this));
 
         period = getIntent().getParcelableExtra(KEY_PERIOD);
-        if (period == null) {
-            finish();
-            return;
-        }
-
-        activity = this;
         report = new Report(recordController.getRecords(period));
 
-        initViews();
+        return period != null;
     }
 
-    private void initViews() {
-        listView = (ListView) findViewById(R.id.listView);
-        expandableListView = (ExpandableListView) findViewById(R.id.expandableListView);
+    @Override
+    protected void initViews() {
+        super.initViews();
 
-        listView.setAdapter(new ReportItemAdapter(activity,
+        listView.setAdapter(new ReportItemAdapter(ReportActivity.this,
                 new Report(recordController.getRecords(period)).getReportList()));
 
         /* Scroll list to bottom only once at start */
@@ -97,10 +95,10 @@ public class ReportActivity extends Activity {
         Map<String, String> m;
 
         /* Fill the group list */
-        groupData = new ArrayList<Map<String, String>>();
+        groupData = new ArrayList<>();
         for (Pair<String, Integer> item : report.getReportList()) {
             /* Fill up attribute names for each group */
-            m = new HashMap<String, String>();
+            m = new HashMap<>();
             m.put(Constants.TITLE_PARAM_NAME, item.first);
             m.put(Constants.PRICE_PARAM_NAME, Integer.toString(item.second));
 
@@ -113,10 +111,10 @@ public class ReportActivity extends Activity {
         int groupTo[] = new int[]{R.id.tv_category, R.id.tv_total};
 
         /* Create list for childDataItems */
-        childData = new ArrayList<List<Map<String, String>>>();
+        childData = new ArrayList<>();
 
         for (Map<String, String> group : groupData) {
-            childDataItem = new ArrayList<Map<String, String>>();
+            childDataItem = new ArrayList<>();
             /* Fill up attribute names for each child item */
             for (Record record : report.getSummaryRecordList()) {
                 if (record.getCategory().equals(group.get(Constants.TITLE_PARAM_NAME))) {
@@ -125,7 +123,7 @@ public class ReportActivity extends Activity {
                         price *= -1;
                     }
 
-                    m = new HashMap<String, String>();
+                    m = new HashMap<>();
                     m.put(Constants.TITLE_PARAM_NAME, record.getTitle());
                     m.put(Constants.PRICE_PARAM_NAME, Integer.toString(price));
 
@@ -144,7 +142,7 @@ public class ReportActivity extends Activity {
 
         expandableListView.addFooterView(getSummaryReportView(report.getSummaryReportList()));
         expandableListView.setAdapter(new ExpandableListReportAdapter(
-                activity,
+                ReportActivity.this,
                 groupData,
                 R.layout.view_report_item_exp,
                 groupFrom,
@@ -159,7 +157,7 @@ public class ReportActivity extends Activity {
     private View getSummaryReportView(List<Pair<String, Integer>> summaryReportList) {
         ViewGroup viewGroup = (ViewGroup) getLayoutInflater().inflate(R.layout.view_summary_report, null);
 
-        ReportItemAdapter adapter = new ReportItemAdapter(activity, summaryReportList);
+        ReportItemAdapter adapter = new ReportItemAdapter(ReportActivity.this, summaryReportList);
 
         for (int i = 0; i < adapter.getCount(); i++) {
             viewGroup.addView(adapter.getView(i, null, null));

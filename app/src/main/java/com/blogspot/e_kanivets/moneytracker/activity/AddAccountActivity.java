@@ -1,29 +1,28 @@
 package com.blogspot.e_kanivets.moneytracker.activity;
 
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 
 import com.blogspot.e_kanivets.moneytracker.R;
+import com.blogspot.e_kanivets.moneytracker.activity.base.BaseActivity;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.helper.DbHelper;
 
-public class AddAccountActivity extends AppCompatActivity {
+import butterknife.Bind;
+
+public class AddAccountActivity extends BaseActivity {
     @SuppressWarnings("unused")
     private static final String TAG = "AddAccountActivity";
 
-    private EditText etTitle;
-    private EditText etInitSum;
+    @Bind(R.id.et_title)
+    EditText etTitle;
+    @Bind(R.id.et_init_sum)
+    EditText etInitSum;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_account);
-
-        initViews();
-        initActionBar();
+    protected int getContentViewId() {
+        return R.layout.activity_add_account;
     }
 
     @Override
@@ -36,10 +35,7 @@ public class AddAccountActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_done:
-                String title = etTitle.getText().toString();
-                int initSum = Integer.parseInt(etInitSum.getText().toString());
-
-                new AccountController(new DbHelper(AddAccountActivity.this)).addAccount(title, initSum);
+                addAccount();
 
                 setResult(RESULT_OK);
                 finish();
@@ -54,12 +50,10 @@ public class AddAccountActivity extends AppCompatActivity {
         }
     }
 
-    private void initViews() {
-        etTitle = (EditText) findViewById(R.id.et_title);
-        etInitSum = (EditText) findViewById(R.id.et_init_sum);
-    }
+    private void addAccount() {
+        String title = etTitle.getText().toString().trim();
+        int initSum = Integer.parseInt(etInitSum.getText().toString().trim());
 
-    private void initActionBar() {
-        if (getSupportActionBar() != null) getSupportActionBar().setCustomView(null);
+        new AccountController(new DbHelper(AddAccountActivity.this)).addAccount(title, initSum);
     }
 }

@@ -3,6 +3,8 @@ package com.blogspot.e_kanivets.moneytracker.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.blogspot.e_kanivets.moneytracker.MtApp;
+
 /**
  * Util class for application.
  * Created on 02/09/14.

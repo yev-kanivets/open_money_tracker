@@ -1,5 +1,6 @@
 package com.blogspot.e_kanivets.moneytracker.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,18 +15,33 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
- * Created by eugene on 01/09/14.
+ * Custom adapter class for {@link Record} entity.
+ * Created on 01/09/14.
+ *
+ * @author Evgenii Kanivets
  */
 public class RecordAdapter extends BaseAdapter{
-
     private Context context;
     private List<Record> records;
 
+    private int whiteRed;
+    private int whiteGreen;
+    private int red;
+    private int green;
+
+    @SuppressWarnings("deprecation")
     public RecordAdapter(Context context, List<Record> records) {
         this.context = context;
         this.records = records;
 
+        whiteRed = context.getResources().getColor(R.color.white_red);
+        whiteGreen = context.getResources().getColor(R.color.white_green);
+        red = context.getResources().getColor(R.color.red);
+        green = context.getResources().getColor(R.color.green);
     }
 
     @Override
@@ -43,35 +59,47 @@ public class RecordAdapter extends BaseAdapter{
         return position;
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        convertView = layoutInflater.inflate(R.layout.view_record, null);
+        ViewHolder viewHolder;
 
-        TextView tvTime = (TextView) convertView.findViewById(R.id.tv_date_and_time);
-        TextView tvPrice = (TextView) convertView.findViewById(R.id.tv_price);
-        TextView tvTitle = (TextView) convertView.findViewById(R.id.tv_title);
-        TextView tvCategory = (TextView) convertView.findViewById(R.id.tv_category);
+        if (convertView == null) {
+            LayoutInflater layoutInflater = LayoutInflater.from(context);
 
-        //Set background color of view according to type
-        convertView.setBackgroundColor(records.get(position).isIncome() ?
-                context.getResources().getColor(R.color.white_green) :
-                context.getResources().getColor(R.color.white_red));
+            convertView = layoutInflater.inflate(R.layout.view_record, parent, false);
+            viewHolder = new ViewHolder(convertView);
 
-        //Set color of price
-        tvPrice.setTextColor(records.get(position).isIncome() ?
-                context.getResources().getColor(R.color.green) :
-                context.getResources().getColor(R.color.red));
+            convertView.setTag(viewHolder);
+        } else viewHolder = (ViewHolder) convertView.getTag();
 
-        //Format date of record to display it on screen
+        convertView.setBackgroundColor(records.get(position).isIncome() ? whiteGreen : whiteRed);
+        viewHolder.tvPrice.setTextColor(records.get(position).isIncome() ? green : red);
+
+        @SuppressLint("SimpleDateFormat")
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        tvTime.setText(dateFormat.format(new Date(records.get(position).getTime())));
+        viewHolder.tvDateAndTime.setText(dateFormat.format(new Date(records.get(position).getTime())));
 
-        tvPrice.setText((records.get(position).isIncome() ? "+ " : "- ")
+        viewHolder.tvPrice.setText((records.get(position).isIncome() ? "+ " : "- ")
                 + Integer.toString(records.get(position).getPrice()));
-        tvTitle.setText(records.get(position).getTitle());
-        tvCategory.setText(records.get(position).getCategory());
+        viewHolder.tvTitle.setText(records.get(position).getTitle());
+        viewHolder.tvCategory.setText(records.get(position).getCategory());
 
         return convertView;
+    }
+
+    public static class ViewHolder {
+        @Bind(R.id.tv_date_and_time)
+        TextView tvDateAndTime;
+        @Bind(R.id.tv_price)
+        TextView tvPrice;
+        @Bind(R.id.tv_title)
+        TextView tvTitle;
+        @Bind(R.id.tv_category)
+        TextView tvCategory;
+
+        public ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
     }
 }

@@ -21,20 +21,12 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ExportFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class ExportFragment extends Fragment implements View.OnClickListener {
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+public class ExportFragment extends Fragment {
     public static final String TAG = "ExportFragment";
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment ExportFragment.
-     */
     public static ExportFragment newInstance() {
         ExportFragment fragment = new ExportFragment();
         Bundle args = new Bundle();
@@ -47,17 +39,8 @@ public class ExportFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-        }
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_export, container, false);
         initViews(rootView);
         initActionBar();
@@ -71,22 +54,8 @@ public class ExportFragment extends Fragment implements View.OnClickListener {
         ((NavDrawerActivity) activity).onSectionAttached(TAG);
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_export:
-                exportRecords();
-                break;
-
-            default:
-                break;
-        }
-    }
-
     private void initViews(View rootView) {
-        if (rootView != null) {
-            rootView.findViewById(R.id.btn_export).setOnClickListener(this);
-        }
+        if (rootView != null) ButterKnife.bind(this, rootView);
     }
 
     private void initActionBar() {
@@ -96,7 +65,8 @@ public class ExportFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void exportRecords() {
+    @OnClick(R.id.btn_export)
+    public void exportRecords() {
         RecordController recordController = new RecordController(new DbHelper(getActivity()));
         List<String> records = recordController.getRecordsForExport(0, Long.MAX_VALUE);
 

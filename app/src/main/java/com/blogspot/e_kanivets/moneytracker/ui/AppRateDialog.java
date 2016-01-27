@@ -12,6 +12,10 @@ import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.util.PrefUtils;
 import com.blogspot.e_kanivets.moneytracker.util.Constants;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class AppRateDialog extends AlertDialog {
     private Context context;
 
@@ -23,38 +27,27 @@ public class AppRateDialog extends AlertDialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.dialog_rate);
+        ButterKnife.bind(AppRateDialog.this);
+    }
 
-        View view = getLayoutInflater().inflate(R.layout.dialog_rate, null);
-        setContentView(view);
+    @OnClick(R.id.yes_button)
+    public void yes() {
+        context.startActivity(new Intent(Intent.ACTION_VIEW,
+                Uri.parse(Constants.GP_MARKET + context.getPackageName())));
+        PrefUtils.appRated();
+        dismiss();
+    }
 
-        Button yesButton = (Button) view.findViewById(R.id.yes_button);
-        Button maybeButton = (Button) view.findViewById(R.id.maybeButton);
-        Button thanksButton = (Button) view.findViewById(R.id.thanksButton);
+    @OnClick(R.id.maybeButton)
+    public void maybe() {
+        dismiss();
+    }
 
-        yesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                context.startActivity(new Intent(Intent.ACTION_VIEW,
-                        Uri.parse(Constants.GP_MARKET + context.getPackageName())));
-                PrefUtils.appRated();
-                dismiss();
-            }
-        });
-
-        maybeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dismiss();
-            }
-        });
-
-        thanksButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                PrefUtils.appRated();
-                dismiss();
-            }
-        });
+    @OnClick(R.id.thanksButton)
+    public void thanks() {
+        PrefUtils.appRated();
+        dismiss();
     }
 
     @Override
