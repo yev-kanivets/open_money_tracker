@@ -63,7 +63,8 @@ public class AccountAdapter extends BaseAdapter {
         Account account = accounts.get(position);
 
         viewHolder.tvTitle.setText(account.getTitle());
-        viewHolder.tvCurSum.setText(Integer.toString(account.getCurSum()));
+        viewHolder.tvCurSum.setText(Integer.toString(account.getCurSum())
+                + " " + account.getCurrency());
 
         return convertView;
     }

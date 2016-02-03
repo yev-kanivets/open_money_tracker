@@ -5,7 +5,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.SimpleAdapter;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseActivity;
@@ -74,8 +73,10 @@ public class AddAccountActivity extends BaseActivity {
     private void addAccount() {
         String title = etTitle.getText().toString().trim();
         int initSum = Integer.parseInt(etInitSum.getText().toString().trim());
+        String currency = (String) spinner.getSelectedItem();
 
-        new AccountController(new DbHelper(AddAccountActivity.this)).addAccount(title, initSum);
+        new AccountController(new DbHelper(AddAccountActivity.this))
+                .addAccount(title, initSum, currency);
     }
 
     public static List<String> getAllCurrencies() {

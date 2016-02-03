@@ -8,11 +8,13 @@ public class Account {
     private int id;
     private String title;
     private int curSum;
+    private String currency;
 
-    public Account(int id, String title, int curSum) {
+    public Account(int id, String title, int curSum, String currency) {
         this.id = id;
         this.title = title;
         this.curSum = curSum;
+        this.currency = currency;
     }
 
     public int getId() {
@@ -33,6 +35,10 @@ public class Account {
 
     public void setCurSum(int curSum) {
         this.curSum = curSum;
+    }
+
+    public String getCurrency() {
+        return currency;
     }
 
     @SuppressWarnings("SimplifiableIfStatement")

@@ -29,6 +29,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     /* DB_VERSION = 2 */
     public static final String TABLE_ACCOUNTS = "accounts";
+    public static final String CURRENCY_COLUMN = "currency";
 
     public static final String ACCOUNT_ID_COLUMN = "account_id";
     public static final String CUR_SUM_COLUMN = "cur_sum";
@@ -107,7 +108,8 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + TABLE_ACCOUNTS + "("
                 + ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + TITLE_COLUMN + " TEXT,"
-                + CUR_SUM_COLUMN + " INTEGER);");
+                + CUR_SUM_COLUMN + " INTEGER,"
+                + CURRENCY_COLUMN + " TEXT );");
 
         /* Insert default account for all records from DB_VERSION = 1 */
         ContentValues contentValues = new ContentValues();

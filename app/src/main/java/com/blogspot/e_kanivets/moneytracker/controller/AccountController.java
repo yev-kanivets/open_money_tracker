@@ -36,12 +36,16 @@ public class AccountController {
             int idColIndex = cursor.getColumnIndex(DbHelper.ID_COLUMN);
             int titleColIndex = cursor.getColumnIndex(DbHelper.TITLE_COLUMN);
             int curSumColIndex = cursor.getColumnIndex(DbHelper.CUR_SUM_COLUMN);
+            int currencyColIndex = cursor.getColumnIndex(DbHelper.CURRENCY_COLUMN);
 
             do {
                 // Read a account from DB
                 Account account = new Account(cursor.getInt(idColIndex),
                         cursor.getString(titleColIndex),
-                        cursor.getInt(curSumColIndex));
+                        cursor.getInt(curSumColIndex),
+                        cursor.getString(currencyColIndex));
+
+                if (account.getTitle().equals(DbHelper.DEFAULT_ACCOUNT)) continue;
 
                 //Add account to list
                 accountList.add(account);
@@ -58,17 +62,20 @@ public class AccountController {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         // Read account from db
-        Cursor cursor = db.query(DbHelper.TABLE_ACCOUNTS, null, "id=?", new String[]{Integer.valueOf(id).toString()}, null, null, null);
+        Cursor cursor = db.query(DbHelper.TABLE_ACCOUNTS, null, "id=?",
+                new String[]{Integer.valueOf(id).toString()}, null, null, null);
         Account account = null;
         if (cursor.moveToFirst()) {
             // Get indexes of columns
             int idColIndex = cursor.getColumnIndex(DbHelper.ID_COLUMN);
             int titleColIndex = cursor.getColumnIndex(DbHelper.TITLE_COLUMN);
             int curSumColIndex = cursor.getColumnIndex(DbHelper.CUR_SUM_COLUMN);
+            int currencyColIndex = cursor.getColumnIndex(DbHelper.CURRENCY_COLUMN);
 
             account = new Account(cursor.getInt(idColIndex),
                     cursor.getString(titleColIndex),
-                    cursor.getInt(curSumColIndex));
+                    cursor.getInt(curSumColIndex),
+                    cursor.getString(currencyColIndex));
         }
 
         cursor.close();
@@ -77,25 +84,26 @@ public class AccountController {
             ContentValues contentValues = new ContentValues();
             contentValues.put(DbHelper.CUR_SUM_COLUMN, account.getCurSum() + diff);
 
-            db.update(DbHelper.TABLE_ACCOUNTS, contentValues, "id=?", new String[]{Integer.valueOf(id).toString()});
+            db.update(DbHelper.TABLE_ACCOUNTS, contentValues, "id=?",
+                    new String[]{Integer.valueOf(id).toString()});
         }
     }
 
     public void deleteAccount(Account account) {
         // Delete the account from DB
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        db.delete(DbHelper.TABLE_ACCOUNTS, "id=?",
-                new String[]{Integer.toString(account.getId())});
+        db.delete(DbHelper.TABLE_ACCOUNTS, "id=?", new String[]{Integer.toString(account.getId())});
         db.close();
     }
 
-    public void addAccount(String title, int curSum) {
+    public void addAccount(String title, int curSum, String currency) {
         //Add account to DB
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(DbHelper.TITLE_COLUMN, title);
         contentValues.put(DbHelper.CUR_SUM_COLUMN, curSum);
+        contentValues.put(DbHelper.CURRENCY_COLUMN, currency);
 
         db.insert(DbHelper.TABLE_ACCOUNTS, null, contentValues);
 
