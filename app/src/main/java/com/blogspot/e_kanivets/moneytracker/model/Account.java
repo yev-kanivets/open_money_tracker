@@ -41,6 +41,28 @@ public class Account {
         return currency;
     }
 
+    public void put(int amount) {
+        curSum += amount;
+    }
+
+    public void take(int amount) {
+        curSum -= amount;
+    }
+
+    @SuppressWarnings("StringBufferReplaceableByString")
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Account {");
+        sb.append("id = ").append(id).append(", ");
+        sb.append("title = ").append(title).append(", ");
+        sb.append("curSum = ").append(curSum).append(", ");
+        sb.append("currency = ").append(currency);
+        sb.append("}");
+
+        return sb.toString();
+    }
+
     @SuppressWarnings("SimplifiableIfStatement")
     @Override
     public boolean equals(Object o) {

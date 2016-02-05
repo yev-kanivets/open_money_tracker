@@ -11,6 +11,8 @@ import java.io.Serializable;
  * Created by eugene on 01/09/14.
  */
 public class Record implements Serializable {
+    public static final int TYPE_INCOME = 0;
+    public static final int TYPE_EXPENSE = 1;
 
     private int id;
     private long time;
@@ -31,6 +33,19 @@ public class Record implements Serializable {
         this.accountId = accountId;
 
         category = new CategoryController(new DbHelper(MtApp.get())).getCategoryById(categoryId);
+    }
+
+    public Record(long time, int type, String title, String category, int price, int accountId) {
+        this.time = time;
+        this.type = type;
+        this.title = title;
+        this.category = category;
+        this.price = price;
+        this.accountId = accountId;
+    }
+
+    public int getType() {
+        return type;
     }
 
     public int getId() {
