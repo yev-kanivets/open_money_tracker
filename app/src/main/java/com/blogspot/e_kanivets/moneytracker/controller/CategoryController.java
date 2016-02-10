@@ -3,6 +3,7 @@ package com.blogspot.e_kanivets.moneytracker.controller;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.blogspot.e_kanivets.moneytracker.helper.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.model.Category;
@@ -17,6 +18,8 @@ import java.util.List;
  * @author Evgenii Kanivets
  */
 public class CategoryController {
+    private static final String TAG = "CategoryController";
+
     private DbHelper dbHelper;
 
     public CategoryController(DbHelper dbHelper) {
@@ -59,6 +62,7 @@ public class CategoryController {
         contentValues.put(DbHelper.NAME_COLUMN, name);
 
         int id = (int) db.insert(DbHelper.TABLE_CATEGORIES, null, contentValues);
+        Log.d(TAG, "created category with id = " + id);
 
         db.close();
 

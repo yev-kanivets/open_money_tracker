@@ -110,8 +110,10 @@ public class RecordController {
 
     public void addRecord(Record record) {
         //Add category if it does not exist yet
-        if (categoryController.getCategoryIdByName(record.getCategory()) == -1)
+        if (categoryController.getCategoryIdByName(record.getCategory()) == -1) {
             categoryController.addCategory(record.getCategory());
+            record.setCategoryId(categoryController.getCategoryIdByName(record.getCategory()));
+        }
 
         //Add record to DB
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -133,8 +135,9 @@ public class RecordController {
 
     public void updateRecordById(int id, String title, String category, int price, int accountId) {
         //Add category if it does not exist yet
-        if (categoryController.getCategoryIdByName(category) == -1)
+        if (categoryController.getCategoryIdByName(category) == -1) {
             categoryController.addCategory(category);
+        }
 
         Record oldRecord = read(id);
 

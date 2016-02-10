@@ -39,6 +39,7 @@ public class Record implements Serializable {
         this.time = time;
         this.type = type;
         this.title = title;
+        this.categoryId = -1;
         this.category = category;
         this.price = price;
         this.accountId = accountId;
