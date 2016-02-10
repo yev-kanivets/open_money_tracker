@@ -9,6 +9,7 @@ import android.util.Log;
 import com.blogspot.e_kanivets.moneytracker.helper.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.model.Account;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
+import com.blogspot.e_kanivets.moneytracker.model.Transfer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,14 +63,14 @@ public class AccountController {
     }
 
     @Nullable
-    public Account read(int id) {
+    public Account read(long id) {
         Account account = null;
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         // Read accounts table from db
         Cursor cursor = db.query(DbHelper.TABLE_ACCOUNTS, null, "id=?",
-                new String[]{Integer.toString(id)}, null, null, null);
+                new String[]{Long.toString(id)}, null, null, null);
 
         if (cursor.moveToFirst()) {
             // Get indexes of columns
@@ -94,7 +95,7 @@ public class AccountController {
         return account;
     }
 
-    public void updateAccountById(Account account) {
+    public void update(Account account) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
@@ -148,7 +149,7 @@ public class AccountController {
 
         Log.d(TAG, "recordAdded: " + account);
 
-        updateAccountById(account);
+        update(account);
 
         return true;
     }
@@ -172,7 +173,7 @@ public class AccountController {
                 break;
         }
 
-        updateAccountById(account);
+        update(account);
 
         return true;
     }
@@ -182,5 +183,22 @@ public class AccountController {
         if (oldRecord == null || newRecord == null) return false;
 
         return recordDeleted(oldRecord) && recordAdded(newRecord);
+    }
+
+    public boolean transferDone(@Nullable Transfer transfer) {
+        if(transfer == null) return false;
+
+        Account fromAccount = read(transfer.getFromAccountId());
+        Account toAccount = read(transfer.getToAccountId());
+
+        if (fromAccount == null || toAccount == null) return false;
+
+        fromAccount.take(transfer.getFromAmount());
+        toAccount.put(transfer.getToAmount());
+
+        update(fromAccount);
+        update(toAccount);
+
+        return true;
     }
 }

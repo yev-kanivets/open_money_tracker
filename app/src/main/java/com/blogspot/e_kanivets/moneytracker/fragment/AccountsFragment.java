@@ -134,6 +134,10 @@ public class AccountsFragment extends Fragment {
                     update();
                     break;
 
+                case REQUEST_TRANSFER:
+                    update();
+                    break;
+
                 default:
                     break;
             }

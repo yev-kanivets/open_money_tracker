@@ -9,8 +9,10 @@ import android.widget.EditText;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseActivity;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
+import com.blogspot.e_kanivets.moneytracker.controller.TransferController;
 import com.blogspot.e_kanivets.moneytracker.helper.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.model.Account;
+import com.blogspot.e_kanivets.moneytracker.model.Transfer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +23,9 @@ public class TransferActivity extends BaseActivity {
     @SuppressWarnings("unused")
     private static final String TAG = "TransferActivity";
 
-    private AccountController accountController;
+    private TransferController transferController;
+
+    private List<Account> accountList;
 
     @Bind(R.id.spinner_from)
     AppCompatSpinner spinnerFrom;
@@ -39,7 +43,12 @@ public class TransferActivity extends BaseActivity {
 
     @Override
     protected boolean initData() {
-        accountController = new AccountController(new DbHelper(TransferActivity.this));
+        DbHelper dbHelper = new DbHelper(TransferActivity.this);
+
+        AccountController accountController = new AccountController(dbHelper);
+        transferController = new TransferController(dbHelper, accountController);
+
+        accountList = accountController.getAccounts();
 
         return super.initData();
     }
@@ -47,8 +56,6 @@ public class TransferActivity extends BaseActivity {
     @Override
     protected void initViews() {
         super.initViews();
-
-        List<Account> accountList = accountController.getAccounts();
 
         List<String> accounts = new ArrayList<>();
         for (Account account : accountList) {
@@ -88,6 +95,25 @@ public class TransferActivity extends BaseActivity {
     }
 
     private void doTransfer() {
+        Account fromAccount = accountList.get(spinnerFrom.getSelectedItemPosition());
+        Account toAccount = accountList.get(spinnerTo.getSelectedItemPosition());
 
+        int fromAmount = -1;
+        try {
+            fromAmount = Integer.parseInt(etFromAmount.getText().toString());
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+
+        int toAmount = -1;
+        try {
+            toAmount = Integer.parseInt(etToAmount.getText().toString());
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+
+        Transfer transfer = new Transfer(System.currentTimeMillis(), fromAccount.getId(),
+                toAccount.getId(), fromAmount, toAmount);
+        transferController.create(transfer);
     }
 }
