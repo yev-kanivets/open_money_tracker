@@ -9,6 +9,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +21,7 @@ import android.widget.ListView;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.AddAccountActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.NavDrawerActivity;
+import com.blogspot.e_kanivets.moneytracker.activity.TransferActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.AccountAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.helper.DbHelper;
@@ -31,6 +34,7 @@ public class AccountsFragment extends Fragment {
     public static final String TAG = "AccountsFragment";
 
     private static final int REQUEST_ADD_ACCOUNT = 1;
+    private static final int REQUEST_TRANSFER = 2;
 
     @Bind(R.id.list_view)
     ListView listView;
@@ -51,6 +55,7 @@ public class AccountsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
         accountController = new AccountController(new DbHelper(getActivity()));
     }
@@ -62,6 +67,26 @@ public class AccountsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_accounts, container, false);
         initViews(rootView);
         return rootView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_accounts, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_transfer:
+                startActivityForResult(new Intent(getActivity(), TransferActivity.class),
+                        REQUEST_TRANSFER);
+                break;
+
+            default:
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

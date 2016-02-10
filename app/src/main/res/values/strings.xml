@@ -43,5 +43,6 @@
     <string name="add_account">Add account</string>
     <string name="initial_sum">Initial sum</string>
     <string name="account">Account</string>
+    <string name="transfer">Transfer</string>
 
 </resources>

@@ -44,5 +44,7 @@
             android:label="@string/title_add_account"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Default" />
+        <activity android:name=".activity.TransferActivity"></activity>
     </application>
+
 </manifest>
