@@ -34,25 +34,31 @@ import com.blogspot.e_kanivets.moneytracker.helper.PeriodHelper;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
 import com.blogspot.e_kanivets.moneytracker.ui.AppRateDialog;
 import com.blogspot.e_kanivets.moneytracker.ui.ChangeDateDialog;
-import com.blogspot.e_kanivets.moneytracker.util.AppUtils;
+import com.blogspot.e_kanivets.moneytracker.util.PrefUtils;
 
 import java.util.Calendar;
 import java.util.Date;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link RecordsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RecordsFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+public class RecordsFragment extends Fragment {
     public static final String TAG = "RecordsFragment";
 
     private static final int REQUEST_ACTION_RECORD = 1;
 
-    private ListView listView;
-
-    private TextView tvFromDate;
-    private TextView tvToDate;
+    @Bind(R.id.list_view)
+    ListView listView;
+    @Bind(R.id.tv_from_date)
+    TextView tvFromDate;
+    @Bind(R.id.tv_to_date)
+    TextView tvToDate;
 
     private RecordController recordController;
     private PeriodController periodController;
@@ -122,75 +128,51 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, A
         }
     }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.btn_add_expense:
-                startAddExpenseActivity(null, AddExpenseActivity.Mode.MODE_ADD);
-                break;
-
-            case R.id.btn_add_income:
-                startAddIncomeActivity(null, AddIncomeActivity.Mode.MODE_ADD);
-                break;
-
-            case R.id.btn_report:
-                Intent intent = new Intent(getActivity(), ReportActivity.class);
-                intent.putExtra(ReportActivity.KEY_PERIOD, periodController.getPeriod());
-                startActivity(intent);
-                break;
-
-            case R.id.tv_from_date:
-                showChangeFromDateDialog();
-                break;
-
-            case R.id.tv_to_date:
-                showChangeToDateDialog();
-                break;
-
-            default:
-                break;
-        }
+    @OnClick(R.id.btn_add_expense)
+    public void addExpense() {
+        startAddExpenseActivity(null, AddExpenseActivity.Mode.MODE_ADD);
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.clear(Calendar.MINUTE);
-        calendar.clear(Calendar.SECOND);
-        calendar.clear(Calendar.MILLISECOND);
-
-        switch (position) {
-            // Day period
-            case 0:
-                periodController.setPeriod(PeriodHelper.getInstance().getDayPeriod());
-                break;
-            // Week period
-            case 1:
-                periodController.setPeriod(PeriodHelper.getInstance().getWeekPeriod());
-                break;
-            // Month period
-            case 2:
-                periodController.setPeriod(PeriodHelper.getInstance().getMonthPeriod());
-                break;
-            // Year period
-            case 3:
-                periodController.setPeriod(PeriodHelper.getInstance().getYearPeriod());
-                break;
-            default:
-                break;
-        }
-
-        AppUtils.writeUsedPeriod(getActivity(), position);
-
-        update();
-
-        tvFromDate.setText(periodController.getFirstDay());
-        tvToDate.setText(periodController.getLastDay());
+    @OnClick(R.id.btn_add_income)
+    public void addIncome() {
+        startAddIncomeActivity(null, AddIncomeActivity.Mode.MODE_ADD);
     }
 
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
+    @OnClick(R.id.btn_report)
+    public void showReport() {
+        Intent intent = new Intent(getActivity(), ReportActivity.class);
+        intent.putExtra(ReportActivity.KEY_PERIOD, periodController.getPeriod());
+        startActivity(intent);
+    }
 
+    @OnClick(R.id.tv_from_date)
+    public void showChangeFromDateDialog() {
+        ChangeDateDialog dialog = new ChangeDateDialog(getActivity(),
+                periodController.getPeriod().getFirst(), new ChangeDateDialog.OnDateChangedListener() {
+            @Override
+            public void OnDataChanged(Date date) {
+                periodController.getPeriod().setFirst(date);
+                update();
+
+                tvFromDate.setText(periodController.getFirstDay());
+            }
+        });
+        dialog.show();
+    }
+
+    @OnClick(R.id.tv_to_date)
+    public void showChangeToDateDialog() {
+        ChangeDateDialog dialog = new ChangeDateDialog(getActivity(),
+                periodController.getPeriod().getLast(), new ChangeDateDialog.OnDateChangedListener() {
+            @Override
+            public void OnDataChanged(Date date) {
+                periodController.getPeriod().setLast(date);
+                update();
+
+                tvToDate.setText(periodController.getLastDay());
+            }
+        });
+        dialog.show();
     }
 
     @Override
@@ -217,25 +199,11 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, A
 
     private void initViews(View rootView) {
         if (rootView != null) {
-            View btnAddIncome = rootView.findViewById(R.id.btn_add_income);
-            View btnAddExpense = rootView.findViewById(R.id.btn_add_expense);
-            View btnReport = rootView.findViewById(R.id.btn_report);
-
-            tvFromDate = (TextView) rootView.findViewById(R.id.tv_from_date);
-            tvToDate = (TextView) rootView.findViewById(R.id.tv_to_date);
-
-            listView = (ListView) rootView.findViewById(R.id.listView);
+            ButterKnife.bind(this, rootView);
 
             //Set dates of current week
             tvFromDate.setText(periodController.getFirstDay());
             tvToDate.setText(periodController.getLastDay());
-
-            //Set listeners
-            btnAddIncome.setOnClickListener(RecordsFragment.this);
-            btnAddExpense.setOnClickListener(RecordsFragment.this);
-            tvFromDate.setOnClickListener(RecordsFragment.this);
-            tvToDate.setOnClickListener(RecordsFragment.this);
-            btnReport.setOnClickListener(RecordsFragment.this);
 
             listView.setAdapter(new RecordAdapter(getActivity(),
                     recordController.getRecords(periodController.getPeriod())));
@@ -250,9 +218,7 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, A
                     if (isFirst) {
                         isFirst = false;
                         listView.setSelection(listView.getCount() - 1);
-                        if (AppUtils.checkRateDialog(getActivity())) {
-                            showAppRateDialog();
-                        }
+                        if (PrefUtils.checkRateDialog()) showAppRateDialog();
                     }
                 }
             });
@@ -274,40 +240,51 @@ public class RecordsFragment extends Fragment implements View.OnClickListener, A
         Spinner spinner = (Spinner) customNav.findViewById(R.id.spinner_period);
         spinner.setAdapter(new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.array_periods)));
-        spinner.setSelection(AppUtils.readUsedPeriod(getActivity()));
-        spinner.setOnItemSelectedListener(this);
-
-        if (actionBar != null) {
-            actionBar.setCustomView(customNav, lp);
-        }
-    }
-
-    private void showChangeFromDateDialog() {
-        ChangeDateDialog dialog = new ChangeDateDialog(getActivity(),
-                periodController.getPeriod().getFirst(), new ChangeDateDialog.OnDateChangedListener() {
+        spinner.setSelection(PrefUtils.readUsedPeriod());
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void OnDataChanged(Date date) {
-                periodController.getPeriod().setFirst(date);
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.clear(Calendar.MINUTE);
+                calendar.clear(Calendar.SECOND);
+                calendar.clear(Calendar.MILLISECOND);
+
+                switch (position) {
+                    // Day period
+                    case 0:
+                        periodController.setPeriod(PeriodHelper.getInstance().getDayPeriod());
+                        break;
+                    // Week period
+                    case 1:
+                        periodController.setPeriod(PeriodHelper.getInstance().getWeekPeriod());
+                        break;
+                    // Month period
+                    case 2:
+                        periodController.setPeriod(PeriodHelper.getInstance().getMonthPeriod());
+                        break;
+                    // Year period
+                    case 3:
+                        periodController.setPeriod(PeriodHelper.getInstance().getYearPeriod());
+                        break;
+                    default:
+                        break;
+                }
+
+                PrefUtils.writeUsedPeriod(position);
+
                 update();
 
                 tvFromDate.setText(periodController.getFirstDay());
-            }
-        });
-        dialog.show();
-    }
-
-    private void showChangeToDateDialog() {
-        ChangeDateDialog dialog = new ChangeDateDialog(getActivity(),
-                periodController.getPeriod().getLast(), new ChangeDateDialog.OnDateChangedListener() {
-            @Override
-            public void OnDataChanged(Date date) {
-                periodController.getPeriod().setLast(date);
-                update();
-
                 tvToDate.setText(periodController.getLastDay());
             }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
         });
-        dialog.show();
+
+        if (actionBar != null) actionBar.setCustomView(customNav, lp);
     }
 
     private void showAppRateDialog() {

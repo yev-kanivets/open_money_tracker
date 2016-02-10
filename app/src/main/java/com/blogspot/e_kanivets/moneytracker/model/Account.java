@@ -8,11 +8,13 @@ public class Account {
     private int id;
     private String title;
     private int curSum;
+    private String currency;
 
-    public Account(int id, String title, int curSum) {
+    public Account(int id, String title, int curSum, String currency) {
         this.id = id;
         this.title = title;
         this.curSum = curSum;
+        this.currency = currency;
     }
 
     public int getId() {
@@ -33,6 +35,32 @@ public class Account {
 
     public void setCurSum(int curSum) {
         this.curSum = curSum;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void put(int amount) {
+        curSum += amount;
+    }
+
+    public void take(int amount) {
+        curSum -= amount;
+    }
+
+    @SuppressWarnings("StringBufferReplaceableByString")
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Account {");
+        sb.append("id = ").append(id).append(", ");
+        sb.append("title = ").append(title).append(", ");
+        sb.append("curSum = ").append(curSum).append(", ");
+        sb.append("currency = ").append(currency);
+        sb.append("}");
+
+        return sb.toString();
     }
 
     @SuppressWarnings("SimplifiableIfStatement")

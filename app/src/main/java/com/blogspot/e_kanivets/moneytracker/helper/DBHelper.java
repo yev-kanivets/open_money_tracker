@@ -29,10 +29,19 @@ public class DbHelper extends SQLiteOpenHelper {
 
     /* DB_VERSION = 2 */
     public static final String TABLE_ACCOUNTS = "accounts";
+    public static final String CURRENCY_COLUMN = "currency";
 
     public static final String ACCOUNT_ID_COLUMN = "account_id";
     public static final String CUR_SUM_COLUMN = "cur_sum";
-    public static final String DEFAULT_ACCOUNT = "default_account";
+    public static final String DEFAULT_ACCOUNT = "Default";
+    public static final String DEFAULT_ACCOUNT_CURRENCY = "NON";
+
+    public static final String TABLE_TRANSFERS = "transfers";
+    public static final String FROM_ACCOUNT_ID_COLUMN = "from_account_id";
+    public static final String TO_ACCOUND_ID_COLUMN = "to_account_id";
+    public static final String FROM_AMOUNT_COLUMN = "from_amount";
+    public static final String TO_AMOUNT_COLUMN = "to_amount";
+    public static final String CREATED_AT_COLUMN = "created_at";
 
     public DbHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -49,23 +58,18 @@ public class DbHelper extends SQLiteOpenHelper {
         if (oldVersion == 1 && newVersion == 2) {
             db.beginTransaction();
 
-            /* Create accounts table */
-            db.execSQL("CREATE TABLE " + TABLE_ACCOUNTS + "("
-                    + ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                    + TITLE_COLUMN + " TEXT,"
-                    + CUR_SUM_COLUMN + " INTEGER);");
+            createAccountsTable(db);
 
             /* Add account_id column into the records table */
             db.execSQL("ALTER TABLE " + TABLE_RECORDS + " ADD COLUMN " + ACCOUNT_ID_COLUMN + " INTEGER;");
 
+            createTransfersTable(db);
+
             /* Insert default account for all records from DB_VERSION = 1 */
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(TITLE_COLUMN, DEFAULT_ACCOUNT);
-            contentValues.put(CUR_SUM_COLUMN, 0);
-            int id = (int) db.insert(TABLE_ACCOUNTS, null, contentValues);
+            long id = insertDefaultAccount(db);
 
             /* Set the default account for all records from DB_VERSION = 1 */
-            contentValues = new ContentValues();
+            ContentValues contentValues = new ContentValues();
             contentValues.put(ACCOUNT_ID_COLUMN, id);
             db.update(DbHelper.TABLE_RECORDS, contentValues, null, null);
 
@@ -104,16 +108,40 @@ public class DbHelper extends SQLiteOpenHelper {
                 + ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + NAME_COLUMN + " TEXT" + ");");
 
+        createAccountsTable(db);
+
+        createTransfersTable(db);
+
+        insertDefaultAccount(db);
+    }
+
+    private void createAccountsTable(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + TABLE_ACCOUNTS + "("
                 + ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + CREATED_AT_COLUMN + " INTEGER,"
                 + TITLE_COLUMN + " TEXT,"
-                + CUR_SUM_COLUMN + " INTEGER);");
+                + CUR_SUM_COLUMN + " INTEGER,"
+                + CURRENCY_COLUMN + " TEXT );");
+    }
 
+    private void createTransfersTable(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE " + TABLE_TRANSFERS + "("
+                + ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + TIME_COLUMN + " INTEGER,"
+                + FROM_ACCOUNT_ID_COLUMN + " INTEGER,"
+                + TO_ACCOUND_ID_COLUMN + " INTEGER,"
+                + FROM_AMOUNT_COLUMN + " INTEGER,"
+                + TO_AMOUNT_COLUMN + " INTEGER);");
+    }
+
+    private long insertDefaultAccount(SQLiteDatabase db) {
         /* Insert default account for all records from DB_VERSION = 1 */
         ContentValues contentValues = new ContentValues();
         contentValues.put(TITLE_COLUMN, DEFAULT_ACCOUNT);
         contentValues.put(CUR_SUM_COLUMN, 0);
+        contentValues.put(CURRENCY_COLUMN, DEFAULT_ACCOUNT_CURRENCY);
+        contentValues.put(CREATED_AT_COLUMN, System.currentTimeMillis());
 
-        db.insert(TABLE_ACCOUNTS, null, contentValues);
+        return db.insert(TABLE_ACCOUNTS, null, contentValues);
     }
 }

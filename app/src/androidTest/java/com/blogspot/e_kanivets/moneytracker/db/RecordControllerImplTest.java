@@ -1,7 +1,5 @@
 package com.blogspot.e_kanivets.moneytracker.db;
 
-import static org.junit.Assert.*;
-
 /**
  * Created by alla on 9/3/15.
  */

@@ -1,4 +1,4 @@
-package com.blogspot.e_kanivets.moneytracker.util;
+package com.blogspot.e_kanivets.moneytracker;
 
 import android.app.Application;
 
@@ -8,11 +8,11 @@ import android.app.Application;
  *
  * @author Evgenii Kanivets
  */
-public class MTApp extends Application {
+public class MtApp extends Application {
 
-    private static MTApp mtApp;
+    private static MtApp mtApp;
 
-    public static MTApp get() {
+    public static MtApp get() {
         return mtApp;
     }
 

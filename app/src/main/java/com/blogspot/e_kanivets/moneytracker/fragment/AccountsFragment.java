@@ -9,6 +9,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,30 +21,26 @@ import android.widget.ListView;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.AddAccountActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.NavDrawerActivity;
+import com.blogspot.e_kanivets.moneytracker.activity.TransferActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.AccountAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.helper.DbHelper;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AccountsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class AccountsFragment extends Fragment implements View.OnClickListener {
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+public class AccountsFragment extends Fragment {
     public static final String TAG = "AccountsFragment";
 
     private static final int REQUEST_ADD_ACCOUNT = 1;
+    private static final int REQUEST_TRANSFER = 2;
 
-    private ListView listView;
+    @Bind(R.id.list_view)
+    ListView listView;
 
     private AccountController accountController;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment AccountsFragment.
-     */
     public static AccountsFragment newInstance() {
         AccountsFragment fragment = new AccountsFragment();
         Bundle args = new Bundle();
@@ -57,6 +55,7 @@ public class AccountsFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
         accountController = new AccountController(new DbHelper(getActivity()));
     }
@@ -71,6 +70,26 @@ public class AccountsFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_accounts, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_transfer:
+                startActivityForResult(new Intent(getActivity(), TransferActivity.class),
+                        REQUEST_TRANSFER);
+                break;
+
+            default:
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
@@ -79,23 +98,15 @@ public class AccountsFragment extends Fragment implements View.OnClickListener {
         ((NavDrawerActivity) activity).onSectionAttached(TAG);
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_add_account:
-                Intent intent = new Intent(getActivity(), AddAccountActivity.class);
-                startActivityForResult(intent, REQUEST_ADD_ACCOUNT);
-                break;
-
-            default:
-                break;
-        }
+    @OnClick(R.id.btn_add_account)
+    public void addAccount() {
+        Intent intent = new Intent(getActivity(), AddAccountActivity.class);
+        startActivityForResult(intent, REQUEST_ADD_ACCOUNT);
     }
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-
         getActivity().getMenuInflater().inflate(R.menu.menu_account, menu);
     }
 
@@ -123,6 +134,10 @@ public class AccountsFragment extends Fragment implements View.OnClickListener {
                     update();
                     break;
 
+                case REQUEST_TRANSFER:
+                    update();
+                    break;
+
                 default:
                     break;
             }
@@ -136,9 +151,7 @@ public class AccountsFragment extends Fragment implements View.OnClickListener {
 
     private void initViews(View rootView) {
         if (rootView != null) {
-            listView = (ListView) rootView.findViewById(R.id.list_view);
-
-            rootView.findViewById(R.id.btn_add_account).setOnClickListener(this);
+            ButterKnife.bind(this, rootView);
 
             listView.setAdapter(new AccountAdapter(getActivity(), accountController.getAccounts()));
             ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
@@ -150,8 +163,6 @@ public class AccountsFragment extends Fragment implements View.OnClickListener {
 
     private void initActionBar() {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setCustomView(null);
-        }
+        if (actionBar != null) actionBar.setCustomView(null);
     }
 }

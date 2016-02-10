@@ -3,7 +3,6 @@
 
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
-    <color name="blue">#8dc6d9</color>
 
     <color name="white_green">#f1f8e9</color>
     <color name="green_light">#8bc34a</color>
@@ -20,7 +19,6 @@
     <color name="dark_grey">#d6d6d6</color>
 
     <color name="yellow_light">#ffbd21</color>
-    <color name="yellow">#ffa00e</color>
     <color name="yellow_dark">#ff8a00</color>
 
 </resources>

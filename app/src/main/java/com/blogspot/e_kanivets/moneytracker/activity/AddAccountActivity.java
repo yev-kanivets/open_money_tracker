@@ -1,29 +1,48 @@
 package com.blogspot.e_kanivets.moneytracker.activity;
 
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatSpinner;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 
 import com.blogspot.e_kanivets.moneytracker.R;
+import com.blogspot.e_kanivets.moneytracker.activity.base.BaseActivity;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.helper.DbHelper;
 
-public class AddAccountActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Currency;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
+
+import butterknife.Bind;
+
+public class AddAccountActivity extends BaseActivity {
     @SuppressWarnings("unused")
     private static final String TAG = "AddAccountActivity";
 
-    private EditText etTitle;
-    private EditText etInitSum;
+    @Bind(R.id.et_title)
+    EditText etTitle;
+    @Bind(R.id.et_init_sum)
+    EditText etInitSum;
+    @Bind(R.id.spinner)
+    AppCompatSpinner spinner;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_account);
+    protected int getContentViewId() {
+        return R.layout.activity_add_account;
+    }
 
-        initViews();
-        initActionBar();
+    @Override
+    protected void initViews() {
+        super.initViews();
+
+        spinner.setAdapter(new ArrayAdapter<>(AddAccountActivity.this,
+                android.R.layout.simple_list_item_1, new ArrayList<>(getAllCurrencies())));
     }
 
     @Override
@@ -36,10 +55,7 @@ public class AddAccountActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_done:
-                String title = etTitle.getText().toString();
-                int initSum = Integer.parseInt(etInitSum.getText().toString());
-
-                new AccountController(new DbHelper(AddAccountActivity.this)).addAccount(title, initSum);
+                addAccount();
 
                 setResult(RESULT_OK);
                 finish();
@@ -54,12 +70,34 @@ public class AddAccountActivity extends AppCompatActivity {
         }
     }
 
-    private void initViews() {
-        etTitle = (EditText) findViewById(R.id.et_title);
-        etInitSum = (EditText) findViewById(R.id.et_init_sum);
+    private void addAccount() {
+        String title = etTitle.getText().toString().trim();
+        int initSum = Integer.parseInt(etInitSum.getText().toString().trim());
+        String currency = (String) spinner.getSelectedItem();
+
+        new AccountController(new DbHelper(AddAccountActivity.this))
+                .addAccount(title, initSum, currency);
     }
 
-    private void initActionBar() {
-        if (getSupportActionBar() != null) getSupportActionBar().setCustomView(null);
+    public static List<String> getAllCurrencies() {
+        Set<Currency> toret = new HashSet<>();
+        Locale[] locs = Locale.getAvailableLocales();
+
+        for (Locale loc : locs) {
+            try {
+                toret.add(Currency.getInstance(loc));
+            } catch (Exception exc) {
+                // Locale not found
+            }
+        }
+
+        List<String> currencyList = new ArrayList<>();
+        for (Currency currency : toret) {
+            currencyList.add(currency.getCurrencyCode());
+        }
+
+        Collections.sort(currencyList);
+
+        return currencyList;
     }
 }
