@@ -44,5 +44,7 @@
     <string name="initial_sum">Initial sum</string>
     <string name="account">Account</string>
     <string name="transfer">Transfer</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
 
 </resources>
