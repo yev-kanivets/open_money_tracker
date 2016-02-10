@@ -50,8 +50,6 @@ public class AccountController {
                         cursor.getInt(curSumColIndex),
                         cursor.getString(currencyColIndex));
 
-                if (account.getTitle().equals(DbHelper.DEFAULT_ACCOUNT)) continue;
-
                 //Add account to list
                 accountList.add(account);
             } while (cursor.moveToNext());

@@ -136,7 +136,7 @@ public abstract class AddRecordBaseActivity extends BaseActivity {
             e.printStackTrace();
         }
 
-        if (price >= 0 && price <= 1000000000) {
+        if (price >= 0 && price <= 1000000000 && spinnerAccount.getSelectedItemPosition() >= 0) {
             Account account = accountController.getAccounts().get(spinnerAccount.getSelectedItemPosition());
             return doRecord(title, category, price, account);
         } else return false;
