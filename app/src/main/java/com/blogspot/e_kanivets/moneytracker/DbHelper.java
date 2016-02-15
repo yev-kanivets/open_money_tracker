@@ -38,7 +38,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public static final String TABLE_TRANSFERS = "transfers";
     public static final String FROM_ACCOUNT_ID_COLUMN = "from_account_id";
-    public static final String TO_ACCOUND_ID_COLUMN = "to_account_id";
+    public static final String TO_ACCOUNT_ID_COLUMN = "to_account_id";
     public static final String FROM_AMOUNT_COLUMN = "from_amount";
     public static final String TO_AMOUNT_COLUMN = "to_amount";
     public static final String CREATED_AT_COLUMN = "created_at";
@@ -129,7 +129,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 + ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + TIME_COLUMN + " INTEGER,"
                 + FROM_ACCOUNT_ID_COLUMN + " INTEGER,"
-                + TO_ACCOUND_ID_COLUMN + " INTEGER,"
+                + TO_ACCOUNT_ID_COLUMN + " INTEGER,"
                 + FROM_AMOUNT_COLUMN + " INTEGER,"
                 + TO_AMOUNT_COLUMN + " INTEGER);");
     }
