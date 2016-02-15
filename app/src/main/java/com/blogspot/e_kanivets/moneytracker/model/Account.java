@@ -1,8 +1,10 @@
 package com.blogspot.e_kanivets.moneytracker.model;
 
 /**
- * Entity class for account
- * Created by evgenii on 6/3/15.
+ * Entity class for account.
+ * Created on 6/3/15.
+ *
+ * @author Evgenii Kanivets
  */
 public class Account {
     private int id;

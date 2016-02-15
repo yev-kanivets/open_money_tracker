@@ -5,9 +5,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
+import com.blogspot.e_kanivets.moneytracker.model.Category;
 import com.blogspot.e_kanivets.moneytracker.model.Period;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
 import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
+import com.blogspot.e_kanivets.moneytracker.repo.CategoryRepo;
+import com.blogspot.e_kanivets.moneytracker.repo.IRepo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,12 +24,14 @@ import java.util.List;
 public class RecordController {
     private DbHelper dbHelper;
     private AccountController accountController;
+    private final IRepo<Category> categoryRepo;
     private final CategoryController categoryController;
 
     public RecordController(DbHelper dbHelper) {
         this.dbHelper = dbHelper;
         this.accountController = new AccountController(new AccountRepo(dbHelper));
-        categoryController = new CategoryController(dbHelper);
+        categoryRepo = new CategoryRepo(dbHelper);
+        categoryController = new CategoryController(categoryRepo);
     }
 
     public Record read(long id) {
@@ -110,11 +115,7 @@ public class RecordController {
     }
 
     public void addRecord(Record record) {
-        //Add category if it does not exist yet
-        if (categoryController.getCategoryIdByName(record.getCategory()) == -1)
-            categoryController.addCategory(record.getCategory());
-
-        record.setCategoryId(categoryController.getCategoryIdByName(record.getCategory()));
+        record.setCategoryId(categoryController.readOrCreate(record.getCategory()).getId());
 
         //Add record to DB
         SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -135,14 +136,9 @@ public class RecordController {
     }
 
     public void updateRecordById(int id, String title, String category, int price, int accountId) {
-        //Add category if it does not exist yet
-        if (categoryController.getCategoryIdByName(category) == -1) {
-            categoryController.addCategory(category);
-        }
-
         Record oldRecord = read(id);
 
-        int categoryId = categoryController.getCategoryIdByName(category);
+        int categoryId = categoryController.readOrCreate(category).getId();
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -216,7 +212,7 @@ public class RecordController {
                 sb.append(id).append(DELIMITER);
                 sb.append(time).append(DELIMITER);
                 sb.append(title).append(DELIMITER);
-                sb.append(categoryController.getCategoryById(categoryId)).append(DELIMITER);
+                sb.append(categoryRepo.read(categoryId)).append(DELIMITER);
                 sb.append(type == 0 ? price : -price);
 
                 result.add(sb.toString());

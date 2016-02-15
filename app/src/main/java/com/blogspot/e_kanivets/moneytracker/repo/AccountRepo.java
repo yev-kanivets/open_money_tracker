@@ -48,7 +48,7 @@ public class AccountRepo implements IRepo<Account> {
             return null;
         } else {
             Account createdAccount = read(id);
-            Log.d(TAG, "Created account : " + account);
+            Log.d(TAG, "Created account : " + createdAccount);
             return createdAccount;
         }
     }
@@ -56,14 +56,7 @@ public class AccountRepo implements IRepo<Account> {
     @Nullable
     @Override
     public Account read(long id) {
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-        Cursor cursor = db.query(DbHelper.TABLE_ACCOUNTS, null, "id=?",
-                new String[]{Long.toString(id)}, null, null, null);
-        List<Account> accountList = getAccountListFromCursor(cursor);
-
-        cursor.close();
-        db.close();
+        List<Account> accountList = readWithCondition("id=?", new String[]{Long.toString(id)});
 
         if (accountList.size() == 1) return accountList.get(0);
         else return null;
@@ -76,6 +69,8 @@ public class AccountRepo implements IRepo<Account> {
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(DbHelper.CUR_SUM_COLUMN, account.getCurSum());
+        contentValues.put(DbHelper.TITLE_COLUMN, account.getTitle());
+        contentValues.put(DbHelper.CURRENCY_COLUMN, account.getCurrency());
 
         String[] args = new String[]{Integer.valueOf(account.getId()).toString()};
         long rowsAffected = db.update(DbHelper.TABLE_ACCOUNTS, contentValues, "id=?", args);
@@ -86,8 +81,9 @@ public class AccountRepo implements IRepo<Account> {
             Log.d(TAG, "Couldn't update account : " + account);
             return null;
         } else {
-            Log.d(TAG, "Updated account : " + account);
-            return read(account.getId());
+            Account updatedAccount = read(account.getId());
+            Log.d(TAG, "Updated account : " + updatedAccount);
+            return updatedAccount;
         }
     }
 
