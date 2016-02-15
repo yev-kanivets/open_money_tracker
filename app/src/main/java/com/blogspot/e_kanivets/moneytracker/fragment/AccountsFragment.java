@@ -23,8 +23,8 @@ import com.blogspot.e_kanivets.moneytracker.activity.AddAccountActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.NavDrawerActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.TransferActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.AccountAdapter;
-import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
+import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -39,7 +39,7 @@ public class AccountsFragment extends Fragment {
     @Bind(R.id.list_view)
     ListView listView;
 
-    private AccountController accountController;
+    private AccountRepo accountRepo;
 
     public static AccountsFragment newInstance() {
         AccountsFragment fragment = new AccountsFragment();
@@ -57,7 +57,7 @@ public class AccountsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        accountController = new AccountController(new DbHelper(getActivity()));
+        accountRepo = new AccountRepo(new DbHelper(getActivity()));
     }
 
     @Override
@@ -116,7 +116,7 @@ public class AccountsFragment extends Fragment {
 
         switch (item.getItemId()) {
             case R.id.delete:
-                accountController.deleteAccount(accountController.getAccounts().get(info.position));
+                accountRepo.delete(accountRepo.readAll().get(info.position));
                 update();
                 return true;
             default:
@@ -145,7 +145,7 @@ public class AccountsFragment extends Fragment {
     }
 
     private void update() {
-        listView.setAdapter(new AccountAdapter(getActivity(), accountController.getAccounts()));
+        listView.setAdapter(new AccountAdapter(getActivity(), accountRepo.readAll()));
         ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
     }
 
@@ -153,7 +153,7 @@ public class AccountsFragment extends Fragment {
         if (rootView != null) {
             ButterKnife.bind(this, rootView);
 
-            listView.setAdapter(new AccountAdapter(getActivity(), accountController.getAccounts()));
+            listView.setAdapter(new AccountAdapter(getActivity(), accountRepo.readAll()));
             ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
             registerForContextMenu(listView);
 

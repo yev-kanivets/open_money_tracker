@@ -8,8 +8,9 @@ import android.widget.EditText;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseActivity;
-import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
+import com.blogspot.e_kanivets.moneytracker.model.Account;
+import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -75,8 +76,9 @@ public class AddAccountActivity extends BaseActivity {
         int initSum = Integer.parseInt(etInitSum.getText().toString().trim());
         String currency = (String) spinner.getSelectedItem();
 
-        new AccountController(new DbHelper(AddAccountActivity.this))
-                .addAccount(title, initSum, currency);
+        Account account = new Account(title, initSum, currency);
+
+        new AccountRepo(new DbHelper(AddAccountActivity.this)).create(account);
     }
 
     public static List<String> getAllCurrencies() {

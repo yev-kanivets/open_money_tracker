@@ -13,6 +13,7 @@ import com.blogspot.e_kanivets.moneytracker.controller.TransferController;
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.model.Account;
 import com.blogspot.e_kanivets.moneytracker.model.Transfer;
+import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,10 +46,11 @@ public class TransferActivity extends BaseActivity {
     protected boolean initData() {
         DbHelper dbHelper = new DbHelper(TransferActivity.this);
 
-        AccountController accountController = new AccountController(dbHelper);
+        AccountRepo accountRepo = new AccountRepo(dbHelper);
+        AccountController accountController = new AccountController(accountRepo);
         transferController = new TransferController(dbHelper, accountController);
 
-        accountList = accountController.getAccounts();
+        accountList = accountRepo.readAll();
 
         return super.initData();
     }
