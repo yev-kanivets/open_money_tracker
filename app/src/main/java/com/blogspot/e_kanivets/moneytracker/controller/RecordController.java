@@ -110,10 +110,10 @@ public class RecordController {
 
     public void addRecord(Record record) {
         //Add category if it does not exist yet
-        if (categoryController.getCategoryIdByName(record.getCategory()) == -1) {
+        if (categoryController.getCategoryIdByName(record.getCategory()) == -1)
             categoryController.addCategory(record.getCategory());
-            record.setCategoryId(categoryController.getCategoryIdByName(record.getCategory()));
-        }
+
+        record.setCategoryId(categoryController.getCategoryIdByName(record.getCategory()));
 
         //Add record to DB
         SQLiteDatabase db = dbHelper.getWritableDatabase();
