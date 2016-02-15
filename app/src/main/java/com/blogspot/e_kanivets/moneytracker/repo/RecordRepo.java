@@ -3,7 +3,6 @@ package com.blogspot.e_kanivets.moneytracker.repo;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -21,7 +20,7 @@ import java.util.List;
  *
  * @author Evgenii Kanivets
  */
-public class RecordRepo implements IRepo<Record> {
+public class RecordRepo extends BaseRepo<Record> {
     @SuppressWarnings("unused")
     private static final String TAG = "RecordRepo";
 
@@ -30,9 +29,15 @@ public class RecordRepo implements IRepo<Record> {
     private final CategoryController categoryController;
 
     public RecordRepo(DbHelper dbHelper, AccountController accountController, CategoryController categoryController) {
+        super(dbHelper);
         this.dbHelper = dbHelper;
         this.accountController = accountController;
         this.categoryController = categoryController;
+    }
+
+    @Override
+    protected String getTable() {
+        return DbHelper.TABLE_RECORDS;
     }
 
     @Nullable
@@ -50,7 +55,7 @@ public class RecordRepo implements IRepo<Record> {
         contentValues.put(DbHelper.PRICE_COLUMN, record.getPrice());
         contentValues.put(DbHelper.ACCOUNT_ID_COLUMN, record.getAccountId());
 
-        long id = db.insert(DbHelper.TABLE_RECORDS, null, contentValues);
+        long id = db.insert(getTable(), null, contentValues);
 
         db.close();
 
@@ -68,19 +73,10 @@ public class RecordRepo implements IRepo<Record> {
 
     @Nullable
     @Override
-    public Record read(long id) {
-        List<Record> recordList = readWithCondition("id=?", new String[]{Long.toString(id)});
-
-        if (recordList.size() == 1) return recordList.get(0);
-        else return null;
-    }
-
-    @Nullable
-    @Override
     public Record update(Record record) {
         Record oldRecord = read(record.getId());
 
-        int categoryId = categoryController.readOrCreate(record.getCategory()).getId();
+        long categoryId = categoryController.readOrCreate(record.getCategory()).getId();
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -90,8 +86,8 @@ public class RecordRepo implements IRepo<Record> {
         contentValues.put(DbHelper.PRICE_COLUMN, record.getPrice());
         contentValues.put(DbHelper.ACCOUNT_ID_COLUMN, record.getAccountId());
 
-        String[] args = {Integer.valueOf(record.getId()).toString()};
-        long rowsAffected = db.update(DbHelper.TABLE_RECORDS, contentValues, "id=?", args);
+        String[] args = {Long.valueOf(record.getId()).toString()};
+        long rowsAffected = db.update(getTable(), contentValues, "id=?", args);
 
         db.close();
 
@@ -109,41 +105,14 @@ public class RecordRepo implements IRepo<Record> {
 
     @Override
     public boolean delete(Record record) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-        String[] args = new String[]{Integer.toString(record.getId())};
-        long rowsAffected = db.delete(DbHelper.TABLE_RECORDS, "id=?", args);
-        db.close();
-
+        boolean result = super.delete(record);
         accountController.recordDeleted(record);
 
-        Log.d(TAG, record + (rowsAffected == 0 ? " didn't " : " ") + "deleted");
-
-        return rowsAffected != 0;
+        return result;
     }
 
-    @NonNull
     @Override
-    public List<Record> readAll() {
-        return readWithCondition(null, null);
-    }
-
-    @NonNull
-    @Override
-    public List<Record> readWithCondition(String condition, String[] args) {
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-        //Read records table from db
-        Cursor cursor = db.query(DbHelper.TABLE_RECORDS, null, condition, args, null, null, null);
-        List<Record> recordList = getRecordListFromCursor(cursor);
-
-        cursor.close();
-        db.close();
-
-        return recordList;
-    }
-
-    private List<Record> getRecordListFromCursor(Cursor cursor) {
+    protected List<Record> getListFromCursor(Cursor cursor) {
         List<Record> recordList = new ArrayList<>();
 
         if (cursor.moveToFirst()) {

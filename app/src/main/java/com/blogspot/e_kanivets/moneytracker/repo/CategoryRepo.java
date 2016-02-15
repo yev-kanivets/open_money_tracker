@@ -3,7 +3,6 @@ package com.blogspot.e_kanivets.moneytracker.repo;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -19,14 +18,20 @@ import java.util.List;
  *
  * @author Evgenii Kanivets
  */
-public class CategoryRepo implements IRepo<Category> {
+public class CategoryRepo extends BaseRepo<Category> {
     @SuppressWarnings("unused")
     private static final String TAG = "CategoryRepo";
 
     private DbHelper dbHelper;
 
     public CategoryRepo(DbHelper dbHelper) {
+        super(dbHelper);
         this.dbHelper = dbHelper;
+    }
+
+    @Override
+    protected String getTable() {
+        return DbHelper.TABLE_CATEGORIES;
     }
 
     @Nullable
@@ -37,7 +42,7 @@ public class CategoryRepo implements IRepo<Category> {
         ContentValues contentValues = new ContentValues();
         contentValues.put(DbHelper.NAME_COLUMN, category.getName());
 
-        long id = db.insert(DbHelper.TABLE_CATEGORIES, null, contentValues);
+        long id = db.insert(getTable(), null, contentValues);
 
         db.close();
 
@@ -53,23 +58,14 @@ public class CategoryRepo implements IRepo<Category> {
 
     @Nullable
     @Override
-    public Category read(long id) {
-        List<Category> categoryList = readWithCondition("id=?", new String[]{Long.toString(id)});
-
-        if (categoryList.size() == 1) return categoryList.get(0);
-        else return null;
-    }
-
-    @Nullable
-    @Override
     public Category update(Category category) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(DbHelper.NAME_COLUMN, category.getName());
 
-        String[] args = new String[]{Integer.valueOf(category.getId()).toString()};
-        long rowsAffected = db.update(DbHelper.TABLE_CATEGORIES, contentValues, "id=?", args);
+        String[] args = new String[]{Long.valueOf(category.getId()).toString()};
+        long rowsAffected = db.update(getTable(), contentValues, "id=?", args);
 
         db.close();
 
@@ -84,41 +80,7 @@ public class CategoryRepo implements IRepo<Category> {
     }
 
     @Override
-    public boolean delete(Category category) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-        String[] args = new String[]{Integer.toString(category.getId())};
-        long rowsAffected = db.delete(DbHelper.TABLE_CATEGORIES, "id=?", args);
-
-        db.close();
-
-        Log.d(TAG, category + (rowsAffected == 0 ? " didn't " : " ") + "deleted");
-
-        return rowsAffected != 0;
-    }
-
-    @NonNull
-    @Override
-    public List<Category> readAll() {
-        return readWithCondition(null, null);
-    }
-
-    @NonNull
-    @Override
-    public List<Category> readWithCondition(String condition, String[] args) {
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-        //Read categories table from db
-        Cursor cursor = db.query(DbHelper.TABLE_CATEGORIES, null, condition, args, null, null, null);
-        List<Category> categoryList = getCategoryListFromCursor(cursor);
-
-        cursor.close();
-        db.close();
-
-        return categoryList;
-    }
-
-    private List<Category> getCategoryListFromCursor(Cursor cursor) {
+    protected List<Category> getListFromCursor(Cursor cursor) {
         List<Category> categoryList = new ArrayList<>();
 
         if (cursor.moveToFirst()) {

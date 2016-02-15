@@ -6,13 +6,13 @@ package com.blogspot.e_kanivets.moneytracker.model;
  *
  * @author Evgenii Kanivets
  */
-public class Account {
-    private int id;
+public class Account implements IEntity {
+    private long id;
     private String title;
     private int curSum;
     private String currency;
 
-    public Account(int id, String title, int curSum, String currency) {
+    public Account(long id, String title, int curSum, String currency) {
         this.id = id;
         this.title = title;
         this.curSum = curSum;
@@ -26,7 +26,8 @@ public class Account {
         this.currency = currency;
     }
 
-    public int getId() {
+    @Override
+    public long getId() {
         return id;
     }
 

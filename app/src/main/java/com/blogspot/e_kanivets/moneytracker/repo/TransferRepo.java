@@ -20,7 +20,7 @@ import java.util.List;
  *
  * @author Evgenii Kanivets
  */
-public class TransferRepo implements IRepo<Transfer> {
+public class TransferRepo extends BaseRepo<Transfer> {
     @SuppressWarnings("unused")
     private static final String TAG = "TransferRepo";
 
@@ -28,8 +28,14 @@ public class TransferRepo implements IRepo<Transfer> {
     private AccountController accountController;
 
     public TransferRepo(DbHelper dbHelper, AccountController accountController) {
+        super(dbHelper);
         this.dbHelper = dbHelper;
         this.accountController = accountController;
+    }
+
+    @Override
+    protected String getTable() {
+        return DbHelper.TABLE_TRANSFERS;
     }
 
     @Nullable
@@ -46,7 +52,7 @@ public class TransferRepo implements IRepo<Transfer> {
         contentValues.put(DbHelper.FROM_AMOUNT_COLUMN, transfer.getFromAmount());
         contentValues.put(DbHelper.TO_AMOUNT_COLUMN, transfer.getToAmount());
 
-        long id = db.insert(DbHelper.TABLE_TRANSFERS, null, contentValues);
+        long id = db.insert(getTable(), null, contentValues);
 
         db.close();
 
@@ -64,46 +70,12 @@ public class TransferRepo implements IRepo<Transfer> {
 
     @Nullable
     @Override
-    public Transfer read(long id) {
-        List<Transfer> transferList = readWithCondition("id=?", new String[]{Long.toString(id)});
-
-        if (transferList.size() == 1) return transferList.get(0);
-        else return null;
-    }
-
-    @Nullable
-    @Override
     public Transfer update(Transfer instance) {
         throw new IllegalStateException("Not implemented yet");
     }
 
     @Override
-    public boolean delete(Transfer instance) {
-        throw new IllegalStateException("Not implemented yet");
-    }
-
-    @NonNull
-    @Override
-    public List<Transfer> readAll() {
-        return readWithCondition(null, null);
-    }
-
-    @NonNull
-    @Override
-    public List<Transfer> readWithCondition(String condition, String[] args) {
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-        // Read accounts table from db
-        Cursor cursor = db.query(DbHelper.TABLE_TRANSFERS, null, condition, args, null, null, null);
-        List<Transfer> accountList = getTransferListFromCursor(cursor);
-
-        cursor.close();
-        db.close();
-
-        return accountList;
-    }
-
-    private List<Transfer> getTransferListFromCursor(Cursor cursor) {
+    protected List<Transfer> getListFromCursor(Cursor cursor) {
         List<Transfer> accountList = new ArrayList<>();
 
         if (cursor.moveToFirst()) {

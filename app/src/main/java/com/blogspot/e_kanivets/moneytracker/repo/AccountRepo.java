@@ -3,7 +3,6 @@ package com.blogspot.e_kanivets.moneytracker.repo;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -19,14 +18,20 @@ import java.util.List;
  *
  * @author Evgenii Kanivets
  */
-public class AccountRepo implements IRepo<Account> {
+public class AccountRepo extends BaseRepo<Account> {
     @SuppressWarnings("unused")
     private static final String TAG = "AccountRepo";
 
     private DbHelper dbHelper;
 
     public AccountRepo(DbHelper dbHelper) {
+        super(dbHelper);
         this.dbHelper = dbHelper;
+    }
+
+    @Override
+    protected String getTable() {
+        return DbHelper.TABLE_ACCOUNTS;
     }
 
     @Nullable
@@ -39,7 +44,7 @@ public class AccountRepo implements IRepo<Account> {
         contentValues.put(DbHelper.CUR_SUM_COLUMN, account.getCurSum());
         contentValues.put(DbHelper.CURRENCY_COLUMN, account.getCurrency());
 
-        long id = db.insert(DbHelper.TABLE_ACCOUNTS, null, contentValues);
+        long id = db.insert(getTable(), null, contentValues);
 
         db.close();
 
@@ -55,15 +60,6 @@ public class AccountRepo implements IRepo<Account> {
 
     @Nullable
     @Override
-    public Account read(long id) {
-        List<Account> accountList = readWithCondition("id=?", new String[]{Long.toString(id)});
-
-        if (accountList.size() == 1) return accountList.get(0);
-        else return null;
-    }
-
-    @Nullable
-    @Override
     public Account update(Account account) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -72,8 +68,8 @@ public class AccountRepo implements IRepo<Account> {
         contentValues.put(DbHelper.TITLE_COLUMN, account.getTitle());
         contentValues.put(DbHelper.CURRENCY_COLUMN, account.getCurrency());
 
-        String[] args = new String[]{Integer.valueOf(account.getId()).toString()};
-        long rowsAffected = db.update(DbHelper.TABLE_ACCOUNTS, contentValues, "id=?", args);
+        String[] args = new String[]{Long.valueOf(account.getId()).toString()};
+        long rowsAffected = db.update(getTable(), contentValues, "id=?", args);
 
         db.close();
 
@@ -88,41 +84,7 @@ public class AccountRepo implements IRepo<Account> {
     }
 
     @Override
-    public boolean delete(Account account) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-        String[] args = new String[]{Integer.toString(account.getId())};
-        long rowsAffected = db.delete(DbHelper.TABLE_ACCOUNTS, "id=?", args);
-
-        db.close();
-
-        Log.d(TAG, account + (rowsAffected == 0 ? " didn't " : " ") + "deleted");
-
-        return rowsAffected != 0;
-    }
-
-    @NonNull
-    @Override
-    public List<Account> readAll() {
-        return readWithCondition(null, null);
-    }
-
-    @NonNull
-    @Override
-    public List<Account> readWithCondition(String condition, String[] args) {
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-
-        // Read accounts table from db
-        Cursor cursor = db.query(DbHelper.TABLE_ACCOUNTS, null, condition, args, null, null, null);
-        List<Account> accountList = getAccountListFromCursor(cursor);
-
-        cursor.close();
-        db.close();
-
-        return accountList;
-    }
-
-    private List<Account> getAccountListFromCursor(Cursor cursor) {
+    protected List<Account> getListFromCursor(Cursor cursor) {
         List<Account> accountList = new ArrayList<>();
 
         if (cursor.moveToFirst()) {

@@ -5,15 +5,8 @@ package com.blogspot.e_kanivets.moneytracker.model;
  * Created on 2/10/16.
  *
  * @author Evgenii Kanivets
- *
- * + ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-+ TIME_COLUMN + " INTEGER,"
-+ FROM_ACCOUNT_ID_COLUMN + " INTEGER,"
-+ TO_ACCOUND_ID_COLUMN + " INTEGER,"
-+ FROM_AMOUNT_COLUMN + " INTEGER,"
-+ TO_AMOUNT_COLUMN + " INTEGER);");
  */
-public class Transfer {
+public class Transfer implements IEntity {
     private long id;
     private long time;
     private long fromAccountId;
@@ -38,6 +31,7 @@ public class Transfer {
         this.toAmount = toAmount;
     }
 
+    @Override
     public long getId() {
         return id;
     }
