@@ -27,17 +27,25 @@ import com.blogspot.e_kanivets.moneytracker.activity.AddIncomeActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.NavDrawerActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.ReportActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.RecordAdapter;
+import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
+import com.blogspot.e_kanivets.moneytracker.controller.CategoryController;
 import com.blogspot.e_kanivets.moneytracker.controller.PeriodController;
 import com.blogspot.e_kanivets.moneytracker.controller.RecordController;
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
+import com.blogspot.e_kanivets.moneytracker.model.Category;
 import com.blogspot.e_kanivets.moneytracker.model.Period;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
+import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
+import com.blogspot.e_kanivets.moneytracker.repo.CategoryRepo;
+import com.blogspot.e_kanivets.moneytracker.repo.IRepo;
+import com.blogspot.e_kanivets.moneytracker.repo.RecordRepo;
 import com.blogspot.e_kanivets.moneytracker.ui.AppRateDialog;
 import com.blogspot.e_kanivets.moneytracker.ui.ChangeDateDialog;
 import com.blogspot.e_kanivets.moneytracker.util.PrefUtils;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -53,15 +61,18 @@ public class RecordsFragment extends Fragment {
 
     private static final int REQUEST_ACTION_RECORD = 1;
 
+    List<Record> recordList;
+
+    private IRepo<Record> recordRepo;
+    private RecordController recordController;
+    private PeriodController periodController;
+
     @Bind(R.id.list_view)
     ListView listView;
     @Bind(R.id.tv_from_date)
     TextView tvFromDate;
     @Bind(R.id.tv_to_date)
     TextView tvToDate;
-
-    private RecordController recordController;
-    private PeriodController periodController;
 
     public static RecordsFragment newInstance() {
         RecordsFragment fragment = new RecordsFragment();
@@ -79,7 +90,14 @@ public class RecordsFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         periodController = new PeriodController();
-        recordController = new RecordController(new DbHelper(getActivity()));
+
+        DbHelper dbHelper = new DbHelper(getActivity());
+        IRepo<Category> categoryRepo = new CategoryRepo(dbHelper);
+        CategoryController categoryController = new CategoryController(categoryRepo);
+        AccountController accountController = new AccountController(new AccountRepo(dbHelper));
+        recordRepo = new RecordRepo(dbHelper, accountController, categoryController);
+
+        recordController = new RecordController(recordRepo, categoryRepo);
     }
 
     @Override
@@ -112,15 +130,13 @@ public class RecordsFragment extends Fragment {
 
         switch (item.getItemId()) {
             case R.id.edit:
-                Record record = recordController.
-                        getRecords(periodController.getPeriod()).get(info.position);
+                Record record = recordList.get(info.position);
                 if (record.isIncome())
                     startAddIncomeActivity(record, AddIncomeActivity.Mode.MODE_EDIT);
                 else startAddExpenseActivity(record, AddExpenseActivity.Mode.MODE_EDIT);
                 return true;
             case R.id.delete:
-                recordController.deleteRecord(recordController.
-                        getRecords(periodController.getPeriod()).get(info.position));
+                recordRepo.delete(recordList.get(info.position));
                 update();
                 return true;
             default:
@@ -192,8 +208,8 @@ public class RecordsFragment extends Fragment {
     }
 
     private void update() {
-        listView.setAdapter(new RecordAdapter(getActivity(),
-                recordController.getRecords(periodController.getPeriod())));
+        recordList = recordController.getRecordsForPeriod(periodController.getPeriod());
+        listView.setAdapter(new RecordAdapter(getActivity(), recordList));
         ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
     }
 
@@ -205,8 +221,9 @@ public class RecordsFragment extends Fragment {
             tvFromDate.setText(periodController.getFirstDay());
             tvToDate.setText(periodController.getLastDay());
 
-            listView.setAdapter(new RecordAdapter(getActivity(),
-                    recordController.getRecords(periodController.getPeriod())));
+            recordList = recordController.getRecordsForPeriod(periodController.getPeriod());
+
+            listView.setAdapter(new RecordAdapter(getActivity(), recordList));
             ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
 
             /* Scroll list to bottom only once at start */

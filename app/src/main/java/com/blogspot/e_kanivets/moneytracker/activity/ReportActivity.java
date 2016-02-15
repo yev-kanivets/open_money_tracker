@@ -11,11 +11,18 @@ import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.ExpandableListReportAdapter;
 import com.blogspot.e_kanivets.moneytracker.adapter.ReportItemAdapter;
+import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
+import com.blogspot.e_kanivets.moneytracker.controller.CategoryController;
 import com.blogspot.e_kanivets.moneytracker.controller.RecordController;
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
+import com.blogspot.e_kanivets.moneytracker.model.Category;
 import com.blogspot.e_kanivets.moneytracker.model.Period;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
 import com.blogspot.e_kanivets.moneytracker.model.Report;
+import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
+import com.blogspot.e_kanivets.moneytracker.repo.CategoryRepo;
+import com.blogspot.e_kanivets.moneytracker.repo.IRepo;
+import com.blogspot.e_kanivets.moneytracker.repo.RecordRepo;
 import com.blogspot.e_kanivets.moneytracker.util.Constants;
 
 import java.util.ArrayList;
@@ -50,10 +57,16 @@ public class ReportActivity extends BaseActivity {
     protected boolean initData() {
         super.initData();
 
-        recordController = new RecordController(new DbHelper(ReportActivity.this));
+        DbHelper dbHelper = new DbHelper(ReportActivity.this);
+        IRepo<Category> categoryRepo = new CategoryRepo(dbHelper);
+        CategoryController categoryController = new CategoryController(categoryRepo);
+        AccountController accountController = new AccountController(new AccountRepo(dbHelper));
+        IRepo<Record> recordRepo = new RecordRepo(dbHelper, accountController, categoryController);
+
+        recordController = new RecordController(recordRepo, categoryRepo);
 
         period = getIntent().getParcelableExtra(KEY_PERIOD);
-        report = new Report(recordController.getRecords(period));
+        report = new Report(recordController.getRecordsForPeriod(period));
 
         return period != null;
     }
@@ -63,7 +76,7 @@ public class ReportActivity extends BaseActivity {
         super.initViews();
 
         listView.setAdapter(new ReportItemAdapter(ReportActivity.this,
-                new Report(recordController.getRecords(period)).getReportList()));
+                new Report(recordController.getRecordsForPeriod(period)).getReportList()));
 
         /* Scroll list to bottom only once at start */
         listView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {

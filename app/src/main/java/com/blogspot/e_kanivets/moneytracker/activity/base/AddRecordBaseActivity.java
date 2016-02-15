@@ -8,12 +8,15 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.controller.RecordController;
+import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
+import com.blogspot.e_kanivets.moneytracker.controller.CategoryController;
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.model.Account;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
 import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
+import com.blogspot.e_kanivets.moneytracker.repo.CategoryRepo;
 import com.blogspot.e_kanivets.moneytracker.repo.IRepo;
+import com.blogspot.e_kanivets.moneytracker.repo.RecordRepo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +43,7 @@ public abstract class AddRecordBaseActivity extends BaseActivity {
     protected List<Account> accountList;
 
     protected IRepo<Account> accountRepo;
-    protected RecordController recordController;
+    protected IRepo<Record> recordRepo;
 
     @Bind(R.id.et_title)
     EditText etTitle;
@@ -63,7 +66,8 @@ public abstract class AddRecordBaseActivity extends BaseActivity {
         DbHelper dbHelper = new DbHelper(AddRecordBaseActivity.this);
 
         accountRepo = new AccountRepo(dbHelper);
-        recordController = new RecordController(dbHelper);
+        recordRepo = new RecordRepo(dbHelper, new AccountController(accountRepo),
+                new CategoryController(new CategoryRepo(dbHelper)));
 
         record = (Record) getIntent().getSerializableExtra(KEY_RECORD);
         mode = (Mode) getIntent().getSerializableExtra(KEY_MODE);
