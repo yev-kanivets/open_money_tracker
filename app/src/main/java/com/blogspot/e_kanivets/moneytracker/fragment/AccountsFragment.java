@@ -24,7 +24,7 @@ import com.blogspot.e_kanivets.moneytracker.activity.NavDrawerActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.TransferActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.AccountAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
-import com.blogspot.e_kanivets.moneytracker.helper.DbHelper;
+import com.blogspot.e_kanivets.moneytracker.DbHelper;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

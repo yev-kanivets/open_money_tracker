@@ -29,8 +29,8 @@ import com.blogspot.e_kanivets.moneytracker.activity.ReportActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.RecordAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.PeriodController;
 import com.blogspot.e_kanivets.moneytracker.controller.RecordController;
-import com.blogspot.e_kanivets.moneytracker.helper.DbHelper;
-import com.blogspot.e_kanivets.moneytracker.helper.PeriodHelper;
+import com.blogspot.e_kanivets.moneytracker.DbHelper;
+import com.blogspot.e_kanivets.moneytracker.model.Period;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
 import com.blogspot.e_kanivets.moneytracker.ui.AppRateDialog;
 import com.blogspot.e_kanivets.moneytracker.ui.ChangeDateDialog;
@@ -250,22 +250,22 @@ public class RecordsFragment extends Fragment {
                 calendar.clear(Calendar.MILLISECOND);
 
                 switch (position) {
-                    // Day period
                     case 0:
-                        periodController.setPeriod(PeriodHelper.getInstance().getDayPeriod());
+                        periodController.setPeriod(Period.dayPeriod());
                         break;
-                    // Week period
+
                     case 1:
-                        periodController.setPeriod(PeriodHelper.getInstance().getWeekPeriod());
+                        periodController.setPeriod(Period.weekPeriod());
                         break;
-                    // Month period
+
                     case 2:
-                        periodController.setPeriod(PeriodHelper.getInstance().getMonthPeriod());
+                        periodController.setPeriod(Period.monthPeriod());
                         break;
-                    // Year period
+
                     case 3:
-                        periodController.setPeriod(PeriodHelper.getInstance().getYearPeriod());
+                        periodController.setPeriod(Period.yearPeriod());
                         break;
+
                     default:
                         break;
                 }
