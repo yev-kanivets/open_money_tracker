@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.model.Period;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
+import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,7 @@ public class RecordController {
 
     public RecordController(DbHelper dbHelper) {
         this.dbHelper = dbHelper;
-        this.accountController = new AccountController(dbHelper);
+        this.accountController = new AccountController(new AccountRepo(dbHelper));
         categoryController = new CategoryController(dbHelper);
     }
 

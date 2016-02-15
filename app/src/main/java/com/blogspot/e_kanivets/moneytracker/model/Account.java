@@ -17,6 +17,13 @@ public class Account {
         this.currency = currency;
     }
 
+    public Account(String title, int curSum, String currency) {
+        this.id = -1;
+        this.title = title;
+        this.curSum = curSum;
+        this.currency = currency;
+    }
+
     public int getId() {
         return id;
     }

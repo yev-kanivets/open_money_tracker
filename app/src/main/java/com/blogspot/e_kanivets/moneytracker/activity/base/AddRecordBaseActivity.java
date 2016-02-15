@@ -8,11 +8,12 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.RecordController;
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.model.Account;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
+import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
+import com.blogspot.e_kanivets.moneytracker.repo.IRepo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,11 @@ public abstract class AddRecordBaseActivity extends BaseActivity {
     protected Record record;
     protected Mode mode;
 
+    protected List<Account> accountList;
+
+    protected IRepo<Account> accountRepo;
+    protected RecordController recordController;
+
     @Bind(R.id.et_title)
     EditText etTitle;
     @Bind(R.id.et_category)
@@ -44,9 +50,6 @@ public abstract class AddRecordBaseActivity extends BaseActivity {
     EditText etPrice;
     @Bind(R.id.spinner_account)
     Spinner spinnerAccount;
-
-    protected RecordController recordController;
-    protected AccountController accountController;
 
     @Override
     protected int getContentViewId() {
@@ -57,11 +60,14 @@ public abstract class AddRecordBaseActivity extends BaseActivity {
     protected boolean initData() {
         super.initData();
 
-        recordController = new RecordController(new DbHelper(AddRecordBaseActivity.this));
-        accountController = new AccountController(new DbHelper(AddRecordBaseActivity.this));
+        DbHelper dbHelper = new DbHelper(AddRecordBaseActivity.this);
+
+        accountRepo = new AccountRepo(dbHelper);
+        recordController = new RecordController(dbHelper);
 
         record = (Record) getIntent().getSerializableExtra(KEY_RECORD);
         mode = (Mode) getIntent().getSerializableExtra(KEY_MODE);
+        accountList = accountRepo.readAll();
 
         return mode != null && (!mode.equals(Mode.MODE_EDIT) || record != null);
     }
@@ -70,8 +76,6 @@ public abstract class AddRecordBaseActivity extends BaseActivity {
     @Override
     protected void initViews() {
         super.initViews();
-
-        List<Account> accountList = accountController.getAccounts();
 
         List<String> accounts = new ArrayList<>();
         for (Account account : accountList) {
@@ -137,7 +141,7 @@ public abstract class AddRecordBaseActivity extends BaseActivity {
         }
 
         if (price >= 0 && price <= 1000000000 && spinnerAccount.getSelectedItemPosition() >= 0) {
-            Account account = accountController.getAccounts().get(spinnerAccount.getSelectedItemPosition());
+            Account account = accountList.get(spinnerAccount.getSelectedItemPosition());
             return doRecord(title, category, price, account);
         } else return false;
     }
