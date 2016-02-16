@@ -1,8 +1,8 @@
 package com.blogspot.e_kanivets.moneytracker.model;
 
-import com.blogspot.e_kanivets.moneytracker.controller.CategoryController;
-import com.blogspot.e_kanivets.moneytracker.helper.DbHelper;
+import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.MtApp;
+import com.blogspot.e_kanivets.moneytracker.repo.CategoryRepo;
 
 import java.io.Serializable;
 
@@ -10,20 +10,20 @@ import java.io.Serializable;
  * Entity class.
  * Created by eugene on 01/09/14.
  */
-public class Record implements Serializable {
+public class Record implements IEntity, Serializable {
     public static final int TYPE_INCOME = 0;
     public static final int TYPE_EXPENSE = 1;
 
-    private int id;
+    private long id;
     private long time;
     private int type;
     private String title;
-    private int categoryId;
+    private long categoryId;
     private String category;
     private int price;
-    private int accountId;
+    private long accountId;
 
-    public Record(int id, long time, int type, String title, int categoryId, int price, int accountId) {
+    public Record(long id, long time, int type, String title, long categoryId, int price, long accountId) {
         this.id = id;
         this.time = time;
         this.type = type;
@@ -32,10 +32,12 @@ public class Record implements Serializable {
         this.price = price;
         this.accountId = accountId;
 
-        category = new CategoryController(new DbHelper(MtApp.get())).getCategoryById(categoryId);
+        // TODO: Refactor this shit.
+        Category categoryActual = new CategoryRepo(new DbHelper(MtApp.get())).read(categoryId);
+        if (categoryActual != null) category = categoryActual.getName();
     }
 
-    public Record(long time, int type, String title, String category, int price, int accountId) {
+    public Record(long time, int type, String title, String category, int price, long accountId) {
         this.time = time;
         this.type = type;
         this.title = title;
@@ -49,7 +51,8 @@ public class Record implements Serializable {
         return type;
     }
 
-    public int getId() {
+    @Override
+    public long getId() {
         return id;
     }
 
@@ -61,7 +64,7 @@ public class Record implements Serializable {
         return category;
     }
 
-    public int getCategoryId() {
+    public long getCategoryId() {
         return categoryId;
     }
 
@@ -81,7 +84,7 @@ public class Record implements Serializable {
         this.title = title;
     }
 
-    public void setCategoryId(int categoryId) {
+    public void setCategoryId(long categoryId) {
         this.categoryId = categoryId;
     }
 
@@ -93,11 +96,11 @@ public class Record implements Serializable {
         this.price = price;
     }
 
-    public int getAccountId() {
+    public long getAccountId() {
         return accountId;
     }
 
-    public void setAccountId(int accountId) {
+    public void setAccountId(long accountId) {
         this.accountId = accountId;
     }
 }

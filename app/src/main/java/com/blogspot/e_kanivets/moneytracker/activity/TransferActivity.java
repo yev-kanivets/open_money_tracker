@@ -9,10 +9,12 @@ import android.widget.EditText;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseActivity;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
-import com.blogspot.e_kanivets.moneytracker.controller.TransferController;
-import com.blogspot.e_kanivets.moneytracker.helper.DbHelper;
+import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.model.Account;
 import com.blogspot.e_kanivets.moneytracker.model.Transfer;
+import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
+import com.blogspot.e_kanivets.moneytracker.repo.IRepo;
+import com.blogspot.e_kanivets.moneytracker.repo.TransferRepo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +25,7 @@ public class TransferActivity extends BaseActivity {
     @SuppressWarnings("unused")
     private static final String TAG = "TransferActivity";
 
-    private TransferController transferController;
+    private IRepo<Transfer> transferRepo;
 
     private List<Account> accountList;
 
@@ -45,10 +47,11 @@ public class TransferActivity extends BaseActivity {
     protected boolean initData() {
         DbHelper dbHelper = new DbHelper(TransferActivity.this);
 
-        AccountController accountController = new AccountController(dbHelper);
-        transferController = new TransferController(dbHelper, accountController);
+        IRepo<Account> accountRepo = new AccountRepo(dbHelper);
+        AccountController accountController = new AccountController(accountRepo);
+        transferRepo = new TransferRepo(dbHelper, accountController);
 
-        accountList = accountController.getAccounts();
+        accountList = accountRepo.readAll();
 
         return super.initData();
     }
@@ -114,6 +117,6 @@ public class TransferActivity extends BaseActivity {
 
         Transfer transfer = new Transfer(System.currentTimeMillis(), fromAccount.getId(),
                 toAccount.getId(), fromAmount, toAmount);
-        transferController.create(transfer);
+        transferRepo.create(transfer);
     }
 }
