@@ -11,7 +11,7 @@
 
         <item name="colorPrimary">@color/green_light</item>
         <item name="colorPrimaryDark">@color/green_dark</item>
-        <item name="colorAccent">@color/white</item>
+        <item name="colorAccent">@color/green_light</item>
     </style>
 
     <style name="Theme.NoTitle" parent="@style/Theme.AppCompat.Light.NoActionBar">
