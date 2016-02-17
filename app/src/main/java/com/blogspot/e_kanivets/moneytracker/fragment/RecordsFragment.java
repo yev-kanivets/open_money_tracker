@@ -22,8 +22,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.activity.AddExpenseActivity;
-import com.blogspot.e_kanivets.moneytracker.activity.AddIncomeActivity;
+import com.blogspot.e_kanivets.moneytracker.activity.AddRecordActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.NavDrawerActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.ReportActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.RecordAdapter;
@@ -132,8 +131,8 @@ public class RecordsFragment extends Fragment {
             case R.id.edit:
                 Record record = recordList.get(info.position);
                 if (record.isIncome())
-                    startAddIncomeActivity(record, AddIncomeActivity.Mode.MODE_EDIT);
-                else startAddExpenseActivity(record, AddExpenseActivity.Mode.MODE_EDIT);
+                    startAddIncomeActivity(record, AddRecordActivity.Mode.MODE_EDIT);
+                else startAddExpenseActivity(record, AddRecordActivity.Mode.MODE_EDIT);
                 return true;
             case R.id.delete:
                 recordRepo.delete(recordList.get(info.position));
@@ -146,12 +145,12 @@ public class RecordsFragment extends Fragment {
 
     @OnClick(R.id.btn_add_expense)
     public void addExpense() {
-        startAddExpenseActivity(null, AddExpenseActivity.Mode.MODE_ADD);
+        startAddExpenseActivity(null, AddRecordActivity.Mode.MODE_ADD);
     }
 
     @OnClick(R.id.btn_add_income)
     public void addIncome() {
-        startAddIncomeActivity(null, AddIncomeActivity.Mode.MODE_ADD);
+        startAddIncomeActivity(null, AddRecordActivity.Mode.MODE_ADD);
     }
 
     @OnClick(R.id.btn_report)
@@ -310,17 +309,19 @@ public class RecordsFragment extends Fragment {
         dialog.show();
     }
 
-    private void startAddIncomeActivity(Record record, AddIncomeActivity.Mode mode) {
-        Intent intent = new Intent(getActivity(), AddIncomeActivity.class);
-        intent.putExtra(AddExpenseActivity.KEY_RECORD, record);
-        intent.putExtra(AddExpenseActivity.KEY_MODE, mode);
+    private void startAddIncomeActivity(Record record, AddRecordActivity.Mode mode) {
+        Intent intent = new Intent(getActivity(), AddRecordActivity.class);
+        intent.putExtra(AddRecordActivity.KEY_RECORD, record);
+        intent.putExtra(AddRecordActivity.KEY_MODE, mode);
+        intent.putExtra(AddRecordActivity.KEY_TYPE, Record.TYPE_INCOME);
         startActivityForResult(intent, REQUEST_ACTION_RECORD);
     }
 
-    private void startAddExpenseActivity(Record record, AddExpenseActivity.Mode mode) {
-        Intent intent = new Intent(getActivity(), AddExpenseActivity.class);
-        intent.putExtra(AddExpenseActivity.KEY_RECORD, record);
-        intent.putExtra(AddExpenseActivity.KEY_MODE, mode);
+    private void startAddExpenseActivity(Record record, AddRecordActivity.Mode mode) {
+        Intent intent = new Intent(getActivity(), AddRecordActivity.class);
+        intent.putExtra(AddRecordActivity.KEY_RECORD, record);
+        intent.putExtra(AddRecordActivity.KEY_MODE, mode);
+        intent.putExtra(AddRecordActivity.KEY_TYPE, Record.TYPE_EXPENSE);
         startActivityForResult(intent, REQUEST_ACTION_RECORD);
     }
 }

@@ -1,4 +1,4 @@
-package com.blogspot.e_kanivets.moneytracker.activity.base;
+package com.blogspot.e_kanivets.moneytracker.activity;
 
 import android.annotation.SuppressLint;
 import android.view.Menu;
@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.blogspot.e_kanivets.moneytracker.R;
+import com.blogspot.e_kanivets.moneytracker.activity.base.BaseActivity;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.CategoryController;
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
@@ -19,26 +20,27 @@ import com.blogspot.e_kanivets.moneytracker.repo.IRepo;
 import com.blogspot.e_kanivets.moneytracker.repo.RecordRepo;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
 
 /**
- * Base implementation of {@link android.support.v7.app.AppCompatActivity} to describe some common
- * methods which connected with income's/expense's handling.
  * Created on 1/26/16.
  *
  * @author Evgenii Kanivets
  */
-public abstract class AddRecordBaseActivity extends BaseActivity {
+public class AddRecordActivity extends BaseActivity {
     @SuppressWarnings("unused")
-    private static final String TAG = "AddRecordBaseActivity";
+    private static final String TAG = "AddRecordActivity";
 
     public static final String KEY_RECORD = "key_record";
     public static final String KEY_MODE = "key_mode";
+    public static final String KEY_TYPE = "key_type";
 
     protected Record record;
     protected Mode mode;
+    protected int type;
 
     protected List<Account> accountList;
 
@@ -63,7 +65,7 @@ public abstract class AddRecordBaseActivity extends BaseActivity {
     protected boolean initData() {
         super.initData();
 
-        DbHelper dbHelper = new DbHelper(AddRecordBaseActivity.this);
+        DbHelper dbHelper = new DbHelper(AddRecordActivity.this);
 
         accountRepo = new AccountRepo(dbHelper);
         recordRepo = new RecordRepo(dbHelper, new AccountController(accountRepo),
@@ -71,9 +73,10 @@ public abstract class AddRecordBaseActivity extends BaseActivity {
 
         record = (Record) getIntent().getSerializableExtra(KEY_RECORD);
         mode = (Mode) getIntent().getSerializableExtra(KEY_MODE);
+        type = getIntent().getIntExtra(KEY_TYPE, -1);
         accountList = accountRepo.readAll();
 
-        return mode != null && (!mode.equals(Mode.MODE_EDIT) || record != null);
+        return mode != null && type != -1 && (!mode.equals(Mode.MODE_EDIT) || record != null);
     }
 
     @SuppressLint("SetTextI18n")
@@ -86,7 +89,7 @@ public abstract class AddRecordBaseActivity extends BaseActivity {
             accounts.add(account.getTitle());
         }
 
-        spinnerAccount.setAdapter(new ArrayAdapter<>(AddRecordBaseActivity.this,
+        spinnerAccount.setAdapter(new ArrayAdapter<>(AddRecordActivity.this,
                 android.R.layout.simple_list_item_1, accounts));
 
         //Add texts to dialog if it's edit dialog
@@ -100,6 +103,21 @@ public abstract class AddRecordBaseActivity extends BaseActivity {
                 if (account.getId() == record.getAccountId()) {
                     spinnerAccount.setSelection(i);
                 }
+            }
+        }
+
+        if (getSupportActionBar() != null) {
+            switch (type) {
+                case Record.TYPE_EXPENSE:
+                    getSupportActionBar().setTitle(R.string.title_add_expense);
+                    break;
+
+                case Record.TYPE_INCOME:
+                    getSupportActionBar().setTitle(R.string.title_add_income);
+                    break;
+
+                default:
+                    break;
             }
         }
     }
@@ -129,8 +147,6 @@ public abstract class AddRecordBaseActivity extends BaseActivity {
         }
     }
 
-    protected abstract boolean doRecord(String title, String category, int price, Account account);
-
     private boolean prepareRecord() {
         String title = etTitle.getText().toString().trim();
         String category = etCategory.getText().toString().trim();
@@ -148,6 +164,35 @@ public abstract class AddRecordBaseActivity extends BaseActivity {
             Account account = accountList.get(spinnerAccount.getSelectedItemPosition());
             return doRecord(title, category, price, account);
         } else return false;
+    }
+
+    protected boolean doRecord(String title, String category, int price, Account account) {
+        if (mode == Mode.MODE_ADD) {
+            switch (type) {
+                case Record.TYPE_EXPENSE:
+                    recordRepo.create(new Record(new Date().getTime(),
+                            Record.TYPE_EXPENSE, title, category, price, account.getId()));
+                    return true;
+
+                case Record.TYPE_INCOME:
+                    recordRepo.create(new Record(new Date().getTime(),
+                            Record.TYPE_INCOME, title, category, price, account.getId()));
+                    return true;
+
+                default:
+                    return false;
+            }
+        } else if (mode == Mode.MODE_EDIT) {
+            record.setTitle(title);
+            record.setCategory(category);
+            record.setPrice(price);
+            record.setAccountId(account.getId());
+            recordRepo.update(record);
+
+            return true;
+        }
+
+        return false;
     }
 
     public enum Mode {MODE_ADD, MODE_EDIT}

@@ -30,13 +30,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.AddExpenseActivity"
-            android:label="@string/title_add_expense"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.Default" />
-        <activity
-            android:name=".activity.AddIncomeActivity"
-            android:label="@string/title_add_income"
+            android:name=".activity.AddRecordActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Default" />
         <activity
