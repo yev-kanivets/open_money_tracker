@@ -1,6 +1,7 @@
 package com.blogspot.e_kanivets.moneytracker.activity;
 
 import android.annotation.SuppressLint;
+import android.graphics.drawable.ColorDrawable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -110,10 +111,14 @@ public class AddRecordActivity extends BaseActivity {
             switch (type) {
                 case Record.TYPE_EXPENSE:
                     getSupportActionBar().setTitle(R.string.title_add_expense);
+                    getSupportActionBar().setBackgroundDrawable(
+                            new ColorDrawable(getResources().getColor(R.color.red_light)));
                     break;
 
                 case Record.TYPE_INCOME:
                     getSupportActionBar().setTitle(R.string.title_add_income);
+                    getSupportActionBar().setBackgroundDrawable(
+                            new ColorDrawable(getResources().getColor(R.color.green_light)));
                     break;
 
                 default:
