@@ -25,7 +25,6 @@ public class NavDrawerActivity extends BaseActivity
     DrawerLayout drawerLayout;
 
     /**
-     * Trigger Travis CI.
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
