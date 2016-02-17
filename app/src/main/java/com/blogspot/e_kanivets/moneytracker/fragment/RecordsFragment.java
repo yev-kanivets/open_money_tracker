@@ -95,7 +95,7 @@ public class RecordsFragment extends Fragment {
         AccountController accountController = new AccountController(new AccountRepo(dbHelper));
         IRepo<Record> recordRepo = new RecordRepo(dbHelper);
 
-        recordController = new RecordController(recordRepo, categoryRepo, categoryController, accountController);
+        recordController = new RecordController(recordRepo, categoryController, accountController);
     }
 
     @Override

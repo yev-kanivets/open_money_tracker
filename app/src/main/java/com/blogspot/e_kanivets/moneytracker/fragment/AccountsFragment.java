@@ -24,6 +24,7 @@ import com.blogspot.e_kanivets.moneytracker.activity.NavDrawerActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.TransferActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.AccountAdapter;
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
+import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.model.Account;
 import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
 import com.blogspot.e_kanivets.moneytracker.repo.IRepo;
@@ -41,7 +42,7 @@ public class AccountsFragment extends Fragment {
     @Bind(R.id.list_view)
     ListView listView;
 
-    private IRepo<Account> accountRepo;
+    private AccountController accountController;
 
     public static AccountsFragment newInstance() {
         AccountsFragment fragment = new AccountsFragment();
@@ -59,7 +60,7 @@ public class AccountsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
-        accountRepo = new AccountRepo(new DbHelper(getActivity()));
+        accountController = new AccountController(new AccountRepo(new DbHelper(getActivity())));
     }
 
     @Override
@@ -118,7 +119,7 @@ public class AccountsFragment extends Fragment {
 
         switch (item.getItemId()) {
             case R.id.delete:
-                accountRepo.delete(accountRepo.readAll().get(info.position));
+                accountController.delete(accountController.readAll().get(info.position));
                 update();
                 return true;
             default:
@@ -147,7 +148,7 @@ public class AccountsFragment extends Fragment {
     }
 
     private void update() {
-        listView.setAdapter(new AccountAdapter(getActivity(), accountRepo.readAll()));
+        listView.setAdapter(new AccountAdapter(getActivity(), accountController.readAll()));
         ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
     }
 
@@ -155,7 +156,7 @@ public class AccountsFragment extends Fragment {
         if (rootView != null) {
             ButterKnife.bind(this, rootView);
 
-            listView.setAdapter(new AccountAdapter(getActivity(), accountRepo.readAll()));
+            listView.setAdapter(new AccountAdapter(getActivity(), accountController.readAll()));
             ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
             registerForContextMenu(listView);
 

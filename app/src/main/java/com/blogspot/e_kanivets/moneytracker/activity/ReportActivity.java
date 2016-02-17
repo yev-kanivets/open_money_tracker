@@ -62,8 +62,8 @@ public class ReportActivity extends BaseActivity {
         CategoryController categoryController = new CategoryController(categoryRepo);
         AccountController accountController = new AccountController(new AccountRepo(dbHelper));
 
-        recordController = new RecordController(new RecordRepo(dbHelper), categoryRepo,
-                categoryController, accountController);
+        recordController = new RecordController(new RecordRepo(dbHelper), categoryController,
+                accountController);
 
         period = getIntent().getParcelableExtra(KEY_PERIOD);
         report = new Report(recordController.getRecordsForPeriod(period));

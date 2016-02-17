@@ -14,7 +14,6 @@ import com.blogspot.e_kanivets.moneytracker.controller.TransferController;
 import com.blogspot.e_kanivets.moneytracker.model.Account;
 import com.blogspot.e_kanivets.moneytracker.model.Transfer;
 import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
-import com.blogspot.e_kanivets.moneytracker.repo.IRepo;
 import com.blogspot.e_kanivets.moneytracker.repo.TransferRepo;
 
 import java.util.ArrayList;
@@ -48,11 +47,10 @@ public class TransferActivity extends BaseActivity {
     protected boolean initData() {
         DbHelper dbHelper = new DbHelper(TransferActivity.this);
 
-        IRepo<Account> accountRepo = new AccountRepo(dbHelper);
-        AccountController accountController = new AccountController(accountRepo);
+        AccountController accountController = new AccountController(new AccountRepo(dbHelper));
         transferController = new TransferController(new TransferRepo(dbHelper), accountController);
 
-        accountList = accountRepo.readAll();
+        accountList = accountController.readAll();
 
         return super.initData();
     }

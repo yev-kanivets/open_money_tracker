@@ -18,7 +18,6 @@ import com.blogspot.e_kanivets.moneytracker.model.Account;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
 import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
 import com.blogspot.e_kanivets.moneytracker.repo.CategoryRepo;
-import com.blogspot.e_kanivets.moneytracker.repo.IRepo;
 import com.blogspot.e_kanivets.moneytracker.repo.RecordRepo;
 
 import java.util.ArrayList;
@@ -46,7 +45,7 @@ public class AddRecordActivity extends BaseActivity {
 
     protected List<Account> accountList;
 
-    protected IRepo<Account> accountRepo;
+    protected AccountController accountController;
     protected RecordController recordController;
 
     @Bind(R.id.et_title)
@@ -69,14 +68,15 @@ public class AddRecordActivity extends BaseActivity {
 
         DbHelper dbHelper = new DbHelper(AddRecordActivity.this);
 
-        accountRepo = new AccountRepo(dbHelper);
-        recordController = new RecordController(new RecordRepo(dbHelper), new CategoryRepo(dbHelper),
+        AccountRepo accountRepo = new AccountRepo(dbHelper);
+        accountController = new AccountController(accountRepo);
+        recordController = new RecordController(new RecordRepo(dbHelper),
                 new CategoryController(new CategoryRepo(dbHelper)), new AccountController(accountRepo));
 
         record = (Record) getIntent().getSerializableExtra(KEY_RECORD);
         mode = (Mode) getIntent().getSerializableExtra(KEY_MODE);
         type = getIntent().getIntExtra(KEY_TYPE, -1);
-        accountList = accountRepo.readAll();
+        accountList = accountController.readAll();
 
         return mode != null && type != -1 && (!mode.equals(Mode.MODE_EDIT) || record != null);
     }

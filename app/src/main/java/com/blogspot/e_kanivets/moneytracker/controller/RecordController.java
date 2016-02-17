@@ -16,14 +16,12 @@ import java.util.List;
  * @author Evgenii Kanivets
  */
 public class RecordController extends BaseController<Record> {
-    private final IRepo<Category> categoryRepo;
     private final CategoryController categoryController;
     private final AccountController accountController;
 
-    public RecordController(IRepo<Record> recordRepo, IRepo<Category> categoryRepo,
-                            CategoryController categoryController, AccountController accountController) {
+    public RecordController(IRepo<Record> recordRepo, CategoryController categoryController,
+                            AccountController accountController) {
         super(recordRepo);
-        this.categoryRepo = categoryRepo;
         this.categoryController = categoryController;
         this.accountController = accountController;
     }
@@ -96,7 +94,7 @@ public class RecordController extends BaseController<Record> {
             sb.append(record.getId()).append(DELIMITER);
             sb.append(record.getTime()).append(DELIMITER);
             sb.append(record.getTitle()).append(DELIMITER);
-            Category category = categoryRepo.read(record.getCategoryId());
+            Category category = categoryController.read(record.getCategoryId());
             sb.append(category == null ? "NONE" : category.getName()).append(DELIMITER);
             sb.append(record.getType() == 0 ? record.getPrice() : -record.getPrice());
 
