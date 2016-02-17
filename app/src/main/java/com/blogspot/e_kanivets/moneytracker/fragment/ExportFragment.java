@@ -79,9 +79,9 @@ public class ExportFragment extends Fragment {
         IRepo<Category> categoryRepo = new CategoryRepo(dbHelper);
         CategoryController categoryController = new CategoryController(categoryRepo);
         AccountController accountController = new AccountController(new AccountRepo(dbHelper));
-        IRepo<Record> recordRepo = new RecordRepo(dbHelper, accountController, categoryController);
+        IRepo<Record> recordRepo = new RecordRepo(dbHelper);
 
-        RecordController recordController = new RecordController(recordRepo, categoryRepo);
+        RecordController recordController = new RecordController(recordRepo, categoryRepo, categoryController, accountController);
 
         List<String> records = recordController.getRecordsForExport(0, Long.MAX_VALUE);
 

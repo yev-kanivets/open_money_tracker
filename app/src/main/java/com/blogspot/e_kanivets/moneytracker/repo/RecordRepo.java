@@ -24,15 +24,8 @@ public class RecordRepo extends BaseRepo<Record> {
     @SuppressWarnings("unused")
     private static final String TAG = "RecordRepo";
 
-    private final DbHelper dbHelper;
-    private final AccountController accountController;
-    private final CategoryController categoryController;
-
-    public RecordRepo(DbHelper dbHelper, AccountController accountController, CategoryController categoryController) {
+    public RecordRepo(DbHelper dbHelper) {
         super(dbHelper);
-        this.dbHelper = dbHelper;
-        this.accountController = accountController;
-        this.categoryController = categoryController;
     }
 
     @Override
@@ -43,8 +36,6 @@ public class RecordRepo extends BaseRepo<Record> {
     @Nullable
     @Override
     public Record create(Record record) {
-        record.setCategoryId(categoryController.readOrCreate(record.getCategory()).getId());
-
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
@@ -64,9 +55,7 @@ public class RecordRepo extends BaseRepo<Record> {
             return null;
         } else {
             Record createdRecord = read(id);
-            accountController.recordAdded(createdRecord);
             Log.d(TAG, "Created record : " + createdRecord);
-
             return createdRecord;
         }
     }
@@ -74,15 +63,11 @@ public class RecordRepo extends BaseRepo<Record> {
     @Nullable
     @Override
     public Record update(Record record) {
-        Record oldRecord = read(record.getId());
-
-        long categoryId = categoryController.readOrCreate(record.getCategory()).getId();
-
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(DbHelper.TITLE_COLUMN, record.getTitle());
-        contentValues.put(DbHelper.CATEGORY_ID_COLUMN, categoryId);
+        contentValues.put(DbHelper.CATEGORY_ID_COLUMN, record.getCategoryId());
         contentValues.put(DbHelper.PRICE_COLUMN, record.getPrice());
         contentValues.put(DbHelper.ACCOUNT_ID_COLUMN, record.getAccountId());
 
@@ -96,19 +81,9 @@ public class RecordRepo extends BaseRepo<Record> {
             return null;
         } else {
             Record updatedRecord = read(record.getId());
-            accountController.recordUpdated(oldRecord, updatedRecord);
-
             Log.d(TAG, "Updated record : " + updatedRecord);
             return updatedRecord;
         }
-    }
-
-    @Override
-    public boolean delete(Record record) {
-        boolean result = super.delete(record);
-        accountController.recordDeleted(record);
-
-        return result;
     }
 
     @Override

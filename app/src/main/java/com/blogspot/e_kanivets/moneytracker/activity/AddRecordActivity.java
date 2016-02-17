@@ -13,6 +13,7 @@ import com.blogspot.e_kanivets.moneytracker.activity.base.BaseActivity;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.CategoryController;
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
+import com.blogspot.e_kanivets.moneytracker.controller.RecordController;
 import com.blogspot.e_kanivets.moneytracker.model.Account;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
 import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
@@ -46,7 +47,7 @@ public class AddRecordActivity extends BaseActivity {
     protected List<Account> accountList;
 
     protected IRepo<Account> accountRepo;
-    protected IRepo<Record> recordRepo;
+    protected RecordController recordController;
 
     @Bind(R.id.et_title)
     EditText etTitle;
@@ -69,8 +70,8 @@ public class AddRecordActivity extends BaseActivity {
         DbHelper dbHelper = new DbHelper(AddRecordActivity.this);
 
         accountRepo = new AccountRepo(dbHelper);
-        recordRepo = new RecordRepo(dbHelper, new AccountController(accountRepo),
-                new CategoryController(new CategoryRepo(dbHelper)));
+        recordController = new RecordController(new RecordRepo(dbHelper), new CategoryRepo(dbHelper),
+                new CategoryController(new CategoryRepo(dbHelper)), new AccountController(accountRepo));
 
         record = (Record) getIntent().getSerializableExtra(KEY_RECORD);
         mode = (Mode) getIntent().getSerializableExtra(KEY_MODE);
@@ -175,12 +176,12 @@ public class AddRecordActivity extends BaseActivity {
         if (mode == Mode.MODE_ADD) {
             switch (type) {
                 case Record.TYPE_EXPENSE:
-                    recordRepo.create(new Record(new Date().getTime(),
+                    recordController.create(new Record(new Date().getTime(),
                             Record.TYPE_EXPENSE, title, category, price, account.getId()));
                     return true;
 
                 case Record.TYPE_INCOME:
-                    recordRepo.create(new Record(new Date().getTime(),
+                    recordController.create(new Record(new Date().getTime(),
                             Record.TYPE_INCOME, title, category, price, account.getId()));
                     return true;
 
@@ -192,7 +193,7 @@ public class AddRecordActivity extends BaseActivity {
             record.setCategory(category);
             record.setPrice(price);
             record.setAccountId(account.getId());
-            recordRepo.update(record);
+            recordController.update(record);
 
             return true;
         }

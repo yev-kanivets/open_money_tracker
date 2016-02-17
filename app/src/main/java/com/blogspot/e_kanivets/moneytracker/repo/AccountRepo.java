@@ -22,11 +22,8 @@ public class AccountRepo extends BaseRepo<Account> {
     @SuppressWarnings("unused")
     private static final String TAG = "AccountRepo";
 
-    private DbHelper dbHelper;
-
     public AccountRepo(DbHelper dbHelper) {
         super(dbHelper);
-        this.dbHelper = dbHelper;
     }
 
     @Override

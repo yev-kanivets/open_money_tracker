@@ -18,10 +18,41 @@ import java.util.List;
 public class RecordController {
     private final IRepo<Category> categoryRepo;
     private final IRepo<Record> recordRepo;
+    private final CategoryController categoryController;
+    private final AccountController accountController;
 
-    public RecordController(IRepo<Record> recordRepo, IRepo<Category> categoryRepo) {
+    public RecordController(IRepo<Record> recordRepo, IRepo<Category> categoryRepo,
+                            CategoryController categoryController, AccountController accountController) {
         this.recordRepo = recordRepo;
         this.categoryRepo = categoryRepo;
+        this.categoryController = categoryController;
+        this.accountController = accountController;
+    }
+
+    @SuppressWarnings("SimplifiableIfStatement")
+    public boolean create(Record record) {
+        record.setCategoryId(categoryController.readOrCreate(record.getCategory()).getId());
+
+        Record createdRecord = recordRepo.create(record);
+        if (createdRecord == null) return false;
+        else return accountController.recordAdded(createdRecord);
+    }
+
+    @SuppressWarnings("SimplifiableIfStatement")
+    public boolean update(Record record) {
+        record.setCategoryId(categoryController.readOrCreate(record.getCategory()).getId());
+
+        Record oldRecord = recordRepo.read(record.getId());
+
+        Record updatedRecord = recordRepo.update(record);
+        if (updatedRecord == null) return false;
+        else return accountController.recordUpdated(oldRecord, updatedRecord);
+    }
+
+    @SuppressWarnings("SimplifiableIfStatement")
+    public boolean delete(Record record) {
+        if (recordRepo.delete(record)) return accountController.recordDeleted(record);
+        else return false;
     }
 
     public List<Record> getRecordsForPeriod(Period period) {

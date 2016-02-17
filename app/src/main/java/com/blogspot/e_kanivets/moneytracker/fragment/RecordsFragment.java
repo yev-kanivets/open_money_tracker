@@ -60,9 +60,8 @@ public class RecordsFragment extends Fragment {
 
     private static final int REQUEST_ACTION_RECORD = 1;
 
-    List<Record> recordList;
+    private List<Record> recordList;
 
-    private IRepo<Record> recordRepo;
     private RecordController recordController;
     private PeriodController periodController;
 
@@ -94,9 +93,9 @@ public class RecordsFragment extends Fragment {
         IRepo<Category> categoryRepo = new CategoryRepo(dbHelper);
         CategoryController categoryController = new CategoryController(categoryRepo);
         AccountController accountController = new AccountController(new AccountRepo(dbHelper));
-        recordRepo = new RecordRepo(dbHelper, accountController, categoryController);
+        IRepo<Record> recordRepo = new RecordRepo(dbHelper);
 
-        recordController = new RecordController(recordRepo, categoryRepo);
+        recordController = new RecordController(recordRepo, categoryRepo, categoryController, accountController);
     }
 
     @Override
@@ -135,7 +134,7 @@ public class RecordsFragment extends Fragment {
                 else startAddExpenseActivity(record, AddRecordActivity.Mode.MODE_EDIT);
                 return true;
             case R.id.delete:
-                recordRepo.delete(recordList.get(info.position));
+                recordController.delete(recordList.get(info.position));
                 update();
                 return true;
             default:

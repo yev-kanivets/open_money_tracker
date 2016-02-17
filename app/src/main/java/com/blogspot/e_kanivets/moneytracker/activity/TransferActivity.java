@@ -10,6 +10,7 @@ import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseActivity;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
+import com.blogspot.e_kanivets.moneytracker.controller.TransferController;
 import com.blogspot.e_kanivets.moneytracker.model.Account;
 import com.blogspot.e_kanivets.moneytracker.model.Transfer;
 import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
@@ -25,7 +26,7 @@ public class TransferActivity extends BaseActivity {
     @SuppressWarnings("unused")
     private static final String TAG = "TransferActivity";
 
-    private IRepo<Transfer> transferRepo;
+    private TransferController transferController;
 
     private List<Account> accountList;
 
@@ -49,7 +50,7 @@ public class TransferActivity extends BaseActivity {
 
         IRepo<Account> accountRepo = new AccountRepo(dbHelper);
         AccountController accountController = new AccountController(accountRepo);
-        transferRepo = new TransferRepo(dbHelper, accountController);
+        transferController = new TransferController(new TransferRepo(dbHelper), accountController);
 
         accountList = accountRepo.readAll();
 
@@ -117,6 +118,6 @@ public class TransferActivity extends BaseActivity {
 
         Transfer transfer = new Transfer(System.currentTimeMillis(), fromAccount.getId(),
                 toAccount.getId(), fromAmount, toAmount);
-        transferRepo.create(transfer);
+        transferController.create(transfer);
     }
 }

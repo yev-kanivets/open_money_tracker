@@ -24,13 +24,8 @@ public class TransferRepo extends BaseRepo<Transfer> {
     @SuppressWarnings("unused")
     private static final String TAG = "TransferRepo";
 
-    private DbHelper dbHelper;
-    private AccountController accountController;
-
-    public TransferRepo(DbHelper dbHelper, AccountController accountController) {
+    public TransferRepo(DbHelper dbHelper) {
         super(dbHelper);
-        this.dbHelper = dbHelper;
-        this.accountController = accountController;
     }
 
     @Override
@@ -61,9 +56,7 @@ public class TransferRepo extends BaseRepo<Transfer> {
             return null;
         } else {
             Transfer createdTransfer = read(id);
-            accountController.transferDone(transfer);
             Log.d(TAG, "Created transfer : " + createdTransfer);
-
             return createdTransfer;
         }
     }

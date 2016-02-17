@@ -22,11 +22,8 @@ public class CategoryRepo extends BaseRepo<Category> {
     @SuppressWarnings("unused")
     private static final String TAG = "CategoryRepo";
 
-    private DbHelper dbHelper;
-
     public CategoryRepo(DbHelper dbHelper) {
         super(dbHelper);
-        this.dbHelper = dbHelper;
     }
 
     @Override
