@@ -15,52 +15,60 @@ import java.util.List;
  *
  * @author Evgenii Kanivets
  */
-public class RecordController {
+public class RecordController extends BaseController<Record> {
     private final IRepo<Category> categoryRepo;
-    private final IRepo<Record> recordRepo;
     private final CategoryController categoryController;
     private final AccountController accountController;
 
     public RecordController(IRepo<Record> recordRepo, IRepo<Category> categoryRepo,
                             CategoryController categoryController, AccountController accountController) {
-        this.recordRepo = recordRepo;
+        super(recordRepo);
         this.categoryRepo = categoryRepo;
         this.categoryController = categoryController;
         this.accountController = accountController;
     }
 
+    @Override
     @SuppressWarnings("SimplifiableIfStatement")
-    public boolean create(Record record) {
+    public Record create(Record record) {
         record.setCategoryId(categoryController.readOrCreate(record.getCategory()).getId());
 
-        Record createdRecord = recordRepo.create(record);
-        if (createdRecord == null) return false;
-        else return accountController.recordAdded(createdRecord);
+        Record createdRecord = repo.create(record);
+        if (createdRecord == null) return null;
+        else {
+            accountController.recordAdded(createdRecord);
+            return createdRecord;
+        }
     }
 
+    @Override
     @SuppressWarnings("SimplifiableIfStatement")
-    public boolean update(Record record) {
+    public Record update(Record record) {
         record.setCategoryId(categoryController.readOrCreate(record.getCategory()).getId());
 
-        Record oldRecord = recordRepo.read(record.getId());
+        Record oldRecord = repo.read(record.getId());
 
-        Record updatedRecord = recordRepo.update(record);
-        if (updatedRecord == null) return false;
-        else return accountController.recordUpdated(oldRecord, updatedRecord);
+        Record updatedRecord = repo.update(record);
+        if (updatedRecord == null) return null;
+        else {
+            accountController.recordUpdated(oldRecord, updatedRecord);
+            return updatedRecord;
+        }
     }
 
+    @Override
     @SuppressWarnings("SimplifiableIfStatement")
     public boolean delete(Record record) {
-        if (recordRepo.delete(record)) return accountController.recordDeleted(record);
+        if (repo.delete(record)) return accountController.recordDeleted(record);
         else return false;
     }
 
     public List<Record> getRecordsForPeriod(Period period) {
-        String condition = DbHelper.TIME_COLUMN  + " BETWEEN ? AND ?";
+        String condition = DbHelper.TIME_COLUMN + " BETWEEN ? AND ?";
         String[] args = new String[]{Long.toString(period.getFirst().getTime()),
                 Long.toString(period.getLast().getTime())};
 
-        return recordRepo.readWithCondition(condition, args);
+        return repo.readWithCondition(condition, args);
     }
 
     public List<String> getRecordsForExport(long fromDate, long toDate) {
@@ -78,10 +86,10 @@ public class RecordController {
 
         result.add(sb.toString());
 
-        String condition = DbHelper.TIME_COLUMN  + " BETWEEN ? AND ?";
+        String condition = DbHelper.TIME_COLUMN + " BETWEEN ? AND ?";
         String[] args = new String[]{Long.toString(fromDate), Long.toString(toDate)};
 
-        List<Record> recordList = recordRepo.readWithCondition(condition, args);
+        List<Record> recordList = repo.readWithCondition(condition, args);
 
         for (Record record : recordList) {
             sb = new StringBuilder();

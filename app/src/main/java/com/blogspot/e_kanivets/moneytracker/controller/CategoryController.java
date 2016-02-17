@@ -12,22 +12,20 @@ import java.util.List;
  *
  * @author Evgenii Kanivets
  */
-public class CategoryController {
+public class CategoryController extends BaseController<Category> {
     @SuppressWarnings("unused")
     private static final String TAG = "CategoryController";
 
-    private IRepo<Category> categoryRepo;
-
     public CategoryController(IRepo<Category> categoryRepo) {
-        this.categoryRepo = categoryRepo;
+        super(categoryRepo);
     }
 
     public Category readOrCreate(String categoryName) {
         String condition = DbHelper.NAME_COLUMN + "=?";
         String[] args = {categoryName};
-        List<Category> categoryList = categoryRepo.readWithCondition(condition, args);
+        List<Category> categoryList = repo.readWithCondition(condition, args);
 
         if (categoryList.size() >= 1) return categoryList.get(0);
-        else return categoryRepo.create(new Category(categoryName));
+        else return repo.create(new Category(categoryName));
     }
 }

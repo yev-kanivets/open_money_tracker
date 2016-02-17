@@ -9,21 +9,26 @@ import com.blogspot.e_kanivets.moneytracker.repo.IRepo;
  *
  * @author Evgenii Kanivets
  */
-public class TransferController {
+public class TransferController extends BaseController<Transfer> {
     @SuppressWarnings("unused")
     private static final String TAG = "TransferController";
 
-    private IRepo<Transfer> transferRepo;
     private AccountController accountController;
 
     public TransferController(IRepo<Transfer> transferRepo, AccountController accountController) {
-        this.transferRepo = transferRepo;
+        super(transferRepo);
         this.accountController = accountController;
     }
 
+    @Override
     @SuppressWarnings("SimplifiableIfStatement")
-    public boolean create(Transfer transfer) {
-        if (transferRepo.create(transfer) == null) return false;
-        else return accountController.transferDone(transfer);
+    public Transfer create(Transfer transfer) {
+        Transfer createdTransfer = repo.create(transfer);
+
+        if (createdTransfer == null) return null;
+        else {
+            accountController.transferDone(createdTransfer);
+            return createdTransfer;
+        }
     }
 }

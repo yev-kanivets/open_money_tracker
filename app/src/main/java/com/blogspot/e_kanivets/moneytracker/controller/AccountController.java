@@ -13,20 +13,18 @@ import com.blogspot.e_kanivets.moneytracker.repo.IRepo;
  *
  * @author Evgenii Kanivets
  */
-public class AccountController {
+public class AccountController extends BaseController<Account> {
     @SuppressWarnings("unused")
     private static final String TAG = "AccountController";
 
-    private IRepo<Account> accountRepo;
-
     public AccountController(IRepo<Account> accountRepo) {
-        this.accountRepo = accountRepo;
+        super(accountRepo);
     }
 
     public boolean recordAdded(@Nullable Record record) {
         if (record == null) return false;
 
-        Account account = accountRepo.read(record.getAccountId());
+        Account account = repo.read(record.getAccountId());
         if (account == null) return false;
 
         switch (record.getType()) {
@@ -42,7 +40,7 @@ public class AccountController {
                 break;
         }
 
-        accountRepo.update(account);
+        repo.update(account);
 
         return true;
     }
@@ -50,7 +48,7 @@ public class AccountController {
     public boolean recordDeleted(@Nullable Record record) {
         if (record == null) return false;
 
-        Account account = accountRepo.read(record.getAccountId());
+        Account account = repo.read(record.getAccountId());
         if (account == null) return false;
 
         switch (record.getType()) {
@@ -66,7 +64,7 @@ public class AccountController {
                 break;
         }
 
-        accountRepo.update(account);
+        repo.update(account);
 
         return true;
     }
@@ -81,16 +79,16 @@ public class AccountController {
     public boolean transferDone(@Nullable Transfer transfer) {
         if(transfer == null) return false;
 
-        Account fromAccount = accountRepo.read(transfer.getFromAccountId());
-        Account toAccount = accountRepo.read(transfer.getToAccountId());
+        Account fromAccount = repo.read(transfer.getFromAccountId());
+        Account toAccount = repo.read(transfer.getToAccountId());
 
         if (fromAccount == null || toAccount == null) return false;
 
         fromAccount.take(transfer.getFromAmount());
         toAccount.put(transfer.getToAmount());
 
-        accountRepo.update(fromAccount);
-        accountRepo.update(toAccount);
+        repo.update(fromAccount);
+        repo.update(toAccount);
 
         return true;
     }
