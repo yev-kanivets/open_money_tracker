@@ -103,4 +103,37 @@ public class Record implements IEntity, Serializable {
     public void setAccountId(long accountId) {
         this.accountId = accountId;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Record {");
+        sb.append("id = ").append(id).append(", ");
+        sb.append("title = ").append(title).append(", ");
+
+        sb.append("type = ");
+        switch (type) {
+            case TYPE_EXPENSE:
+                sb.append("expense");
+                break;
+
+            case TYPE_INCOME:
+                sb.append("income");
+                break;
+
+            default:
+                sb.append("unknown");
+                break;
+        }
+        sb.append(", ");
+
+        sb.append("time = ").append(time).append(", ");
+        sb.append("category = ").append(category).append(", ");
+        sb.append("categoryId = ").append(categoryId).append(", ");
+        sb.append("price = ").append(price).append(", ");
+        sb.append("accountId = ").append(accountId);
+        sb.append("}");
+
+        return sb.toString();
+    }
 }
