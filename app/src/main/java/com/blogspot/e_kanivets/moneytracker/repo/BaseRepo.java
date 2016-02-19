@@ -1,5 +1,6 @@
 package com.blogspot.e_kanivets.moneytracker.repo;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
@@ -26,9 +27,31 @@ public abstract class BaseRepo<T extends IEntity> implements IRepo<T> {
         this.dbHelper = dbHelper;
     }
 
-    abstract String getTable();
+    abstract protected String getTable();
 
-    abstract List<T> getListFromCursor(Cursor cursor);
+    @NonNull
+    abstract protected ContentValues contentValues(T instance);
+
+    abstract protected List<T> getListFromCursor(Cursor cursor);
+
+    @Nullable
+    @Override
+    public T create(T instance) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        long id = db.insert(getTable(), null, contentValues(instance));
+
+        db.close();
+
+        if (id == -1) {
+            Log.d(TAG, "Couldn't create record : " + instance);
+            return null;
+        } else {
+            T createdInstance = read(id);
+            Log.d(TAG, "Created record : " + createdInstance);
+            return createdInstance;
+        }
+    }
 
     @Nullable
     @Override
@@ -37,6 +60,26 @@ public abstract class BaseRepo<T extends IEntity> implements IRepo<T> {
 
         if (list.size() == 1) return list.get(0);
         else return null;
+    }
+
+    @Nullable
+    @Override
+    public T update(T instance) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        String[] args = new String[]{Long.valueOf(instance.getId()).toString()};
+        long rowsAffected = db.update(getTable(), contentValues(instance), "id=?", args);
+
+        db.close();
+
+        if (rowsAffected == 0) {
+            Log.d(TAG, "Couldn't update record : " + instance);
+            return null;
+        } else {
+            T updatedInstance = read(instance.getId());
+            Log.d(TAG, "Updated record : " + updatedInstance);
+            return updatedInstance;
+        }
     }
 
     @NonNull
