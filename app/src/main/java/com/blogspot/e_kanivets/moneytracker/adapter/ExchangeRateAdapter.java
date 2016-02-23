@@ -9,7 +9,6 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.model.Account;
 import com.blogspot.e_kanivets.moneytracker.model.ExchangeRate;
 
 import java.util.List;
@@ -55,7 +54,7 @@ public class ExchangeRateAdapter extends BaseAdapter {
         if (convertView == null) {
             LayoutInflater layoutInflater = LayoutInflater.from(context);
 
-            convertView = layoutInflater.inflate(R.layout.view_account, parent, false);
+            convertView = layoutInflater.inflate(R.layout.view_exchange_rate, parent, false);
             viewHolder = new ViewHolder(convertView);
 
             convertView.setTag(viewHolder);
@@ -63,17 +62,20 @@ public class ExchangeRateAdapter extends BaseAdapter {
 
         ExchangeRate rate = getItem(position);
 
-        viewHolder.tvTitle.setText(rate.getFromCurrency());
-        viewHolder.tvCurSum.setText(rate.getToCurrency());
+        viewHolder.tvFromCurrency.setText(rate.getFromCurrency());
+        viewHolder.tvToCurrency.setText(rate.getToCurrency());
+        viewHolder.tvAmount.setText(Double.toString(rate.getAmount()));
 
         return convertView;
     }
 
     public static class ViewHolder {
-        @Bind(R.id.tv_title)
-        TextView tvTitle;
-        @Bind(R.id.tv_cur_sum)
-        TextView tvCurSum;
+        @Bind(R.id.tv_from_currency)
+        TextView tvFromCurrency;
+        @Bind(R.id.tv_to_currency)
+        TextView tvToCurrency;
+        @Bind(R.id.tv_amount)
+        TextView tvAmount;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
