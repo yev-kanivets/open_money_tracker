@@ -2,6 +2,7 @@ package com.blogspot.e_kanivets.moneytracker.model;
 
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.MtApp;
+import com.blogspot.e_kanivets.moneytracker.controller.CategoryController;
 import com.blogspot.e_kanivets.moneytracker.repo.CategoryRepo;
 
 import java.io.Serializable;
@@ -33,7 +34,8 @@ public class Record implements IEntity, Serializable {
         this.accountId = accountId;
 
         // TODO: Refactor this shit.
-        Category categoryActual = new CategoryRepo(new DbHelper(MtApp.get())).read(categoryId);
+        CategoryRepo categoryRepo = new CategoryRepo(new DbHelper(MtApp.get()));
+        Category categoryActual = new CategoryController(categoryRepo).read(categoryId);
         if (categoryActual != null) category = categoryActual.getName();
     }
 
