@@ -18,7 +18,7 @@ import android.widget.ListView;
 
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.activity.AddAccountActivity;
+import com.blogspot.e_kanivets.moneytracker.activity.AddExchangeRateActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.NavDrawerActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.ExchangeRateAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
@@ -74,8 +74,8 @@ public class ExchangeRatesFragment extends Fragment {
     }
 
     @OnClick(R.id.btn_add_exchange_rate)
-    public void addAccount() {
-        Intent intent = new Intent(getActivity(), AddAccountActivity.class);
+    public void addExchangeRate() {
+        Intent intent = new Intent(getActivity(), AddExchangeRateActivity.class);
         startActivityForResult(intent, REQUEST_ADD_EXCHANGE_RATE);
     }
 
@@ -96,6 +96,22 @@ public class ExchangeRatesFragment extends Fragment {
                 return true;
             default:
                 return super.onContextItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == AppCompatActivity.RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_ADD_EXCHANGE_RATE:
+                    update();
+                    break;
+
+                default:
+                    break;
+            }
         }
     }
 
