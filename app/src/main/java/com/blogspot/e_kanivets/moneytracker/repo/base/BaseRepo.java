@@ -1,4 +1,4 @@
-package com.blogspot.e_kanivets.moneytracker.repo;
+package com.blogspot.e_kanivets.moneytracker.repo.base;
 
 import android.content.ContentValues;
 import android.database.Cursor;

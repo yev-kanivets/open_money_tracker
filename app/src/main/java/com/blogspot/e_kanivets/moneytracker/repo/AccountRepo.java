@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.model.Account;
+import com.blogspot.e_kanivets.moneytracker.repo.base.BaseRepo;
+import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +55,7 @@ public class AccountRepo extends BaseRepo<Account> {
 
             do {
                 // Read a account from DB
-                Account account = new Account(cursor.getInt(idColIndex),
+                Account account = new Account(cursor.getLong(idColIndex),
                         cursor.getString(titleColIndex),
                         cursor.getInt(curSumColIndex),
                         cursor.getString(currencyColIndex));

@@ -1,14 +1,14 @@
-package com.blogspot.e_kanivets.moneytracker.controller;
+package com.blogspot.e_kanivets.moneytracker.controller.base;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.blogspot.e_kanivets.moneytracker.repo.IRepo;
+import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo;
 
 import java.util.List;
 
 /**
- * This is just a wrapper for {@link com.blogspot.e_kanivets.moneytracker.repo.IRepo} interface.
+ * This is just a wrapper for {@link IRepo} interface.
  * Don't use Repo classes outside of controllers.
  * Created on 2/17/16.
  *

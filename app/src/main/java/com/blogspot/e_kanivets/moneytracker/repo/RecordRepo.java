@@ -2,15 +2,12 @@ package com.blogspot.e_kanivets.moneytracker.repo;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
-import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
-import com.blogspot.e_kanivets.moneytracker.controller.CategoryController;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
+import com.blogspot.e_kanivets.moneytracker.repo.base.BaseRepo;
+import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +59,7 @@ public class RecordRepo extends BaseRepo<Record> {
             int accountIdColIndex = cursor.getColumnIndex(DbHelper.ACCOUNT_ID_COLUMN);
 
             do {
-                Record record = new Record(cursor.getInt(idColIndex),
+                Record record = new Record(cursor.getLong(idColIndex),
                         cursor.getLong(timeColIndex),
                         cursor.getInt(typeColIndex),
                         cursor.getString(titleColIndex),

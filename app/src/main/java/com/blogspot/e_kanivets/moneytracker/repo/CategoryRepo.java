@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.model.Category;
+import com.blogspot.e_kanivets.moneytracker.repo.base.BaseRepo;
+import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +50,7 @@ public class CategoryRepo extends BaseRepo<Category> {
 
             do {
                 //Read a record from DB
-                Category category = new Category(cursor.getInt(idColIndex),
+                Category category = new Category(cursor.getLong(idColIndex),
                         cursor.getString(nameColIndex));
 
                 //Add record to list

@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.model.Transfer;
+import com.blogspot.e_kanivets.moneytracker.repo.base.BaseRepo;
+import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +59,7 @@ public class TransferRepo extends BaseRepo<Transfer> {
 
             do {
                 // Read a account from DB
-                Transfer account = new Transfer(cursor.getInt(idColIndex),
+                Transfer account = new Transfer(cursor.getLong(idColIndex),
                         cursor.getLong(idColTime),
                         cursor.getLong(idColFromAccountId),
                         cursor.getLong(idColToAccountId),

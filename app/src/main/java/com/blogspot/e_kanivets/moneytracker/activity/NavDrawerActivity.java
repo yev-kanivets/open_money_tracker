@@ -9,6 +9,7 @@ import android.view.Menu;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseActivity;
 import com.blogspot.e_kanivets.moneytracker.fragment.AccountsFragment;
+import com.blogspot.e_kanivets.moneytracker.fragment.ExchangeRatesFragment;
 import com.blogspot.e_kanivets.moneytracker.fragment.ExportFragment;
 import com.blogspot.e_kanivets.moneytracker.fragment.NavigationDrawerFragment;
 import com.blogspot.e_kanivets.moneytracker.fragment.RecordsFragment;
@@ -72,6 +73,10 @@ public class NavDrawerActivity extends BaseActivity
                 break;
 
             case 3:
+                fragment = ExchangeRatesFragment.newInstance();
+                break;
+
+            case 4:
                 fragment = ExportFragment.newInstance();
                 break;
 
@@ -97,6 +102,10 @@ public class NavDrawerActivity extends BaseActivity
 
             case RecordsFragment.TAG:
                 mTitle = getString(R.string.title_records);
+                break;
+
+            case ExchangeRatesFragment.TAG:
+                mTitle = getString(R.string.title_exchange_rates);
                 break;
 
             default:
