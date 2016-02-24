@@ -13,6 +13,7 @@ import com.blogspot.e_kanivets.moneytracker.adapter.ExpandableListReportAdapter;
 import com.blogspot.e_kanivets.moneytracker.adapter.ReportItemAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.CategoryController;
+import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
 import com.blogspot.e_kanivets.moneytracker.controller.RecordController;
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.model.Category;
@@ -21,6 +22,7 @@ import com.blogspot.e_kanivets.moneytracker.model.Record;
 import com.blogspot.e_kanivets.moneytracker.model.Report;
 import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
 import com.blogspot.e_kanivets.moneytracker.repo.CategoryRepo;
+import com.blogspot.e_kanivets.moneytracker.repo.ExchangeRateRepo;
 import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo;
 import com.blogspot.e_kanivets.moneytracker.repo.RecordRepo;
 import com.blogspot.e_kanivets.moneytracker.util.Constants;
@@ -62,6 +64,7 @@ public class ReportActivity extends BaseActivity {
         IRepo<Category> categoryRepo = new CategoryRepo(dbHelper);
         CategoryController categoryController = new CategoryController(categoryRepo);
         AccountController accountController = new AccountController(new AccountRepo(dbHelper));
+        ExchangeRateController rateController = new ExchangeRateController(new ExchangeRateRepo(dbHelper));
 
         recordController = new RecordController(new RecordRepo(dbHelper), categoryController,
                 accountController);
@@ -71,7 +74,7 @@ public class ReportActivity extends BaseActivity {
             currency = accountController.readAll().get(0).getCurrency();
 
         period = getIntent().getParcelableExtra(KEY_PERIOD);
-        report = new Report(recordController.getRecordsForPeriod(period), currency);
+        report = new Report(recordController.getRecordsForPeriod(period), currency, rateController);
 
         return period != null;
     }

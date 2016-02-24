@@ -11,6 +11,12 @@
     tools:context="com.blogspot.e_kanivets.moneytracker.activity.AddExchangeRateActivity">
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="1" />
+
+    <TextView
         android:id="@+id/tv_from_currency"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="*" />
+        android:text="=" />
 
     <TextView
         android:id="@+id/tv_amount"
@@ -37,13 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="=" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="1" />
+        android:text="*" />
 
     <TextView
         android:id="@+id/tv_to_currency"
@@ -51,4 +51,5 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center|left" />
+
 </LinearLayout>
