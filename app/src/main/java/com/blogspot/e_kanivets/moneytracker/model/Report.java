@@ -17,12 +17,14 @@ import java.util.List;
 public class Report {
 
     private List<Record> records;
+    private String currency;
     private List<Record> summaryRecordList;
     private List<Pair<String, Integer>> reportList;
     private List<Pair<String, Integer>> summaryReportList;
 
-    public Report(List<Record> records) {
+    public Report(List<Record> records, String currency) {
         this.records = records;
+        this.currency = currency;
         makeReport();
     }
 
@@ -71,7 +73,7 @@ public class Report {
 
             if (summaryRecord == null) {
                 summaryRecord = new Record(-1, -1, -1, record.getTitle(), record.getCategoryId(),
-                        price, record.getAccountId());
+                        price, record.getAccountId(), currency);
             } else {
                 summaryRecord.setPrice(summaryRecord.getPrice() + price);
             }

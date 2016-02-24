@@ -39,6 +39,7 @@ public class ReportActivity extends BaseActivity {
     public static final String KEY_PERIOD = "key_period";
 
     private Report report;
+    private String currency;
 
     @Bind(R.id.list_view)
     ListView listView;
@@ -65,8 +66,12 @@ public class ReportActivity extends BaseActivity {
         recordController = new RecordController(new RecordRepo(dbHelper), categoryController,
                 accountController);
 
+        currency = DbHelper.DEFAULT_ACCOUNT_CURRENCY;
+        if (accountController.readAll().size() > 0)
+            currency = accountController.readAll().get(0).getCurrency();
+
         period = getIntent().getParcelableExtra(KEY_PERIOD);
-        report = new Report(recordController.getRecordsForPeriod(period));
+        report = new Report(recordController.getRecordsForPeriod(period), currency);
 
         return period != null;
     }
@@ -75,8 +80,7 @@ public class ReportActivity extends BaseActivity {
     protected void initViews() {
         super.initViews();
 
-        listView.setAdapter(new ReportItemAdapter(ReportActivity.this,
-                new Report(recordController.getRecordsForPeriod(period)).getReportList()));
+        listView.setAdapter(new ReportItemAdapter(ReportActivity.this, report.getReportList()));
 
         /* Scroll list to bottom only once at start */
         listView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {

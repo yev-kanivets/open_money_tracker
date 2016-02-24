@@ -189,13 +189,14 @@ public class AddRecordActivity extends BaseActivity {
         if (mode == Mode.MODE_ADD) {
             switch (type) {
                 case Record.TYPE_EXPENSE:
-                    recordController.create(new Record(new Date().getTime(),
-                            Record.TYPE_EXPENSE, title, category, price, account.getId()));
+                    recordController.create(new Record(new Date().getTime(), Record.TYPE_EXPENSE,
+                            title, category, price, account.getId(),
+                            account.getCurrency()));
                     return true;
 
                 case Record.TYPE_INCOME:
-                    recordController.create(new Record(new Date().getTime(),
-                            Record.TYPE_INCOME, title, category, price, account.getId()));
+                    recordController.create(new Record(new Date().getTime(), Record.TYPE_INCOME,
+                            title, category, price, account.getId(), account.getCurrency()));
                     return true;
 
                 default:
@@ -206,6 +207,7 @@ public class AddRecordActivity extends BaseActivity {
             record.setCategory(category);
             record.setPrice(price);
             record.setAccountId(account.getId());
+            record.setCurrency(account.getCurrency());
             recordController.update(record);
 
             return true;

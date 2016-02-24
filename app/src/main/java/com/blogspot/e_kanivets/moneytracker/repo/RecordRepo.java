@@ -41,6 +41,7 @@ public class RecordRepo extends BaseRepo<Record> {
         contentValues.put(DbHelper.CATEGORY_ID_COLUMN, record.getCategoryId());
         contentValues.put(DbHelper.PRICE_COLUMN, record.getPrice());
         contentValues.put(DbHelper.ACCOUNT_ID_COLUMN, record.getAccountId());
+        contentValues.put(DbHelper.CURRENCY_COLUMN, record.getCurrency());
 
         return contentValues;
     }
@@ -57,6 +58,7 @@ public class RecordRepo extends BaseRepo<Record> {
             int categoryColIndex = cursor.getColumnIndex(DbHelper.CATEGORY_ID_COLUMN);
             int priceColIndex = cursor.getColumnIndex(DbHelper.PRICE_COLUMN);
             int accountIdColIndex = cursor.getColumnIndex(DbHelper.ACCOUNT_ID_COLUMN);
+            int currencyColIndex = cursor.getColumnIndex(DbHelper.CURRENCY_COLUMN);
 
             do {
                 Record record = new Record(cursor.getLong(idColIndex),
@@ -65,7 +67,8 @@ public class RecordRepo extends BaseRepo<Record> {
                         cursor.getString(titleColIndex),
                         cursor.getInt(categoryColIndex),
                         cursor.getInt(priceColIndex),
-                        cursor.getInt(accountIdColIndex));
+                        cursor.getInt(accountIdColIndex),
+                        cursor.getString(currencyColIndex));
 
                 recordList.add(record);
             } while (cursor.moveToNext());
