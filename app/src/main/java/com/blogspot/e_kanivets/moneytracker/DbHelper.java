@@ -15,7 +15,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     /* DB_VERSION = 1 */
     public static final String DB_NAME = "database";
-    public static final int DB_VERSION = 2;
+    public static final int DB_VERSION = 3;
     public static final String TABLE_RECORDS = "records";
     public static final String TABLE_CATEGORIES = "categories";
 
