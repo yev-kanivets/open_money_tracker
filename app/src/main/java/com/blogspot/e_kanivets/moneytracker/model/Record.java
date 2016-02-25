@@ -1,5 +1,7 @@
 package com.blogspot.e_kanivets.moneytracker.model;
 
+import android.support.annotation.NonNull;
+
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.controller.CategoryController;
@@ -52,6 +54,18 @@ public class Record implements IEntity, Serializable {
         this.price = price;
         this.accountId = accountId;
         this.currency = currency;
+    }
+
+    public Record(@NonNull Record record) {
+        this.id = record.getId();
+        this.time = record.getTime();
+        this.type = record.getType();
+        this.title = record.getTitle();
+        this.categoryId = record.getCategoryId();
+        this.category = record.getCategory();
+        this.price = record.getPrice();
+        this.accountId = record.getAccountId();
+        this.currency = record.getCurrency();
     }
 
     public int getType() {
