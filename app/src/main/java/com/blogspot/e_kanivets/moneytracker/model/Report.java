@@ -5,12 +5,12 @@ import android.util.Pair;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
+import com.blogspot.e_kanivets.moneytracker.report.ExchangeRateProvider;
+import com.blogspot.e_kanivets.moneytracker.report.base.IExchangeRateProvider;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * Created on 11/09/14.
@@ -20,18 +20,17 @@ import java.util.TreeMap;
 public class Report {
     private List<Record> records;
     private String currency;
-    private ExchangeRateController exchangeRateController;
     private List<Record> summaryRecordList;
     private List<Pair<String, Integer>> reportList;
     private List<Pair<String, Integer>> summaryReportList;
-    private Map<String, ExchangeRate> rateMap;
+
+    private IExchangeRateProvider rateProvider;
 
     public Report(List<Record> records, String currency, ExchangeRateController exchangeRateController) {
         this.records = records;
         this.currency = currency;
-        this.exchangeRateController = exchangeRateController;
+        rateProvider = new ExchangeRateProvider(currency, exchangeRateController);
 
-        rateMap = initRateMap();
         makeReport();
     }
 
@@ -63,7 +62,7 @@ public class Report {
 
             int convertedPrice = record.getPrice();
             if (!currency.equals(record.getCurrency())) {
-                ExchangeRate rate = rateMap.get(record.getCurrency());
+                ExchangeRate rate = rateProvider.getRate(record);
                 if (rate != null) convertedPrice *= rate.getAmount();
             }
 
@@ -179,18 +178,5 @@ public class Report {
                 }
             }
         }
-    }
-
-    private Map<String, ExchangeRate> initRateMap() {
-        Map<String, ExchangeRate> rateMap = new TreeMap<>();
-
-        for (ExchangeRate rate : exchangeRateController.readAll()) {
-            if (!currency.equals(rate.getToCurrency())) continue;
-            if (rateMap.containsKey(rate.getFromCurrency())) continue;
-
-            rateMap.put(rate.getFromCurrency(), rate);
-        }
-
-        return rateMap;
     }
 }
