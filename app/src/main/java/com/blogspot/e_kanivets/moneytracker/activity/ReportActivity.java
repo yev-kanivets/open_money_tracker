@@ -13,6 +13,7 @@ import com.blogspot.e_kanivets.moneytracker.adapter.ExpandableListReportAdapter;
 import com.blogspot.e_kanivets.moneytracker.adapter.ReportItemAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.CategoryController;
+import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
 import com.blogspot.e_kanivets.moneytracker.controller.RecordController;
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.model.Category;
@@ -21,7 +22,8 @@ import com.blogspot.e_kanivets.moneytracker.model.Record;
 import com.blogspot.e_kanivets.moneytracker.model.Report;
 import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
 import com.blogspot.e_kanivets.moneytracker.repo.CategoryRepo;
-import com.blogspot.e_kanivets.moneytracker.repo.IRepo;
+import com.blogspot.e_kanivets.moneytracker.repo.ExchangeRateRepo;
+import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo;
 import com.blogspot.e_kanivets.moneytracker.repo.RecordRepo;
 import com.blogspot.e_kanivets.moneytracker.util.Constants;
 
@@ -39,6 +41,7 @@ public class ReportActivity extends BaseActivity {
     public static final String KEY_PERIOD = "key_period";
 
     private Report report;
+    private String currency;
 
     @Bind(R.id.list_view)
     ListView listView;
@@ -61,12 +64,17 @@ public class ReportActivity extends BaseActivity {
         IRepo<Category> categoryRepo = new CategoryRepo(dbHelper);
         CategoryController categoryController = new CategoryController(categoryRepo);
         AccountController accountController = new AccountController(new AccountRepo(dbHelper));
+        ExchangeRateController rateController = new ExchangeRateController(new ExchangeRateRepo(dbHelper));
 
         recordController = new RecordController(new RecordRepo(dbHelper), categoryController,
                 accountController);
 
+        currency = DbHelper.DEFAULT_ACCOUNT_CURRENCY;
+        if (accountController.readAll().size() > 0)
+            currency = accountController.readAll().get(0).getCurrency();
+
         period = getIntent().getParcelableExtra(KEY_PERIOD);
-        report = new Report(recordController.getRecordsForPeriod(period));
+        report = new Report(recordController.getRecordsForPeriod(period), currency, rateController);
 
         return period != null;
     }
@@ -75,8 +83,7 @@ public class ReportActivity extends BaseActivity {
     protected void initViews() {
         super.initViews();
 
-        listView.setAdapter(new ReportItemAdapter(ReportActivity.this,
-                new Report(recordController.getRecordsForPeriod(period)).getReportList()));
+        listView.setAdapter(new ReportItemAdapter(ReportActivity.this, report.getReportList()));
 
         /* Scroll list to bottom only once at start */
         listView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {

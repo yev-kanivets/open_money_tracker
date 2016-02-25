@@ -2,14 +2,12 @@ package com.blogspot.e_kanivets.moneytracker.repo;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
-import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.model.Transfer;
+import com.blogspot.e_kanivets.moneytracker.repo.base.BaseRepo;
+import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,13 +31,9 @@ public class TransferRepo extends BaseRepo<Transfer> {
         return DbHelper.TABLE_TRANSFERS;
     }
 
-    @Nullable
+    @NonNull
     @Override
-    public Transfer create(Transfer transfer) {
-        if (transfer == null) return null;
-
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
+    protected ContentValues contentValues(Transfer transfer) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(DbHelper.TIME_COLUMN, transfer.getTime());
         contentValues.put(DbHelper.FROM_ACCOUNT_ID_COLUMN, transfer.getFromAccountId());
@@ -47,24 +41,7 @@ public class TransferRepo extends BaseRepo<Transfer> {
         contentValues.put(DbHelper.FROM_AMOUNT_COLUMN, transfer.getFromAmount());
         contentValues.put(DbHelper.TO_AMOUNT_COLUMN, transfer.getToAmount());
 
-        long id = db.insert(getTable(), null, contentValues);
-
-        db.close();
-
-        if (id == -1) {
-            Log.d(TAG, "Couldn't create transfer : " + transfer);
-            return null;
-        } else {
-            Transfer createdTransfer = read(id);
-            Log.d(TAG, "Created transfer : " + createdTransfer);
-            return createdTransfer;
-        }
-    }
-
-    @Nullable
-    @Override
-    public Transfer update(Transfer instance) {
-        throw new IllegalStateException("Not implemented yet");
+        return contentValues;
     }
 
     @Override
@@ -82,7 +59,7 @@ public class TransferRepo extends BaseRepo<Transfer> {
 
             do {
                 // Read a account from DB
-                Transfer account = new Transfer(cursor.getInt(idColIndex),
+                Transfer account = new Transfer(cursor.getLong(idColIndex),
                         cursor.getLong(idColTime),
                         cursor.getLong(idColFromAccountId),
                         cursor.getLong(idColToAccountId),

@@ -1,4 +1,4 @@
-package com.blogspot.e_kanivets.moneytracker.repo;
+package com.blogspot.e_kanivets.moneytracker.repo.base;
 
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.NonNull;

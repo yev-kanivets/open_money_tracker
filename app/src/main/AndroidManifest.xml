@@ -39,6 +39,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Default" />
         <activity
+            android:name=".activity.AddExchangeRateActivity"
+            android:label="@string/add_exchange_rate"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Default" />
+        <activity
             android:name=".activity.TransferActivity"
             android:label="@string/transfer"
             android:screenOrientation="portrait"

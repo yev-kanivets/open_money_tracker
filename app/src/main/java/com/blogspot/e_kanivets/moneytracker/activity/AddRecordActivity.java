@@ -2,8 +2,11 @@ package com.blogspot.e_kanivets.moneytracker.activity;
 
 import android.annotation.SuppressLint;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -114,12 +117,22 @@ public class AddRecordActivity extends BaseActivity {
                     getSupportActionBar().setTitle(R.string.title_add_expense);
                     getSupportActionBar().setBackgroundDrawable(
                             new ColorDrawable(getResources().getColor(R.color.red_light)));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        Window window = getWindow();
+                        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                        window.setStatusBarColor(getResources().getColor(R.color.red_dark));
+                    }
                     break;
 
                 case Record.TYPE_INCOME:
                     getSupportActionBar().setTitle(R.string.title_add_income);
                     getSupportActionBar().setBackgroundDrawable(
                             new ColorDrawable(getResources().getColor(R.color.green_light)));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        Window window = getWindow();
+                        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                        window.setStatusBarColor(getResources().getColor(R.color.green_dark));
+                    }
                     break;
 
                 default:
@@ -176,13 +189,14 @@ public class AddRecordActivity extends BaseActivity {
         if (mode == Mode.MODE_ADD) {
             switch (type) {
                 case Record.TYPE_EXPENSE:
-                    recordController.create(new Record(new Date().getTime(),
-                            Record.TYPE_EXPENSE, title, category, price, account.getId()));
+                    recordController.create(new Record(new Date().getTime(), Record.TYPE_EXPENSE,
+                            title, category, price, account.getId(),
+                            account.getCurrency()));
                     return true;
 
                 case Record.TYPE_INCOME:
-                    recordController.create(new Record(new Date().getTime(),
-                            Record.TYPE_INCOME, title, category, price, account.getId()));
+                    recordController.create(new Record(new Date().getTime(), Record.TYPE_INCOME,
+                            title, category, price, account.getId(), account.getCurrency()));
                     return true;
 
                 default:
@@ -193,6 +207,7 @@ public class AddRecordActivity extends BaseActivity {
             record.setCategory(category);
             record.setPrice(price);
             record.setAccountId(account.getId());
+            record.setCurrency(account.getCurrency());
             recordController.update(record);
 
             return true;

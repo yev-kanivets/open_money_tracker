@@ -36,7 +36,7 @@ import com.blogspot.e_kanivets.moneytracker.model.Period;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
 import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
 import com.blogspot.e_kanivets.moneytracker.repo.CategoryRepo;
-import com.blogspot.e_kanivets.moneytracker.repo.IRepo;
+import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo;
 import com.blogspot.e_kanivets.moneytracker.repo.RecordRepo;
 import com.blogspot.e_kanivets.moneytracker.ui.AppRateDialog;
 import com.blogspot.e_kanivets.moneytracker.ui.ChangeDateDialog;

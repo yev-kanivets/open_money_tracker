@@ -2,6 +2,7 @@ package com.blogspot.e_kanivets.moneytracker.model;
 
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.MtApp;
+import com.blogspot.e_kanivets.moneytracker.controller.CategoryController;
 import com.blogspot.e_kanivets.moneytracker.repo.CategoryRepo;
 
 import java.io.Serializable;
@@ -22,8 +23,10 @@ public class Record implements IEntity, Serializable {
     private String category;
     private int price;
     private long accountId;
+    private String currency;
 
-    public Record(long id, long time, int type, String title, long categoryId, int price, long accountId) {
+    public Record(long id, long time, int type, String title, long categoryId, int price,
+                  long accountId, String currency) {
         this.id = id;
         this.time = time;
         this.type = type;
@@ -31,13 +34,16 @@ public class Record implements IEntity, Serializable {
         this.categoryId = categoryId;
         this.price = price;
         this.accountId = accountId;
+        this.currency = currency;
 
         // TODO: Refactor this shit.
-        Category categoryActual = new CategoryRepo(new DbHelper(MtApp.get())).read(categoryId);
+        CategoryRepo categoryRepo = new CategoryRepo(new DbHelper(MtApp.get()));
+        Category categoryActual = new CategoryController(categoryRepo).read(categoryId);
         if (categoryActual != null) category = categoryActual.getName();
     }
 
-    public Record(long time, int type, String title, String category, int price, long accountId) {
+    public Record(long time, int type, String title, String category, int price, long accountId,
+                  String currency) {
         this.time = time;
         this.type = type;
         this.title = title;
@@ -45,6 +51,7 @@ public class Record implements IEntity, Serializable {
         this.category = category;
         this.price = price;
         this.accountId = accountId;
+        this.currency = currency;
     }
 
     public int getType() {
@@ -102,5 +109,48 @@ public class Record implements IEntity, Serializable {
 
     public void setAccountId(long accountId) {
         this.accountId = accountId;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public String getCurrency() {
+        if (currency == null) return DbHelper.DEFAULT_ACCOUNT_CURRENCY;
+        else return currency;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Record {");
+        sb.append("id = ").append(id).append(", ");
+        sb.append("title = ").append(title).append(", ");
+
+        sb.append("type = ");
+        switch (type) {
+            case TYPE_EXPENSE:
+                sb.append("expense");
+                break;
+
+            case TYPE_INCOME:
+                sb.append("income");
+                break;
+
+            default:
+                sb.append("unknown");
+                break;
+        }
+        sb.append(", ");
+
+        sb.append("time = ").append(time).append(", ");
+        sb.append("category = ").append(category).append(", ");
+        sb.append("categoryId = ").append(categoryId).append(", ");
+        sb.append("price = ").append(price).append(", ");
+        sb.append("accountId = ").append(accountId).append(", ");
+        sb.append("currency = ").append(currency);
+        sb.append("}");
+
+        return sb.toString();
     }
 }

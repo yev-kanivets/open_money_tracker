@@ -9,8 +9,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,76 +16,52 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 
-import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.activity.AddAccountActivity;
-import com.blogspot.e_kanivets.moneytracker.activity.NavDrawerActivity;
-import com.blogspot.e_kanivets.moneytracker.activity.TransferActivity;
-import com.blogspot.e_kanivets.moneytracker.adapter.AccountAdapter;
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
-import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
-import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
+import com.blogspot.e_kanivets.moneytracker.R;
+import com.blogspot.e_kanivets.moneytracker.activity.AddExchangeRateActivity;
+import com.blogspot.e_kanivets.moneytracker.activity.NavDrawerActivity;
+import com.blogspot.e_kanivets.moneytracker.adapter.ExchangeRateAdapter;
+import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
+import com.blogspot.e_kanivets.moneytracker.repo.ExchangeRateRepo;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class AccountsFragment extends Fragment {
-    public static final String TAG = "AccountsFragment";
+public class ExchangeRatesFragment extends Fragment {
+    public static final String TAG = "ExchangeRatesFragment";
 
-    private static final int REQUEST_ADD_ACCOUNT = 1;
-    private static final int REQUEST_TRANSFER = 2;
+    private static final int REQUEST_ADD_EXCHANGE_RATE = 1;
 
     @Bind(R.id.list_view)
     ListView listView;
 
-    private AccountController accountController;
+    private ExchangeRateController rateController;
 
-    public static AccountsFragment newInstance() {
-        AccountsFragment fragment = new AccountsFragment();
+    public static ExchangeRatesFragment newInstance() {
+        ExchangeRatesFragment fragment = new ExchangeRatesFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }
 
-    public AccountsFragment() {
+    public ExchangeRatesFragment() {
         // Required empty public constructor
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-
-        accountController = new AccountController(new AccountRepo(new DbHelper(getActivity())));
+        rateController = new ExchangeRateController(new ExchangeRateRepo(new DbHelper(getActivity())));
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_accounts, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_exchange_rates, container, false);
         initViews(rootView);
         return rootView;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_accounts, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_transfer:
-                startActivityForResult(new Intent(getActivity(), TransferActivity.class),
-                        REQUEST_TRANSFER);
-                break;
-
-            default:
-                break;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -99,16 +73,16 @@ public class AccountsFragment extends Fragment {
         ((NavDrawerActivity) activity).onSectionAttached(TAG);
     }
 
-    @OnClick(R.id.btn_add_account)
-    public void addAccount() {
-        Intent intent = new Intent(getActivity(), AddAccountActivity.class);
-        startActivityForResult(intent, REQUEST_ADD_ACCOUNT);
+    @OnClick(R.id.btn_add_exchange_rate)
+    public void addExchangeRate() {
+        Intent intent = new Intent(getActivity(), AddExchangeRateActivity.class);
+        startActivityForResult(intent, REQUEST_ADD_EXCHANGE_RATE);
     }
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        getActivity().getMenuInflater().inflate(R.menu.menu_account, menu);
+        getActivity().getMenuInflater().inflate(R.menu.menu_exchange_rate, menu);
     }
 
     @Override
@@ -117,7 +91,7 @@ public class AccountsFragment extends Fragment {
 
         switch (item.getItemId()) {
             case R.id.delete:
-                accountController.delete(accountController.readAll().get(info.position));
+                rateController.delete(rateController.readAll().get(info.position));
                 update();
                 return true;
             default:
@@ -131,11 +105,7 @@ public class AccountsFragment extends Fragment {
 
         if (resultCode == AppCompatActivity.RESULT_OK) {
             switch (requestCode) {
-                case REQUEST_ADD_ACCOUNT:
-                    update();
-                    break;
-
-                case REQUEST_TRANSFER:
+                case REQUEST_ADD_EXCHANGE_RATE:
                     update();
                     break;
 
@@ -146,7 +116,7 @@ public class AccountsFragment extends Fragment {
     }
 
     private void update() {
-        listView.setAdapter(new AccountAdapter(getActivity(), accountController.readAll()));
+        listView.setAdapter(new ExchangeRateAdapter(getActivity(), rateController.readAll()));
         ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
     }
 
@@ -154,7 +124,7 @@ public class AccountsFragment extends Fragment {
         if (rootView != null) {
             ButterKnife.bind(this, rootView);
 
-            listView.setAdapter(new AccountAdapter(getActivity(), accountController.readAll()));
+            listView.setAdapter(new ExchangeRateAdapter(getActivity(), rateController.readAll()));
             ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
             registerForContextMenu(listView);
 

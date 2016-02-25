@@ -4,10 +4,13 @@ import android.util.Pair;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.MtApp;
+import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Created on 11/09/14.
@@ -15,14 +18,20 @@ import java.util.List;
  * @author Evgenii Kanivets
  */
 public class Report {
-
     private List<Record> records;
+    private String currency;
+    private ExchangeRateController exchangeRateController;
     private List<Record> summaryRecordList;
     private List<Pair<String, Integer>> reportList;
     private List<Pair<String, Integer>> summaryReportList;
+    private Map<String, ExchangeRate> rateMap;
 
-    public Report(List<Record> records) {
+    public Report(List<Record> records, String currency, ExchangeRateController exchangeRateController) {
         this.records = records;
+        this.currency = currency;
+        this.exchangeRateController = exchangeRateController;
+
+        rateMap = initRateMap();
         makeReport();
     }
 
@@ -52,18 +61,24 @@ public class Report {
                 sum = map.get(record.getCategory());
             }
 
+            int convertedPrice = record.getPrice();
+            if (!currency.equals(record.getCurrency())) {
+                ExchangeRate rate = rateMap.get(record.getCurrency());
+                if (rate != null) convertedPrice *= rate.getAmount();
+            }
+
             //Add or subtract price
             if (record.isIncome()) {
-                totalIncome += record.getPrice();
-                map.put(record.getCategory(), sum + record.getPrice());
+                totalIncome += convertedPrice;
+                map.put(record.getCategory(), sum + convertedPrice);
             } else {
-                totalExpense -= record.getPrice();
-                map.put(record.getCategory(), sum - record.getPrice());
+                totalExpense -= convertedPrice;
+                map.put(record.getCategory(), sum - convertedPrice);
             }
 
             String key = record.getCategory() + "/" + record.getTitle();
             Record summaryRecord = recordMap.get(key);
-            int price = record.getPrice();
+            int price = convertedPrice;
 
             if (record.isIncome()) {
                 price *= -1;
@@ -71,7 +86,7 @@ public class Report {
 
             if (summaryRecord == null) {
                 summaryRecord = new Record(-1, -1, -1, record.getTitle(), record.getCategoryId(),
-                        price, record.getAccountId());
+                        price, record.getAccountId(), currency);
             } else {
                 summaryRecord.setPrice(summaryRecord.getPrice() + price);
             }
@@ -164,5 +179,18 @@ public class Report {
                 }
             }
         }
+    }
+
+    private Map<String, ExchangeRate> initRateMap() {
+        Map<String, ExchangeRate> rateMap = new TreeMap<>();
+
+        for (ExchangeRate rate : exchangeRateController.readAll()) {
+            if (!currency.equals(rate.getToCurrency())) continue;
+            if (rateMap.containsKey(rate.getFromCurrency())) continue;
+
+            rateMap.put(rate.getFromCurrency(), rate);
+        }
+
+        return rateMap;
     }
 }

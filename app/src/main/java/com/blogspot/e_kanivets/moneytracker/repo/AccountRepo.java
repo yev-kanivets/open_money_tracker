@@ -2,12 +2,12 @@ package com.blogspot.e_kanivets.moneytracker.repo;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.support.annotation.Nullable;
-import android.util.Log;
+import android.support.annotation.NonNull;
 
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.model.Account;
+import com.blogspot.e_kanivets.moneytracker.repo.base.BaseRepo;
+import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,53 +31,15 @@ public class AccountRepo extends BaseRepo<Account> {
         return DbHelper.TABLE_ACCOUNTS;
     }
 
-    @Nullable
+    @NonNull
     @Override
-    public Account create(Account account) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
+    protected ContentValues contentValues(Account account) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(DbHelper.TITLE_COLUMN, account.getTitle());
         contentValues.put(DbHelper.CUR_SUM_COLUMN, account.getCurSum());
         contentValues.put(DbHelper.CURRENCY_COLUMN, account.getCurrency());
 
-        long id = db.insert(getTable(), null, contentValues);
-
-        db.close();
-
-        if (id == -1) {
-            Log.d(TAG, "Couldn't create account : " + account);
-            return null;
-        } else {
-            Account createdAccount = read(id);
-            Log.d(TAG, "Created account : " + createdAccount);
-            return createdAccount;
-        }
-    }
-
-    @Nullable
-    @Override
-    public Account update(Account account) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(DbHelper.CUR_SUM_COLUMN, account.getCurSum());
-        contentValues.put(DbHelper.TITLE_COLUMN, account.getTitle());
-        contentValues.put(DbHelper.CURRENCY_COLUMN, account.getCurrency());
-
-        String[] args = new String[]{Long.valueOf(account.getId()).toString()};
-        long rowsAffected = db.update(getTable(), contentValues, "id=?", args);
-
-        db.close();
-
-        if (rowsAffected == 0) {
-            Log.d(TAG, "Couldn't update account : " + account);
-            return null;
-        } else {
-            Account updatedAccount = read(account.getId());
-            Log.d(TAG, "Updated account : " + updatedAccount);
-            return updatedAccount;
-        }
+        return contentValues;
     }
 
     @Override
@@ -93,7 +55,7 @@ public class AccountRepo extends BaseRepo<Account> {
 
             do {
                 // Read a account from DB
-                Account account = new Account(cursor.getInt(idColIndex),
+                Account account = new Account(cursor.getLong(idColIndex),
                         cursor.getString(titleColIndex),
                         cursor.getInt(curSumColIndex),
                         cursor.getString(currencyColIndex));

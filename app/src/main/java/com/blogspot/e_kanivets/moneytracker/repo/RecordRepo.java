@@ -2,14 +2,12 @@ package com.blogspot.e_kanivets.moneytracker.repo;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.support.annotation.Nullable;
-import android.util.Log;
+import android.support.annotation.NonNull;
 
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
-import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
-import com.blogspot.e_kanivets.moneytracker.controller.CategoryController;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
+import com.blogspot.e_kanivets.moneytracker.repo.base.BaseRepo;
+import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,11 +31,9 @@ public class RecordRepo extends BaseRepo<Record> {
         return DbHelper.TABLE_RECORDS;
     }
 
-    @Nullable
+    @NonNull
     @Override
-    public Record create(Record record) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
+    protected ContentValues contentValues(Record record) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(DbHelper.TIME_COLUMN, record.getTime());
         contentValues.put(DbHelper.TYPE_COLUMN, record.getType());
@@ -45,45 +41,9 @@ public class RecordRepo extends BaseRepo<Record> {
         contentValues.put(DbHelper.CATEGORY_ID_COLUMN, record.getCategoryId());
         contentValues.put(DbHelper.PRICE_COLUMN, record.getPrice());
         contentValues.put(DbHelper.ACCOUNT_ID_COLUMN, record.getAccountId());
+        contentValues.put(DbHelper.CURRENCY_COLUMN, record.getCurrency());
 
-        long id = db.insert(getTable(), null, contentValues);
-
-        db.close();
-
-        if (id == -1) {
-            Log.d(TAG, "Couldn't create record : " + record);
-            return null;
-        } else {
-            Record createdRecord = read(id);
-            Log.d(TAG, "Created record : " + createdRecord);
-            return createdRecord;
-        }
-    }
-
-    @Nullable
-    @Override
-    public Record update(Record record) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(DbHelper.TITLE_COLUMN, record.getTitle());
-        contentValues.put(DbHelper.CATEGORY_ID_COLUMN, record.getCategoryId());
-        contentValues.put(DbHelper.PRICE_COLUMN, record.getPrice());
-        contentValues.put(DbHelper.ACCOUNT_ID_COLUMN, record.getAccountId());
-
-        String[] args = {Long.valueOf(record.getId()).toString()};
-        long rowsAffected = db.update(getTable(), contentValues, "id=?", args);
-
-        db.close();
-
-        if (rowsAffected == 0) {
-            Log.d(TAG, "Couldn't update record : " + record);
-            return null;
-        } else {
-            Record updatedRecord = read(record.getId());
-            Log.d(TAG, "Updated record : " + updatedRecord);
-            return updatedRecord;
-        }
+        return contentValues;
     }
 
     @Override
@@ -98,15 +58,17 @@ public class RecordRepo extends BaseRepo<Record> {
             int categoryColIndex = cursor.getColumnIndex(DbHelper.CATEGORY_ID_COLUMN);
             int priceColIndex = cursor.getColumnIndex(DbHelper.PRICE_COLUMN);
             int accountIdColIndex = cursor.getColumnIndex(DbHelper.ACCOUNT_ID_COLUMN);
+            int currencyColIndex = cursor.getColumnIndex(DbHelper.CURRENCY_COLUMN);
 
             do {
-                Record record = new Record(cursor.getInt(idColIndex),
+                Record record = new Record(cursor.getLong(idColIndex),
                         cursor.getLong(timeColIndex),
                         cursor.getInt(typeColIndex),
                         cursor.getString(titleColIndex),
                         cursor.getInt(categoryColIndex),
                         cursor.getInt(priceColIndex),
-                        cursor.getInt(accountIdColIndex));
+                        cursor.getInt(accountIdColIndex),
+                        cursor.getString(currencyColIndex));
 
                 recordList.add(record);
             } while (cursor.moveToNext());

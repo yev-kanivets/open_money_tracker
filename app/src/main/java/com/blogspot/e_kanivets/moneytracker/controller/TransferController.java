@@ -1,7 +1,8 @@
 package com.blogspot.e_kanivets.moneytracker.controller;
 
+import com.blogspot.e_kanivets.moneytracker.controller.base.BaseController;
 import com.blogspot.e_kanivets.moneytracker.model.Transfer;
-import com.blogspot.e_kanivets.moneytracker.repo.IRepo;
+import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo;
 
 /**
  * Controller class to encapsulate transfer handling logic.

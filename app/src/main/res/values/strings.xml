@@ -46,5 +46,7 @@
     <string name="transfer">Transfer</string>
     <string name="from">From</string>
     <string name="to">To</string>
+    <string name="title_exchange_rates">Exchange rates</string>
+    <string name="add_exchange_rate">Add exchange rate</string>
 
 </resources>

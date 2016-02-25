@@ -2,10 +2,11 @@ package com.blogspot.e_kanivets.moneytracker.controller;
 
 import android.support.annotation.Nullable;
 
+import com.blogspot.e_kanivets.moneytracker.controller.base.BaseController;
 import com.blogspot.e_kanivets.moneytracker.model.Account;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
 import com.blogspot.e_kanivets.moneytracker.model.Transfer;
-import com.blogspot.e_kanivets.moneytracker.repo.IRepo;
+import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo;
 
 /**
  * Controller class to encapsulate account handling logic.
