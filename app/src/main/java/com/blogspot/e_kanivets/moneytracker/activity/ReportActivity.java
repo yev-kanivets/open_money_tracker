@@ -1,5 +1,7 @@
 package com.blogspot.e_kanivets.moneytracker.activity;
 
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.widget.ExpandableListView;
 
 import com.blogspot.e_kanivets.moneytracker.R;
@@ -58,6 +60,11 @@ public class ReportActivity extends BaseActivity {
         ReportMaker reportMaker = new ReportMaker(rateController);
         report = reportMaker.getReport(currency, period, recordList);
 
+        if (report == null) {
+            List<String> ratesNeeded = reportMaker.currencyNeeded(currency, recordList);
+            showExchangeRatesNeededDialog(currency, ratesNeeded);
+        }
+
         return true;
     }
 
@@ -65,9 +72,33 @@ public class ReportActivity extends BaseActivity {
     protected void initViews() {
         super.initViews();
 
+        if (report == null) return;
         ReportConverter reportConverter = new ReportConverter(report);
 
         expandableListView.addFooterView(new TotalReportViewCreator(ReportActivity.this, report).create());
         expandableListView.setAdapter(new ExpandableListReportAdapter(ReportActivity.this, reportConverter));
+    }
+
+    private void showExchangeRatesNeededDialog(String currency, List<String> ratesNeeded) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(ReportActivity.this);
+        builder.setTitle(getString(R.string.cant_make_report));
+
+        StringBuilder sb = new StringBuilder(getString(R.string.rates_needed));
+        for (String str : ratesNeeded) {
+            sb.append("\n").append(str).append(getString(R.string.arrow)).append(currency);
+        }
+
+        builder.setMessage(sb.toString());
+
+        builder.setPositiveButton(android.R.string.ok, null);
+
+        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                finish();
+            }
+        });
+
+        builder.show();
     }
 }

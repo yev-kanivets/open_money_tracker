@@ -76,7 +76,7 @@ public class AddRecordActivity extends BaseActivity {
         recordController = new RecordController(new RecordRepo(dbHelper),
                 new CategoryController(new CategoryRepo(dbHelper)), new AccountController(accountRepo));
 
-        record = (Record) getIntent().getSerializableExtra(KEY_RECORD);
+        record = getIntent().getParcelableExtra(KEY_RECORD);
         mode = (Mode) getIntent().getSerializableExtra(KEY_MODE);
         type = getIntent().getIntExtra(KEY_TYPE, -1);
         accountList = accountController.readAll();
