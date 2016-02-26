@@ -196,15 +196,21 @@ public class ReportTest {
 
         CategoryRecord categoryRecord = new CategoryRecord("1", currency, 10 * 4 - 2 + 5 - 10 * 4);
 
-        SummaryRecord summaryRecord1 = new SummaryRecord("1", currency, 42);
-        summaryRecord1.add(record1);
+        SummaryRecord summaryRecord1 = new SummaryRecord("1", currency, 38);
+        Record convertedRecord1 = new Record(record1);
+        convertedRecord1.setPrice(40);
+        summaryRecord1.add(convertedRecord1);
         summaryRecord1.add(record2);
         categoryRecord.add(summaryRecord1);
 
         SummaryRecord summaryRecord2 = new SummaryRecord("3", currency, 5);
+        summaryRecord2.add(record3);
         categoryRecord.add(summaryRecord2);
 
-        SummaryRecord summaryRecord3 = new SummaryRecord("4", currency, 5);
+        SummaryRecord summaryRecord3 = new SummaryRecord("4", currency, -40);
+        Record convertedRecord4 = new Record(record4);
+        convertedRecord4.setPrice(40);
+        summaryRecord3.add(convertedRecord4);
         categoryRecord.add(summaryRecord3);
 
         categoryRecordList.add(categoryRecord);

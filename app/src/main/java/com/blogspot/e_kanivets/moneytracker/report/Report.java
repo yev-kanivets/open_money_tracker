@@ -8,9 +8,14 @@ import com.blogspot.e_kanivets.moneytracker.model.Record;
 import com.blogspot.e_kanivets.moneytracker.report.base.IExchangeRateProvider;
 import com.blogspot.e_kanivets.moneytracker.report.base.IReport;
 import com.blogspot.e_kanivets.moneytracker.report.model.CategoryRecord;
+import com.blogspot.e_kanivets.moneytracker.report.model.SummaryRecord;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * First {@link IReport} implementation.
@@ -28,6 +33,7 @@ public class Report implements IReport {
 
     private double totalIncome;
     private double totalExpense;
+    private List<CategoryRecord> categoryRecordList;
 
     public Report(String currency, Period period, List<Record> recordList, IExchangeRateProvider rateProvider) {
         if (currency == null || period == null || recordList == null || rateProvider == null)
@@ -36,6 +42,8 @@ public class Report implements IReport {
         this.currency = currency;
         this.period = period;
         this.rateProvider = rateProvider;
+
+        categoryRecordList = new ArrayList<>();
 
         makeReport(recordList);
     }
@@ -70,14 +78,17 @@ public class Report implements IReport {
     @NonNull
     @Override
     public List<CategoryRecord> getSummary() {
-        return new ArrayList<>();
+        return categoryRecordList;
     }
 
     private void makeReport(List<Record> recordList) {
         totalIncome = 0;
         totalExpense = 0;
+        categoryRecordList.clear();
 
         List<Record> convertedRecordList = convertRecordList(recordList);
+
+        Map<String, List<Record>> categorySortedMap = new TreeMap<>();
 
         for (Record record : convertedRecordList) {
             switch (record.getType()) {
@@ -92,7 +103,24 @@ public class Report implements IReport {
                 default:
                     break;
             }
+
+            String category = record.getCategory();
+
+            if (!categorySortedMap.containsKey(category))
+                categorySortedMap.put(category, new ArrayList<Record>());
+            categorySortedMap.get(category).add(record);
         }
+
+        for (String category : categorySortedMap.keySet()) {
+            categoryRecordList.add(createCategoryRecord(category, categorySortedMap.get(category)));
+        }
+
+        Collections.sort(categoryRecordList, new Comparator<CategoryRecord>() {
+            @Override
+            public int compare(CategoryRecord lhs, CategoryRecord rhs) {
+                return compareDoubles(lhs.getAmount(), rhs.getAmount());
+            }
+        });
     }
 
     @NonNull
@@ -115,5 +143,80 @@ public class Report implements IReport {
         }
 
         return convertedRecordList;
+    }
+
+    @NonNull
+    private CategoryRecord createCategoryRecord(String category, List<Record> recordList) {
+        Map<String, List<Record>> titleSortedMap = new TreeMap<>();
+
+        double amount = 0;
+
+        for (Record record : recordList) {
+            amount += getAmount(record);
+
+            String title = record.getTitle();
+
+            if (!titleSortedMap.containsKey(title))
+                titleSortedMap.put(title, new ArrayList<Record>());
+            titleSortedMap.get(title).add(record);
+        }
+
+        CategoryRecord categoryRecord = new CategoryRecord(category, currency, amount);
+
+        for (String title : titleSortedMap.keySet()) {
+            categoryRecord.add(createSummaryRecord(title, titleSortedMap.get(title)));
+        }
+
+        Collections.sort(categoryRecord.getSummaryRecordList(), new Comparator<SummaryRecord>() {
+            @Override
+            public int compare(SummaryRecord lhs, SummaryRecord rhs) {
+                return compareDoubles(lhs.getAmount(), rhs.getAmount());
+            }
+        });
+
+        return categoryRecord;
+    }
+
+    @NonNull
+    private SummaryRecord createSummaryRecord(String title, List<Record> recordList) {
+        double amount = 0;
+
+        for (Record record : recordList) {
+            amount += getAmount(record);
+        }
+
+        SummaryRecord summaryRecord = new SummaryRecord(title, currency, amount);
+
+        for (Record record : recordList) {
+            summaryRecord.add(record);
+        }
+
+        Collections.sort(summaryRecord.getRecordList(), new Comparator<Record>() {
+            @Override
+            public int compare(Record lhs, Record rhs) {
+                return compareDoubles(getAmount(lhs), getAmount(rhs));
+            }
+        });
+
+        return summaryRecord;
+    }
+
+    private double getAmount(Record record) {
+        switch (record.getType()) {
+            case Record.TYPE_INCOME:
+                return record.getPrice();
+
+            case Record.TYPE_EXPENSE:
+                return -record.getPrice();
+
+            default:
+                return 0;
+        }
+    }
+
+    private int compareDoubles(double lhs, double rhs) {
+        if (lhs > 0 && rhs < 0) return -1;
+        else if (lhs < 0 && rhs > 0) return 1;
+        else return -1 * Double.compare(Math.abs(lhs), Math.abs(rhs));
     }
 }
