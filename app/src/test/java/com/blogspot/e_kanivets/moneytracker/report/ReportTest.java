@@ -7,6 +7,8 @@ import com.blogspot.e_kanivets.moneytracker.model.Period;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
 import com.blogspot.e_kanivets.moneytracker.report.base.IExchangeRateProvider;
 import com.blogspot.e_kanivets.moneytracker.report.base.IReport;
+import com.blogspot.e_kanivets.moneytracker.report.model.CategoryRecord;
+import com.blogspot.e_kanivets.moneytracker.report.model.SummaryRecord;
 
 import org.junit.After;
 import org.junit.Before;
@@ -176,7 +178,38 @@ public class ReportTest {
 
     @Test
     public void testGetSummary() throws Exception {
+        Period period = new Period(new Date(1), new Date());
 
+        List<Record> recordList = new ArrayList<>();
+        Record record1 = new Record(0, Record.TYPE_INCOME, "1", "1", 10, 1, "USD");
+        recordList.add(record1);
+        Record record2 = new Record(1, Record.TYPE_EXPENSE, "1", "1", 2, 2, "UAH");
+        recordList.add(record2);
+        Record record3 = new Record(2, Record.TYPE_INCOME, "3", "1", 5, 1, "UAH");
+        recordList.add(record3);
+        Record record4 = new Record(3, Record.TYPE_EXPENSE, "4", "1", 10, 2, "USD");
+        recordList.add(record4);
+
+        IReport report = new Report(currency, period, recordList, rateProvider);
+
+        List<CategoryRecord> categoryRecordList = new ArrayList<>();
+
+        CategoryRecord categoryRecord = new CategoryRecord("1", currency, 10 * 4 - 2 + 5 - 10 * 4);
+
+        SummaryRecord summaryRecord1 = new SummaryRecord("1", currency, 42);
+        summaryRecord1.add(record1);
+        summaryRecord1.add(record2);
+        categoryRecord.add(summaryRecord1);
+
+        SummaryRecord summaryRecord2 = new SummaryRecord("3", currency, 5);
+        categoryRecord.add(summaryRecord2);
+
+        SummaryRecord summaryRecord3 = new SummaryRecord("4", currency, 5);
+        categoryRecord.add(summaryRecord3);
+
+        categoryRecordList.add(categoryRecord);
+
+        assertEquals(categoryRecordList, report.getSummary());
     }
 
     private static class TestProvider implements IExchangeRateProvider {

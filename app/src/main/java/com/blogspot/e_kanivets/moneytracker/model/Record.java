@@ -167,4 +167,20 @@ public class Record implements IEntity, Serializable {
 
         return sb.toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Record) {
+            Record record = (Record) o;
+            return this.id == record.getId()
+                    && this.time == record.getTime()
+                    && this.type == record.getType()
+                    && this.title.equals(record.getTitle())
+                    && this.categoryId == record.getCategoryId()
+                    && this.category.equals(record.getCategory())
+                    && this.price == record.getPrice()
+                    && this.accountId == record.getAccountId()
+                    && this.currency.equals(record.getCurrency());
+        } else return false;
+    }
 }
