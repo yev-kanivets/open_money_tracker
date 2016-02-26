@@ -48,5 +48,8 @@
     <string name="to">To</string>
     <string name="title_exchange_rates">Exchange rates</string>
     <string name="add_exchange_rate">Add exchange rate</string>
+    <string name="cant_make_report">Can\'t make a report</string>
+    <string name="rates_needed">Next exchange rates are needed:</string>
+    <string name="arrow"><![CDATA[" -> "]]></string>
 
 </resources>

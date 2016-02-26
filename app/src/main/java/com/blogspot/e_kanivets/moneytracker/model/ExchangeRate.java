@@ -50,6 +50,18 @@ public class ExchangeRate implements IEntity {
         return amount;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof ExchangeRate) {
+            ExchangeRate rate = (ExchangeRate) o;
+            return this.id == rate.getId()
+                    && this.createdAt == rate.getCreatedAt()
+                    && this.fromCurrency.equals(rate.getFromCurrency())
+                    && this.toCurrency.equals(rate.getToCurrency())
+                    && this.amount == rate.getAmount();
+        } else return false;
+    }
+
     @SuppressWarnings("StringBufferReplaceableByString")
     @Override
     public String toString() {

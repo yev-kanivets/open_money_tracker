@@ -42,6 +42,7 @@ import com.blogspot.e_kanivets.moneytracker.ui.AppRateDialog;
 import com.blogspot.e_kanivets.moneytracker.ui.ChangeDateDialog;
 import com.blogspot.e_kanivets.moneytracker.util.PrefUtils;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -156,6 +157,7 @@ public class RecordsFragment extends Fragment {
     public void showReport() {
         Intent intent = new Intent(getActivity(), ReportActivity.class);
         intent.putExtra(ReportActivity.KEY_PERIOD, periodController.getPeriod());
+        intent.putExtra(ReportActivity.KEY_RECORD_LIST, (ArrayList<Record>) recordList);
         startActivity(intent);
     }
 

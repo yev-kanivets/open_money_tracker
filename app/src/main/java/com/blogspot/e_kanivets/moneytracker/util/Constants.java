@@ -15,7 +15,6 @@ public interface Constants {
     String KEY_USED_PERIOD = "key_used_period";
 
     int DEFAULT_USED_PERIOD = 1;
-
     String TITLE_PARAM_NAME = "title";
     String PRICE_PARAM_NAME = "price";
 
