@@ -6,13 +6,6 @@
     android:background="@color/light_grey"
     android:orientation="vertical">
 
-    <ListView
-        android:id="@+id/list_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:visibility="gone" />
-
     <ExpandableListView
         android:id="@+id/exp_list_view"
         android:layout_width="match_parent"

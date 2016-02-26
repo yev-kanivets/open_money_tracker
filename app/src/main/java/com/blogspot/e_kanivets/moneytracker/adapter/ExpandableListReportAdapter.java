@@ -8,9 +8,11 @@ import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 
 import com.blogspot.e_kanivets.moneytracker.R;
+import com.blogspot.e_kanivets.moneytracker.report.ReportConverter;
 import com.blogspot.e_kanivets.moneytracker.util.Constants;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import butterknife.Bind;
@@ -30,6 +32,12 @@ public class ExpandableListReportAdapter extends SimpleExpandableListAdapter {
     private int white;
     private int red;
     private int green;
+
+    public ExpandableListReportAdapter(Context context, ReportConverter converter) {
+        this(context, converter.getGroupData(), converter.getGroupLayout(),
+                converter.getGroupFrom(), converter.getGroupTo(), converter.getChildData(),
+                converter.getChildLayout(), converter.getChildFrom(), converter.getChildTo());
+    }
 
     @SuppressWarnings("deprecation")
     public ExpandableListReportAdapter(Context context, List<? extends Map<String, String>> groupData,
@@ -68,7 +76,7 @@ public class ExpandableListReportAdapter extends SimpleExpandableListAdapter {
         if (viewHolder == null) viewHolder = new ViewHolder(view);
 
         /* Customize view to fit to model and UI */
-        Integer price = Integer.parseInt(values.get(Constants.PRICE_PARAM_NAME));
+        Double price = Double.parseDouble(values.get(Constants.PRICE_PARAM_NAME));
 
         if (groupView) view.setBackgroundColor(price < 0 ? whiteRed : whiteGreen);
         else view.setBackgroundColor(white);
@@ -77,7 +85,11 @@ public class ExpandableListReportAdapter extends SimpleExpandableListAdapter {
         viewHolder.tvTotal.setTextColor(price >= 0 ? green : red);
 
         viewHolder.tvCategory.setText(values.get(Constants.TITLE_PARAM_NAME));
-        viewHolder.tvTotal.setText((price >= 0 ? "+ " : "- ") + Math.abs(price));
+        viewHolder.tvTotal.setText(format(price));
+    }
+
+    private String format(double amount) {
+        return (amount >= 0 ? "+ " : "- ") + String.format(Locale.getDefault(), "%.0f", Math.abs(amount));
     }
 
     public static class ViewHolder {

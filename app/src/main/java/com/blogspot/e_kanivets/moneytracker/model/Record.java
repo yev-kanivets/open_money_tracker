@@ -1,5 +1,7 @@
 package com.blogspot.e_kanivets.moneytracker.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
@@ -13,7 +15,7 @@ import java.io.Serializable;
  * Entity class.
  * Created by eugene on 01/09/14.
  */
-public class Record implements IEntity, Serializable {
+public class Record implements IEntity, Parcelable {
     public static final int TYPE_INCOME = 0;
     public static final int TYPE_EXPENSE = 1;
 
@@ -67,6 +69,30 @@ public class Record implements IEntity, Serializable {
         this.accountId = record.getAccountId();
         this.currency = record.getCurrency();
     }
+
+    protected Record(Parcel in) {
+        id = in.readLong();
+        time = in.readLong();
+        type = in.readInt();
+        title = in.readString();
+        categoryId = in.readLong();
+        category = in.readString();
+        price = in.readInt();
+        accountId = in.readLong();
+        currency = in.readString();
+    }
+
+    public static final Creator<Record> CREATOR = new Creator<Record>() {
+        @Override
+        public Record createFromParcel(Parcel in) {
+            return new Record(in);
+        }
+
+        @Override
+        public Record[] newArray(int size) {
+            return new Record[size];
+        }
+    };
 
     public int getType() {
         return type;
@@ -182,5 +208,23 @@ public class Record implements IEntity, Serializable {
                     && this.accountId == record.getAccountId()
                     && this.currency.equals(record.getCurrency());
         } else return false;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeLong(time);
+        dest.writeInt(type);
+        dest.writeString(title);
+        dest.writeLong(categoryId);
+        dest.writeString(category);
+        dest.writeInt(price);
+        dest.writeLong(accountId);
+        dest.writeString(currency);
     }
 }
