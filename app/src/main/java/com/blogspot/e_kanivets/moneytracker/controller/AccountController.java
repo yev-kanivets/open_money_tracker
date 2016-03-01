@@ -23,7 +23,7 @@ public class AccountController extends BaseController<Account> {
     }
 
     public boolean recordAdded(@Nullable Record record) {
-        if (record == null) return false;
+        if (record == null || record.getAccount() == null) return false;
 
         Account account = repo.read(record.getAccount().getId());
         if (account == null) return false;
@@ -47,7 +47,7 @@ public class AccountController extends BaseController<Account> {
     }
 
     public boolean recordDeleted(@Nullable Record record) {
-        if (record == null) return false;
+        if (record == null || record.getAccount() == null) return false;
 
         Account account = repo.read(record.getAccount().getId());
         if (account == null) return false;

@@ -89,8 +89,13 @@ public class RecordController extends BaseController<Record> {
         // Data read from DB through Repo layer doesn't contain right nested objects, so construct them
         List<Record> completedRecordList = new ArrayList<>();
         for (Record record : recordList) {
-            Category category = categoryController.read(record.getCategory().getId());
-            Account account = accountController.read(record.getAccount().getId());
+            Category category = null;
+            if (record.getCategory() != null)
+                category = categoryController.read(record.getCategory().getId());
+
+            Account account = null;
+            if (record.getAccount() != null)
+                account = accountController.read(record.getAccount().getId());
 
             completedRecordList.add(new Record(record.getId(), record.getTime(), record.getType(),
                     record.getTitle(), category, record.getPrice(), account, record.getCurrency()));
@@ -132,7 +137,11 @@ public class RecordController extends BaseController<Record> {
             sb.append(record.getId()).append(DELIMITER);
             sb.append(record.getTime()).append(DELIMITER);
             sb.append(record.getTitle()).append(DELIMITER);
-            Category category = categoryController.read(record.getCategory().getId());
+
+            Category category = null;
+            if (record.getCategory() != null)
+                category = categoryController.read(record.getCategory().getId());
+
             sb.append(category == null ? "NONE" : category.getName()).append(DELIMITER);
             sb.append(record.getType() == 0 ? record.getPrice() : -record.getPrice());
 
@@ -143,6 +152,8 @@ public class RecordController extends BaseController<Record> {
     }
 
     private Record validateRecord(Record record) {
+        if (record.getCategory() == null) return record;
+
         Category category = categoryController.readOrCreate(record.getCategory().getName());
 
         return new Record(record.getId(), record.getTime(), record.getType(), record.getTitle(),

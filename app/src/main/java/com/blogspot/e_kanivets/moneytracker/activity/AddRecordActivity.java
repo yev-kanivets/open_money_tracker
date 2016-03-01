@@ -102,13 +102,15 @@ public class AddRecordActivity extends BaseActivity {
         //Add texts to dialog if it's edit dialog
         if (mode == Mode.MODE_EDIT) {
             etTitle.setText(record.getTitle());
-            etCategory.setText(record.getCategory().getName());
+            if (record.getCategory() != null) etCategory.setText(record.getCategory().getName());
             etPrice.setText(Integer.toString(record.getPrice()));
 
-            for (int i = 0; i < accountList.size(); i++) {
-                Account account = accountList.get(i);
-                if (account.getId() == record.getAccount().getId()) {
-                    spinnerAccount.setSelection(i);
+            if (record.getAccount() != null) {
+                for (int i = 0; i < accountList.size(); i++) {
+                    Account account = accountList.get(i);
+                    if (account.getId() == record.getAccount().getId()) {
+                        spinnerAccount.setSelection(i);
+                    }
                 }
             }
         }

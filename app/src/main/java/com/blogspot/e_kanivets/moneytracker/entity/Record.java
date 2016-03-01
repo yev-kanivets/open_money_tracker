@@ -2,6 +2,7 @@ package com.blogspot.e_kanivets.moneytracker.entity;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.entity.base.BaseEntity;
@@ -91,6 +92,7 @@ public class Record extends BaseEntity implements Parcelable {
         return title;
     }
 
+    @Nullable
     public Category getCategory() {
         return category;
     }
@@ -107,6 +109,7 @@ public class Record extends BaseEntity implements Parcelable {
         return type == 0;
     }
 
+    @Nullable
     public Account getAccount() {
         return account;
     }
