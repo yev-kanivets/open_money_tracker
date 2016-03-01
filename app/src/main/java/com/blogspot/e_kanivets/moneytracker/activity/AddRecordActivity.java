@@ -17,8 +17,9 @@ import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.CategoryController;
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.controller.RecordController;
-import com.blogspot.e_kanivets.moneytracker.model.Account;
-import com.blogspot.e_kanivets.moneytracker.model.Record;
+import com.blogspot.e_kanivets.moneytracker.entity.Account;
+import com.blogspot.e_kanivets.moneytracker.entity.Category;
+import com.blogspot.e_kanivets.moneytracker.entity.Record;
 import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
 import com.blogspot.e_kanivets.moneytracker.repo.CategoryRepo;
 import com.blogspot.e_kanivets.moneytracker.repo.RecordRepo;
@@ -84,6 +85,7 @@ public class AddRecordActivity extends BaseActivity {
         return mode != null && type != -1 && (!mode.equals(Mode.MODE_EDIT) || record != null);
     }
 
+    @SuppressWarnings("deprecation")
     @SuppressLint("SetTextI18n")
     @Override
     protected void initViews() {
@@ -100,12 +102,12 @@ public class AddRecordActivity extends BaseActivity {
         //Add texts to dialog if it's edit dialog
         if (mode == Mode.MODE_EDIT) {
             etTitle.setText(record.getTitle());
-            etCategory.setText(record.getCategory());
+            etCategory.setText(record.getCategory().getName());
             etPrice.setText(Integer.toString(record.getPrice()));
 
             for (int i = 0; i < accountList.size(); i++) {
                 Account account = accountList.get(i);
-                if (account.getId() == record.getAccountId()) {
+                if (account.getId() == record.getAccount().getId()) {
                     spinnerAccount.setSelection(i);
                 }
             }
@@ -190,25 +192,21 @@ public class AddRecordActivity extends BaseActivity {
             switch (type) {
                 case Record.TYPE_EXPENSE:
                     recordController.create(new Record(new Date().getTime(), Record.TYPE_EXPENSE,
-                            title, category, price, account.getId(),
-                            account.getCurrency()));
+                            title, new Category(category), price, account, account.getCurrency()));
                     return true;
 
                 case Record.TYPE_INCOME:
                     recordController.create(new Record(new Date().getTime(), Record.TYPE_INCOME,
-                            title, category, price, account.getId(), account.getCurrency()));
+                            title, new Category(category), price, account, account.getCurrency()));
                     return true;
 
                 default:
                     return false;
             }
         } else if (mode == Mode.MODE_EDIT) {
-            record.setTitle(title);
-            record.setCategory(category);
-            record.setPrice(price);
-            record.setAccountId(account.getId());
-            record.setCurrency(account.getCurrency());
-            recordController.update(record);
+            Record updatedRecord = new Record(record.getId(), record.getTime(), record.getType(),
+                    title, new Category(category), price, account, account.getCurrency());
+            recordController.update(updatedRecord);
 
             return true;
         }

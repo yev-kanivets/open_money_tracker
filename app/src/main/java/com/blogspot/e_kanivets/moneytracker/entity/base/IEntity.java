@@ -1,4 +1,4 @@
-package com.blogspot.e_kanivets.moneytracker.model;
+package com.blogspot.e_kanivets.moneytracker.entity.base;
 
 /**
  * Interface to represent contract of abstract entity.

@@ -4,8 +4,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
-import com.blogspot.e_kanivets.moneytracker.model.ExchangeRate;
-import com.blogspot.e_kanivets.moneytracker.model.Record;
+import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRate;
+import com.blogspot.e_kanivets.moneytracker.entity.Record;
 import com.blogspot.e_kanivets.moneytracker.report.base.IExchangeRateProvider;
 
 import java.util.Map;

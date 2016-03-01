@@ -3,9 +3,9 @@ package com.blogspot.e_kanivets.moneytracker.controller;
 import android.support.annotation.Nullable;
 
 import com.blogspot.e_kanivets.moneytracker.controller.base.BaseController;
-import com.blogspot.e_kanivets.moneytracker.model.Account;
-import com.blogspot.e_kanivets.moneytracker.model.Record;
-import com.blogspot.e_kanivets.moneytracker.model.Transfer;
+import com.blogspot.e_kanivets.moneytracker.entity.Account;
+import com.blogspot.e_kanivets.moneytracker.entity.Record;
+import com.blogspot.e_kanivets.moneytracker.entity.Transfer;
 import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo;
 
 /**
@@ -25,7 +25,7 @@ public class AccountController extends BaseController<Account> {
     public boolean recordAdded(@Nullable Record record) {
         if (record == null) return false;
 
-        Account account = repo.read(record.getAccountId());
+        Account account = repo.read(record.getAccount().getId());
         if (account == null) return false;
 
         switch (record.getType()) {
@@ -49,7 +49,7 @@ public class AccountController extends BaseController<Account> {
     public boolean recordDeleted(@Nullable Record record) {
         if (record == null) return false;
 
-        Account account = repo.read(record.getAccountId());
+        Account account = repo.read(record.getAccount().getId());
         if (account == null) return false;
 
         switch (record.getType()) {

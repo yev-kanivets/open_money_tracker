@@ -2,7 +2,7 @@ package com.blogspot.e_kanivets.moneytracker.report.model;
 
 import android.support.annotation.NonNull;
 
-import com.blogspot.e_kanivets.moneytracker.model.Record;
+import com.blogspot.e_kanivets.moneytracker.entity.Record;
 
 import java.util.ArrayList;
 import java.util.List;

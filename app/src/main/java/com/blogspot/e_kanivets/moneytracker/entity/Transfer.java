@@ -1,4 +1,9 @@
-package com.blogspot.e_kanivets.moneytracker.model;
+package com.blogspot.e_kanivets.moneytracker.entity;
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.blogspot.e_kanivets.moneytracker.entity.base.BaseEntity;
 
 /**
  * Entity class to represent transfer operation between accounts.
@@ -6,8 +11,7 @@ package com.blogspot.e_kanivets.moneytracker.model;
  *
  * @author Evgenii Kanivets
  */
-public class Transfer implements IEntity {
-    private long id;
+public class Transfer extends BaseEntity implements Parcelable {
     private long time;
     private long fromAccountId;
     private long toAccountId;
@@ -30,6 +34,26 @@ public class Transfer implements IEntity {
         this.fromAmount = fromAmount;
         this.toAmount = toAmount;
     }
+
+    protected Transfer(Parcel in) {
+        time = in.readLong();
+        fromAccountId = in.readLong();
+        toAccountId = in.readLong();
+        fromAmount = in.readInt();
+        toAmount = in.readInt();
+    }
+
+    public static final Creator<Transfer> CREATOR = new Creator<Transfer>() {
+        @Override
+        public Transfer createFromParcel(Parcel in) {
+            return new Transfer(in);
+        }
+
+        @Override
+        public Transfer[] newArray(int size) {
+            return new Transfer[size];
+        }
+    };
 
     @Override
     public long getId() {
@@ -56,6 +80,19 @@ public class Transfer implements IEntity {
         return toAmount;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Transfer) {
+            Transfer transfer = (Transfer) o;
+            return this.id == transfer.getId()
+                    && this.time == transfer.getTime()
+                    && this.fromAccountId == transfer.getFromAccountId()
+                    && this.toAccountId == transfer.getToAccountId()
+                    && this.fromAmount == transfer.getFromAmount()
+                    && this.toAmount == transfer.getToAmount();
+        } else return false;
+    }
+
     @SuppressWarnings("StringBufferReplaceableByString")
     @Override
     public String toString() {
@@ -70,5 +107,19 @@ public class Transfer implements IEntity {
         sb.append("}");
 
         return sb.toString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(time);
+        dest.writeLong(fromAccountId);
+        dest.writeLong(toAccountId);
+        dest.writeInt(fromAmount);
+        dest.writeInt(toAmount);
     }
 }

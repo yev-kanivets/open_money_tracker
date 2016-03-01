@@ -1,73 +1,58 @@
-package com.blogspot.e_kanivets.moneytracker.model;
+package com.blogspot.e_kanivets.moneytracker.entity;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
 
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
-import com.blogspot.e_kanivets.moneytracker.MtApp;
-import com.blogspot.e_kanivets.moneytracker.controller.CategoryController;
-import com.blogspot.e_kanivets.moneytracker.repo.CategoryRepo;
-
-import java.io.Serializable;
+import com.blogspot.e_kanivets.moneytracker.entity.base.BaseEntity;
 
 /**
- * Entity class.
+ * Entity class. Immutable.
  * Created by eugene on 01/09/14.
  */
-public class Record implements IEntity, Parcelable {
+public class Record extends BaseEntity implements Parcelable {
     public static final int TYPE_INCOME = 0;
     public static final int TYPE_EXPENSE = 1;
 
-    private long id;
-    private long time;
-    private int type;
-    private String title;
-    private long categoryId;
-    private String category;
-    private int price;
-    private long accountId;
-    private String currency;
+    private final long time;
+    private final int type;
+    private final String title;
+    private final Category category;
+    private final int price;
+    private final Account account;
+    private final String currency;
 
-    public Record(long id, long time, int type, String title, long categoryId, int price,
-                  long accountId, String currency) {
+    public Record(long id, long time, int type, String title, long categoryId, int price, long accountId, String currency) {
         this.id = id;
         this.time = time;
         this.type = type;
         this.title = title;
-        this.categoryId = categoryId;
+        this.category = new Category(categoryId, null);
         this.price = price;
-        this.accountId = accountId;
+        this.account = new Account(accountId, null, -1, null);
         this.currency = currency;
-
-        // TODO: Refactor this shit.
-        CategoryRepo categoryRepo = new CategoryRepo(new DbHelper(MtApp.get()));
-        Category categoryActual = new CategoryController(categoryRepo).read(categoryId);
-        if (categoryActual != null) category = categoryActual.getName();
     }
 
-    public Record(long time, int type, String title, String category, int price, long accountId,
-                  String currency) {
+    public Record(long id, long time, int type, String title, Category category, int price, Account account, String currency) {
+        this.id = id;
         this.time = time;
         this.type = type;
         this.title = title;
-        this.categoryId = -1;
         this.category = category;
         this.price = price;
-        this.accountId = accountId;
+        this.account = account;
         this.currency = currency;
     }
 
-    public Record(@NonNull Record record) {
-        this.id = record.getId();
-        this.time = record.getTime();
-        this.type = record.getType();
-        this.title = record.getTitle();
-        this.categoryId = record.getCategoryId();
-        this.category = record.getCategory();
-        this.price = record.getPrice();
-        this.accountId = record.getAccountId();
-        this.currency = record.getCurrency();
+    public Record(long time, int type, String title, Category category, int price, Account account, String currency) {
+        this.id = -1;
+        this.time = time;
+        this.type = type;
+        this.title = title;
+        this.category = category;
+        this.price = price;
+        this.account = account;
+        this.currency = currency;
     }
 
     protected Record(Parcel in) {
@@ -75,10 +60,9 @@ public class Record implements IEntity, Parcelable {
         time = in.readLong();
         type = in.readInt();
         title = in.readString();
-        categoryId = in.readLong();
-        category = in.readString();
+        category = in.readParcelable(Category.class.getClassLoader());
         price = in.readInt();
-        accountId = in.readLong();
+        account = in.readParcelable(Account.class.getClassLoader());
         currency = in.readString();
     }
 
@@ -107,12 +91,8 @@ public class Record implements IEntity, Parcelable {
         return title;
     }
 
-    public String getCategory() {
+    public Category getCategory() {
         return category;
-    }
-
-    public long getCategoryId() {
-        return categoryId;
     }
 
     public int getPrice() {
@@ -127,32 +107,8 @@ public class Record implements IEntity, Parcelable {
         return type == 0;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setCategoryId(long categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public long getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(long accountId) {
-        this.accountId = accountId;
-    }
-
-    public void setCurrency(String currency) {
-        this.currency = currency;
+    public Account getAccount() {
+        return account;
     }
 
     public String getCurrency() {
@@ -185,9 +141,8 @@ public class Record implements IEntity, Parcelable {
 
         sb.append("time = ").append(time).append(", ");
         sb.append("category = ").append(category).append(", ");
-        sb.append("categoryId = ").append(categoryId).append(", ");
         sb.append("price = ").append(price).append(", ");
-        sb.append("accountId = ").append(accountId).append(", ");
+        sb.append("account = ").append(account).append(", ");
         sb.append("currency = ").append(currency);
         sb.append("}");
 
@@ -201,12 +156,11 @@ public class Record implements IEntity, Parcelable {
             return this.id == record.getId()
                     && this.time == record.getTime()
                     && this.type == record.getType()
-                    && this.title.equals(record.getTitle())
-                    && this.categoryId == record.getCategoryId()
+                    && equals(this.title, record.getTitle())
                     && this.category.equals(record.getCategory())
                     && this.price == record.getPrice()
-                    && this.accountId == record.getAccountId()
-                    && this.currency.equals(record.getCurrency());
+                    && this.account.equals(record.getAccount())
+                    && equals(this.currency, record.getCurrency());
         } else return false;
     }
 
@@ -221,10 +175,9 @@ public class Record implements IEntity, Parcelable {
         dest.writeLong(time);
         dest.writeInt(type);
         dest.writeString(title);
-        dest.writeLong(categoryId);
-        dest.writeString(category);
+        dest.writeParcelable(category, 0);
         dest.writeInt(price);
-        dest.writeLong(accountId);
+        dest.writeParcelable(account, 0);
         dest.writeString(currency);
     }
 }

@@ -1,7 +1,7 @@
 package com.blogspot.e_kanivets.moneytracker.controller;
 
 import com.blogspot.e_kanivets.moneytracker.controller.base.BaseController;
-import com.blogspot.e_kanivets.moneytracker.model.ExchangeRate;
+import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRate;
 import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo;
 
 /**

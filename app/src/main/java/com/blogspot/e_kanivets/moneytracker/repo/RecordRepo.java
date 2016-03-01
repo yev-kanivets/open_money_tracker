@@ -3,9 +3,10 @@ package com.blogspot.e_kanivets.moneytracker.repo;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
-import com.blogspot.e_kanivets.moneytracker.model.Record;
+import com.blogspot.e_kanivets.moneytracker.entity.Record;
 import com.blogspot.e_kanivets.moneytracker.repo.base.BaseRepo;
 import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo;
 
@@ -26,29 +27,34 @@ public class RecordRepo extends BaseRepo<Record> {
         super(dbHelper);
     }
 
+    @NonNull
     @Override
     protected String getTable() {
         return DbHelper.TABLE_RECORDS;
     }
 
-    @NonNull
+    @Nullable
     @Override
-    protected ContentValues contentValues(Record record) {
+    protected ContentValues contentValues(@Nullable Record record) {
         ContentValues contentValues = new ContentValues();
+        if (record == null) return null;
+
         contentValues.put(DbHelper.TIME_COLUMN, record.getTime());
         contentValues.put(DbHelper.TYPE_COLUMN, record.getType());
         contentValues.put(DbHelper.TITLE_COLUMN, record.getTitle());
-        contentValues.put(DbHelper.CATEGORY_ID_COLUMN, record.getCategoryId());
+        contentValues.put(DbHelper.CATEGORY_ID_COLUMN, record.getCategory().getId());
         contentValues.put(DbHelper.PRICE_COLUMN, record.getPrice());
-        contentValues.put(DbHelper.ACCOUNT_ID_COLUMN, record.getAccountId());
+        contentValues.put(DbHelper.ACCOUNT_ID_COLUMN, record.getAccount().getId());
         contentValues.put(DbHelper.CURRENCY_COLUMN, record.getCurrency());
 
         return contentValues;
     }
 
+    @NonNull
     @Override
     protected List<Record> getListFromCursor(Cursor cursor) {
         List<Record> recordList = new ArrayList<>();
+        if (cursor == null) return recordList;
 
         if (cursor.moveToFirst()) {
             int idColIndex = cursor.getColumnIndex(DbHelper.ID_COLUMN);
@@ -65,9 +71,9 @@ public class RecordRepo extends BaseRepo<Record> {
                         cursor.getLong(timeColIndex),
                         cursor.getInt(typeColIndex),
                         cursor.getString(titleColIndex),
-                        cursor.getInt(categoryColIndex),
+                        cursor.getLong(categoryColIndex),
                         cursor.getInt(priceColIndex),
-                        cursor.getInt(accountIdColIndex),
+                        cursor.getLong(accountIdColIndex),
                         cursor.getString(currencyColIndex));
 
                 recordList.add(record);

@@ -1,4 +1,9 @@
-package com.blogspot.e_kanivets.moneytracker.model;
+package com.blogspot.e_kanivets.moneytracker.entity;
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.blogspot.e_kanivets.moneytracker.entity.base.BaseEntity;
 
 /**
  * Entity class to represent exchange rate between two currencies.
@@ -6,8 +11,7 @@ package com.blogspot.e_kanivets.moneytracker.model;
  *
  * @author Evgenii Kanivets
  */
-public class ExchangeRate implements IEntity {
-    private long id;
+public class ExchangeRate extends BaseEntity implements Parcelable {
     private long createdAt;
     private String fromCurrency;
     private String toCurrency;
@@ -28,6 +32,25 @@ public class ExchangeRate implements IEntity {
         this.toCurrency = toCurrency;
         this.amount = amount;
     }
+
+    protected ExchangeRate(Parcel in) {
+        createdAt = in.readLong();
+        fromCurrency = in.readString();
+        toCurrency = in.readString();
+        amount = in.readDouble();
+    }
+
+    public static final Creator<ExchangeRate> CREATOR = new Creator<ExchangeRate>() {
+        @Override
+        public ExchangeRate createFromParcel(Parcel in) {
+            return new ExchangeRate(in);
+        }
+
+        @Override
+        public ExchangeRate[] newArray(int size) {
+            return new ExchangeRate[size];
+        }
+    };
 
     @Override
     public long getId() {
@@ -56,8 +79,8 @@ public class ExchangeRate implements IEntity {
             ExchangeRate rate = (ExchangeRate) o;
             return this.id == rate.getId()
                     && this.createdAt == rate.getCreatedAt()
-                    && this.fromCurrency.equals(rate.getFromCurrency())
-                    && this.toCurrency.equals(rate.getToCurrency())
+                    && equals(fromCurrency, rate.getFromCurrency())
+                    && equals(this.toCurrency, rate.getToCurrency())
                     && this.amount == rate.getAmount();
         } else return false;
     }
@@ -75,5 +98,18 @@ public class ExchangeRate implements IEntity {
         sb.append("}");
 
         return sb.toString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(createdAt);
+        dest.writeString(fromCurrency);
+        dest.writeString(toCurrency);
+        dest.writeDouble(amount);
     }
 }

@@ -20,7 +20,7 @@ public interface IRepo<T> {
      * @return created record or null if can't create.
      */
     @Nullable
-    T create(T instance);
+    T create(@Nullable T instance);
 
     /**
      * Reads a record from storage.
@@ -38,7 +38,7 @@ public interface IRepo<T> {
      * @return updated record or null if can't update.
      */
     @Nullable
-    T update(T instance);
+    T update(@Nullable T instance);
 
     /**
      * Deletes a record from storage.
@@ -46,7 +46,7 @@ public interface IRepo<T> {
      * @param instance is entity instance to be deleted.
      * @return true if deleted or false if not.
      */
-    boolean delete(T instance);
+    boolean delete(@Nullable T instance);
 
     /**
      * Reads all records from storage.
@@ -65,5 +65,5 @@ public interface IRepo<T> {
      * @return list of matched records. List can't be null, but may be zero sized.
      */
     @NonNull
-    List<T> readWithCondition(String condition, String[] args);
+    List<T> readWithCondition(@Nullable String condition, @Nullable String[] args);
 }

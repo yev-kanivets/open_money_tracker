@@ -2,9 +2,9 @@ package com.blogspot.e_kanivets.moneytracker.report;
 
 import android.support.annotation.NonNull;
 
-import com.blogspot.e_kanivets.moneytracker.model.ExchangeRate;
+import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRate;
 import com.blogspot.e_kanivets.moneytracker.model.Period;
-import com.blogspot.e_kanivets.moneytracker.model.Record;
+import com.blogspot.e_kanivets.moneytracker.entity.Record;
 import com.blogspot.e_kanivets.moneytracker.report.base.IExchangeRateProvider;
 import com.blogspot.e_kanivets.moneytracker.report.base.IReport;
 import com.blogspot.e_kanivets.moneytracker.report.model.CategoryRecord;
@@ -104,11 +104,11 @@ public class Report implements IReport {
                     break;
             }
 
-            String category = record.getCategory();
+            String categoryName = record.getCategory().getName();
 
-            if (!categorySortedMap.containsKey(category))
-                categorySortedMap.put(category, new ArrayList<Record>());
-            categorySortedMap.get(category).add(record);
+            if (!categorySortedMap.containsKey(categoryName))
+                categorySortedMap.put(categoryName, new ArrayList<Record>());
+            categorySortedMap.get(categoryName).add(record);
         }
 
         for (String category : categorySortedMap.keySet()) {
@@ -136,8 +136,8 @@ public class Report implements IReport {
                 convertedPrice *= exchangeRate.getAmount();
             }
 
-            Record convertedRecord = new Record(record);
-            convertedRecord.setPrice(convertedPrice);
+            Record convertedRecord = new Record(record.getId(), record.getTime(), record.getType(),
+                    record.getTitle(), record.getCategory(), convertedPrice, record.getAccount(), currency);
 
             convertedRecordList.add(convertedRecord);
         }
