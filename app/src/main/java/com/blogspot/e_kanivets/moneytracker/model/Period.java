@@ -176,4 +176,13 @@ public class Period implements Parcelable {
 
         return new Period(first, last);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Period) {
+            Period period = (Period) o;
+            return this.first.equals(period.getFirst())
+                    && this.last.equals(period.getLast());
+        } else return false;
+    }
 }

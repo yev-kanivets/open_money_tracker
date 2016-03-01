@@ -1,5 +1,7 @@
 package com.blogspot.e_kanivets.moneytracker.util;
 
+import com.blogspot.e_kanivets.moneytracker.DbHelper;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Currency;
@@ -31,6 +33,8 @@ public class CurrencyProvider {
         for (Currency currency : toret) {
             currencyList.add(currency.getCurrencyCode());
         }
+
+        currencyList.add(DbHelper.DEFAULT_ACCOUNT_CURRENCY);
 
         Collections.sort(currencyList);
 
