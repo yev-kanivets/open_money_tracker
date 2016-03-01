@@ -4,8 +4,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
-import com.blogspot.e_kanivets.moneytracker.model.ExchangeRate;
-import com.blogspot.e_kanivets.moneytracker.model.Record;
+import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRate;
+import com.blogspot.e_kanivets.moneytracker.entity.Record;
 import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo;
 import com.blogspot.e_kanivets.moneytracker.report.base.IExchangeRateProvider;
 
@@ -68,12 +68,12 @@ public class ExchangeRateProviderTest {
         provider = new ExchangeRateProvider("USD", rateController);
 
         assertEquals(new ExchangeRate(1, "UAH", "USD", 4),
-                provider.getRate(new Record(0, 0, "", "", 0, 0, "UAH")));
+                provider.getRate(new Record(1, 0, 0, "", 1, 0, 0, "UAH")));
 
         assertEquals(new ExchangeRate(0, "AFN", "USD", 3),
-                provider.getRate(new Record(0, 0, "", "", 0, 0, "AFN")));
+                provider.getRate(new Record(1, 0, 0, "", 1, 0, 0, "AFN")));
 
-        assertNull(provider.getRate(new Record(0, 0, "", "", 0, 0, "SMTH")));
+        assertNull(provider.getRate(new Record(1, 0, 0, "", 1, 0, 0, "SMTH")));
     }
 
     private static class TestRepo implements IRepo<ExchangeRate> {

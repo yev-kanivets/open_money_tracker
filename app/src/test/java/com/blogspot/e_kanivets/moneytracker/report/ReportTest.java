@@ -1,10 +1,13 @@
 package com.blogspot.e_kanivets.moneytracker.report;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.blogspot.e_kanivets.moneytracker.model.ExchangeRate;
+import com.blogspot.e_kanivets.moneytracker.entity.Account;
+import com.blogspot.e_kanivets.moneytracker.entity.Category;
+import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRate;
+import com.blogspot.e_kanivets.moneytracker.entity.Record;
 import com.blogspot.e_kanivets.moneytracker.model.Period;
-import com.blogspot.e_kanivets.moneytracker.model.Record;
 import com.blogspot.e_kanivets.moneytracker.report.base.IExchangeRateProvider;
 import com.blogspot.e_kanivets.moneytracker.report.base.IReport;
 import com.blogspot.e_kanivets.moneytracker.report.model.CategoryRecord;
@@ -132,11 +135,7 @@ public class ReportTest {
     public void testGetTotal() throws Exception {
         Period period = new Period(new Date(1), new Date());
 
-        List<Record> recordList = new ArrayList<>();
-        recordList.add(new Record(0, Record.TYPE_INCOME, "1", "1", 10, 1, "USD"));
-        recordList.add(new Record(1, Record.TYPE_EXPENSE, "2", "1", 2, 2, "UAH"));
-        recordList.add(new Record(2, Record.TYPE_INCOME, "3", "1", 5, 1, "UAH"));
-        recordList.add(new Record(3, Record.TYPE_EXPENSE, "4", "1", 10, 2, "USD"));
+        List<Record> recordList = getRecordList();
 
         IReport report = new Report(currency, period, recordList, rateProvider);
 
@@ -148,11 +147,7 @@ public class ReportTest {
     public void testGetTotalIncome() throws Exception {
         Period period = new Period(new Date(1), new Date());
 
-        List<Record> recordList = new ArrayList<>();
-        recordList.add(new Record(0, Record.TYPE_INCOME, "1", "1", 10, 1, "USD"));
-        recordList.add(new Record(1, Record.TYPE_EXPENSE, "2", "1", 2, 2, "UAH"));
-        recordList.add(new Record(2, Record.TYPE_INCOME, "3", "1", 5, 1, "UAH"));
-        recordList.add(new Record(3, Record.TYPE_EXPENSE, "4", "1", 10, 2, "USD"));
+        List<Record> recordList = getRecordList();
 
         IReport report = new Report(currency, period, recordList, rateProvider);
 
@@ -164,11 +159,7 @@ public class ReportTest {
     public void testGetTotalExpense() throws Exception {
         Period period = new Period(new Date(1), new Date());
 
-        List<Record> recordList = new ArrayList<>();
-        recordList.add(new Record(0, Record.TYPE_INCOME, "1", "1", 10, 1, "USD"));
-        recordList.add(new Record(1, Record.TYPE_EXPENSE, "2", "1", 2, 2, "UAH"));
-        recordList.add(new Record(2, Record.TYPE_INCOME, "3", "1", 5, 1, "UAH"));
-        recordList.add(new Record(3, Record.TYPE_EXPENSE, "4", "1", 10, 2, "USD"));
+        List<Record> recordList = getRecordList();
 
         IReport report = new Report(currency, period, recordList, rateProvider);
 
@@ -181,24 +172,29 @@ public class ReportTest {
         Period period = new Period(new Date(1), new Date());
 
         List<Record> recordList = new ArrayList<>();
-        Record record1 = new Record(0, Record.TYPE_INCOME, "1", "1", 10, 1, "USD");
+
+        Category category = new Category(1, "category");
+        Account account1 = new Account(1, "account1", 100, "UAH");
+        Account account2 = new Account(2, "account2", 100, "USD");
+
+        Record record1 = new Record(1, 0, Record.TYPE_INCOME, "1", category, 10, account2, "USD");
         recordList.add(record1);
-        Record record2 = new Record(1, Record.TYPE_EXPENSE, "1", "1", 2, 2, "UAH");
+        Record record2 = new Record(2, 1, Record.TYPE_EXPENSE, "1", category, 2, account1, "UAH");
         recordList.add(record2);
-        Record record3 = new Record(2, Record.TYPE_INCOME, "3", "1", 5, 1, "UAH");
+        Record record3 = new Record(3, 2, Record.TYPE_INCOME, "3", category, 5, account1, "UAH");
         recordList.add(record3);
-        Record record4 = new Record(3, Record.TYPE_EXPENSE, "4", "1", 10, 2, "USD");
+        Record record4 = new Record(4, 3, Record.TYPE_EXPENSE, "4", category, 10, account2, "USD");
         recordList.add(record4);
 
         IReport report = new Report(currency, period, recordList, rateProvider);
 
         List<CategoryRecord> categoryRecordList = new ArrayList<>();
 
-        CategoryRecord categoryRecord = new CategoryRecord("1", currency, 10 * 4 - 2 + 5 - 10 * 4);
+        CategoryRecord categoryRecord = new CategoryRecord("category", currency, 10 * 4 - 2 + 5 - 10 * 4);
 
         SummaryRecord summaryRecord1 = new SummaryRecord("1", currency, 38);
-        Record convertedRecord1 = new Record(record1);
-        convertedRecord1.setPrice(40);
+        Record convertedRecord1 = new Record(record1.getId(), record1.getTime(), record1.getType(),
+                record1.getTitle(), record1.getCategory(), 40, record1.getAccount(), currency);
         summaryRecord1.add(convertedRecord1);
         summaryRecord1.add(record2);
         categoryRecord.add(summaryRecord1);
@@ -208,14 +204,34 @@ public class ReportTest {
         categoryRecord.add(summaryRecord2);
 
         SummaryRecord summaryRecord3 = new SummaryRecord("4", currency, -40);
-        Record convertedRecord4 = new Record(record4);
-        convertedRecord4.setPrice(40);
+        Record convertedRecord4 = new Record(record4.getId(), record4.getTime(), record4.getType(),
+                record4.getTitle(), record4.getCategory(), 40, record4.getAccount(), currency);
         summaryRecord3.add(convertedRecord4);
         categoryRecord.add(summaryRecord3);
 
         categoryRecordList.add(categoryRecord);
 
         assertEquals(categoryRecordList, report.getSummary());
+    }
+
+    @NonNull
+    private List<Record> getRecordList() {
+        List<Record> recordList = new ArrayList<>();
+
+        Category category = new Category(1, "category");
+        Account account1 = new Account(1, "account1", 100, "UAH");
+        Account account2 = new Account(2, "account2", 100, "USD");
+
+        Record record1 = new Record(1, 0, Record.TYPE_INCOME, "1", category, 10, account2, "USD");
+        recordList.add(record1);
+        Record record2 = new Record(2, 1, Record.TYPE_EXPENSE, "1", category, 2, account1, "UAH");
+        recordList.add(record2);
+        Record record3 = new Record(3, 2, Record.TYPE_INCOME, "3", category, 5, account1, "UAH");
+        recordList.add(record3);
+        Record record4 = new Record(4, 3, Record.TYPE_EXPENSE, "4", category, 10, account2, "USD");
+        recordList.add(record4);
+
+        return recordList;
     }
 
     private static class TestProvider implements IExchangeRateProvider {
