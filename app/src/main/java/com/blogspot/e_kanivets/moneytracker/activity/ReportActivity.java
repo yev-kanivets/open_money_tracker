@@ -11,7 +11,7 @@ import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.model.Period;
-import com.blogspot.e_kanivets.moneytracker.model.Record;
+import com.blogspot.e_kanivets.moneytracker.entity.Record;
 import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
 import com.blogspot.e_kanivets.moneytracker.repo.ExchangeRateRepo;
 import com.blogspot.e_kanivets.moneytracker.report.ReportConverter;

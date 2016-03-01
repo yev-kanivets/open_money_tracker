@@ -8,7 +8,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
-import com.blogspot.e_kanivets.moneytracker.model.IEntity;
+import com.blogspot.e_kanivets.moneytracker.entity.base.IEntity;
 
 import java.util.List;
 
@@ -115,11 +115,11 @@ public abstract class BaseRepo<T extends IEntity> implements IRepo<T> {
 
         // Read accounts table from db
         Cursor cursor = db.query(getTable(), null, condition, args, null, null, null);
-        List<T> accountList = getListFromCursor(cursor);
+        List<T> recordList = getListFromCursor(cursor);
 
         cursor.close();
         db.close();
 
-        return accountList;
+        return recordList;
     }
 }

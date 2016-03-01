@@ -10,7 +10,7 @@ import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseActivity;
 import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
-import com.blogspot.e_kanivets.moneytracker.model.ExchangeRate;
+import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRate;
 import com.blogspot.e_kanivets.moneytracker.repo.ExchangeRateRepo;
 import com.blogspot.e_kanivets.moneytracker.util.CurrencyProvider;
 

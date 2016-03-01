@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
-import com.blogspot.e_kanivets.moneytracker.model.Account;
+import com.blogspot.e_kanivets.moneytracker.entity.Account;
 
 import junit.framework.TestCase;
 
@@ -63,6 +63,7 @@ public class AccountRepoTest extends TestCase {
         Mockito.when(mockCursor.getColumnIndex(DbHelper.TITLE_COLUMN)).thenReturn(2);
         Mockito.when(mockCursor.getColumnIndex(DbHelper.CUR_SUM_COLUMN)).thenReturn(3);
         Mockito.when(mockCursor.getColumnIndex(DbHelper.CURRENCY_COLUMN)).thenReturn(4);
+
         Mockito.when(mockCursor.getLong(1)).thenReturn(1L);
         Mockito.when(mockCursor.getString(2)).thenReturn("title");
         Mockito.when(mockCursor.getInt(3)).thenReturn(100);

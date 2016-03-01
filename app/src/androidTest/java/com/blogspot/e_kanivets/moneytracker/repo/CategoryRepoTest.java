@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
-import com.blogspot.e_kanivets.moneytracker.model.Category;
+import com.blogspot.e_kanivets.moneytracker.entity.Category;
 
 import junit.framework.TestCase;
 
@@ -59,6 +59,7 @@ public class CategoryRepoTest extends TestCase {
         Mockito.when(mockCursor.moveToFirst()).thenReturn(true);
         Mockito.when(mockCursor.getColumnIndex(DbHelper.ID_COLUMN)).thenReturn(1);
         Mockito.when(mockCursor.getColumnIndex(DbHelper.NAME_COLUMN)).thenReturn(2);
+
         Mockito.when(mockCursor.getLong(1)).thenReturn(1L);
         Mockito.when(mockCursor.getString(2)).thenReturn("category");
 

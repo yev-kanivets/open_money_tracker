@@ -1,4 +1,9 @@
-package com.blogspot.e_kanivets.moneytracker.model;
+package com.blogspot.e_kanivets.moneytracker.entity;
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.blogspot.e_kanivets.moneytracker.entity.base.BaseEntity;
 
 /**
  * Entity class for account.
@@ -6,8 +11,7 @@ package com.blogspot.e_kanivets.moneytracker.model;
  *
  * @author Evgenii Kanivets
  */
-public class Account implements IEntity {
-    private long id;
+public class Account extends BaseEntity implements Parcelable {
     private String title;
     private int curSum;
     private String currency;
@@ -26,25 +30,31 @@ public class Account implements IEntity {
         this.currency = currency;
     }
 
-    @Override
-    public long getId() {
-        return id;
+    protected Account(Parcel in) {
+        id = in.readLong();
+        title = in.readString();
+        curSum = in.readInt();
+        currency = in.readString();
     }
+
+    public static final Creator<Account> CREATOR = new Creator<Account>() {
+        @Override
+        public Account createFromParcel(Parcel in) {
+            return new Account(in);
+        }
+
+        @Override
+        public Account[] newArray(int size) {
+            return new Account[size];
+        }
+    };
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public int getCurSum() {
         return curSum;
-    }
-
-    public void setCurSum(int curSum) {
-        this.curSum = curSum;
     }
 
     public String getCurrency() {
@@ -65,9 +75,9 @@ public class Account implements IEntity {
         if (o instanceof Account) {
             Account account = (Account) o;
             return this.id == account.getId()
-                    && this.title.equals(account.getTitle())
+                    && equals(this.title, account.getTitle())
                     && this.curSum == account.getCurSum()
-                    && this.currency.equals(account.getCurrency());
+                    && equals(this.currency, account.getCurrency());
         } else return false;
     }
 
@@ -83,5 +93,18 @@ public class Account implements IEntity {
         sb.append("}");
 
         return sb.toString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(title);
+        dest.writeInt(curSum);
+        dest.writeString(currency);
     }
 }

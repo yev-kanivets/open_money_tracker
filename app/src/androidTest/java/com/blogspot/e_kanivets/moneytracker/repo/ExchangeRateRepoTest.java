@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
-import com.blogspot.e_kanivets.moneytracker.model.ExchangeRate;
+import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRate;
 
 import junit.framework.TestCase;
 
@@ -65,6 +65,7 @@ public class ExchangeRateRepoTest extends TestCase {
         Mockito.when(mockCursor.getColumnIndex(DbHelper.FROM_CURRENCY_COLUMN)).thenReturn(3);
         Mockito.when(mockCursor.getColumnIndex(DbHelper.TO_CURRENCY_COLUMN)).thenReturn(4);
         Mockito.when(mockCursor.getColumnIndex(DbHelper.AMOUNT_COLUMN)).thenReturn(5);
+
         Mockito.when(mockCursor.getLong(1)).thenReturn(1L);
         Mockito.when(mockCursor.getLong(2)).thenReturn(1L);
         Mockito.when(mockCursor.getString(3)).thenReturn("NON");

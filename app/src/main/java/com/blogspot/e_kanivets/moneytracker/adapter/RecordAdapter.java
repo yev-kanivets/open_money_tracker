@@ -9,7 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.model.Record;
+import com.blogspot.e_kanivets.moneytracker.entity.Record;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -85,7 +85,7 @@ public class RecordAdapter extends BaseAdapter{
         viewHolder.tvPrice.setText((record.isIncome() ? "+ " : "- ")
                 + Integer.toString(record.getPrice()));
         viewHolder.tvTitle.setText(record.getTitle());
-        viewHolder.tvCategory.setText(record.getCategory());
+        viewHolder.tvCategory.setText(record.getCategory().getName());
         viewHolder.tvCurrency.setText(record.getCurrency());
 
         return convertView;
