@@ -3,6 +3,7 @@ package com.blogspot.e_kanivets.moneytracker.activity;
 import android.annotation.SuppressLint;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
+import android.support.annotation.Nullable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
@@ -91,29 +92,14 @@ public class AddRecordActivity extends BaseActivity {
     protected void initViews() {
         super.initViews();
 
-        List<String> accounts = new ArrayList<>();
-        for (Account account : accountList) {
-            accounts.add(account.getTitle());
-        }
-
-        spinnerAccount.setAdapter(new ArrayAdapter<>(AddRecordActivity.this,
-                android.R.layout.simple_list_item_1, accounts));
-
         //Add texts to dialog if it's edit dialog
         if (mode == Mode.MODE_EDIT) {
             etTitle.setText(record.getTitle());
             if (record.getCategory() != null) etCategory.setText(record.getCategory().getName());
             etPrice.setText(Integer.toString(record.getPrice()));
-
-            if (record.getAccount() != null) {
-                for (int i = 0; i < accountList.size(); i++) {
-                    Account account = accountList.get(i);
-                    if (account.getId() == record.getAccount().getId()) {
-                        spinnerAccount.setSelection(i);
-                    }
-                }
-            }
         }
+
+        presentSpinnerAccount();
 
         if (getSupportActionBar() != null) {
             switch (type) {
@@ -170,6 +156,38 @@ public class AddRecordActivity extends BaseActivity {
         }
     }
 
+    private void presentSpinnerAccount() {
+        List<String> accounts = new ArrayList<>();
+        for (Account account : accountList) {
+            accounts.add(account.getTitle());
+        }
+
+        int selectedAccountIndex = 0;
+
+        if (mode == Mode.MODE_EDIT) {
+            selectedAccountIndex = -1;
+
+            if (record.getAccount() != null) {
+                for (int i = 0; i < accountList.size(); i++) {
+                    Account account = accountList.get(i);
+                    if (account.getId() == record.getAccount().getId()) selectedAccountIndex = i;
+                }
+            }
+
+            if (selectedAccountIndex == -1) {
+                selectedAccountIndex = 0;
+                spinnerAccount.setEnabled(false);
+
+                accounts = new ArrayList<>();
+                accounts.add(getString(R.string.account_was_removed));
+            }
+        }
+
+        spinnerAccount.setAdapter(new ArrayAdapter<>(AddRecordActivity.this,
+                android.R.layout.simple_list_item_1, accounts));
+        spinnerAccount.setSelection(selectedAccountIndex);
+    }
+
     private boolean prepareRecord() {
         String title = etTitle.getText().toString().trim();
         String category = etCategory.getText().toString().trim();
@@ -184,12 +202,17 @@ public class AddRecordActivity extends BaseActivity {
         }
 
         if (price >= 0 && price <= 1000000000 && spinnerAccount.getSelectedItemPosition() >= 0) {
-            Account account = accountList.get(spinnerAccount.getSelectedItemPosition());
+            Account account = null;
+            if (spinnerAccount.isEnabled())
+                account = accountList.get(spinnerAccount.getSelectedItemPosition());
+
             return doRecord(title, category, price, account);
         } else return false;
     }
 
-    protected boolean doRecord(String title, String category, int price, Account account) {
+    private boolean doRecord(String title, String category, int price, @Nullable Account account) {
+        if (account == null) return false;
+
         if (mode == Mode.MODE_ADD) {
             switch (type) {
                 case Record.TYPE_EXPENSE:

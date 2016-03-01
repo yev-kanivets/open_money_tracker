@@ -51,5 +51,6 @@
     <string name="cant_make_report">Can\'t make a report</string>
     <string name="rates_needed">Next exchange rates are needed:</string>
     <string name="arrow"><![CDATA[" -> "]]></string>
+    <string name="account_was_removed">Account was removed</string>
 
 </resources>
