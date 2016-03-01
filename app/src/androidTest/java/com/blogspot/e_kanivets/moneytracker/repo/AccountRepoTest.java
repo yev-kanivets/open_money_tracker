@@ -46,6 +46,8 @@ public class AccountRepoTest extends TestCase {
         ContentValues actual = repo.contentValues(account);
 
         assertEquals(expected, actual);
+
+        assertNull(repo.contentValues(null));
     }
 
     public void testGetListFromCursor() throws Exception {
@@ -66,5 +68,7 @@ public class AccountRepoTest extends TestCase {
         expected.add(new Account(1, "title", 100, "NON"));
 
         assertEquals(expected, repo.getListFromCursor(mockCursor));
+
+        assertEquals(new ArrayList<>(), repo.getListFromCursor(null));
     }
 }

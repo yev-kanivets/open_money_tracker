@@ -27,16 +27,18 @@ public abstract class BaseRepo<T extends IEntity> implements IRepo<T> {
         this.dbHelper = dbHelper;
     }
 
+    @NonNull
     abstract protected String getTable();
 
-    @NonNull
-    abstract protected ContentValues contentValues(T instance);
+    @Nullable
+    abstract protected ContentValues contentValues(@Nullable T instance);
 
-    abstract protected List<T> getListFromCursor(Cursor cursor);
+    @NonNull
+    abstract protected List<T> getListFromCursor(@Nullable Cursor cursor);
 
     @Nullable
     @Override
-    public T create(T instance) {
+    public T create(@Nullable T instance) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         long id = db.insert(getTable(), null, contentValues(instance));
@@ -64,7 +66,9 @@ public abstract class BaseRepo<T extends IEntity> implements IRepo<T> {
 
     @Nullable
     @Override
-    public T update(T instance) {
+    public T update(@Nullable T instance) {
+        if (instance == null) return null;
+
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         String[] args = new String[]{Long.valueOf(instance.getId()).toString()};
@@ -89,7 +93,9 @@ public abstract class BaseRepo<T extends IEntity> implements IRepo<T> {
     }
 
     @Override
-    public boolean delete(T instance) {
+    public boolean delete(@Nullable T instance) {
+        if (instance == null) return false;
+
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         String[] args = new String[]{Long.toString(instance.getId())};
@@ -104,7 +110,7 @@ public abstract class BaseRepo<T extends IEntity> implements IRepo<T> {
 
     @NonNull
     @Override
-    public List<T> readWithCondition(String condition, String[] args) {
+    public List<T> readWithCondition(@Nullable String condition, @Nullable String[] args) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         // Read accounts table from db

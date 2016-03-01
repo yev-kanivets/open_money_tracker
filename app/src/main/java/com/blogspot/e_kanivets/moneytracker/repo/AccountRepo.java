@@ -3,6 +3,7 @@ package com.blogspot.e_kanivets.moneytracker.repo;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.model.Account;
@@ -26,15 +27,18 @@ public class AccountRepo extends BaseRepo<Account> {
         super(dbHelper);
     }
 
+    @NonNull
     @Override
     protected String getTable() {
         return DbHelper.TABLE_ACCOUNTS;
     }
 
-    @NonNull
+    @Nullable
     @Override
-    protected ContentValues contentValues(Account account) {
+    protected ContentValues contentValues(@Nullable Account account) {
         ContentValues contentValues = new ContentValues();
+        if (account == null) return null;
+
         contentValues.put(DbHelper.TITLE_COLUMN, account.getTitle());
         contentValues.put(DbHelper.CUR_SUM_COLUMN, account.getCurSum());
         contentValues.put(DbHelper.CURRENCY_COLUMN, account.getCurrency());
@@ -42,9 +46,11 @@ public class AccountRepo extends BaseRepo<Account> {
         return contentValues;
     }
 
+    @NonNull
     @Override
-    protected List<Account> getListFromCursor(Cursor cursor) {
+    protected List<Account> getListFromCursor(@Nullable Cursor cursor) {
         List<Account> accountList = new ArrayList<>();
+        if (cursor == null) return accountList;
 
         if (cursor.moveToFirst()) {
             // Get indexes of columns

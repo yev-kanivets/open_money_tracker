@@ -3,6 +3,7 @@ package com.blogspot.e_kanivets.moneytracker.repo;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.model.Record;
@@ -26,15 +27,18 @@ public class RecordRepo extends BaseRepo<Record> {
         super(dbHelper);
     }
 
+    @NonNull
     @Override
     protected String getTable() {
         return DbHelper.TABLE_RECORDS;
     }
 
-    @NonNull
+    @Nullable
     @Override
-    protected ContentValues contentValues(Record record) {
+    protected ContentValues contentValues(@Nullable Record record) {
         ContentValues contentValues = new ContentValues();
+        if (record == null) return null;
+
         contentValues.put(DbHelper.TIME_COLUMN, record.getTime());
         contentValues.put(DbHelper.TYPE_COLUMN, record.getType());
         contentValues.put(DbHelper.TITLE_COLUMN, record.getTitle());
@@ -46,9 +50,11 @@ public class RecordRepo extends BaseRepo<Record> {
         return contentValues;
     }
 
+    @NonNull
     @Override
     protected List<Record> getListFromCursor(Cursor cursor) {
         List<Record> recordList = new ArrayList<>();
+        if (cursor == null) return recordList;
 
         if (cursor.moveToFirst()) {
             int idColIndex = cursor.getColumnIndex(DbHelper.ID_COLUMN);

@@ -3,6 +3,7 @@ package com.blogspot.e_kanivets.moneytracker.repo;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.model.ExchangeRate;
@@ -26,15 +27,18 @@ public class ExchangeRateRepo extends BaseRepo<ExchangeRate> {
         super(dbHelper);
     }
 
+    @NonNull
     @Override
     protected String getTable() {
         return DbHelper.TABLE_RATES;
     }
 
-    @NonNull
+    @Nullable
     @Override
-    protected ContentValues contentValues(ExchangeRate exchangeRate) {
+    protected ContentValues contentValues(@Nullable ExchangeRate exchangeRate) {
         ContentValues contentValues = new ContentValues();
+        if (exchangeRate == null) return null;
+
         contentValues.put(DbHelper.CREATED_AT_COLUMN, exchangeRate.getCreatedAt());
         contentValues.put(DbHelper.FROM_CURRENCY_COLUMN, exchangeRate.getFromCurrency());
         contentValues.put(DbHelper.TO_CURRENCY_COLUMN, exchangeRate.getToCurrency());
@@ -43,9 +47,11 @@ public class ExchangeRateRepo extends BaseRepo<ExchangeRate> {
         return contentValues;
     }
 
+    @NonNull
     @Override
-    protected List<ExchangeRate> getListFromCursor(Cursor cursor) {
+    protected List<ExchangeRate> getListFromCursor(@Nullable Cursor cursor) {
         List<ExchangeRate> exchangeRateList = new ArrayList<>();
+        if (cursor == null) return exchangeRateList;
 
         if (cursor.moveToFirst()) {
             int idColIndex = cursor.getColumnIndex(DbHelper.ID_COLUMN);
