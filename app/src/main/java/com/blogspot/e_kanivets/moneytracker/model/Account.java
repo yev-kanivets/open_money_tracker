@@ -59,6 +59,18 @@ public class Account implements IEntity {
         curSum -= amount;
     }
 
+    @SuppressWarnings("SimplifiableIfStatement")
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Account) {
+            Account account = (Account) o;
+            return this.id == account.getId()
+                    && this.title.equals(account.getTitle())
+                    && this.curSum == account.getCurSum()
+                    && this.currency.equals(account.getCurrency());
+        } else return false;
+    }
+
     @SuppressWarnings("StringBufferReplaceableByString")
     @Override
     public String toString() {
@@ -71,15 +83,5 @@ public class Account implements IEntity {
         sb.append("}");
 
         return sb.toString();
-    }
-
-    @SuppressWarnings("SimplifiableIfStatement")
-    @Override
-    public boolean equals(Object o) {
-        if (o instanceof Account) {
-            return ((Account) o).getId() == getId();
-        } else {
-            return false;
-        }
     }
 }

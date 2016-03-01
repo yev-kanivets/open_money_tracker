@@ -30,6 +30,15 @@ public class Category implements IEntity {
         return name;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Category) {
+            Category category = (Category) o;
+            return this.id == category.getId()
+                    && this.name.equals(category.getName());
+        } else return false;
+    }
+
     @SuppressWarnings("StringBufferReplaceableByString")
     @Override
     public String toString() {

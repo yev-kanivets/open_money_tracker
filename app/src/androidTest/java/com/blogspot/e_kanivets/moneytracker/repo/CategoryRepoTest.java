@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
-import com.blogspot.e_kanivets.moneytracker.model.Account;
+import com.blogspot.e_kanivets.moneytracker.model.Category;
 
 import junit.framework.TestCase;
 
@@ -19,33 +19,33 @@ import java.util.List;
  *
  * @author Evgenii Kanivets
  */
-public class AccountRepoTest extends TestCase {
-    private AccountRepo repo;
+public class CategoryRepoTest extends TestCase {
+    private CategoryRepo repo;
 
+    @Override
     public void setUp() throws Exception {
         super.setUp();
         DbHelper mock = Mockito.mock(DbHelper.class);
-        repo = new AccountRepo(mock);
+        repo = new CategoryRepo(mock);
     }
 
+    @Override
     public void tearDown() throws Exception {
         super.tearDown();
         repo = null;
     }
 
     public void testGetTable() throws Exception {
-        assertEquals(DbHelper.TABLE_ACCOUNTS, repo.getTable());
+        assertEquals(DbHelper.TABLE_CATEGORIES, repo.getTable());
     }
 
     public void testContentValues() throws Exception {
-        Account account = new Account(-1, "title1", 100, "NON");
+        Category category = new Category(1, "category");
 
         ContentValues expected = new ContentValues();
-        expected.put(DbHelper.TITLE_COLUMN, "title1");
-        expected.put(DbHelper.CUR_SUM_COLUMN, 100);
-        expected.put(DbHelper.CURRENCY_COLUMN, "NON");
+        expected.put(DbHelper.NAME_COLUMN, "category");
 
-        ContentValues actual = repo.contentValues(account);
+        ContentValues actual = repo.contentValues(category);
 
         assertEquals(expected, actual);
 
@@ -53,21 +53,17 @@ public class AccountRepoTest extends TestCase {
     }
 
     public void testGetListFromCursor() throws Exception {
-        assertEquals(new ArrayList<Account>(), repo.getListFromCursor(Mockito.mock(Cursor.class)));
+        assertEquals(new ArrayList<Category>(), repo.getListFromCursor(Mockito.mock(Cursor.class)));
 
         Cursor mockCursor = Mockito.mock(Cursor.class);
         Mockito.when(mockCursor.moveToFirst()).thenReturn(true);
         Mockito.when(mockCursor.getColumnIndex(DbHelper.ID_COLUMN)).thenReturn(1);
-        Mockito.when(mockCursor.getColumnIndex(DbHelper.TITLE_COLUMN)).thenReturn(2);
-        Mockito.when(mockCursor.getColumnIndex(DbHelper.CUR_SUM_COLUMN)).thenReturn(3);
-        Mockito.when(mockCursor.getColumnIndex(DbHelper.CURRENCY_COLUMN)).thenReturn(4);
+        Mockito.when(mockCursor.getColumnIndex(DbHelper.NAME_COLUMN)).thenReturn(2);
         Mockito.when(mockCursor.getLong(1)).thenReturn(1L);
-        Mockito.when(mockCursor.getString(2)).thenReturn("title");
-        Mockito.when(mockCursor.getInt(3)).thenReturn(100);
-        Mockito.when(mockCursor.getString(4)).thenReturn("NON");
+        Mockito.when(mockCursor.getString(2)).thenReturn("category");
 
-        List<Account> expected = new ArrayList<>();
-        expected.add(new Account(1, "title", 100, "NON"));
+        List<Category> expected = new ArrayList<>();
+        expected.add(new Category(1, "category"));
 
         assertEquals(expected, repo.getListFromCursor(mockCursor));
 
