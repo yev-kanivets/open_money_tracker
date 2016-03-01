@@ -22,12 +22,14 @@ import java.util.List;
 public class AccountRepoTest extends TestCase {
     private AccountRepo repo;
 
+    @Override
     public void setUp() throws Exception {
         super.setUp();
         DbHelper mock = Mockito.mock(DbHelper.class);
         repo = new AccountRepo(mock);
     }
 
+    @Override
     public void tearDown() throws Exception {
         super.tearDown();
         repo = null;
