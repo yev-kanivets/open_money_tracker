@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="1" />
+        android:text="@string/one" />
 
     <android.support.v7.widget.AppCompatSpinner
         android:id="@+id/spinner_from_currency"
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="=" />
+        android:text="@string/equal" />
 
     <EditText
         android:id="@+id/et_amount"
@@ -41,7 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="*" />
+        android:text="@string/multiply" />
 
     <android.support.v7.widget.AppCompatSpinner
         android:id="@+id/spinner_to_currency"

@@ -50,7 +50,7 @@
         android:id="@+id/ll_total_expense">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:text="@string/total_expenses"
             android:textSize="18sp"
@@ -89,7 +89,7 @@
         android:id="@+id/ll_total">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:text="@string/total"
             android:textSize="18sp"

@@ -51,5 +51,8 @@
     <string name="rates_needed">Next exchange rates are needed:</string>
     <string name="arrow" translatable="false"><![CDATA[" -> "]]></string>
     <string name="account_was_removed">Account was removed</string>
+    <string name="one" translatable="false">1</string>
+    <string name="equal" translatable="false">=</string>
+    <string name="multiply" translatable="false">*</string>
 
 </resources>
