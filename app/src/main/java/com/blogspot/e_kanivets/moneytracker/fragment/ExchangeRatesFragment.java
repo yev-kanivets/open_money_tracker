@@ -41,6 +41,7 @@ public class ExchangeRatesFragment extends Fragment {
     ListView listView;
 
     private ExchangeRateController rateController;
+    private List<ExchangeRate> exchangeRateList;
 
     public static ExchangeRatesFragment newInstance() {
         ExchangeRatesFragment fragment = new ExchangeRatesFragment();
@@ -95,7 +96,7 @@ public class ExchangeRatesFragment extends Fragment {
 
         switch (item.getItemId()) {
             case R.id.delete:
-                rateController.delete(rateController.readAll().get(info.position));
+                rateController.delete(exchangeRateList.get(info.position));
                 update();
                 return true;
             default:
@@ -120,7 +121,7 @@ public class ExchangeRatesFragment extends Fragment {
     }
 
     private void update() {
-        List<ExchangeRate> exchangeRateList = rateController.readAll();
+        exchangeRateList = rateController.readAll();
         Collections.reverse(exchangeRateList);
 
         listView.setAdapter(new ExchangeRateAdapter(getActivity(), exchangeRateList));
