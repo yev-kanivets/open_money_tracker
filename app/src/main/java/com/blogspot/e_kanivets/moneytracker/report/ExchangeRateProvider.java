@@ -8,6 +8,9 @@ import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRate;
 import com.blogspot.e_kanivets.moneytracker.entity.Record;
 import com.blogspot.e_kanivets.moneytracker.report.base.IExchangeRateProvider;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -50,9 +53,17 @@ public class ExchangeRateProvider implements IExchangeRateProvider {
     private Map<String, ExchangeRate> getRateMap() {
         Map<String, ExchangeRate> rateMap = new TreeMap<>();
 
+        List<ExchangeRate> exchangeRateList = controller.readAll();
+        Collections.sort(exchangeRateList, new Comparator<ExchangeRate>() {
+            @Override
+            public int compare(ExchangeRate lhs, ExchangeRate rhs) {
+                return lhs.getCreatedAt() < rhs.getCreatedAt() ? -1
+                        : (lhs.getCreatedAt() == rhs.getCreatedAt() ? 0 : 1);
+            }
+        });
+
         for (ExchangeRate rate : controller.readAll()) {
             if (!toCurrency.equals(rate.getToCurrency())) continue;
-            if (rateMap.containsKey(rate.getFromCurrency())) continue;
 
             rateMap.put(rate.getFromCurrency(), rate);
         }
