@@ -25,7 +25,6 @@ public class ExchangeRateProvider implements IExchangeRateProvider {
     private static final String TAG = "ExchangeRateProvider";
 
     private String toCurrency;
-    private final ExchangeRateController controller;
     private final Map<String, ExchangeRate> rateMap;
 
     /**
@@ -34,9 +33,8 @@ public class ExchangeRateProvider implements IExchangeRateProvider {
      */
     public ExchangeRateProvider(String toCurrency, ExchangeRateController controller) {
         this.toCurrency = toCurrency;
-        this.controller = controller;
 
-        rateMap = getRateMap();
+        rateMap = getRateMap(controller.readAll());
     }
 
     @Nullable
@@ -50,10 +48,9 @@ public class ExchangeRateProvider implements IExchangeRateProvider {
     }
 
     @NonNull
-    private Map<String, ExchangeRate> getRateMap() {
+    private Map<String, ExchangeRate> getRateMap(List<ExchangeRate> exchangeRateList) {
         Map<String, ExchangeRate> rateMap = new TreeMap<>();
 
-        List<ExchangeRate> exchangeRateList = controller.readAll();
         Collections.sort(exchangeRateList, new Comparator<ExchangeRate>() {
             @Override
             public int compare(ExchangeRate lhs, ExchangeRate rhs) {
@@ -62,7 +59,7 @@ public class ExchangeRateProvider implements IExchangeRateProvider {
             }
         });
 
-        for (ExchangeRate rate : controller.readAll()) {
+        for (ExchangeRate rate : exchangeRateList) {
             if (!toCurrency.equals(rate.getToCurrency())) continue;
 
             rateMap.put(rate.getFromCurrency(), rate);
