@@ -22,22 +22,31 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.activity.AddExpenseActivity;
-import com.blogspot.e_kanivets.moneytracker.activity.AddIncomeActivity;
+import com.blogspot.e_kanivets.moneytracker.activity.AddRecordActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.NavDrawerActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.ReportActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.RecordAdapter;
+import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
+import com.blogspot.e_kanivets.moneytracker.controller.CategoryController;
 import com.blogspot.e_kanivets.moneytracker.controller.PeriodController;
 import com.blogspot.e_kanivets.moneytracker.controller.RecordController;
-import com.blogspot.e_kanivets.moneytracker.helper.DbHelper;
-import com.blogspot.e_kanivets.moneytracker.helper.PeriodHelper;
-import com.blogspot.e_kanivets.moneytracker.model.Record;
+import com.blogspot.e_kanivets.moneytracker.DbHelper;
+import com.blogspot.e_kanivets.moneytracker.entity.Category;
+import com.blogspot.e_kanivets.moneytracker.model.Period;
+import com.blogspot.e_kanivets.moneytracker.entity.Record;
+import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
+import com.blogspot.e_kanivets.moneytracker.repo.CategoryRepo;
+import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo;
+import com.blogspot.e_kanivets.moneytracker.repo.RecordRepo;
 import com.blogspot.e_kanivets.moneytracker.ui.AppRateDialog;
 import com.blogspot.e_kanivets.moneytracker.ui.ChangeDateDialog;
 import com.blogspot.e_kanivets.moneytracker.util.PrefUtils;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -53,15 +62,17 @@ public class RecordsFragment extends Fragment {
 
     private static final int REQUEST_ACTION_RECORD = 1;
 
+    private List<Record> recordList;
+
+    private RecordController recordController;
+    private PeriodController periodController;
+
     @Bind(R.id.list_view)
     ListView listView;
     @Bind(R.id.tv_from_date)
     TextView tvFromDate;
     @Bind(R.id.tv_to_date)
     TextView tvToDate;
-
-    private RecordController recordController;
-    private PeriodController periodController;
 
     public static RecordsFragment newInstance() {
         RecordsFragment fragment = new RecordsFragment();
@@ -79,7 +90,14 @@ public class RecordsFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         periodController = new PeriodController();
-        recordController = new RecordController(new DbHelper(getActivity()));
+
+        DbHelper dbHelper = new DbHelper(getActivity());
+        IRepo<Category> categoryRepo = new CategoryRepo(dbHelper);
+        CategoryController categoryController = new CategoryController(categoryRepo);
+        AccountController accountController = new AccountController(new AccountRepo(dbHelper));
+        IRepo<Record> recordRepo = new RecordRepo(dbHelper);
+
+        recordController = new RecordController(recordRepo, categoryController, accountController);
     }
 
     @Override
@@ -112,15 +130,13 @@ public class RecordsFragment extends Fragment {
 
         switch (item.getItemId()) {
             case R.id.edit:
-                Record record = recordController.
-                        getRecords(periodController.getPeriod()).get(info.position);
+                Record record = recordList.get(info.position);
                 if (record.isIncome())
-                    startAddIncomeActivity(record, AddIncomeActivity.Mode.MODE_EDIT);
-                else startAddExpenseActivity(record, AddExpenseActivity.Mode.MODE_EDIT);
+                    startAddIncomeActivity(record, AddRecordActivity.Mode.MODE_EDIT);
+                else startAddExpenseActivity(record, AddRecordActivity.Mode.MODE_EDIT);
                 return true;
             case R.id.delete:
-                recordController.deleteRecord(recordController.
-                        getRecords(periodController.getPeriod()).get(info.position));
+                recordController.delete(recordList.get(info.position));
                 update();
                 return true;
             default:
@@ -130,18 +146,19 @@ public class RecordsFragment extends Fragment {
 
     @OnClick(R.id.btn_add_expense)
     public void addExpense() {
-        startAddExpenseActivity(null, AddExpenseActivity.Mode.MODE_ADD);
+        startAddExpenseActivity(null, AddRecordActivity.Mode.MODE_ADD);
     }
 
     @OnClick(R.id.btn_add_income)
     public void addIncome() {
-        startAddIncomeActivity(null, AddIncomeActivity.Mode.MODE_ADD);
+        startAddIncomeActivity(null, AddRecordActivity.Mode.MODE_ADD);
     }
 
     @OnClick(R.id.btn_report)
     public void showReport() {
         Intent intent = new Intent(getActivity(), ReportActivity.class);
         intent.putExtra(ReportActivity.KEY_PERIOD, periodController.getPeriod());
+        intent.putExtra(ReportActivity.KEY_RECORD_LIST, (ArrayList<Record>) recordList);
         startActivity(intent);
     }
 
@@ -192,8 +209,10 @@ public class RecordsFragment extends Fragment {
     }
 
     private void update() {
-        listView.setAdapter(new RecordAdapter(getActivity(),
-                recordController.getRecords(periodController.getPeriod())));
+        recordList = recordController.getRecordsForPeriod(periodController.getPeriod());
+        Collections.reverse(recordList);
+
+        listView.setAdapter(new RecordAdapter(getActivity(), recordList));
         ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
     }
 
@@ -205,9 +224,7 @@ public class RecordsFragment extends Fragment {
             tvFromDate.setText(periodController.getFirstDay());
             tvToDate.setText(periodController.getLastDay());
 
-            listView.setAdapter(new RecordAdapter(getActivity(),
-                    recordController.getRecords(periodController.getPeriod())));
-            ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
+            update();
 
             /* Scroll list to bottom only once at start */
             listView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -250,22 +267,22 @@ public class RecordsFragment extends Fragment {
                 calendar.clear(Calendar.MILLISECOND);
 
                 switch (position) {
-                    // Day period
                     case 0:
-                        periodController.setPeriod(PeriodHelper.getInstance().getDayPeriod());
+                        periodController.setPeriod(Period.dayPeriod());
                         break;
-                    // Week period
+
                     case 1:
-                        periodController.setPeriod(PeriodHelper.getInstance().getWeekPeriod());
+                        periodController.setPeriod(Period.weekPeriod());
                         break;
-                    // Month period
+
                     case 2:
-                        periodController.setPeriod(PeriodHelper.getInstance().getMonthPeriod());
+                        periodController.setPeriod(Period.monthPeriod());
                         break;
-                    // Year period
+
                     case 3:
-                        periodController.setPeriod(PeriodHelper.getInstance().getYearPeriod());
+                        periodController.setPeriod(Period.yearPeriod());
                         break;
+
                     default:
                         break;
                 }
@@ -293,17 +310,19 @@ public class RecordsFragment extends Fragment {
         dialog.show();
     }
 
-    private void startAddIncomeActivity(Record record, AddIncomeActivity.Mode mode) {
-        Intent intent = new Intent(getActivity(), AddIncomeActivity.class);
-        intent.putExtra(AddExpenseActivity.KEY_RECORD, record);
-        intent.putExtra(AddExpenseActivity.KEY_MODE, mode);
+    private void startAddIncomeActivity(Record record, AddRecordActivity.Mode mode) {
+        Intent intent = new Intent(getActivity(), AddRecordActivity.class);
+        intent.putExtra(AddRecordActivity.KEY_RECORD, record);
+        intent.putExtra(AddRecordActivity.KEY_MODE, mode);
+        intent.putExtra(AddRecordActivity.KEY_TYPE, Record.TYPE_INCOME);
         startActivityForResult(intent, REQUEST_ACTION_RECORD);
     }
 
-    private void startAddExpenseActivity(Record record, AddExpenseActivity.Mode mode) {
-        Intent intent = new Intent(getActivity(), AddExpenseActivity.class);
-        intent.putExtra(AddExpenseActivity.KEY_RECORD, record);
-        intent.putExtra(AddExpenseActivity.KEY_MODE, mode);
+    private void startAddExpenseActivity(Record record, AddRecordActivity.Mode mode) {
+        Intent intent = new Intent(getActivity(), AddRecordActivity.class);
+        intent.putExtra(AddRecordActivity.KEY_RECORD, record);
+        intent.putExtra(AddRecordActivity.KEY_MODE, mode);
+        intent.putExtra(AddRecordActivity.KEY_TYPE, Record.TYPE_EXPENSE);
         startActivityForResult(intent, REQUEST_ACTION_RECORD);
     }
 }

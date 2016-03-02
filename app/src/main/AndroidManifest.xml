@@ -30,25 +30,28 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.AddExpenseActivity"
-            android:label="@string/title_add_expense"
+            android:name=".activity.AddRecordActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Default" />
-        <activity
-            android:name=".activity.AddIncomeActivity"
-            android:label="@string/title_add_income"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.Default" />
+            android:theme="@style/Theme.Default"
+            android:windowSoftInputMode="stateVisible" />
         <activity
             android:name=".activity.AddAccountActivity"
             android:label="@string/title_add_account"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Default" />
+            android:theme="@style/Theme.Default"
+            android:windowSoftInputMode="stateVisible" />
+        <activity
+            android:name=".activity.AddExchangeRateActivity"
+            android:label="@string/add_exchange_rate"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Default"
+            android:windowSoftInputMode="stateVisible" />
         <activity
             android:name=".activity.TransferActivity"
             android:label="@string/transfer"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Default" />
+            android:theme="@style/Theme.Default"
+            android:windowSoftInputMode="stateVisible" />
     </application>
 
 </manifest>

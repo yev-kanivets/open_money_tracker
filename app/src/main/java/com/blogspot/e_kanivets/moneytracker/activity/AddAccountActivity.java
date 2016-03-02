@@ -8,16 +8,13 @@ import android.widget.EditText;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseActivity;
+import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
-import com.blogspot.e_kanivets.moneytracker.helper.DbHelper;
+import com.blogspot.e_kanivets.moneytracker.entity.Account;
+import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
+import com.blogspot.e_kanivets.moneytracker.util.CurrencyProvider;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Currency;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
 
 import butterknife.Bind;
 
@@ -42,7 +39,8 @@ public class AddAccountActivity extends BaseActivity {
         super.initViews();
 
         spinner.setAdapter(new ArrayAdapter<>(AddAccountActivity.this,
-                android.R.layout.simple_list_item_1, new ArrayList<>(getAllCurrencies())));
+                android.R.layout.simple_list_item_1,
+                new ArrayList<>(CurrencyProvider.getAllCurrencies())));
     }
 
     @Override
@@ -75,29 +73,8 @@ public class AddAccountActivity extends BaseActivity {
         int initSum = Integer.parseInt(etInitSum.getText().toString().trim());
         String currency = (String) spinner.getSelectedItem();
 
-        new AccountController(new DbHelper(AddAccountActivity.this))
-                .addAccount(title, initSum, currency);
-    }
+        Account account = new Account(title, initSum, currency);
 
-    public static List<String> getAllCurrencies() {
-        Set<Currency> toret = new HashSet<>();
-        Locale[] locs = Locale.getAvailableLocales();
-
-        for (Locale loc : locs) {
-            try {
-                toret.add(Currency.getInstance(loc));
-            } catch (Exception exc) {
-                // Locale not found
-            }
-        }
-
-        List<String> currencyList = new ArrayList<>();
-        for (Currency currency : toret) {
-            currencyList.add(currency.getCurrencyCode());
-        }
-
-        Collections.sort(currencyList);
-
-        return currencyList;
+        new AccountController(new AccountRepo(new DbHelper(AddAccountActivity.this))).create(account);
     }
 }

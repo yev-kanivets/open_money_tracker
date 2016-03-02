@@ -1,48 +1,35 @@
 package com.blogspot.e_kanivets.moneytracker.controller;
 
-import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
-import android.support.annotation.Nullable;
-import android.util.Log;
-
-import com.blogspot.e_kanivets.moneytracker.helper.DbHelper;
-import com.blogspot.e_kanivets.moneytracker.model.Transfer;
+import com.blogspot.e_kanivets.moneytracker.controller.base.BaseController;
+import com.blogspot.e_kanivets.moneytracker.entity.Transfer;
+import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo;
 
 /**
  * Controller class to encapsulate transfer handling logic.
- * Created by evgenii_kanivets on 2/10/16.
+ * Created on 2/17/16.
+ *
+ * @author Evgenii Kanivets
  */
-public class TransferController {
+public class TransferController extends BaseController<Transfer> {
     @SuppressWarnings("unused")
     private static final String TAG = "TransferController";
 
-    private DbHelper dbHelper;
     private AccountController accountController;
 
-    public TransferController(DbHelper dbHelper, AccountController accountController) {
-        this.dbHelper = dbHelper;
+    public TransferController(IRepo<Transfer> transferRepo, AccountController accountController) {
+        super(transferRepo);
         this.accountController = accountController;
     }
 
-    public boolean create(@Nullable Transfer transfer) {
-        if (transfer == null) return false;
+    @Override
+    @SuppressWarnings("SimplifiableIfStatement")
+    public Transfer create(Transfer transfer) {
+        Transfer createdTransfer = repo.create(transfer);
 
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(DbHelper.TIME_COLUMN, transfer.getTime());
-        contentValues.put(DbHelper.FROM_ACCOUNT_ID_COLUMN, transfer.getFromAccountId());
-        contentValues.put(DbHelper.TO_ACCOUND_ID_COLUMN, transfer.getToAccountId());
-        contentValues.put(DbHelper.FROM_AMOUNT_COLUMN, transfer.getFromAmount());
-        contentValues.put(DbHelper.TO_AMOUNT_COLUMN, transfer.getToAmount());
-
-        long id = db.insert(DbHelper.TABLE_TRANSFERS, null, contentValues);
-        Log.d(TAG, "created transfer with id = " + id);
-
-        db.close();
-
-        accountController.transferDone(transfer);
-
-        return true;
+        if (createdTransfer == null) return null;
+        else {
+            accountController.transferDone(createdTransfer);
+            return createdTransfer;
+        }
     }
 }

@@ -7,7 +7,7 @@ android:
     # - tools
 
     # The BuildTools version used by your project
-    - build-tools-21.1.2
+    - build-tools-22.0.1
 
     # The SDK version used to compile your project
     - android-23
@@ -30,10 +30,15 @@ before_script:
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
 
+before_deploy:
+ - cp app/build/outputs/apk/app-release.apk app-release.apk
+
 deploy:
   provider: releases
-  api_key: "cd4e940299fb298808e2fbc7969593a53c195bd0"
-  file: "/app/build/outputs/app-release.apk"
+  api_key: "e3fbd39d0f08c069bc465f3f3b0a8c5018bb09dd"
+  file:
+   - "app-release.apk"
   skip_cleanup: true
   on:
     tags: true
+

@@ -32,4 +32,24 @@
     <string name="no_thank_you">Нет, спасибо</string>
     <string name="yes_very">Да!</string>
 
+    <string name="title_records">Записи</string>
+    <string name="title_accounts">Счета</string>
+    <string name="title_export">Экспорт</string>
+    <string name="title_add_income">Добавить доход</string>
+    <string name="title_add_expense">Добавить расход</string>
+    <string name="title_add_account">Добавить счет</string>
+
+    <string name="export">Экспорт</string>
+    <string name="add_account">Добавить счет</string>
+    <string name="initial_sum">Начальная сумма</string>
+    <string name="account">Счет</string>
+    <string name="transfer">Перевод</string>
+    <string name="from">Со счета</string>
+    <string name="to">На счет</string>
+    <string name="title_exchange_rates">Курсы обмена</string>
+    <string name="add_exchange_rate">Добавить курс обмена</string>
+    <string name="cant_make_report">Не получается сформировать отчет</string>
+    <string name="rates_needed">Следующие курсы обмена необходимы для формирования отчета:</string>
+    <string name="account_was_removed">Счет был удален</string>
+
 </resources>

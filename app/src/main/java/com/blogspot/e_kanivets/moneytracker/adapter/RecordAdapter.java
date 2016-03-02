@@ -9,7 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.model.Record;
+import com.blogspot.e_kanivets.moneytracker.entity.Record;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -50,7 +50,7 @@ public class RecordAdapter extends BaseAdapter{
     }
 
     @Override
-    public Object getItem(int position) {
+    public Record getItem(int position) {
         return records.get(position);
     }
 
@@ -73,17 +73,20 @@ public class RecordAdapter extends BaseAdapter{
             convertView.setTag(viewHolder);
         } else viewHolder = (ViewHolder) convertView.getTag();
 
-        convertView.setBackgroundColor(records.get(position).isIncome() ? whiteGreen : whiteRed);
-        viewHolder.tvPrice.setTextColor(records.get(position).isIncome() ? green : red);
+        Record record = getItem(position);
+
+        convertView.setBackgroundColor(record.isIncome() ? whiteGreen : whiteRed);
+        viewHolder.tvPrice.setTextColor(record.isIncome() ? green : red);
 
         @SuppressLint("SimpleDateFormat")
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        viewHolder.tvDateAndTime.setText(dateFormat.format(new Date(records.get(position).getTime())));
+        viewHolder.tvDateAndTime.setText(dateFormat.format(new Date(record.getTime())));
 
-        viewHolder.tvPrice.setText((records.get(position).isIncome() ? "+ " : "- ")
-                + Integer.toString(records.get(position).getPrice()));
-        viewHolder.tvTitle.setText(records.get(position).getTitle());
-        viewHolder.tvCategory.setText(records.get(position).getCategory());
+        viewHolder.tvPrice.setText((record.isIncome() ? "+ " : "- ")
+                + Integer.toString(record.getPrice()));
+        viewHolder.tvTitle.setText(record.getTitle());
+        viewHolder.tvCategory.setText(record.getCategory().getName());
+        viewHolder.tvCurrency.setText(record.getCurrency());
 
         return convertView;
     }
@@ -97,6 +100,8 @@ public class RecordAdapter extends BaseAdapter{
         TextView tvTitle;
         @Bind(R.id.tv_category)
         TextView tvCategory;
+        @Bind(R.id.tv_currency)
+        TextView tvCurrency;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);

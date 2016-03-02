@@ -9,10 +9,12 @@ import android.widget.EditText;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseActivity;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
+import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.controller.TransferController;
-import com.blogspot.e_kanivets.moneytracker.helper.DbHelper;
-import com.blogspot.e_kanivets.moneytracker.model.Account;
-import com.blogspot.e_kanivets.moneytracker.model.Transfer;
+import com.blogspot.e_kanivets.moneytracker.entity.Account;
+import com.blogspot.e_kanivets.moneytracker.entity.Transfer;
+import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
+import com.blogspot.e_kanivets.moneytracker.repo.TransferRepo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,10 +47,10 @@ public class TransferActivity extends BaseActivity {
     protected boolean initData() {
         DbHelper dbHelper = new DbHelper(TransferActivity.this);
 
-        AccountController accountController = new AccountController(dbHelper);
-        transferController = new TransferController(dbHelper, accountController);
+        AccountController accountController = new AccountController(new AccountRepo(dbHelper));
+        transferController = new TransferController(new TransferRepo(dbHelper), accountController);
 
-        accountList = accountController.getAccounts();
+        accountList = accountController.readAll();
 
         return super.initData();
     }

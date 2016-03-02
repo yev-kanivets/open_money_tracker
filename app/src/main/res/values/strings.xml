@@ -28,7 +28,6 @@
     <string name="no_thank_you">No Thank You</string>
     <string name="yes_very">Yes!</string>
 
-    <!-- Not translated strings -->
     <string name="title_records">Records</string>
     <string name="title_accounts">Accounts</string>
     <string name="title_export">Export</string>
@@ -36,8 +35,8 @@
     <string name="title_add_expense">Add expense</string>
     <string name="title_add_account">Add account</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
 
     <string name="export">Export</string>
     <string name="add_account">Add account</string>
@@ -46,5 +45,14 @@
     <string name="transfer">Transfer</string>
     <string name="from">From</string>
     <string name="to">To</string>
+    <string name="title_exchange_rates">Exchange rates</string>
+    <string name="add_exchange_rate">Add exchange rate</string>
+    <string name="cant_make_report">Can\'t make a report</string>
+    <string name="rates_needed">Next exchange rates are needed:</string>
+    <string name="arrow" translatable="false"><![CDATA[" -> "]]></string>
+    <string name="account_was_removed">Account was removed</string>
+    <string name="one" translatable="false">1</string>
+    <string name="equal" translatable="false">=</string>
+    <string name="multiply" translatable="false">*</string>
 
 </resources>
