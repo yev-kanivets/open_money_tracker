@@ -44,6 +44,7 @@ import com.blogspot.e_kanivets.moneytracker.util.PrefUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -209,6 +210,8 @@ public class RecordsFragment extends Fragment {
 
     private void update() {
         recordList = recordController.getRecordsForPeriod(periodController.getPeriod());
+        Collections.reverse(recordList);
+
         listView.setAdapter(new RecordAdapter(getActivity(), recordList));
         ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
     }
@@ -221,10 +224,7 @@ public class RecordsFragment extends Fragment {
             tvFromDate.setText(periodController.getFirstDay());
             tvToDate.setText(periodController.getLastDay());
 
-            recordList = recordController.getRecordsForPeriod(periodController.getPeriod());
-
-            listView.setAdapter(new RecordAdapter(getActivity(), recordList));
-            ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
+            update();
 
             /* Scroll list to bottom only once at start */
             listView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {

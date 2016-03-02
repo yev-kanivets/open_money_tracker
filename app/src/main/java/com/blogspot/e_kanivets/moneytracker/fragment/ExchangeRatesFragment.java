@@ -22,7 +22,11 @@ import com.blogspot.e_kanivets.moneytracker.activity.AddExchangeRateActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.NavDrawerActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.ExchangeRateAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
+import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRate;
 import com.blogspot.e_kanivets.moneytracker.repo.ExchangeRateRepo;
+
+import java.util.Collections;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -116,7 +120,10 @@ public class ExchangeRatesFragment extends Fragment {
     }
 
     private void update() {
-        listView.setAdapter(new ExchangeRateAdapter(getActivity(), rateController.readAll()));
+        List<ExchangeRate> exchangeRateList = rateController.readAll();
+        Collections.reverse(exchangeRateList);
+
+        listView.setAdapter(new ExchangeRateAdapter(getActivity(), exchangeRateList));
         ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
     }
 
@@ -124,9 +131,8 @@ public class ExchangeRatesFragment extends Fragment {
         if (rootView != null) {
             ButterKnife.bind(this, rootView);
 
-            listView.setAdapter(new ExchangeRateAdapter(getActivity(), rateController.readAll()));
-            ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
             registerForContextMenu(listView);
+            update();
 
             ((NavDrawerActivity) getActivity()).onSectionAttached(TAG);
         }
