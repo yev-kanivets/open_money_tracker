@@ -58,7 +58,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @Override
-    protected void initToolbar() {
+    protected Toolbar initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -68,6 +68,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+        return toolbar;
     }
 
     @Override

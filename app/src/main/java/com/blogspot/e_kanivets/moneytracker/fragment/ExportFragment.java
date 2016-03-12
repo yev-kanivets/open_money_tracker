@@ -30,7 +30,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ExportFragment extends Fragment {
+public class ExportFragment extends BaseFragment {
     public static final String TAG = "ExportFragment";
 
     public static ExportFragment newInstance() {
@@ -48,6 +48,7 @@ public class ExportFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_export, container, false);
+        getActivity().setTitle(R.string.title_export);
         initViews(rootView);
         initActionBar();
         return rootView;

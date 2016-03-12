@@ -102,7 +102,7 @@ public class RecordsFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_records, container, false);
-        initToolbar(rootView);
+        getActivity().setTitle(R.string.title_records);
         initViews(rootView);
         return rootView;
     }
@@ -198,7 +198,53 @@ public class RecordsFragment extends BaseFragment {
         }
     }
 
-    protected void initToolbar(View rootView) {
+    private void update() {
+        recordList = recordController.getRecordsForPeriod(periodController.getPeriod());
+        Collections.reverse(recordList);
+
+        listView.setAdapter(new RecordAdapter(getActivity(), recordList));
+        ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
+    }
+
+    private void initViews(View rootView) {
+        if (rootView == null) return;
+
+        ButterKnife.bind(this, rootView);
+
+        //Set dates of current week
+        tvFromDate.setText(periodController.getFirstDay());
+        tvToDate.setText(periodController.getLastDay());
+
+        update();
+
+        if (PrefUtils.checkRateDialog()) showAppRateDialog();
+
+        registerForContextMenu(listView);
+    }
+
+    private void showAppRateDialog() {
+        AppRateDialog dialog = new AppRateDialog(getActivity());
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+    }
+
+    private void startAddIncomeActivity(Record record, AddRecordActivity.Mode mode) {
+        Intent intent = new Intent(getActivity(), AddRecordActivity.class);
+        intent.putExtra(AddRecordActivity.KEY_RECORD, record);
+        intent.putExtra(AddRecordActivity.KEY_MODE, mode);
+        intent.putExtra(AddRecordActivity.KEY_TYPE, Record.TYPE_INCOME);
+        startActivityForResult(intent, REQUEST_ACTION_RECORD);
+    }
+
+    private void startAddExpenseActivity(Record record, AddRecordActivity.Mode mode) {
+        Intent intent = new Intent(getActivity(), AddRecordActivity.class);
+        intent.putExtra(AddRecordActivity.KEY_RECORD, record);
+        intent.putExtra(AddRecordActivity.KEY_MODE, mode);
+        intent.putExtra(AddRecordActivity.KEY_TYPE, Record.TYPE_EXPENSE);
+        startActivityForResult(intent, REQUEST_ACTION_RECORD);
+    }
+
+    protected View getAppBarContent() {
         ActionBar.LayoutParams lp = new ActionBar.LayoutParams(
                 ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT,
                 Gravity.RIGHT | Gravity.CENTER_VERTICAL);
@@ -251,52 +297,6 @@ public class RecordsFragment extends BaseFragment {
             }
         });
 
-        getToolbar().setCustomView(customNav, lp);
-    }
-
-    private void update() {
-        recordList = recordController.getRecordsForPeriod(periodController.getPeriod());
-        Collections.reverse(recordList);
-
-        listView.setAdapter(new RecordAdapter(getActivity(), recordList));
-        ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
-    }
-
-    private void initViews(View rootView) {
-        if (rootView == null) return;
-
-        ButterKnife.bind(this, rootView);
-
-        //Set dates of current week
-        tvFromDate.setText(periodController.getFirstDay());
-        tvToDate.setText(periodController.getLastDay());
-
-        update();
-
-        if (PrefUtils.checkRateDialog()) showAppRateDialog();
-
-        registerForContextMenu(listView);
-    }
-
-    private void showAppRateDialog() {
-        AppRateDialog dialog = new AppRateDialog(getActivity());
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.show();
-    }
-
-    private void startAddIncomeActivity(Record record, AddRecordActivity.Mode mode) {
-        Intent intent = new Intent(getActivity(), AddRecordActivity.class);
-        intent.putExtra(AddRecordActivity.KEY_RECORD, record);
-        intent.putExtra(AddRecordActivity.KEY_MODE, mode);
-        intent.putExtra(AddRecordActivity.KEY_TYPE, Record.TYPE_INCOME);
-        startActivityForResult(intent, REQUEST_ACTION_RECORD);
-    }
-
-    private void startAddExpenseActivity(Record record, AddRecordActivity.Mode mode) {
-        Intent intent = new Intent(getActivity(), AddRecordActivity.class);
-        intent.putExtra(AddRecordActivity.KEY_RECORD, record);
-        intent.putExtra(AddRecordActivity.KEY_MODE, mode);
-        intent.putExtra(AddRecordActivity.KEY_TYPE, Record.TYPE_EXPENSE);
-        startActivityForResult(intent, REQUEST_ACTION_RECORD);
+        return customNav;
     }
 }
