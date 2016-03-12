@@ -54,7 +54,7 @@ import butterknife.OnClick;
  * Use the {@link RecordsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RecordsFragment extends Fragment {
+public class RecordsFragment extends BaseFragment {
     public static final String TAG = "RecordsFragment";
 
     private static final int REQUEST_ACTION_RECORD = 1;
@@ -102,8 +102,8 @@ public class RecordsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_records, container, false);
+        initToolbar(rootView);
         initViews(rootView);
-        initActionBar();
         return rootView;
     }
 
@@ -198,33 +198,7 @@ public class RecordsFragment extends Fragment {
         }
     }
 
-    private void update() {
-        recordList = recordController.getRecordsForPeriod(periodController.getPeriod());
-        Collections.reverse(recordList);
-
-        listView.setAdapter(new RecordAdapter(getActivity(), recordList));
-        ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
-    }
-
-    private void initViews(View rootView) {
-        if (rootView == null) return;
-
-        ButterKnife.bind(this, rootView);
-
-        //Set dates of current week
-        tvFromDate.setText(periodController.getFirstDay());
-        tvToDate.setText(periodController.getLastDay());
-
-        update();
-
-        if (PrefUtils.checkRateDialog()) showAppRateDialog();
-
-        registerForContextMenu(listView);
-    }
-
-    private void initActionBar() {
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-
+    protected void initToolbar(View rootView) {
         ActionBar.LayoutParams lp = new ActionBar.LayoutParams(
                 ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT,
                 Gravity.RIGHT | Gravity.CENTER_VERTICAL);
@@ -277,7 +251,31 @@ public class RecordsFragment extends Fragment {
             }
         });
 
-        if (actionBar != null) actionBar.setCustomView(customNav, lp);
+        getToolbar().setCustomView(customNav, lp);
+    }
+
+    private void update() {
+        recordList = recordController.getRecordsForPeriod(periodController.getPeriod());
+        Collections.reverse(recordList);
+
+        listView.setAdapter(new RecordAdapter(getActivity(), recordList));
+        ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
+    }
+
+    private void initViews(View rootView) {
+        if (rootView == null) return;
+
+        ButterKnife.bind(this, rootView);
+
+        //Set dates of current week
+        tvFromDate.setText(periodController.getFirstDay());
+        tvToDate.setText(periodController.getLastDay());
+
+        update();
+
+        if (PrefUtils.checkRateDialog()) showAppRateDialog();
+
+        registerForContextMenu(listView);
     }
 
     private void showAppRateDialog() {

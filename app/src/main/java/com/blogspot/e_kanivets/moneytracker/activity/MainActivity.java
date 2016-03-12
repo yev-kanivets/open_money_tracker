@@ -7,7 +7,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import com.blogspot.e_kanivets.moneytracker.R;
@@ -29,7 +28,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     protected int getContentViewId() {
-        return R.layout.activity_nav_drawer;
+        return R.layout.activity_main;
     }
 
     @Override
@@ -44,6 +43,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, RecordsFragment.newInstance())
+                .commit();
     }
 
     @Override
@@ -64,16 +68,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if (!drawer.isDrawerOpen(GravityCompat.START)) {
-            initToolbar();
-            return true;
-        }
-
-        return super.onCreateOptionsMenu(menu);
     }
 
     @Override

@@ -62,7 +62,6 @@ public class AccountsFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_accounts, container, false);
-        initToolbar(rootView);
         initViews(rootView);
         return rootView;
     }

@@ -61,7 +61,6 @@ public class ExchangeRatesFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_exchange_rates, container, false);
-        initToolbar(rootView);
         initViews(rootView);
         return rootView;
     }
