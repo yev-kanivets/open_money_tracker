@@ -1,6 +1,5 @@
 package com.blogspot.e_kanivets.moneytracker.fragment;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
@@ -23,7 +21,6 @@ import android.widget.TextView;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.AddRecordActivity;
-import com.blogspot.e_kanivets.moneytracker.activity.NavDrawerActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.ReportActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.RecordAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
@@ -108,13 +105,6 @@ public class RecordsFragment extends Fragment {
         initViews(rootView);
         initActionBar();
         return rootView;
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-        ((NavDrawerActivity) activity).onSectionAttached(TAG);
     }
 
     @Override
@@ -217,33 +207,19 @@ public class RecordsFragment extends Fragment {
     }
 
     private void initViews(View rootView) {
-        if (rootView != null) {
-            ButterKnife.bind(this, rootView);
+        if (rootView == null) return;
 
-            //Set dates of current week
-            tvFromDate.setText(periodController.getFirstDay());
-            tvToDate.setText(periodController.getLastDay());
+        ButterKnife.bind(this, rootView);
 
-            update();
+        //Set dates of current week
+        tvFromDate.setText(periodController.getFirstDay());
+        tvToDate.setText(periodController.getLastDay());
 
-            /* Scroll list to bottom only once at start */
-            listView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                private boolean isFirst = true;
+        update();
 
-                @Override
-                public void onGlobalLayout() {
-                    if (isFirst) {
-                        isFirst = false;
-                        listView.setSelection(listView.getCount() - 1);
-                        if (PrefUtils.checkRateDialog()) showAppRateDialog();
-                    }
-                }
-            });
+        if (PrefUtils.checkRateDialog()) showAppRateDialog();
 
-            registerForContextMenu(listView);
-
-            ((NavDrawerActivity) getActivity()).onSectionAttached(TAG);
-        }
+        registerForContextMenu(listView);
     }
 
     private void initActionBar() {

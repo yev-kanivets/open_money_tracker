@@ -1,6 +1,5 @@
 package com.blogspot.e_kanivets.moneytracker.fragment;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.activity.NavDrawerActivity;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.CategoryController;
 import com.blogspot.e_kanivets.moneytracker.controller.RecordController;
@@ -53,13 +51,6 @@ public class ExportFragment extends Fragment {
         initViews(rootView);
         initActionBar();
         return rootView;
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-        ((NavDrawerActivity) activity).onSectionAttached(TAG);
     }
 
     private void initViews(View rootView) {

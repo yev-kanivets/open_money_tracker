@@ -7,7 +7,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 
 import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.activity.base.BaseActivity;
+import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.controller.TransferController;
@@ -21,7 +21,7 @@ import java.util.List;
 
 import butterknife.Bind;
 
-public class TransferActivity extends BaseActivity {
+public class TransferActivity extends BaseBackActivity {
     @SuppressWarnings("unused")
     private static final String TAG = "TransferActivity";
 

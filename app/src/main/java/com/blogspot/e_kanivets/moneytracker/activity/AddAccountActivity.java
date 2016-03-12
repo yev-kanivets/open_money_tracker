@@ -7,8 +7,8 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 
 import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.activity.base.BaseActivity;
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
+import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.entity.Account;
 import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 
-public class AddAccountActivity extends BaseActivity {
+public class AddAccountActivity extends BaseBackActivity {
     @SuppressWarnings("unused")
     private static final String TAG = "AddAccountActivity";
 

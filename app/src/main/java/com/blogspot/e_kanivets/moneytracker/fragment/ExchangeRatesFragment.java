@@ -1,11 +1,8 @@
 package com.blogspot.e_kanivets.moneytracker.fragment;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -19,7 +16,6 @@ import android.widget.ListView;
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.AddExchangeRateActivity;
-import com.blogspot.e_kanivets.moneytracker.activity.NavDrawerActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.ExchangeRateAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
 import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRate;
@@ -32,7 +28,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ExchangeRatesFragment extends Fragment {
+public class ExchangeRatesFragment extends BaseFragment {
     public static final String TAG = "ExchangeRatesFragment";
 
     private static final int REQUEST_ADD_EXCHANGE_RATE = 1;
@@ -65,17 +61,9 @@ public class ExchangeRatesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_exchange_rates, container, false);
+        initToolbar(rootView);
         initViews(rootView);
         return rootView;
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-        initActionBar();
-
-        ((NavDrawerActivity) activity).onSectionAttached(TAG);
     }
 
     @OnClick(R.id.btn_add_exchange_rate)
@@ -129,18 +117,11 @@ public class ExchangeRatesFragment extends Fragment {
     }
 
     private void initViews(View rootView) {
-        if (rootView != null) {
-            ButterKnife.bind(this, rootView);
+        if (rootView == null) return;
 
-            registerForContextMenu(listView);
-            update();
+        ButterKnife.bind(this, rootView);
 
-            ((NavDrawerActivity) getActivity()).onSectionAttached(TAG);
-        }
-    }
-
-    private void initActionBar() {
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (actionBar != null) actionBar.setCustomView(null);
+        registerForContextMenu(listView);
+        update();
     }
 }

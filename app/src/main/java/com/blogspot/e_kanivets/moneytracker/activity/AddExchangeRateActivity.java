@@ -8,7 +8,7 @@ import android.widget.EditText;
 
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.activity.base.BaseActivity;
+import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
 import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRate;
 import com.blogspot.e_kanivets.moneytracker.repo.ExchangeRateRepo;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 
-public class AddExchangeRateActivity extends BaseActivity {
+public class AddExchangeRateActivity extends BaseBackActivity {
     @SuppressWarnings("unused")
     private static final String TAG = "AddExchangeRateActivity";
 

@@ -5,7 +5,7 @@ import android.support.v7.app.AlertDialog;
 import android.widget.ExpandableListView;
 
 import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.activity.base.BaseActivity;
+import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.ExpandableListReportAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
@@ -23,7 +23,7 @@ import java.util.List;
 
 import butterknife.Bind;
 
-public class ReportActivity extends BaseActivity {
+public class ReportActivity extends BaseBackActivity {
     @SuppressWarnings("unused")
     private static final String TAG = "ReportActivity";
 

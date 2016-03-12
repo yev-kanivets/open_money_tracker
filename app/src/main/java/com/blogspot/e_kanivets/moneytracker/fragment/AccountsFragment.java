@@ -1,11 +1,8 @@
 package com.blogspot.e_kanivets.moneytracker.fragment;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -20,7 +17,6 @@ import android.widget.ListView;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.AddAccountActivity;
-import com.blogspot.e_kanivets.moneytracker.activity.NavDrawerActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.TransferActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.AccountAdapter;
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
@@ -31,7 +27,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class AccountsFragment extends Fragment {
+public class AccountsFragment extends BaseFragment {
     public static final String TAG = "AccountsFragment";
 
     private static final int REQUEST_ADD_ACCOUNT = 1;
@@ -66,6 +62,7 @@ public class AccountsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_accounts, container, false);
+        initToolbar(rootView);
         initViews(rootView);
         return rootView;
     }
@@ -88,15 +85,6 @@ public class AccountsFragment extends Fragment {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-        initActionBar();
-
-        ((NavDrawerActivity) activity).onSectionAttached(TAG);
     }
 
     @OnClick(R.id.btn_add_account)
@@ -151,19 +139,12 @@ public class AccountsFragment extends Fragment {
     }
 
     private void initViews(View rootView) {
-        if (rootView != null) {
-            ButterKnife.bind(this, rootView);
+        if (rootView == null) return;
 
-            listView.setAdapter(new AccountAdapter(getActivity(), accountController.readAll()));
-            ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
-            registerForContextMenu(listView);
+        ButterKnife.bind(this, rootView);
 
-            ((NavDrawerActivity) getActivity()).onSectionAttached(TAG);
-        }
-    }
-
-    private void initActionBar() {
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (actionBar != null) actionBar.setCustomView(null);
+        listView.setAdapter(new AccountAdapter(getActivity(), accountController.readAll()));
+        ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
+        registerForContextMenu(listView);
     }
 }

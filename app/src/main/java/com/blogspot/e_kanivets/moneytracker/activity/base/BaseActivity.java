@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 import butterknife.ButterKnife;
@@ -38,7 +40,10 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void initViews() {
         ButterKnife.bind(BaseActivity.this);
+        initToolbar();
     }
+
+    protected abstract void initToolbar();
 
     protected void showToast(String message) {
         Toast.makeText(BaseActivity.this, message, Toast.LENGTH_SHORT).show();

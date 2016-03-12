@@ -19,7 +19,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Default" />
         <activity
-            android:name=".activity.NavDrawerActivity"
+            android:name=".activity.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Default">
