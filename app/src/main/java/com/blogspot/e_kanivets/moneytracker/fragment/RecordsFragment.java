@@ -103,6 +103,7 @@ public class RecordsFragment extends BaseFragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_records, container, false);
         getActivity().setTitle(R.string.title_records);
+        inflateAppBarLayout(R.layout.view_action_bar);
         initViews(rootView);
         return rootView;
     }
@@ -206,7 +207,8 @@ public class RecordsFragment extends BaseFragment {
         ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
     }
 
-    private void initViews(View rootView) {
+    @Override
+    protected void initViews(View rootView) {
         if (rootView == null) return;
 
         ButterKnife.bind(this, rootView);
@@ -220,37 +222,8 @@ public class RecordsFragment extends BaseFragment {
         if (PrefUtils.checkRateDialog()) showAppRateDialog();
 
         registerForContextMenu(listView);
-    }
 
-    private void showAppRateDialog() {
-        AppRateDialog dialog = new AppRateDialog(getActivity());
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.show();
-    }
-
-    private void startAddIncomeActivity(Record record, AddRecordActivity.Mode mode) {
-        Intent intent = new Intent(getActivity(), AddRecordActivity.class);
-        intent.putExtra(AddRecordActivity.KEY_RECORD, record);
-        intent.putExtra(AddRecordActivity.KEY_MODE, mode);
-        intent.putExtra(AddRecordActivity.KEY_TYPE, Record.TYPE_INCOME);
-        startActivityForResult(intent, REQUEST_ACTION_RECORD);
-    }
-
-    private void startAddExpenseActivity(Record record, AddRecordActivity.Mode mode) {
-        Intent intent = new Intent(getActivity(), AddRecordActivity.class);
-        intent.putExtra(AddRecordActivity.KEY_RECORD, record);
-        intent.putExtra(AddRecordActivity.KEY_MODE, mode);
-        intent.putExtra(AddRecordActivity.KEY_TYPE, Record.TYPE_EXPENSE);
-        startActivityForResult(intent, REQUEST_ACTION_RECORD);
-    }
-
-    protected View getAppBarContent() {
-        ActionBar.LayoutParams lp = new ActionBar.LayoutParams(
-                ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT,
-                Gravity.RIGHT | Gravity.CENTER_VERTICAL);
-        View customNav = LayoutInflater.from(getActivity()).inflate(R.layout.view_action_bar, null);
-
-        Spinner spinner = (Spinner) customNav.findViewById(R.id.spinner_period);
+        Spinner spinner = (Spinner) getActivity().findViewById(R.id.spinner_period);
         spinner.setAdapter(new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.array_periods)));
         spinner.setSelection(PrefUtils.readUsedPeriod());
@@ -296,7 +269,27 @@ public class RecordsFragment extends BaseFragment {
 
             }
         });
+    }
 
-        return customNav;
+    private void showAppRateDialog() {
+        AppRateDialog dialog = new AppRateDialog(getActivity());
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+    }
+
+    private void startAddIncomeActivity(Record record, AddRecordActivity.Mode mode) {
+        Intent intent = new Intent(getActivity(), AddRecordActivity.class);
+        intent.putExtra(AddRecordActivity.KEY_RECORD, record);
+        intent.putExtra(AddRecordActivity.KEY_MODE, mode);
+        intent.putExtra(AddRecordActivity.KEY_TYPE, Record.TYPE_INCOME);
+        startActivityForResult(intent, REQUEST_ACTION_RECORD);
+    }
+
+    private void startAddExpenseActivity(Record record, AddRecordActivity.Mode mode) {
+        Intent intent = new Intent(getActivity(), AddRecordActivity.class);
+        intent.putExtra(AddRecordActivity.KEY_RECORD, record);
+        intent.putExtra(AddRecordActivity.KEY_MODE, mode);
+        intent.putExtra(AddRecordActivity.KEY_TYPE, Record.TYPE_EXPENSE);
+        startActivityForResult(intent, REQUEST_ACTION_RECORD);
     }
 }

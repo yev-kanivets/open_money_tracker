@@ -61,6 +61,7 @@ public class ExchangeRatesFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_exchange_rates, container, false);
+        inflateAppBarLayout(-1);
         getActivity().setTitle(R.string.title_exchange_rates);
         initViews(rootView);
         return rootView;
@@ -116,7 +117,8 @@ public class ExchangeRatesFragment extends BaseFragment {
         ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
     }
 
-    private void initViews(View rootView) {
+    @Override
+    protected void initViews(View rootView) {
         if (rootView == null) return;
 
         ButterKnife.bind(this, rootView);

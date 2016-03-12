@@ -49,12 +49,14 @@ public class ExportFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_export, container, false);
         getActivity().setTitle(R.string.title_export);
+        inflateAppBarLayout(-1);
         initViews(rootView);
         initActionBar();
         return rootView;
     }
 
-    private void initViews(View rootView) {
+    @Override
+    protected void initViews(View rootView) {
         if (rootView != null) ButterKnife.bind(this, rootView);
     }
 
