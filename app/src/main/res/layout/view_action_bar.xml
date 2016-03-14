@@ -1,12 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingEnd="@dimen/activity_horizontal_margin"
+    android:paddingStart="@dimen/activity_horizontal_margin">
+
+    <TextView
+        android:id="@+id/tv_from_date"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="New Text"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/tv_to_date"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="New Text"
+        android:textColor="@color/black" />
 
     <Spinner
         android:id="@+id/spinner_period"
-        android:layout_width="match_parent"
+        android:layout_width="110dp"
         android:layout_height="wrap_content" />
 
 </LinearLayout>

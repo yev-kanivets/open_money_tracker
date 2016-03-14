@@ -4,11 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
-import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,9 +66,7 @@ public class RecordsFragment extends BaseFragment {
 
     @Bind(R.id.list_view)
     ListView listView;
-    @Bind(R.id.tv_from_date)
     TextView tvFromDate;
-    @Bind(R.id.tv_to_date)
     TextView tvToDate;
 
     public static RecordsFragment newInstance() {
@@ -85,6 +83,7 @@ public class RecordsFragment extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
 
         periodController = new PeriodController();
 
@@ -106,6 +105,25 @@ public class RecordsFragment extends BaseFragment {
         inflateAppBarLayout(R.layout.view_action_bar);
         initViews(rootView);
         return rootView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_records, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_report:
+                showReport();
+                break;
+
+            default:
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -145,7 +163,6 @@ public class RecordsFragment extends BaseFragment {
         startAddIncomeActivity(null, AddRecordActivity.Mode.MODE_ADD);
     }
 
-    @OnClick(R.id.btn_report)
     public void showReport() {
         Intent intent = new Intent(getActivity(), ReportActivity.class);
         intent.putExtra(ReportActivity.KEY_PERIOD, periodController.getPeriod());
@@ -153,7 +170,6 @@ public class RecordsFragment extends BaseFragment {
         startActivity(intent);
     }
 
-    @OnClick(R.id.tv_from_date)
     public void showChangeFromDateDialog() {
         ChangeDateDialog dialog = new ChangeDateDialog(getActivity(),
                 periodController.getPeriod().getFirst(), new ChangeDateDialog.OnDateChangedListener() {
@@ -168,7 +184,6 @@ public class RecordsFragment extends BaseFragment {
         dialog.show();
     }
 
-    @OnClick(R.id.tv_to_date)
     public void showChangeToDateDialog() {
         ChangeDateDialog dialog = new ChangeDateDialog(getActivity(),
                 periodController.getPeriod().getLast(), new ChangeDateDialog.OnDateChangedListener() {
@@ -212,6 +227,22 @@ public class RecordsFragment extends BaseFragment {
         if (rootView == null) return;
 
         ButterKnife.bind(this, rootView);
+
+        tvFromDate = (TextView) getActivity().findViewById(R.id.tv_from_date);
+        tvToDate = (TextView) getActivity().findViewById(R.id.tv_to_date);
+
+        tvFromDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showChangeFromDateDialog();
+            }
+        });
+        tvToDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showChangeToDateDialog();
+            }
+        });
 
         //Set dates of current week
         tvFromDate.setText(periodController.getFirstDay());

@@ -4,40 +4,6 @@
     android:background="@color/light_grey"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:background="@color/grey"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/tv_from_date"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/selector_change_date"
-            android:gravity="center"
-            android:text="New Text" />
-
-        <TextView
-            android:id="@+id/tv_to_date"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/selector_change_date"
-            android:gravity="center"
-            android:text="New Text" />
-
-        <Button
-            android:id="@+id/btn_report"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/selector_report"
-            android:padding="15dp"
-            android:text="@string/report" />
-    </LinearLayout>
-
     <ListView
         android:id="@+id/list_view"
         android:layout_width="match_parent"
