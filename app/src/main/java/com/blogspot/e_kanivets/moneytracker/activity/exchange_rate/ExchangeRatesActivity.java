@@ -1,21 +1,17 @@
-package com.blogspot.e_kanivets.moneytracker.fragment;
+package com.blogspot.e_kanivets.moneytracker.activity.exchange_rate;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.activity.AddExchangeRateActivity;
+import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.ExchangeRateAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
 import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRate;
@@ -25,58 +21,43 @@ import java.util.Collections;
 import java.util.List;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ExchangeRatesFragment extends BaseFragment {
-    public static final String TAG = "ExchangeRatesFragment";
+public class ExchangeRatesActivity extends BaseBackActivity {
+    @SuppressWarnings("unused")
+    private static final String TAG = "ExchangeRatesActivity";
 
     private static final int REQUEST_ADD_EXCHANGE_RATE = 1;
-
-    @Bind(R.id.list_view)
-    ListView listView;
 
     private ExchangeRateController rateController;
     private List<ExchangeRate> exchangeRateList;
 
-    public static ExchangeRatesFragment newInstance() {
-        ExchangeRatesFragment fragment = new ExchangeRatesFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
+    @Bind(R.id.list_view)
+    ListView listView;
 
-    public ExchangeRatesFragment() {
-        // Required empty public constructor
+    @Override
+    protected int getContentViewId() {
+        return R.layout.activity_exchange_rates;
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        rateController = new ExchangeRateController(new ExchangeRateRepo(new DbHelper(getActivity())));
+    protected boolean initData() {
+        rateController = new ExchangeRateController(new ExchangeRateRepo(new DbHelper(ExchangeRatesActivity.this)));
+        return super.initData();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_exchange_rates, container, false);
-        inflateAppBarLayout(-1);
-        getActivity().setTitle(R.string.title_exchange_rates);
-        initViews(rootView);
-        return rootView;
-    }
+    protected void initViews() {
+        super.initViews();
 
-    @OnClick(R.id.btn_add_exchange_rate)
-    public void addExchangeRate() {
-        Intent intent = new Intent(getActivity(), AddExchangeRateActivity.class);
-        startActivityForResult(intent, REQUEST_ADD_EXCHANGE_RATE);
+        registerForContextMenu(listView);
+        update();
     }
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        getActivity().getMenuInflater().inflate(R.menu.menu_exchange_rate, menu);
+        getMenuInflater().inflate(R.menu.menu_exchange_rate, menu);
     }
 
     @Override
@@ -91,6 +72,12 @@ public class ExchangeRatesFragment extends BaseFragment {
             default:
                 return super.onContextItemSelected(item);
         }
+    }
+
+    @OnClick(R.id.btn_add_exchange_rate)
+    public void addExchangeRate() {
+        Intent intent = new Intent(ExchangeRatesActivity.this, AddExchangeRateActivity.class);
+        startActivityForResult(intent, REQUEST_ADD_EXCHANGE_RATE);
     }
 
     @Override
@@ -113,17 +100,7 @@ public class ExchangeRatesFragment extends BaseFragment {
         exchangeRateList = rateController.readAll();
         Collections.reverse(exchangeRateList);
 
-        listView.setAdapter(new ExchangeRateAdapter(getActivity(), exchangeRateList));
+        listView.setAdapter(new ExchangeRateAdapter(ExchangeRatesActivity.this, exchangeRateList));
         ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
-    }
-
-    @Override
-    protected void initViews(View rootView) {
-        if (rootView == null) return;
-
-        ButterKnife.bind(this, rootView);
-
-        registerForContextMenu(listView);
-        update();
     }
 }

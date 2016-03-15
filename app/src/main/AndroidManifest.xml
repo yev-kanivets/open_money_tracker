@@ -14,11 +14,6 @@
         android:label="@string/app_name"
         android:theme="@style/Theme.Default">
         <activity
-            android:name=".activity.ReportActivity"
-            android:label="@string/report"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.Default" />
-        <activity
             android:name=".activity.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
@@ -29,32 +24,49 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".activity.ReportActivity"
+            android:label="@string/report"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Default" />
+
         <activity
             android:name=".activity.AddRecordActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Default"
             android:windowSoftInputMode="stateVisible" />
+
         <activity
             android:name=".activity.account.AddAccountActivity"
             android:label="@string/title_add_account"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Default"
             android:windowSoftInputMode="stateVisible" />
+
         <activity
-            android:name=".activity.AddExchangeRateActivity"
+            android:name=".activity.exchange_rate.AddExchangeRateActivity"
             android:label="@string/add_exchange_rate"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Default"
             android:windowSoftInputMode="stateVisible" />
+
         <activity
             android:name=".activity.account.TransferActivity"
             android:label="@string/transfer"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Default"
             android:windowSoftInputMode="stateVisible" />
+
         <activity
             android:name=".activity.account.AccountsActivity"
             android:label="@string/title_accounts"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Default" />
+
+        <activity
+            android:name=".activity.exchange_rate.ExchangeRatesActivity"
+            android:label="@string/title_exchange_rates"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Default" />
     </application>

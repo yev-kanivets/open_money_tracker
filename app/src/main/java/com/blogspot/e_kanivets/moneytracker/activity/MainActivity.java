@@ -13,7 +13,7 @@ import android.view.MenuItem;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.account.AccountsActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseActivity;
-import com.blogspot.e_kanivets.moneytracker.fragment.ExchangeRatesFragment;
+import com.blogspot.e_kanivets.moneytracker.activity.exchange_rate.ExchangeRatesActivity;
 import com.blogspot.e_kanivets.moneytracker.fragment.ExportFragment;
 import com.blogspot.e_kanivets.moneytracker.fragment.RecordsFragment;
 import com.blogspot.e_kanivets.moneytracker.util.PrefUtils;
@@ -87,7 +87,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 break;
 
             case R.id.nav_rates:
-                fragment = ExchangeRatesFragment.newInstance();
+                startActivity(new Intent(MainActivity.this, ExchangeRatesActivity.class));
                 break;
 
             case R.id.nav_export:
