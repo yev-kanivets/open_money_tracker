@@ -35,7 +35,7 @@
             android:theme="@style/Theme.Default"
             android:windowSoftInputMode="stateVisible" />
         <activity
-            android:name=".activity.AddAccountActivity"
+            android:name=".activity.account.AddAccountActivity"
             android:label="@string/title_add_account"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Default"
@@ -47,11 +47,16 @@
             android:theme="@style/Theme.Default"
             android:windowSoftInputMode="stateVisible" />
         <activity
-            android:name=".activity.TransferActivity"
+            android:name=".activity.account.TransferActivity"
             android:label="@string/transfer"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Default"
             android:windowSoftInputMode="stateVisible" />
+        <activity
+            android:name=".activity.account.AccountsActivity"
+            android:label="@string/title_accounts"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Default" />
     </application>
 
 </manifest>
