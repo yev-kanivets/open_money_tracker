@@ -63,10 +63,6 @@ public class AddExchangeRateActivity extends BaseBackActivity {
                 }
                 return true;
 
-            case R.id.action_close:
-                finish();
-                return true;
-
             default:
                 return super.onOptionsItemSelected(item);
         }

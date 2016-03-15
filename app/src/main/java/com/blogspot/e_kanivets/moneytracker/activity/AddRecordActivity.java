@@ -147,10 +147,6 @@ public class AddRecordActivity extends BaseBackActivity {
                 } else showToast(R.string.wrong_number_text);
                 return true;
 
-            case R.id.action_close:
-                finish();
-                return true;
-
             default:
                 return super.onOptionsItemSelected(item);
         }

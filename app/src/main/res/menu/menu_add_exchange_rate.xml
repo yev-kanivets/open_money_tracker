@@ -8,10 +8,4 @@
         android:title="@string/add"
         tools:showAsAction="ifRoom" />
 
-    <item
-        android:id="@+id/action_close"
-        android:icon="@drawable/ic_close_white_24dp"
-        android:title="@string/add"
-        tools:showAsAction="ifRoom" />
-
 </menu>
