@@ -1,4 +1,4 @@
-package com.blogspot.e_kanivets.moneytracker.activity;
+package com.blogspot.e_kanivets.moneytracker.activity.exchange_rate;
 
 import android.support.v7.widget.AppCompatSpinner;
 import android.view.Menu;

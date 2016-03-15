@@ -1,10 +1,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@color/light_grey"
     android:orientation="vertical"
-    tools:context="com.blogspot.e_kanivets.moneytracker.fragment.AccountsFragment">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".activity.MainActivity">
+
+    <Button
+        android:id="@+id/btn_report"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_report"
+        android:padding="15dp"
+        android:text="@string/report" />
 
     <ListView
         android:id="@+id/list_view"
@@ -21,13 +31,23 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btn_add_account"
-            android:layout_width="0dp"
+            android:id="@+id/btn_add_income"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="end"
             android:layout_weight="1"
             android:background="@drawable/selector_add_income"
             android:padding="15dp"
-            android:text="@string/add_account" />
+            android:text="@string/add_income" />
+
+        <Button
+            android:id="@+id/btn_add_expense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/selector_add_expense"
+            android:padding="15dp"
+            android:text="@string/add_expense" />
     </LinearLayout>
 
 </LinearLayout>
