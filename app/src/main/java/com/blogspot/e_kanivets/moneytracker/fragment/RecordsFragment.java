@@ -109,7 +109,7 @@ public class RecordsFragment extends BaseFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_records, menu);
+        //inflater.inflate(R.menu.menu_records, menu);
     }
 
     @Override
