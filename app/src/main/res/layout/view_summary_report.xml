@@ -1,116 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         android:background="@color/black"
         android:visibility="visible" />
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:id="@+id/ll_total_income"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
-        android:id="@+id/ll_total_income">
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/half_margin"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/half_margin">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:gravity="start"
             android:text="@string/total_incomes"
-            android:textSize="18sp"
-            android:layout_gravity="center"
-            android:minWidth="5dp"
-            android:paddingLeft="10dp"
-            android:background="@android:color/transparent"
-            android:layout_weight="1"
-            android:layout_margin="10dp"
-            android:gravity="left" />
+            android:textSize="18sp" />
 
         <TextView
+            android:id="@+id/tv_total_income"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/tv_total_income"
-            android:textSize="18sp"
             android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
-            android:layout_margin="10dp"
-            android:gravity="right" />
+            android:gravity="end"
+            android:text="New Text"
+            android:textSize="18sp" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:id="@+id/ll_total_expense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
-        android:id="@+id/ll_total_expense">
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/half_margin"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/half_margin">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:text="@string/total_expenses"
-            android:textSize="18sp"
             android:layout_gravity="center"
-            android:minWidth="5dp"
-            android:paddingLeft="10dp"
-            android:background="@android:color/transparent"
             android:layout_weight="1"
-            android:layout_margin="10dp"
-            android:gravity="left" />
+            android:background="@android:color/transparent"
+            android:gravity="start"
+            android:text="@string/total_expenses"
+            android:textSize="18sp" />
 
         <TextView
+            android:id="@+id/tv_total_expense"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/tv_total_expense"
-            android:textSize="18sp"
             android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
-            android:layout_margin="10dp"
-            android:gravity="right" />
+            android:gravity="end"
+            android:text="New Text"
+            android:textSize="18sp" />
 
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         android:background="@color/black"
         android:visibility="visible" />
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:id="@+id/ll_total"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
-        android:id="@+id/ll_total">
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/half_margin"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/half_margin">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:text="@string/total"
-            android:textSize="18sp"
             android:layout_gravity="center"
-            android:minWidth="5dp"
-            android:paddingLeft="10dp"
-            android:background="@android:color/transparent"
             android:layout_weight="1"
-            android:layout_margin="10dp"
-            android:gravity="left" />
+            android:background="@android:color/transparent"
+            android:gravity="start"
+            android:text="@string/total"
+            android:textSize="18sp" />
 
         <TextView
+            android:id="@+id/tv_total"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/tv_total"
-            android:textSize="18sp"
             android:layout_gravity="center_vertical"
             android:background="@android:color/transparent"
-            android:layout_margin="10dp"
-            android:gravity="right" />
+            android:gravity="end"
+            android:text="New Text"
+            android:textSize="18sp" />
 
     </LinearLayout>
 

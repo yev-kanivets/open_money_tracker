@@ -5,8 +5,8 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:paddingBottom="@dimen/half_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingEnd="@dimen/activity_horizontal_margin"
+    android:paddingStart="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/half_margin"
     tools:context="com.blogspot.e_kanivets.moneytracker.activity.AddExchangeRateActivity">
 
@@ -14,21 +14,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="1" />
+        android:text="@string/one" />
 
     <TextView
         android:id="@+id/tv_from_currency"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:gravity="center|right" />
+        android:gravity="center|end" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="=" />
+        android:text="@string/equal" />
 
     <TextView
         android:id="@+id/tv_amount"
@@ -43,13 +43,13 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="*" />
+        android:text="@string/multiply" />
 
     <TextView
         android:id="@+id/tv_to_currency"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:gravity="center|left" />
+        android:gravity="center|start" />
 
 </LinearLayout>

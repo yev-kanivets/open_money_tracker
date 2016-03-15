@@ -39,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:gravity="center|right" />
+            android:gravity="center|end" />
 
         <TextView
             android:layout_width="match_parent"
@@ -69,7 +69,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:gravity="center|left" />
+            android:gravity="center|start" />
     </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>
