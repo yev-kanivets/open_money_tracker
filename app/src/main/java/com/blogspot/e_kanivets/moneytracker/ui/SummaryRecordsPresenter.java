@@ -52,17 +52,18 @@ public class SummaryRecordsPresenter {
         viewHolder.tvPeriod.setText(periodController.getFirstDay() + " - " + periodController.getLastDay());
 
         viewHolder.tvTotalIncome.setTextColor(report.getTotalIncome() >= 0 ? green : red);
-        viewHolder.tvTotalIncome.setText(format(report.getTotalIncome()));
+        viewHolder.tvTotalIncome.setText(format(report.getTotalIncome(), report.getCurrency()));
 
         viewHolder.tvTotalExpense.setTextColor(report.getTotalExpense() >= 0 ? green : red);
-        viewHolder.tvTotalExpense.setText(format(report.getTotalExpense()));
+        viewHolder.tvTotalExpense.setText(format(report.getTotalExpense(), report.getCurrency()));
 
         viewHolder.tvTotal.setTextColor(report.getTotal() >= 0 ? green : red);
-        viewHolder.tvTotal.setText(format(report.getTotal()));
+        viewHolder.tvTotal.setText(format(report.getTotal(), report.getCurrency()));
     }
 
-    private String format(double amount) {
-        return (amount >= 0 ? "+ " : "- ") + String.format(Locale.getDefault(), "%.0f", Math.abs(amount));
+    private String format(double amount, String currency) {
+        return (amount >= 0 ? "+ " : "- ") + String.format(Locale.getDefault(), "%.0f", Math.abs(amount))
+                + " " + currency;
     }
 
     public static class ViewHolder {

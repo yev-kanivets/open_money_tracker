@@ -21,7 +21,8 @@
             android:text="Small Text"
             android:id="@+id/tv_date_and_time"
             android:layout_gravity="start"
-            android:background="@android:color/transparent" />
+            android:background="@android:color/transparent"
+            android:theme="@style/Text_Caption" />
 
         <LinearLayout
             android:orientation="horizontal"
@@ -35,25 +36,25 @@
                 android:layout_height="wrap_content"
                 android:text="New Text"
                 android:id="@+id/tv_title"
-                android:textSize="18sp"
                 android:layout_weight="1"
                 android:layout_gravity="center_vertical|top"
                 android:gravity="start"
                 android:background="@android:color/transparent"
-                android:paddingBottom="5dp" />
+                android:paddingBottom="5dp"
+                android:theme="@style/Text_Body2" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="New Text"
                 android:id="@+id/tv_category"
-                android:textSize="18sp"
                 android:layout_weight="1"
                 android:layout_gravity="center_vertical|top"
                 android:gravity="start"
                 android:layout_marginStart="2dp"
                 android:background="@android:color/transparent"
-                android:paddingBottom="5dp" />
+                android:paddingBottom="5dp"
+                android:theme="@style/Text_Body1" />
 
         </LinearLayout>
 
@@ -72,18 +73,18 @@
             android:layout_height="wrap_content"
             android:text="New Text"
             android:id="@+id/tv_price"
-            android:textSize="18sp"
             android:background="@android:color/transparent"
-            android:gravity="end" />
+            android:gravity="end"
+            android:theme="@style/Text_Body2" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="New Text"
             android:id="@+id/tv_currency"
-            android:textSize="18sp"
             android:background="@android:color/transparent"
-            android:gravity="end" />
+            android:gravity="end"
+            android:theme="@style/Text_Body1" />
 
     </LinearLayout>
 
