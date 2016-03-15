@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_records"
+        android:title="@string/title_records" />
+    <item
+        android:id="@+id/nav_accounts"
+        android:title="@string/title_accounts" />
+    <item
+        android:id="@+id/nav_rates"
+        android:title="@string/title_exchange_rates" />
+    <item
+        android:id="@+id/nav_export"
+        android:title="@string/title_export" />
+</menu>

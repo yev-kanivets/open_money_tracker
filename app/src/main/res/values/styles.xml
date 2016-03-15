@@ -4,14 +4,13 @@
     <style name="Theme.Default" parent="@style/Theme.AppCompat.Light">
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
 
-        <!-- Support library compatibility -->
-        <item name="actionBarStyle">@style/MyActionBar</item>
-        <item name="actionBarTabTextStyle">@style/MyActionBarTabText</item>
-        <item name="actionMenuTextColor">@color/white</item>
-
         <item name="colorPrimary">@color/green_light</item>
         <item name="colorPrimaryDark">@color/green_dark</item>
         <item name="colorAccent">@color/green_light</item>
+
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@null</item>
     </style>
 
     <style name="Theme.NoTitle" parent="@style/Theme.AppCompat.Light.NoActionBar">
@@ -26,6 +25,10 @@
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <!-- ActionBar styles -->
     <style name="MyActionBar" parent="@style/Widget.AppCompat.ActionBar">

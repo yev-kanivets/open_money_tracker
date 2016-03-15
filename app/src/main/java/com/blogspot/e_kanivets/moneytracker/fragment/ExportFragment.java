@@ -1,6 +1,5 @@
 package com.blogspot.e_kanivets.moneytracker.fragment;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.activity.NavDrawerActivity;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.CategoryController;
 import com.blogspot.e_kanivets.moneytracker.controller.RecordController;
@@ -32,7 +30,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ExportFragment extends Fragment {
+public class ExportFragment extends BaseFragment {
     public static final String TAG = "ExportFragment";
 
     public static ExportFragment newInstance() {
@@ -50,19 +48,15 @@ public class ExportFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_export, container, false);
+        getActivity().setTitle(R.string.title_export);
+        inflateAppBarLayout(-1);
         initViews(rootView);
         initActionBar();
         return rootView;
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-
-        ((NavDrawerActivity) activity).onSectionAttached(TAG);
-    }
-
-    private void initViews(View rootView) {
+    protected void initViews(View rootView) {
         if (rootView != null) ButterKnife.bind(this, rootView);
     }
 

@@ -13,7 +13,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.activity.base.BaseActivity;
+import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.CategoryController;
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
@@ -36,7 +36,7 @@ import butterknife.Bind;
  *
  * @author Evgenii Kanivets
  */
-public class AddRecordActivity extends BaseActivity {
+public class AddRecordActivity extends BaseBackActivity {
     @SuppressWarnings("unused")
     private static final String TAG = "AddRecordActivity";
 
@@ -145,10 +145,6 @@ public class AddRecordActivity extends BaseActivity {
                     setResult(RESULT_OK);
                     finish();
                 } else showToast(R.string.wrong_number_text);
-                return true;
-
-            case R.id.action_close:
-                finish();
                 return true;
 
             default:

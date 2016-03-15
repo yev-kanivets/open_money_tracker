@@ -1,36 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center"
     android:background="@color/white"
-    android:orientation="vertical">
+    tools:context=".activity.AddRecordActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:paddingStart="@dimen/activity_horizontal_margin">
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="2dp"
             android:orientation="horizontal">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
-                android:gravity="center_vertical|left"
-                android:paddingLeft="10dp"
+                android:gravity="center_vertical|start"
                 android:text="@string/title" />
 
             <EditText
                 android:id="@+id/et_title"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginRight="10dp"
                 android:layout_weight="1"
                 android:maxLines="1"
                 android:singleLine="true" />
@@ -39,7 +53,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="2dp"
             android:layout_weight="1"
             android:orientation="horizontal">
 
@@ -47,15 +60,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
-                android:gravity="center_vertical|left"
-                android:paddingLeft="10dp"
+                android:gravity="center_vertical|start"
                 android:text="@string/category" />
 
             <EditText
                 android:id="@+id/et_category"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginRight="10dp"
                 android:layout_weight="1"
                 android:maxLines="1"
                 android:singleLine="true" />
@@ -66,7 +77,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_margin="2dp"
             android:layout_weight="1"
             android:orientation="horizontal">
 
@@ -74,15 +84,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
-                android:gravity="center_vertical|left"
-                android:paddingLeft="10dp"
+                android:gravity="center_vertical|start"
                 android:text="@string/price" />
 
             <EditText
                 android:id="@+id/et_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
                 android:layout_weight="1"
                 android:inputType="numberSigned"
                 android:maxLines="1"
@@ -94,7 +102,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_margin="2dp"
             android:layout_weight="1"
             android:orientation="horizontal">
 
@@ -102,17 +109,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
-                android:gravity="center_vertical|left"
-                android:paddingLeft="10dp"
+                android:gravity="center_vertical|start"
                 android:text="@string/account" />
 
             <Spinner
                 android:id="@+id/spinner_account"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
                 android:layout_weight="1" />
 
         </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>
