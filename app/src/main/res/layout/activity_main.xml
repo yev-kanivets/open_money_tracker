@@ -24,40 +24,14 @@
                 android:background="?attr/colorPrimary"
                 app:popupTheme="@style/AppTheme.PopupOverlay">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <Spinner
+                    android:id="@+id/spinner_period"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingEnd="@dimen/activity_horizontal_margin"
-                    android:paddingStart="@dimen/zero_margin">
-
-                    <TextView
-                        android:id="@+id/tv_from_date"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="New Text"
-                        android:textColor="@color/white" />
-
-                    <TextView
-                        android:id="@+id/tv_to_date"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="New Text"
-                        android:textColor="@color/white" />
-
-                    <Spinner
-                        android:id="@+id/spinner_period"
-                        android:layout_width="110dp"
-                        android:layout_height="wrap_content"
-                        tools:listitem="@android:layout/simple_expandable_list_item_1"
-                        android:theme="@style/Theme.AppCompat.Light" />
-
-                </LinearLayout>
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                    android:theme="@style/Theme.AppCompat.Light"
+                    tools:listitem="@android:layout/simple_expandable_list_item_1" />
             </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.AppBarLayout>

@@ -6,15 +6,7 @@
     android:background="@color/light_grey"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".activity.MainActivity">
-
-    <Button
-        android:id="@+id/btn_report"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/selector_report"
-        android:padding="15dp"
-        android:text="@string/report" />
+    tools:context=".activity.record.MainActivity">
 
     <ListView
         android:id="@+id/list_view"

@@ -54,4 +54,34 @@
         <item name="spinBars">true</item>
         <item name="color">@android:color/white</item>
     </style>
+
+    <style name="Text_Title">
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/text_black</item>
+    </style>
+
+    <style name="Text_Subheading">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">sans-serif-regular</item>
+        <item name="android:textColor">@color/text_black</item>
+    </style>
+    
+    <style name="Text_Body2">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/text_black</item>
+    </style>
+
+    <style name="Text_Body1">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">sans-serif-regular</item>
+        <item name="android:textColor">@color/text_black</item>
+    </style>
+
+    <style name="Text_Caption">
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">sans-serif-regular</item>
+        <item name="android:textColor">@color/text_grey</item>
+    </style>
 </resources>

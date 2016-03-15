@@ -57,12 +57,12 @@ public class PeriodController {
     }
 
     public String getFirstDay() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM, yyyy");
         return dateFormat.format(getPeriod().getFirst());
     }
 
     public String getLastDay() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM, yyyy");
         return dateFormat.format(getPeriod().getLast());
     }
 }

@@ -1,4 +1,4 @@
-package com.blogspot.e_kanivets.moneytracker.activity;
+package com.blogspot.e_kanivets.moneytracker.activity.record;
 
 import android.content.Intent;
 import android.support.design.widget.NavigationView;
@@ -13,18 +13,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.R;
+import com.blogspot.e_kanivets.moneytracker.activity.ExportActivity;
+import com.blogspot.e_kanivets.moneytracker.activity.ReportActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.account.AccountsActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.exchange_rate.ExchangeRatesActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.RecordAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.CategoryController;
+import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
 import com.blogspot.e_kanivets.moneytracker.controller.PeriodController;
 import com.blogspot.e_kanivets.moneytracker.controller.RecordController;
 import com.blogspot.e_kanivets.moneytracker.entity.Category;
@@ -32,16 +33,18 @@ import com.blogspot.e_kanivets.moneytracker.entity.Record;
 import com.blogspot.e_kanivets.moneytracker.model.Period;
 import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
 import com.blogspot.e_kanivets.moneytracker.repo.CategoryRepo;
+import com.blogspot.e_kanivets.moneytracker.repo.ExchangeRateRepo;
 import com.blogspot.e_kanivets.moneytracker.repo.RecordRepo;
 import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo;
+import com.blogspot.e_kanivets.moneytracker.report.ReportMaker;
+import com.blogspot.e_kanivets.moneytracker.report.base.IReport;
 import com.blogspot.e_kanivets.moneytracker.ui.AppRateDialog;
-import com.blogspot.e_kanivets.moneytracker.ui.ChangeDateDialog;
+import com.blogspot.e_kanivets.moneytracker.ui.SummaryRecordsPresenter;
 import com.blogspot.e_kanivets.moneytracker.util.PrefUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -57,18 +60,19 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     private RecordController recordController;
     private PeriodController periodController;
+    private ExchangeRateController rateController;
+    private AccountController accountController;
+
+    private IReport report;
 
     @Bind(R.id.drawer_layout)
     DrawerLayout drawer;
 
     @Bind(R.id.list_view)
     ListView listView;
-    @Bind(R.id.tv_from_date)
-    TextView tvFromDate;
-    @Bind(R.id.tv_to_date)
-    TextView tvToDate;
     @Bind(R.id.spinner_period)
     AppCompatSpinner spinner;
+    private SummaryRecordsPresenter summaryPresenter;
 
     @Override
     protected int getContentViewId() {
@@ -84,10 +88,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         DbHelper dbHelper = new DbHelper(MainActivity.this);
         IRepo<Category> categoryRepo = new CategoryRepo(dbHelper);
         CategoryController categoryController = new CategoryController(categoryRepo);
-        AccountController accountController = new AccountController(new AccountRepo(dbHelper));
+        accountController = new AccountController(new AccountRepo(dbHelper));
         IRepo<Record> recordRepo = new RecordRepo(dbHelper);
 
         recordController = new RecordController(recordRepo, categoryController, accountController);
+
+        rateController = new ExchangeRateController(new ExchangeRateRepo(dbHelper));
+
+        summaryPresenter = new SummaryRecordsPresenter(MainActivity.this);
 
         return super.initData();
     }
@@ -98,12 +106,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-        //Set dates of current week
-        tvFromDate.setText(periodController.getFirstDay());
-        tvToDate.setText(periodController.getLastDay());
-
-        update();
 
         if (PrefUtils.checkRateDialog()) showAppRateDialog();
 
@@ -144,9 +146,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 PrefUtils.writeUsedPeriod(position);
 
                 update();
-
-                tvFromDate.setText(periodController.getFirstDay());
-                tvToDate.setText(periodController.getLastDay());
             }
 
             @Override
@@ -154,6 +153,17 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
             }
         });
+
+        View summaryView = summaryPresenter.create();
+        listView.addHeaderView(summaryView);
+        summaryView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showReport();
+            }
+        });
+
+        update();
     }
 
     @Override
@@ -213,7 +223,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         switch (item.getItemId()) {
             case R.id.edit:
-                Record record = recordList.get(info.position);
+                // Minus one because of list view's header view
+                Record record = recordList.get(info.position - 1);
                 if (record.isIncome())
                     startAddIncomeActivity(record, AddRecordActivity.Mode.MODE_EDIT);
                 else startAddExpenseActivity(record, AddRecordActivity.Mode.MODE_EDIT);
@@ -237,42 +248,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         startAddIncomeActivity(null, AddRecordActivity.Mode.MODE_ADD);
     }
 
-    @OnClick(R.id.btn_report)
     public void showReport() {
         Intent intent = new Intent(MainActivity.this, ReportActivity.class);
         intent.putExtra(ReportActivity.KEY_PERIOD, periodController.getPeriod());
         intent.putExtra(ReportActivity.KEY_RECORD_LIST, (ArrayList<Record>) recordList);
         startActivity(intent);
-    }
-
-    @OnClick(R.id.tv_from_date)
-    public void showChangeFromDateDialog() {
-        ChangeDateDialog dialog = new ChangeDateDialog(MainActivity.this,
-                periodController.getPeriod().getFirst(), new ChangeDateDialog.OnDateChangedListener() {
-            @Override
-            public void OnDataChanged(Date date) {
-                periodController.getPeriod().setFirst(date);
-                update();
-
-                tvFromDate.setText(periodController.getFirstDay());
-            }
-        });
-        dialog.show();
-    }
-
-    @OnClick(R.id.tv_to_date)
-    public void showChangeToDateDialog() {
-        ChangeDateDialog dialog = new ChangeDateDialog(MainActivity.this,
-                periodController.getPeriod().getLast(), new ChangeDateDialog.OnDateChangedListener() {
-            @Override
-            public void OnDataChanged(Date date) {
-                periodController.getPeriod().setLast(date);
-                update();
-
-                tvToDate.setText(periodController.getLastDay());
-            }
-        });
-        dialog.show();
     }
 
     @Override
@@ -296,7 +276,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         Collections.reverse(recordList);
 
         listView.setAdapter(new RecordAdapter(MainActivity.this, recordList));
-        ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
+
+        String currency = DbHelper.DEFAULT_ACCOUNT_CURRENCY;
+        if (accountController.readAll().size() > 0)
+            currency = accountController.readAll().get(0).getCurrency();
+
+        ReportMaker reportMaker = new ReportMaker(rateController);
+        report = reportMaker.getReport(currency, periodController.getPeriod(), recordList);
+        summaryPresenter.update(report);
     }
 
     private void showAppRateDialog() {

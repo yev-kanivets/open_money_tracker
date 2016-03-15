@@ -1,4 +1,4 @@
-package com.blogspot.e_kanivets.moneytracker.activity;
+package com.blogspot.e_kanivets.moneytracker.activity.record;
 
 import android.annotation.SuppressLint;
 import android.graphics.drawable.ColorDrawable;

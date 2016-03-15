@@ -14,8 +14,8 @@
         android:label="@string/app_name"
         android:theme="@style/Theme.Default">
         <activity
-            android:name=".activity.MainActivity"
-            android:label="@string/app_name"
+            android:name=".activity.record.MainActivity"
+            android:label="@string/title_records"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Default">
             <intent-filter>
@@ -30,7 +30,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Default" />
         <activity
-            android:name=".activity.AddRecordActivity"
+            android:name=".activity.record.AddRecordActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Default"
             android:windowSoftInputMode="stateVisible" />

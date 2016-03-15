@@ -55,4 +55,7 @@
     <string name="equal" translatable="false">=</string>
     <string name="multiply" translatable="false">*</string>
 
+    <!-- Not translated strings -->
+    <string name="short_summary">Short summary</string>
+
 </resources>
