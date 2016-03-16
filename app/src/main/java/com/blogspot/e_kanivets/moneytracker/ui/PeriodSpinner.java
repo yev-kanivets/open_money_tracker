@@ -20,6 +20,8 @@ import java.util.Date;
  * @author Evgenii Kanivets
  */
 public class PeriodSpinner extends AppCompatSpinner {
+    private Context context;
+
     private OnPeriodSelectedListener periodSelectedListener;
     private AdapterView.OnItemSelectedListener listener;
     private Period lastPeriod;
@@ -61,10 +63,6 @@ public class PeriodSpinner extends AppCompatSpinner {
             case Period.TYPE_YEAR:
                 setSelection(3);
                 break;
-
-            case Period.TYPE_CUSTOM:
-                setSelection(4);
-                break;
         }
     }
 
@@ -83,6 +81,8 @@ public class PeriodSpinner extends AppCompatSpinner {
     }
 
     private void init(Context context) {
+        this.context = context;
+
         setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_list_item_1,
                 getResources().getStringArray(R.array.array_periods)));
         setOnItemSelectedEvenIfUnchangedListener(new AdapterView.OnItemSelectedListener() {
@@ -112,7 +112,7 @@ public class PeriodSpinner extends AppCompatSpinner {
 
                     case 4:
                         // Custom period selection
-                        setPeriod(new Period(new Date(0), new Date(0), Period.TYPE_CUSTOM));
+                        showFromDateDialog();
                         break;
 
                     default:
@@ -125,6 +125,31 @@ public class PeriodSpinner extends AppCompatSpinner {
 
             }
         });
+    }
+
+    private void showFromDateDialog() {
+        if (lastPeriod == null) return;
+        ChangeDateDialog dialog = new ChangeDateDialog(context, lastPeriod.getFirst(),
+                new ChangeDateDialog.OnDateChangedListener() {
+            @Override
+            public void OnDataChanged(Date fromDate) {
+                showToDateDialog(fromDate);
+            }
+        });
+        dialog.show();
+    }
+
+    private void showToDateDialog(final Date fromDate) {
+        if (lastPeriod == null) return;
+
+        ChangeDateDialog dialog = new ChangeDateDialog(context, lastPeriod.getLast(),
+                new ChangeDateDialog.OnDateChangedListener() {
+                    @Override
+                    public void OnDataChanged(Date toDate) {
+                        setPeriod(new Period(fromDate, toDate, Period.TYPE_CUSTOM));
+                    }
+                });
+        dialog.show();
     }
 
     public interface OnPeriodSelectedListener {

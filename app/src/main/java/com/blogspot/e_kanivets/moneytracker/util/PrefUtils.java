@@ -67,7 +67,7 @@ public class PrefUtils {
                     return Period.yearPeriod();
 
                 case Period.TYPE_CUSTOM:
-                    return new Period(new Date(first), new Date(last), type);
+                    return Period.weekPeriod();
 
                 default:
                     return Period.weekPeriod();
