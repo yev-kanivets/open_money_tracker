@@ -7,7 +7,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
 
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
@@ -16,6 +15,7 @@ import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.AccountAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
+import com.blogspot.e_kanivets.moneytracker.ui.AccountsSummaryPresenter;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -28,6 +28,7 @@ public class AccountsActivity extends BaseBackActivity {
     private static final int REQUEST_TRANSFER = 2;
 
     private AccountController accountController;
+    private AccountsSummaryPresenter summaryPresenter;
 
     @Bind(R.id.list_view)
     ListView listView;
@@ -39,7 +40,9 @@ public class AccountsActivity extends BaseBackActivity {
 
     @Override
     protected boolean initData() {
-        accountController = new AccountController(new AccountRepo(new DbHelper(AccountsActivity.this)));
+        DbHelper dbHelper = new DbHelper(AccountsActivity.this);
+        accountController = new AccountController(new AccountRepo(dbHelper));
+        summaryPresenter = new AccountsSummaryPresenter(AccountsActivity.this);
         return super.initData();
     }
 
@@ -47,9 +50,10 @@ public class AccountsActivity extends BaseBackActivity {
     protected void initViews() {
         super.initViews();
 
-        listView.setAdapter(new AccountAdapter(AccountsActivity.this, accountController.readAll()));
-        ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
+        listView.addHeaderView(summaryPresenter.create());
+
         registerForContextMenu(listView);
+        update();
     }
 
     @Override
@@ -119,6 +123,6 @@ public class AccountsActivity extends BaseBackActivity {
 
     private void update() {
         listView.setAdapter(new AccountAdapter(AccountsActivity.this, accountController.readAll()));
-        ((BaseAdapter) listView.getAdapter()).notifyDataSetChanged();
+        summaryPresenter.update();
     }
 }

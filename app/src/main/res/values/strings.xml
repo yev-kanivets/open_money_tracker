@@ -58,5 +58,8 @@
     <!-- Not translated strings -->
     <string name="short_summary">Short summary</string>
     <string name="custom">Custom</string>
+    <string name="summary">Summary</string>
+    <string name="currency">Currency</string>
+    <string name="error_exchange_rates">Error! Specify exchange rates.</string>
 
 </resources>

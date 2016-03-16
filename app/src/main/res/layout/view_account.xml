@@ -4,30 +4,37 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:paddingBottom="@dimen/half_margin"
-    android:paddingStart="@dimen/activity_horizontal_margin"
     android:paddingEnd="@dimen/activity_horizontal_margin"
+    android:paddingStart="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/half_margin">
 
     <TextView
         android:id="@+id/tv_title"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|top"
         android:layout_weight="1"
-        android:background="@android:color/transparent"
         android:gravity="start"
-        android:paddingBottom="5dp"
         android:text="New Text"
-        android:textSize="18sp" />
+        android:theme="@style/Text_Body1" />
 
     <TextView
         android:id="@+id/tv_cur_sum"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1.15"
-        android:background="@android:color/transparent"
         android:gravity="end"
         android:text="New Text"
-        android:textSize="18sp" />
+        android:theme="@style/Text_Body2" />
+
+    <TextView
+        android:id="@+id/tv_currency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="monospace"
+        android:gravity="end"
+        android:paddingEnd="@dimen/zero_margin"
+        android:paddingStart="5dp"
+        android:text="New Text"
+        android:theme="@style/Text_Body1" />
 
 </LinearLayout>

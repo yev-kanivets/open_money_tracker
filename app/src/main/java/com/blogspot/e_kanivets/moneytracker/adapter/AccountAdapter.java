@@ -26,9 +26,20 @@ public class AccountAdapter extends BaseAdapter {
     private Context context;
     private List<Account> accounts;
 
+    private int whiteRed;
+    private int whiteGreen;
+    private int red;
+    private int green;
+
+    @SuppressWarnings("deprecation")
     public AccountAdapter(Context context, List<Account> accounts) {
         this.context = context;
         this.accounts = accounts;
+
+        whiteRed = context.getResources().getColor(R.color.white_red);
+        whiteGreen = context.getResources().getColor(R.color.white_green);
+        red = context.getResources().getColor(R.color.red);
+        green = context.getResources().getColor(R.color.green);
     }
 
     @Override
@@ -62,9 +73,14 @@ public class AccountAdapter extends BaseAdapter {
 
         Account account = accounts.get(position);
 
+        convertView.setBackgroundColor(account.getCurSum() >= 0 ? whiteGreen : whiteRed);
+
+        viewHolder.tvCurSum.setTextColor(account.getCurSum() >= 0 ? green : red);
+        viewHolder.tvCurrency.setTextColor(account.getCurSum() >= 0 ? green : red);
+
         viewHolder.tvTitle.setText(account.getTitle());
-        viewHolder.tvCurSum.setText(Integer.toString(account.getCurSum())
-                + " " + account.getCurrency());
+        viewHolder.tvCurSum.setText(Integer.toString(account.getCurSum()));
+        viewHolder.tvCurrency.setText(account.getCurrency());
 
         return convertView;
     }
@@ -74,6 +90,8 @@ public class AccountAdapter extends BaseAdapter {
         TextView tvTitle;
         @Bind(R.id.tv_cur_sum)
         TextView tvCurSum;
+        @Bind(R.id.tv_currency)
+        TextView tvCurrency;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
