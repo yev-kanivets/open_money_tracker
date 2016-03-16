@@ -17,7 +17,7 @@ import com.blogspot.e_kanivets.moneytracker.repo.ExchangeRateRepo;
 import com.blogspot.e_kanivets.moneytracker.report.ReportConverter;
 import com.blogspot.e_kanivets.moneytracker.report.ReportMaker;
 import com.blogspot.e_kanivets.moneytracker.report.base.IReport;
-import com.blogspot.e_kanivets.moneytracker.ui.TotalReportViewCreator;
+import com.blogspot.e_kanivets.moneytracker.ui.ShortSummaryPresenter;
 
 import java.util.List;
 
@@ -75,8 +75,10 @@ public class ReportActivity extends BaseBackActivity {
         if (report == null) return;
         ReportConverter reportConverter = new ReportConverter(report);
 
-        expandableListView.addFooterView(new TotalReportViewCreator(ReportActivity.this, report).create());
+        ShortSummaryPresenter shortSummaryPresenter = new ShortSummaryPresenter(ReportActivity.this);
+        expandableListView.addHeaderView(shortSummaryPresenter.create());
         expandableListView.setAdapter(new ExpandableListReportAdapter(ReportActivity.this, reportConverter));
+        shortSummaryPresenter.update(report);
     }
 
     private void showExchangeRatesNeededDialog(String currency, List<String> ratesNeeded) {

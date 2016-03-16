@@ -30,7 +30,7 @@ import com.blogspot.e_kanivets.moneytracker.report.ReportMaker;
 import com.blogspot.e_kanivets.moneytracker.report.base.IReport;
 import com.blogspot.e_kanivets.moneytracker.ui.AppRateDialog;
 import com.blogspot.e_kanivets.moneytracker.ui.PeriodSpinner;
-import com.blogspot.e_kanivets.moneytracker.ui.SummaryRecordsPresenter;
+import com.blogspot.e_kanivets.moneytracker.ui.ShortSummaryPresenter;
 import com.blogspot.e_kanivets.moneytracker.util.PrefUtils;
 
 import java.util.ArrayList;
@@ -52,7 +52,7 @@ public class MainActivity extends BaseDrawerActivity {
     private RecordController recordController;
     private ExchangeRateController rateController;
     private AccountController accountController;
-    private SummaryRecordsPresenter summaryPresenter;
+    private ShortSummaryPresenter summaryPresenter;
 
     @Bind(R.id.list_view)
     ListView listView;
@@ -78,7 +78,7 @@ public class MainActivity extends BaseDrawerActivity {
 
         rateController = new ExchangeRateController(new ExchangeRateRepo(dbHelper));
 
-        summaryPresenter = new SummaryRecordsPresenter(MainActivity.this);
+        summaryPresenter = new ShortSummaryPresenter(MainActivity.this);
 
         return super.initData();
     }

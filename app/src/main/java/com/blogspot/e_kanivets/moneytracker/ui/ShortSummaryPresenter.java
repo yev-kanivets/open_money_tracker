@@ -14,68 +14,61 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * Util class to encapsulate Total view creation.
+ * Util class to create and manage summary header view for .
  * Created on 2/26/16.
  *
  * @author Evgenii Kanivets
  */
-public class TotalReportViewCreator {
-    private final IReport report;
+public class ShortSummaryPresenter {
     private final LayoutInflater layoutInflater;
 
-    private int whiteRed;
-    private int whiteGreen;
     private int red;
     private int green;
+    private View view;
 
     @SuppressWarnings("deprecation")
-    public TotalReportViewCreator(Context context, IReport report) {
-        this.report = report;
+    public ShortSummaryPresenter(Context context) {
         layoutInflater = LayoutInflater.from(context);
-
-        whiteRed = context.getResources().getColor(R.color.white_red);
-        whiteGreen = context.getResources().getColor(R.color.white_green);
         red = context.getResources().getColor(R.color.red);
         green = context.getResources().getColor(R.color.green);
     }
 
     public View create() {
-        View view = layoutInflater.inflate(R.layout.view_summary_report, null);
+        view = layoutInflater.inflate(R.layout.view_summary_records, null);
 
         ViewHolder viewHolder = new ViewHolder(view);
-
-        viewHolder.llTotalIncome.setBackgroundColor(report.getTotalIncome() < 0 ? whiteRed : whiteGreen);
-        viewHolder.tvTotalIncome.setTextColor(report.getTotalIncome() >= 0 ? green : red);
-        viewHolder.tvTotalIncome.setText(format(report.getTotalIncome()));
-
-        viewHolder.llTotalExpense.setBackgroundColor(report.getTotalExpense() < 0 ? whiteRed : whiteGreen);
-        viewHolder.tvTotalExpense.setTextColor(report.getTotalExpense() >= 0 ? green : red);
-        viewHolder.tvTotalExpense.setText(format(report.getTotalExpense()));
-
-        viewHolder.llTotal.setBackgroundColor(report.getTotal() < 0 ? whiteRed : whiteGreen);
-        viewHolder.tvTotal.setTextColor(report.getTotal() >= 0 ? green : red);
-        viewHolder.tvTotal.setText(format(report.getTotal()));
+        view.setTag(viewHolder);
 
         return view;
     }
 
-    private String format(double amount) {
-        return (amount >= 0 ? "+ " : "- ") + String.format(Locale.getDefault(), "%.0f", Math.abs(amount));
+    public void update(IReport report) {
+        ViewHolder viewHolder = (ViewHolder) view.getTag();
+
+        viewHolder.tvPeriod.setText(report.getPeriod().getFirstDay() + " - " + report.getPeriod().getLastDay());
+
+        viewHolder.tvTotalIncome.setTextColor(report.getTotalIncome() >= 0 ? green : red);
+        viewHolder.tvTotalIncome.setText(format(report.getTotalIncome(), report.getCurrency()));
+
+        viewHolder.tvTotalExpense.setTextColor(report.getTotalExpense() >= 0 ? green : red);
+        viewHolder.tvTotalExpense.setText(format(report.getTotalExpense(), report.getCurrency()));
+
+        viewHolder.tvTotal.setTextColor(report.getTotal() >= 0 ? green : red);
+        viewHolder.tvTotal.setText(format(report.getTotal(), report.getCurrency()));
+    }
+
+    private String format(double amount, String currency) {
+        return (amount >= 0 ? "+ " : "- ") + String.format(Locale.getDefault(), "%.0f", Math.abs(amount))
+                + " " + currency;
     }
 
     public static class ViewHolder {
-        @Bind(R.id.ll_total_income)
-        View llTotalIncome;
+        @Bind(R.id.tv_period)
+        TextView tvPeriod;
         @Bind(R.id.tv_total_income)
         TextView tvTotalIncome;
-
-        @Bind(R.id.ll_total_expense)
-        View llTotalExpense;
         @Bind(R.id.tv_total_expense)
         TextView tvTotalExpense;
-
-        @Bind(R.id.ll_total)
-        View llTotal;
         @Bind(R.id.tv_total)
         TextView tvTotal;
 
