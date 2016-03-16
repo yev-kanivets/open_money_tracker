@@ -49,7 +49,7 @@ public class ReportTest {
     public void testForNulls() throws Exception {
         IReport report;
 
-        Period period = new Period(new Date(1), new Date());
+        Period period = new Period(new Date(1), new Date(), Period.TYPE_CUSTOM);
         List<Record> recordList = new ArrayList<>();
 
         try {
@@ -103,7 +103,7 @@ public class ReportTest {
 
     @Test
     public void testGetCurrency() throws Exception {
-        Period period = new Period(new Date(1), new Date());
+        Period period = new Period(new Date(1), new Date(), Period.TYPE_CUSTOM);
         List<Record> recordList = new ArrayList<>();
 
         IReport report = new Report(currency, period, recordList, rateProvider);
@@ -118,14 +118,14 @@ public class ReportTest {
 
     @Test
     public void testGetPeriod() throws Exception {
-        Period period = new Period(new Date(1), new Date());
+        Period period = new Period(new Date(1), new Date(), Period.TYPE_CUSTOM);
         List<Record> recordList = new ArrayList<>();
 
         IReport report = new Report(currency, period, recordList, rateProvider);
 
         assertEquals(period, report.getPeriod());
 
-        period = new Period(new Date(3), new Date(100));
+        period = new Period(new Date(3), new Date(100), Period.TYPE_CUSTOM);
         report = new Report(currency, period, recordList, rateProvider);
 
         assertEquals(period, report.getPeriod());
@@ -133,7 +133,7 @@ public class ReportTest {
 
     @Test
     public void testGetTotal() throws Exception {
-        Period period = new Period(new Date(1), new Date());
+        Period period = new Period(new Date(1), new Date(), Period.TYPE_CUSTOM);
 
         List<Record> recordList = getRecordList();
 
@@ -145,7 +145,7 @@ public class ReportTest {
 
     @Test
     public void testGetTotalIncome() throws Exception {
-        Period period = new Period(new Date(1), new Date());
+        Period period = new Period(new Date(1), new Date(), Period.TYPE_CUSTOM);
 
         List<Record> recordList = getRecordList();
 
@@ -157,7 +157,7 @@ public class ReportTest {
 
     @Test
     public void testGetTotalExpense() throws Exception {
-        Period period = new Period(new Date(1), new Date());
+        Period period = new Period(new Date(1), new Date(), Period.TYPE_CUSTOM);
 
         List<Record> recordList = getRecordList();
 
@@ -169,7 +169,7 @@ public class ReportTest {
 
     @Test
     public void testGetSummary() throws Exception {
-        Period period = new Period(new Date(1), new Date());
+        Period period = new Period(new Date(1), new Date(), Period.TYPE_CUSTOM);
 
         List<Record> recordList = new ArrayList<>();
 

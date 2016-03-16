@@ -2,11 +2,7 @@ package com.blogspot.e_kanivets.moneytracker.activity.record;
 
 import android.content.Intent;
 import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,11 +11,8 @@ import android.widget.ListView;
 
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.activity.ExportActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.ReportActivity;
-import com.blogspot.e_kanivets.moneytracker.activity.account.AccountsActivity;
-import com.blogspot.e_kanivets.moneytracker.activity.base.BaseActivity;
-import com.blogspot.e_kanivets.moneytracker.activity.exchange_rate.ExchangeRatesActivity;
+import com.blogspot.e_kanivets.moneytracker.activity.base.BaseDrawerActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.RecordAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.CategoryController;
@@ -47,7 +40,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.OnClick;
 
-public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseDrawerActivity {
     @SuppressWarnings("unused")
     private static final String TAG = "MainActivity";
 
@@ -60,9 +53,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private ExchangeRateController rateController;
     private AccountController accountController;
     private SummaryRecordsPresenter summaryPresenter;
-
-    @Bind(R.id.drawer_layout)
-    DrawerLayout drawer;
 
     @Bind(R.id.list_view)
     ListView listView;
@@ -122,51 +112,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             }
         });
         spinner.setPeriod(PrefUtils.readPeriod());
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (drawer != null && drawer.isDrawerOpen(GravityCompat.START))
-            drawer.closeDrawer(GravityCompat.START);
-        else super.onBackPressed();
-    }
-
-    @Override
-    protected Toolbar initToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open,
-                R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        return toolbar;
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.nav_accounts:
-                startActivity(new Intent(MainActivity.this, AccountsActivity.class));
-                break;
-
-            case R.id.nav_rates:
-                startActivity(new Intent(MainActivity.this, ExchangeRatesActivity.class));
-                break;
-
-            case R.id.nav_export:
-                startActivity(new Intent(MainActivity.this, ExportActivity.class));
-                break;
-
-            default:
-                break;
-        }
-
-        drawer.closeDrawer(GravityCompat.START);
-        return false;
     }
 
     @Override
