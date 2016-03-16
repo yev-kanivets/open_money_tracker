@@ -57,5 +57,6 @@
 
     <!-- Not translated strings -->
     <string name="short_summary">Short summary</string>
+    <string name="custom">Custom</string>
 
 </resources>

@@ -6,13 +6,11 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.Toolbar;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
@@ -26,7 +24,6 @@ import com.blogspot.e_kanivets.moneytracker.adapter.RecordAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.CategoryController;
 import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
-import com.blogspot.e_kanivets.moneytracker.controller.PeriodController;
 import com.blogspot.e_kanivets.moneytracker.controller.RecordController;
 import com.blogspot.e_kanivets.moneytracker.entity.Category;
 import com.blogspot.e_kanivets.moneytracker.entity.Record;
@@ -39,11 +36,11 @@ import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo;
 import com.blogspot.e_kanivets.moneytracker.report.ReportMaker;
 import com.blogspot.e_kanivets.moneytracker.report.base.IReport;
 import com.blogspot.e_kanivets.moneytracker.ui.AppRateDialog;
+import com.blogspot.e_kanivets.moneytracker.ui.PeriodSpinner;
 import com.blogspot.e_kanivets.moneytracker.ui.SummaryRecordsPresenter;
 import com.blogspot.e_kanivets.moneytracker.util.PrefUtils;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
@@ -57,13 +54,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private static final int REQUEST_ACTION_RECORD = 1;
 
     private List<Record> recordList;
+    private Period period;
 
     private RecordController recordController;
-    private PeriodController periodController;
     private ExchangeRateController rateController;
     private AccountController accountController;
-
-    private IReport report;
+    private SummaryRecordsPresenter summaryPresenter;
 
     @Bind(R.id.drawer_layout)
     DrawerLayout drawer;
@@ -71,8 +67,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Bind(R.id.list_view)
     ListView listView;
     @Bind(R.id.spinner_period)
-    AppCompatSpinner spinner;
-    private SummaryRecordsPresenter summaryPresenter;
+    PeriodSpinner spinner;
 
     @Override
     protected int getContentViewId() {
@@ -82,8 +77,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     protected boolean initData() {
         PrefUtils.addLaunchCount();
-
-        periodController = new PeriodController();
 
         DbHelper dbHelper = new DbHelper(MainActivity.this);
         IRepo<Category> categoryRepo = new CategoryRepo(dbHelper);
@@ -111,49 +104,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         registerForContextMenu(listView);
 
-        spinner.setAdapter(new ArrayAdapter<>(MainActivity.this, android.R.layout.simple_list_item_1,
-                getResources().getStringArray(R.array.array_periods)));
-        spinner.setSelection(PrefUtils.readUsedPeriod());
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.clear(Calendar.MINUTE);
-                calendar.clear(Calendar.SECOND);
-                calendar.clear(Calendar.MILLISECOND);
-
-                switch (position) {
-                    case 0:
-                        periodController.setPeriod(Period.dayPeriod());
-                        break;
-
-                    case 1:
-                        periodController.setPeriod(Period.weekPeriod());
-                        break;
-
-                    case 2:
-                        periodController.setPeriod(Period.monthPeriod());
-                        break;
-
-                    case 3:
-                        periodController.setPeriod(Period.yearPeriod());
-                        break;
-
-                    default:
-                        break;
-                }
-
-                PrefUtils.writeUsedPeriod(position);
-
-                update();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
         View summaryView = summaryPresenter.create();
         listView.addHeaderView(summaryView);
         summaryView.setOnClickListener(new View.OnClickListener() {
@@ -163,7 +113,15 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             }
         });
 
-        update();
+        spinner.setPeriodSelectedListener(new PeriodSpinner.OnPeriodSelectedListener() {
+            @Override
+            public void onPeriodSelected(Period period) {
+                MainActivity.this.period = period;
+                PrefUtils.writePeriod(period);
+                update();
+            }
+        });
+        spinner.setPeriod(PrefUtils.readPeriod());
     }
 
     @Override
@@ -229,10 +187,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     startAddIncomeActivity(record, AddRecordActivity.Mode.MODE_EDIT);
                 else startAddExpenseActivity(record, AddRecordActivity.Mode.MODE_EDIT);
                 return true;
+
             case R.id.delete:
                 recordController.delete(recordList.get(info.position));
                 update();
                 return true;
+
             default:
                 return super.onContextItemSelected(item);
         }
@@ -250,7 +210,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     public void showReport() {
         Intent intent = new Intent(MainActivity.this, ReportActivity.class);
-        intent.putExtra(ReportActivity.KEY_PERIOD, periodController.getPeriod());
+        intent.putExtra(ReportActivity.KEY_PERIOD, period);
         intent.putExtra(ReportActivity.KEY_RECORD_LIST, (ArrayList<Record>) recordList);
         startActivity(intent);
     }
@@ -272,7 +232,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void update() {
-        recordList = recordController.getRecordsForPeriod(periodController.getPeriod());
+        recordList = recordController.getRecordsForPeriod(period);
         Collections.reverse(recordList);
 
         listView.setAdapter(new RecordAdapter(MainActivity.this, recordList));
@@ -282,7 +242,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             currency = accountController.readAll().get(0).getCurrency();
 
         ReportMaker reportMaker = new ReportMaker(rateController);
-        report = reportMaker.getReport(currency, periodController.getPeriod(), recordList);
+        IReport report = reportMaker.getReport(currency, period, recordList);
         summaryPresenter.update(report);
     }
 

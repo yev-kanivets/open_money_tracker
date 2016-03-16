@@ -1,29 +1,44 @@
 package com.blogspot.e_kanivets.moneytracker.model;
 
+import android.annotation.SuppressLint;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Entity class for Period which consists from two dates.
+ * Entity class for Period which consists from two dates. Immutable.
  * Created on 10/09/14.
  *
  * @author Evgenii Kanivets
  */
 public class Period implements Parcelable {
+
+    public static final String TYPE_DAY = "day";
+    public static final String TYPE_WEEK = "week";
+    public static final String TYPE_MONTH = "month";
+    public static final String TYPE_YEAR = "year";
+    public static final String TYPE_CUSTOM = "custom";
+
+    @SuppressLint("SimpleDateFormat")
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM, yyyy");
+
     private Date first;
     private Date last;
+    private String type;
 
-    public Period(Date first, Date last) {
-        this.first = first;
-        this.last = last;
+    public Period(Date first, Date last, String type) {
+        this.first = new Date(first.getTime());
+        this.last = new Date(last.getTime());
+        this.type = type;
     }
 
     protected Period(Parcel in) {
         first = new Date(in.readLong());
         last = new Date(in.readLong());
+        type = in.readString();
     }
 
     public static final Creator<Period> CREATOR = new Creator<Period>() {
@@ -46,26 +61,16 @@ public class Period implements Parcelable {
         return last;
     }
 
-    public void setFirst(Date first) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(first);
-
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-
-        this.first = cal.getTime();
+    public String getType() {
+        return type;
     }
 
-    public void setLast(Date last) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(last);
+    public String getFirstDay() {
+        return dateFormat.format(getFirst());
+    }
 
-        cal.set(Calendar.HOUR_OF_DAY, 23);
-        cal.set(Calendar.MINUTE, 59);
-        cal.set(Calendar.SECOND, 59);
-
-        this.last = cal.getTime();
+    public String getLastDay() {
+        return dateFormat.format(getLast());
     }
 
     @Override
@@ -77,6 +82,7 @@ public class Period implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(first.getTime());
         dest.writeLong(last.getTime());
+        dest.writeString(type);
     }
 
     public static Period dayPeriod() {
@@ -97,7 +103,7 @@ public class Period implements Parcelable {
 
         Date last = cal.getTime();
 
-        return new Period(first, last);
+        return new Period(first, last, TYPE_DAY);
     }
 
     public static Period weekPeriod() {
@@ -122,7 +128,7 @@ public class Period implements Parcelable {
 
         Date last = cal.getTime();
 
-        return new Period(first, last);
+        return new Period(first, last, TYPE_WEEK);
     }
 
     public static Period monthPeriod() {
@@ -147,7 +153,7 @@ public class Period implements Parcelable {
 
         Date last = cal.getTime();
 
-        return new Period(first, last);
+        return new Period(first, last, TYPE_MONTH);
     }
 
     public static Period yearPeriod() {
@@ -174,7 +180,7 @@ public class Period implements Parcelable {
 
         Date last = cal.getTime();
 
-        return new Period(first, last);
+        return new Period(first, last, TYPE_YEAR);
     }
 
     @Override

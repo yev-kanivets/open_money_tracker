@@ -10,7 +10,7 @@
 
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:windowBackground">@null</item>
+        <item name="android:windowBackground">@color/background_white</item>
     </style>
 
     <style name="Theme.NoTitle" parent="@style/Theme.AppCompat.Light.NoActionBar">
@@ -66,7 +66,7 @@
         <item name="android:fontFamily">sans-serif-regular</item>
         <item name="android:textColor">@color/text_black</item>
     </style>
-    
+
     <style name="Text_Body2">
         <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">sans-serif-medium</item>

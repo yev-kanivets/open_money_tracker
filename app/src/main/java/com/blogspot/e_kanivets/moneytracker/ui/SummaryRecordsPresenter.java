@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.controller.PeriodController;
 import com.blogspot.e_kanivets.moneytracker.report.base.IReport;
 
 import java.util.Locale;
@@ -46,10 +45,7 @@ public class SummaryRecordsPresenter {
     public void update(IReport report) {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
-        PeriodController periodController = new PeriodController();
-        periodController.setPeriod(report.getPeriod());
-
-        viewHolder.tvPeriod.setText(periodController.getFirstDay() + " - " + periodController.getLastDay());
+        viewHolder.tvPeriod.setText(report.getPeriod().getFirstDay() + " - " + report.getPeriod().getLastDay());
 
         viewHolder.tvTotalIncome.setTextColor(report.getTotalIncome() >= 0 ? green : red);
         viewHolder.tvTotalIncome.setText(format(report.getTotalIncome(), report.getCurrency()));

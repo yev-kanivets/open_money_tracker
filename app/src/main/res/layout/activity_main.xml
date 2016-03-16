@@ -24,7 +24,7 @@
                 android:background="?attr/colorPrimary"
                 app:popupTheme="@style/AppTheme.PopupOverlay">
 
-                <Spinner
+                <com.blogspot.e_kanivets.moneytracker.ui.PeriodSpinner
                     android:id="@+id/spinner_period"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
