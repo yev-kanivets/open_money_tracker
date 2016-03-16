@@ -12,6 +12,7 @@ import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.entity.Account;
 
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -79,10 +80,14 @@ public class AccountAdapter extends BaseAdapter {
         viewHolder.tvCurrency.setTextColor(account.getCurSum() >= 0 ? green : red);
 
         viewHolder.tvTitle.setText(account.getTitle());
-        viewHolder.tvCurSum.setText(Integer.toString(account.getCurSum()));
+        viewHolder.tvCurSum.setText(format(account.getCurSum()));
         viewHolder.tvCurrency.setText(account.getCurrency());
 
         return convertView;
+    }
+
+    private String format(double amount) {
+        return (amount >= 0 ? "+ " : "- ") + String.format(Locale.getDefault(), "%.0f", Math.abs(amount));
     }
 
     public static class ViewHolder {

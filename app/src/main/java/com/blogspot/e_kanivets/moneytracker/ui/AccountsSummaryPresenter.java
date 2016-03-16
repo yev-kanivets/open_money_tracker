@@ -103,15 +103,17 @@ public class AccountsSummaryPresenter {
         if (report == null) {
             viewHolder.tvTotal.setTextColor(red);
             viewHolder.tvTotal.setText(R.string.error_exchange_rates);
+            viewHolder.tvCurrency.setText("");
         } else {
             viewHolder.tvTotal.setTextColor(report.getTotal() >= 0 ? green : red);
-            viewHolder.tvTotal.setText(format(report.getTotal(), report.getCurrency()));
+            viewHolder.tvTotal.setText(format(report.getTotal()));
+            viewHolder.tvCurrency.setTextColor(report.getTotal() >= 0 ? green : red);
+            viewHolder.tvCurrency.setText(report.getCurrency());
         }
     }
 
-    private String format(double amount, String currency) {
-        return (amount >= 0 ? "+ " : "- ") + String.format(Locale.getDefault(), "%.0f", Math.abs(amount))
-                + " " + currency;
+    private String format(double amount) {
+        return (amount >= 0 ? "+ " : "- ") + String.format(Locale.getDefault(), "%.0f", Math.abs(amount));
     }
 
     public static class ViewHolder {
@@ -119,6 +121,8 @@ public class AccountsSummaryPresenter {
         AppCompatSpinner spinnerCurrency;
         @Bind(R.id.tv_total)
         TextView tvTotal;
+        @Bind(R.id.tv_currency)
+        TextView tvCurrency;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);

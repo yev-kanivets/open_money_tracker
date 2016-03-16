@@ -49,9 +49,22 @@
 
         <TextView
             android:id="@+id/tv_total"
-            style="@style/Text_Body1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="New Text"
+            android:theme="@style/Text_Body2" />
+
+        <TextView
+            android:id="@+id/tv_currency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="monospace"
+            android:gravity="end"
+            android:paddingEnd="@dimen/zero_margin"
+            android:paddingStart="5dp"
+            android:text="New Text"
+            android:theme="@style/Text_Body1" />
 
     </LinearLayout>
 

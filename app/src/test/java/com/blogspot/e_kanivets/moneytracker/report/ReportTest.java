@@ -254,5 +254,11 @@ public class ReportTest {
 
             }
         }
+
+        @Nullable
+        @Override
+        public ExchangeRate getRate(@Nullable Account account) {
+            return null;
+        }
     }
 }
