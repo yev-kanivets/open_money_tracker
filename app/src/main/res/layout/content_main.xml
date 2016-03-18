@@ -5,7 +5,7 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".activity.record.MainActivity">
+    tools:showIn="@layout/activity_main">
 
     <ListView
         android:id="@+id/list_view"

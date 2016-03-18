@@ -180,7 +180,7 @@ public class AddRecordActivity extends BaseBackActivity {
         }
 
         spinnerAccount.setAdapter(new ArrayAdapter<>(AddRecordActivity.this,
-                android.R.layout.simple_list_item_1, accounts));
+                R.layout.view_account_item, accounts));
         spinnerAccount.setSelection(selectedAccountIndex);
     }
 
