@@ -134,7 +134,8 @@ public class MainActivity extends BaseDrawerActivity {
                 return true;
 
             case R.id.delete:
-                recordController.delete(recordList.get(info.position));
+                // Minus one because of list view's header view
+                recordController.delete(recordList.get(info.position - 1));
                 update();
                 return true;
 

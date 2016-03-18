@@ -5,15 +5,22 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatSpinner;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
+import com.blogspot.e_kanivets.moneytracker.adapter.CategoryAutoCompleteAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.CategoryController;
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
@@ -24,6 +31,7 @@ import com.blogspot.e_kanivets.moneytracker.entity.Record;
 import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
 import com.blogspot.e_kanivets.moneytracker.repo.CategoryRepo;
 import com.blogspot.e_kanivets.moneytracker.repo.RecordRepo;
+import com.blogspot.e_kanivets.moneytracker.util.CategoryAutoCompleter;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -44,19 +52,19 @@ public class AddRecordActivity extends BaseBackActivity {
     public static final String KEY_MODE = "key_mode";
     public static final String KEY_TYPE = "key_type";
 
-    protected Record record;
-    protected Mode mode;
-    protected int type;
+    private Record record;
+    private Mode mode;
+    private int type;
 
-    protected List<Account> accountList;
+    private List<Account> accountList;
 
-    protected AccountController accountController;
-    protected RecordController recordController;
+    private CategoryController categoryController;
+    private RecordController recordController;
 
     @Bind(R.id.et_title)
     EditText etTitle;
     @Bind(R.id.et_category)
-    EditText etCategory;
+    AutoCompleteTextView etCategory;
     @Bind(R.id.et_price)
     EditText etPrice;
     @Bind(R.id.spinner_account)
@@ -74,9 +82,10 @@ public class AddRecordActivity extends BaseBackActivity {
         DbHelper dbHelper = new DbHelper(AddRecordActivity.this);
 
         AccountRepo accountRepo = new AccountRepo(dbHelper);
-        accountController = new AccountController(accountRepo);
-        recordController = new RecordController(new RecordRepo(dbHelper),
-                new CategoryController(new CategoryRepo(dbHelper)), new AccountController(accountRepo));
+        AccountController accountController = new AccountController(accountRepo);
+        categoryController = new CategoryController(new CategoryRepo(dbHelper));
+        recordController = new RecordController(new RecordRepo(dbHelper), categoryController,
+                new AccountController(accountRepo));
 
         record = getIntent().getParcelableExtra(KEY_RECORD);
         mode = (Mode) getIntent().getSerializableExtra(KEY_MODE);
@@ -129,6 +138,23 @@ public class AddRecordActivity extends BaseBackActivity {
                     break;
             }
         }
+
+        etCategory.setAdapter(new CategoryAutoCompleteAdapter(AddRecordActivity.this,
+                R.layout.view_category_item, new CategoryAutoCompleter(categoryController)));
+        etCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                etCategory.setText((String) parent.getAdapter().getItem(position));
+                etCategory.setSelection(etCategory.getText().length());
+            }
+        });
+        etCategory.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) tryRecord();
+                return false;
+            }
+        });
     }
 
     @Override
@@ -141,15 +167,19 @@ public class AddRecordActivity extends BaseBackActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_done:
-                if (prepareRecord()) {
-                    setResult(RESULT_OK);
-                    finish();
-                } else showToast(R.string.wrong_number_text);
+                tryRecord();
                 return true;
 
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void tryRecord() {
+        if (prepareRecord()) {
+            setResult(RESULT_OK);
+            finish();
+        } else showToast(R.string.wrong_number_text);
     }
 
     private void presentSpinnerAccount() {

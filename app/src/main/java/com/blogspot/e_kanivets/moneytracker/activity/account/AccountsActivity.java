@@ -87,7 +87,8 @@ public class AccountsActivity extends BaseBackActivity {
 
         switch (item.getItemId()) {
             case R.id.delete:
-                accountController.delete(accountController.readAll().get(info.position));
+                // Minus one because of list view's header view
+                accountController.delete(accountController.readAll().get(info.position - 1));
                 update();
                 return true;
             default:
