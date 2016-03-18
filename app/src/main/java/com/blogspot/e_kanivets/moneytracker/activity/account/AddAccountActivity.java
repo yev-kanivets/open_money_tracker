@@ -39,7 +39,7 @@ public class AddAccountActivity extends BaseBackActivity {
         super.initViews();
 
         spinner.setAdapter(new ArrayAdapter<>(AddAccountActivity.this,
-                android.R.layout.simple_list_item_1,
+                R.layout.view_spinner_item,
                 new ArrayList<>(CurrencyProvider.getAllCurrencies())));
     }
 

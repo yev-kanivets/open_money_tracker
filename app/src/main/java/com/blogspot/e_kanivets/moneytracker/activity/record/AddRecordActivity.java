@@ -4,13 +4,13 @@ import android.annotation.SuppressLint;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.AppCompatSpinner;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.Spinner;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
@@ -60,7 +60,7 @@ public class AddRecordActivity extends BaseBackActivity {
     @Bind(R.id.et_price)
     EditText etPrice;
     @Bind(R.id.spinner_account)
-    Spinner spinnerAccount;
+    AppCompatSpinner spinnerAccount;
 
     @Override
     protected int getContentViewId() {
@@ -180,7 +180,7 @@ public class AddRecordActivity extends BaseBackActivity {
         }
 
         spinnerAccount.setAdapter(new ArrayAdapter<>(AddRecordActivity.this,
-                R.layout.view_account_item, accounts));
+                R.layout.view_spinner_item, accounts));
         spinnerAccount.setSelection(selectedAccountIndex);
     }
 

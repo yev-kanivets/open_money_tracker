@@ -14,11 +14,11 @@
         android:text="@string/account"
         android:theme="@style/Text_Hint" />
 
-    <Spinner
+    <android.support.v7.widget.AppCompatSpinner
         android:id="@+id/spinner_account"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        tools:listitem="@android:layout/simple_dropdown_item_1line" />
+        android:layout_height="@dimen/spinner_height"
+        tools:listitem="@layout/view_spinner_item" />
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
