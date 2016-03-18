@@ -61,5 +61,6 @@
     <string name="summary">Summary</string>
     <string name="currency">Currency</string>
     <string name="error_exchange_rates">Error! Specify exchange rates.</string>
+    <string name="amount">Amount</string>
 
 </resources>

@@ -65,10 +65,10 @@ public class TransferActivity extends BaseBackActivity {
         }
 
         spinnerFrom.setAdapter(new ArrayAdapter<>(TransferActivity.this,
-                android.R.layout.simple_list_item_1, accounts));
+                R.layout.view_spinner_item, accounts));
 
         spinnerTo.setAdapter(new ArrayAdapter<>(TransferActivity.this,
-                android.R.layout.simple_list_item_1, accounts));
+                R.layout.view_spinner_item, accounts));
     }
 
     @Override
