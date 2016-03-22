@@ -87,6 +87,8 @@ public class MainActivity extends BaseDrawerActivity {
     protected void initViews() {
         super.initViews();
 
+        setTitle(R.string.title_records);
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
