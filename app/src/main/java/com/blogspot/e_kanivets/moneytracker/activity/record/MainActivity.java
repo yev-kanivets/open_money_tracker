@@ -18,6 +18,7 @@ import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.CategoryController;
 import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
 import com.blogspot.e_kanivets.moneytracker.controller.RecordController;
+import com.blogspot.e_kanivets.moneytracker.entity.Account;
 import com.blogspot.e_kanivets.moneytracker.entity.Category;
 import com.blogspot.e_kanivets.moneytracker.entity.Record;
 import com.blogspot.e_kanivets.moneytracker.model.Period;
@@ -186,8 +187,8 @@ public class MainActivity extends BaseDrawerActivity {
         listView.setAdapter(new RecordAdapter(MainActivity.this, recordList));
 
         String currency = DbHelper.DEFAULT_ACCOUNT_CURRENCY;
-        if (accountController.readAll().size() > 0)
-            currency = accountController.readAll().get(0).getCurrency();
+        Account defaultAccount = accountController.readDefaultAccount();
+        if (defaultAccount != null) currency = defaultAccount.getCurrency();
 
         ReportMaker reportMaker = new ReportMaker(rateController);
         IReport report = reportMaker.getReport(currency, period, recordList);

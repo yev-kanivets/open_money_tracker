@@ -12,6 +12,7 @@ import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
+import com.blogspot.e_kanivets.moneytracker.entity.Account;
 import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
 import com.blogspot.e_kanivets.moneytracker.repo.ExchangeRateRepo;
 import com.blogspot.e_kanivets.moneytracker.report.ReportMaker;
@@ -67,8 +68,8 @@ public class AccountsSummaryPresenter {
                 android.R.layout.simple_list_item_1, currencyList));
 
         String currency = DbHelper.DEFAULT_ACCOUNT_CURRENCY;
-        if (accountController.readAll().size() > 0)
-            currency = accountController.readAll().get(0).getCurrency();
+        Account defaultAccount = accountController.readDefaultAccount();
+        if (defaultAccount != null) currency = defaultAccount.getCurrency();
 
         for (int i = 0; i < currencyList.size(); i++) {
             String item = currencyList.get(i);

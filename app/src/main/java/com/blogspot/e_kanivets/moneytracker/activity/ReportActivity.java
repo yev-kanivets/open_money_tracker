@@ -10,6 +10,7 @@ import com.blogspot.e_kanivets.moneytracker.adapter.ExpandableListReportAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
+import com.blogspot.e_kanivets.moneytracker.entity.Account;
 import com.blogspot.e_kanivets.moneytracker.model.Period;
 import com.blogspot.e_kanivets.moneytracker.entity.Record;
 import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
@@ -54,8 +55,8 @@ public class ReportActivity extends BaseBackActivity {
         ExchangeRateController rateController = new ExchangeRateController(new ExchangeRateRepo(dbHelper));
 
         String currency = DbHelper.DEFAULT_ACCOUNT_CURRENCY;
-        if (accountController.readAll().size() > 0)
-            currency = accountController.readAll().get(0).getCurrency();
+        Account defaultAccount = accountController.readDefaultAccount();
+        if (defaultAccount != null) currency = defaultAccount.getCurrency();
 
         ReportMaker reportMaker = new ReportMaker(rateController);
         report = reportMaker.getReport(currency, period, recordList);
