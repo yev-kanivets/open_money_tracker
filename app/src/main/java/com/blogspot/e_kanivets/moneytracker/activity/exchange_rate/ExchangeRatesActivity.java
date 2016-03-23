@@ -68,6 +68,7 @@ public class ExchangeRatesActivity extends BaseBackActivity {
             case R.id.delete:
                 rateController.delete(exchangeRateList.get(info.position));
                 update();
+                setResult(RESULT_OK);
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -88,6 +89,7 @@ public class ExchangeRatesActivity extends BaseBackActivity {
             switch (requestCode) {
                 case REQUEST_ADD_EXCHANGE_RATE:
                     update();
+                    setResult(RESULT_OK);
                     break;
 
                 default:

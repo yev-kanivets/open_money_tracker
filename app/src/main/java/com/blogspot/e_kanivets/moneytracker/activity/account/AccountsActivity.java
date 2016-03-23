@@ -90,6 +90,7 @@ public class AccountsActivity extends BaseBackActivity {
                 // Minus one because of list view's header view
                 accountController.delete(accountController.readAll().get(info.position - 1));
                 update();
+                setResult(RESULT_OK);
                 return true;
             default:
                 return super.onContextItemSelected(item);

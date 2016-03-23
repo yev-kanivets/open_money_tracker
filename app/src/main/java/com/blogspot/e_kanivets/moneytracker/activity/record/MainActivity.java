@@ -180,7 +180,8 @@ public class MainActivity extends BaseDrawerActivity {
         }
     }
 
-    private void update() {
+    @Override
+    protected void update() {
         recordList = recordController.getRecordsForPeriod(period);
         Collections.reverse(recordList);
 

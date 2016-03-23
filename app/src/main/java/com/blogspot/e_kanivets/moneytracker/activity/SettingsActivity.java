@@ -2,6 +2,7 @@ package com.blogspot.e_kanivets.moneytracker.activity;
 
 import android.os.Bundle;
 import android.preference.ListPreference;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
@@ -47,6 +48,13 @@ public class SettingsActivity extends BaseBackActivity {
             addPreferencesFromResource(R.xml.preferences);
 
             ListPreference defaultAccountPref = (ListPreference) findPreference(getString(R.string.pref_default_account));
+            defaultAccountPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    getActivity().setResult(RESULT_OK);
+                    return true;
+                }
+            });
 
             List<Account> accountList = accountController.readAll();
 
