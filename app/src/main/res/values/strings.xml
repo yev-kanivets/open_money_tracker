@@ -64,5 +64,7 @@
     <string name="amount">Amount</string>
     <string name="title_settings">Settings</string>
     <string name="settings">Settings</string>
+    <string name="default_account">Default account</string>
+    <string name="pref_default_account">pref_default_account</string>
 
 </resources>

@@ -1,22 +1,81 @@
 package com.blogspot.e_kanivets.moneytracker.activity;
 
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
+import android.preference.ListPreference;
+import android.preference.PreferenceFragment;
 
+import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.R;
+import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
+import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
+import com.blogspot.e_kanivets.moneytracker.entity.Account;
+import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
 
-/**
- * Don't want to use {@link android.preference.PreferenceFragment}.
- * Know that SettingsActivity is deprecated, but it's more convenient for me.
- * Created on 3/23/16.
- *
- * @author Evgenii Kanivets
- */
-public class SettingsActivity extends PreferenceActivity {
+import java.util.ArrayList;
+import java.util.List;
+
+public class SettingsActivity extends BaseBackActivity {
+    @SuppressWarnings("unused")
+    private static final String TAG = "SettingsActivity";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.preferences);
+    protected int getContentViewId() {
+        return R.layout.activity_settings;
+    }
+
+    @Override
+    protected void initViews() {
+        super.initViews();
+
+        // Display the fragment as the main content.
+        getFragmentManager().beginTransaction()
+                .replace(R.id.content, new SettingsFragment())
+                .commit();
+    }
+
+    public static class SettingsFragment extends PreferenceFragment {
+        private AccountController accountController;
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            DbHelper dbHelper = new DbHelper(getActivity());
+            accountController = new AccountController(new AccountRepo(dbHelper));
+
+            // Load the preferences from an XML resource
+            addPreferencesFromResource(R.xml.preferences);
+
+            ListPreference defaultAccountPref = (ListPreference) findPreference(getString(R.string.pref_default_account));
+
+            List<Account> accountList = accountController.readAll();
+
+            if (accountList.size() > 0)
+                defaultAccountPref.setDefaultValue(Long.toString(accountList.get(0).getId()));
+            defaultAccountPref.setEntries(getEntries(accountList));
+            defaultAccountPref.setEntryValues(getEntryValues(accountList));
+        }
+
+        @SuppressWarnings("ToArrayCallWithZeroLengthArrayArgument")
+        private String[] getEntries(List<Account> accountList) {
+            List<String> result = new ArrayList<>();
+
+            for (Account account : accountList) {
+                result.add(account.getTitle());
+            }
+
+            return result.toArray(new String[0]);
+        }
+
+        @SuppressWarnings("ToArrayCallWithZeroLengthArrayArgument")
+        private String[] getEntryValues(List<Account> accountList) {
+            List<String> result = new ArrayList<>();
+
+            for (Account account : accountList) {
+                result.add(Long.toString(account.getId()));
+            }
+
+            return result.toArray(new String[0]);
+        }
     }
 }
