@@ -2,8 +2,10 @@ package com.blogspot.e_kanivets.moneytracker.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import com.blogspot.e_kanivets.moneytracker.MtApp;
+import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.model.Period;
 
 import java.util.Date;
@@ -74,6 +76,13 @@ public class PrefUtils {
 
             }
         }
+    }
+
+    public static long readDefaultAccountId() {
+        String defaultAccountPref = MtApp.get().getString(R.string.pref_default_account);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MtApp.get());
+
+        return Long.parseLong(preferences.getString(defaultAccountPref, "-1"));
     }
 
     public static void writePeriod(Period period) {

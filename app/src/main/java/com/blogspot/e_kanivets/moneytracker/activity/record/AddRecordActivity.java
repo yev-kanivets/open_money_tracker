@@ -69,6 +69,7 @@ public class AddRecordActivity extends BaseBackActivity {
     EditText etPrice;
     @Bind(R.id.spinner_account)
     AppCompatSpinner spinnerAccount;
+    private AccountController accountController;
 
     @Override
     protected int getContentViewId() {
@@ -82,7 +83,7 @@ public class AddRecordActivity extends BaseBackActivity {
         DbHelper dbHelper = new DbHelper(AddRecordActivity.this);
 
         AccountRepo accountRepo = new AccountRepo(dbHelper);
-        AccountController accountController = new AccountController(accountRepo);
+        accountController = new AccountController(accountRepo);
         categoryController = new CategoryController(new CategoryRepo(dbHelper));
         recordController = new RecordController(new RecordRepo(dbHelper), categoryController,
                 new AccountController(accountRepo));
@@ -188,25 +189,31 @@ public class AddRecordActivity extends BaseBackActivity {
             accounts.add(account.getTitle());
         }
 
-        int selectedAccountIndex = 0;
+        int selectedAccountIndex = -1;
 
         if (mode == Mode.MODE_EDIT) {
-            selectedAccountIndex = -1;
-
             if (record.getAccount() != null) {
                 for (int i = 0; i < accountList.size(); i++) {
                     Account account = accountList.get(i);
                     if (account.getId() == record.getAccount().getId()) selectedAccountIndex = i;
                 }
             }
-
-            if (selectedAccountIndex == -1) {
-                selectedAccountIndex = 0;
-                spinnerAccount.setEnabled(false);
-
-                accounts = new ArrayList<>();
-                accounts.add(getString(R.string.account_was_removed));
+        } else if (mode == Mode.MODE_ADD) {
+            Account defaultAccount = accountController.readDefaultAccount();
+            if (defaultAccount != null) {
+                for (int i = 0; i < accountList.size(); i++) {
+                    Account account = accountList.get(i);
+                    if (account.getId() == defaultAccount.getId()) selectedAccountIndex = i;
+                }
             }
+        }
+
+        if (selectedAccountIndex == -1) {
+            selectedAccountIndex = 0;
+            spinnerAccount.setEnabled(false);
+
+            accounts = new ArrayList<>();
+            accounts.add(getString(R.string.account_was_removed));
         }
 
         spinnerAccount.setAdapter(new ArrayAdapter<>(AddRecordActivity.this,

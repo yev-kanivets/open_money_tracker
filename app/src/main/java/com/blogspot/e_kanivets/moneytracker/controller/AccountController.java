@@ -7,6 +7,9 @@ import com.blogspot.e_kanivets.moneytracker.entity.Account;
 import com.blogspot.e_kanivets.moneytracker.entity.Record;
 import com.blogspot.e_kanivets.moneytracker.entity.Transfer;
 import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo;
+import com.blogspot.e_kanivets.moneytracker.util.PrefUtils;
+
+import java.util.List;
 
 /**
  * Controller class to encapsulate account handling logic.
@@ -78,7 +81,7 @@ public class AccountController extends BaseController<Account> {
     }
 
     public boolean transferDone(@Nullable Transfer transfer) {
-        if(transfer == null) return false;
+        if (transfer == null) return false;
 
         Account fromAccount = repo.read(transfer.getFromAccountId());
         Account toAccount = repo.read(transfer.getToAccountId());
@@ -92,5 +95,23 @@ public class AccountController extends BaseController<Account> {
         repo.update(toAccount);
 
         return true;
+    }
+
+    @Nullable
+    public Account readDefaultAccount() {
+        long defaultAccountId = PrefUtils.readDefaultAccountId();
+
+        if (defaultAccountId == -1) return getFirstAccount();
+        else {
+            Account account = read(defaultAccountId);
+            if (account == null) return getFirstAccount();
+            else return account;
+        }
+    }
+
+    private Account getFirstAccount() {
+        List<Account> accountList = readAll();
+        if (accountList.size() == 0) return null;
+        else return accountList.get(0);
     }
 }
