@@ -67,6 +67,11 @@
             android:label="@string/title_export"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Default" />
+        <activity
+            android:name=".activity.SettingsActivity"
+            android:label="@string/title_settings"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Default" />
     </application>
 
 </manifest>

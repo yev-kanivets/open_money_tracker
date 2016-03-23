@@ -62,5 +62,7 @@
     <string name="currency">Currency</string>
     <string name="error_exchange_rates">Error! Specify exchange rates.</string>
     <string name="amount">Amount</string>
+    <string name="title_settings">Settings</string>
+    <string name="settings">Settings</string>
 
 </resources>
