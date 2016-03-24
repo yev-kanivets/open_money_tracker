@@ -24,7 +24,7 @@ import butterknife.ButterKnife;
  *
  * @author Evgenii Kanivets
  */
-public class RecordAdapter extends BaseAdapter{
+public class RecordAdapter extends BaseAdapter {
     private Context context;
     private List<Record> records;
 
@@ -83,7 +83,7 @@ public class RecordAdapter extends BaseAdapter{
         viewHolder.tvDateAndTime.setText(dateFormat.format(new Date(record.getTime())));
 
         viewHolder.tvPrice.setText((record.isIncome() ? "+ " : "- ")
-                + Integer.toString(record.getPrice()));
+                + Integer.toString((int) record.getPrice()));
         viewHolder.tvTitle.setText(record.getTitle());
         viewHolder.tvCategory.setText(record.getCategory().getName());
         viewHolder.tvCurrency.setText(record.getCurrency());

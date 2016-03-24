@@ -128,7 +128,7 @@ public class Report implements IReport {
         List<Record> convertedRecordList = new ArrayList<>();
 
         for (Record record : recordList) {
-            int convertedPrice = record.getPrice();
+            double convertedPrice = record.getPrice();
 
             if (!currency.equals(record.getCurrency())) {
                 ExchangeRate exchangeRate = rateProvider.getRate(record);
