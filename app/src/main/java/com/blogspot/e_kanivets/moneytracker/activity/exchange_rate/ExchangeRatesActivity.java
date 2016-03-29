@@ -9,16 +9,17 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 
-import com.blogspot.e_kanivets.moneytracker.DbHelper;
+import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.ExchangeRateAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
 import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRate;
-import com.blogspot.e_kanivets.moneytracker.repo.ExchangeRateRepo;
 
 import java.util.Collections;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -29,7 +30,9 @@ public class ExchangeRatesActivity extends BaseBackActivity {
 
     private static final int REQUEST_ADD_EXCHANGE_RATE = 1;
 
-    private ExchangeRateController rateController;
+    @Inject
+    ExchangeRateController rateController;
+
     private List<ExchangeRate> exchangeRateList;
 
     @Bind(R.id.list_view)
@@ -42,8 +45,9 @@ public class ExchangeRatesActivity extends BaseBackActivity {
 
     @Override
     protected boolean initData() {
-        rateController = new ExchangeRateController(new ExchangeRateRepo(new DbHelper(ExchangeRatesActivity.this)));
-        return super.initData();
+        boolean result = super.initData();
+        MtApp.get().getAppComponent().inject(ExchangeRatesActivity.this);
+        return result;
     }
 
     @Override

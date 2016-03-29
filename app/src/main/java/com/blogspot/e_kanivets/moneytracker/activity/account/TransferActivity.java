@@ -6,18 +6,18 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 
+import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
-import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.controller.TransferController;
 import com.blogspot.e_kanivets.moneytracker.entity.Account;
 import com.blogspot.e_kanivets.moneytracker.entity.Transfer;
-import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
-import com.blogspot.e_kanivets.moneytracker.repo.TransferRepo;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 
@@ -25,7 +25,10 @@ public class TransferActivity extends BaseBackActivity {
     @SuppressWarnings("unused")
     private static final String TAG = "TransferActivity";
 
-    private TransferController transferController;
+    @Inject
+    TransferController transferController;
+    @Inject
+    AccountController accountController;
 
     private List<Account> accountList;
 
@@ -45,14 +48,10 @@ public class TransferActivity extends BaseBackActivity {
 
     @Override
     protected boolean initData() {
-        DbHelper dbHelper = new DbHelper(TransferActivity.this);
-
-        AccountController accountController = new AccountController(new AccountRepo(dbHelper));
-        transferController = new TransferController(new TransferRepo(dbHelper), accountController);
-
+        boolean result = super.initData();
+        MtApp.get().getAppComponent().inject(TransferActivity.this);
         accountList = accountController.readAll();
-
-        return super.initData();
+        return result;
     }
 
     @Override

@@ -10,23 +10,17 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
+import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.ReportActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseDrawerActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.RecordAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
-import com.blogspot.e_kanivets.moneytracker.controller.CategoryController;
 import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
 import com.blogspot.e_kanivets.moneytracker.controller.RecordController;
 import com.blogspot.e_kanivets.moneytracker.entity.Account;
-import com.blogspot.e_kanivets.moneytracker.entity.Category;
 import com.blogspot.e_kanivets.moneytracker.entity.Record;
 import com.blogspot.e_kanivets.moneytracker.model.Period;
-import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
-import com.blogspot.e_kanivets.moneytracker.repo.CategoryRepo;
-import com.blogspot.e_kanivets.moneytracker.repo.ExchangeRateRepo;
-import com.blogspot.e_kanivets.moneytracker.repo.RecordRepo;
-import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo;
 import com.blogspot.e_kanivets.moneytracker.report.ReportMaker;
 import com.blogspot.e_kanivets.moneytracker.report.base.IReport;
 import com.blogspot.e_kanivets.moneytracker.ui.AppRateDialog;
@@ -37,6 +31,8 @@ import com.blogspot.e_kanivets.moneytracker.util.PrefUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -50,9 +46,13 @@ public class MainActivity extends BaseDrawerActivity {
     private List<Record> recordList;
     private Period period;
 
-    private RecordController recordController;
-    private ExchangeRateController rateController;
-    private AccountController accountController;
+    @Inject
+    RecordController recordController;
+    @Inject
+    ExchangeRateController rateController;
+    @Inject
+    AccountController accountController;
+
     private ShortSummaryPresenter summaryPresenter;
 
     @Bind(R.id.list_view)
@@ -68,16 +68,7 @@ public class MainActivity extends BaseDrawerActivity {
     @Override
     protected boolean initData() {
         PrefUtils.addLaunchCount();
-
-        DbHelper dbHelper = new DbHelper(MainActivity.this);
-        IRepo<Category> categoryRepo = new CategoryRepo(dbHelper);
-        CategoryController categoryController = new CategoryController(categoryRepo);
-        accountController = new AccountController(new AccountRepo(dbHelper));
-        IRepo<Record> recordRepo = new RecordRepo(dbHelper);
-
-        recordController = new RecordController(recordRepo, categoryController, accountController);
-
-        rateController = new ExchangeRateController(new ExchangeRateRepo(dbHelper));
+        MtApp.get().getAppComponent().inject(MainActivity.this);
 
         summaryPresenter = new ShortSummaryPresenter(MainActivity.this);
 
