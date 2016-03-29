@@ -6,21 +6,25 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 
-import com.blogspot.e_kanivets.moneytracker.DbHelper;
+import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
 import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRate;
-import com.blogspot.e_kanivets.moneytracker.repo.ExchangeRateRepo;
 import com.blogspot.e_kanivets.moneytracker.util.CurrencyProvider;
 
 import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 
 public class AddExchangeRateActivity extends BaseBackActivity {
     @SuppressWarnings("unused")
     private static final String TAG = "AddExchangeRateActivity";
+
+    @Inject
+    ExchangeRateController exchangeRateController;
 
     @Bind(R.id.spinner_from_currency)
     AppCompatSpinner spinnerFromCurrency;
@@ -32,6 +36,13 @@ public class AddExchangeRateActivity extends BaseBackActivity {
     @Override
     protected int getContentViewId() {
         return R.layout.activity_add_exchange_rate;
+    }
+
+    @Override
+    protected boolean initData() {
+        boolean result = super.initData();
+        MtApp.get().getAppComponent().inject(AddExchangeRateActivity.this);
+        return result;
     }
 
     @Override
@@ -84,8 +95,7 @@ public class AddExchangeRateActivity extends BaseBackActivity {
         ExchangeRate exchangeRate = new ExchangeRate(System.currentTimeMillis(),
                 fromCurrency, toCurrency, amount);
 
-        ExchangeRate createdRate = new ExchangeRateController(new ExchangeRateRepo(
-                new DbHelper(AddExchangeRateActivity.this))).create(exchangeRate);
+        ExchangeRate createdRate = exchangeRateController.create(exchangeRate);
 
         return createdRate != null;
     }

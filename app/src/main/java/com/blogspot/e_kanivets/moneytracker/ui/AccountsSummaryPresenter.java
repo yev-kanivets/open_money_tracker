@@ -9,18 +9,19 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
+import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
 import com.blogspot.e_kanivets.moneytracker.entity.Account;
-import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
-import com.blogspot.e_kanivets.moneytracker.repo.ExchangeRateRepo;
 import com.blogspot.e_kanivets.moneytracker.report.ReportMaker;
 import com.blogspot.e_kanivets.moneytracker.report.base.IAccountsReport;
 import com.blogspot.e_kanivets.moneytracker.util.CurrencyProvider;
 
 import java.util.List;
 import java.util.Locale;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -35,7 +36,10 @@ public class AccountsSummaryPresenter {
     private Context context;
     private final LayoutInflater layoutInflater;
 
-    private AccountController accountController;
+    @Inject
+    ExchangeRateController rateController;
+    @Inject
+    AccountController accountController;
 
     private int red;
     private int green;
@@ -50,9 +54,7 @@ public class AccountsSummaryPresenter {
         red = context.getResources().getColor(R.color.red);
         green = context.getResources().getColor(R.color.green);
 
-        DbHelper dbHelper = new DbHelper(context);
-        accountController = new AccountController(new AccountRepo(dbHelper));
-        ExchangeRateController rateController = new ExchangeRateController(new ExchangeRateRepo(dbHelper));
+        MtApp.get().getAppComponent().inject(AccountsSummaryPresenter.this);
         reportMaker = new ReportMaker(rateController);
     }
 

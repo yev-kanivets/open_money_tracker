@@ -18,24 +18,23 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.CategoryAutoCompleteAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.CategoryController;
-import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.controller.RecordController;
 import com.blogspot.e_kanivets.moneytracker.entity.Account;
 import com.blogspot.e_kanivets.moneytracker.entity.Category;
 import com.blogspot.e_kanivets.moneytracker.entity.Record;
-import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
-import com.blogspot.e_kanivets.moneytracker.repo.CategoryRepo;
-import com.blogspot.e_kanivets.moneytracker.repo.RecordRepo;
 import com.blogspot.e_kanivets.moneytracker.util.CategoryAutoCompleter;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 
@@ -58,8 +57,12 @@ public class AddRecordActivity extends BaseBackActivity {
 
     private List<Account> accountList;
 
-    private CategoryController categoryController;
-    private RecordController recordController;
+    @Inject
+    CategoryController categoryController;
+    @Inject
+    RecordController recordController;
+    @Inject
+    AccountController accountController;
 
     @Bind(R.id.et_title)
     EditText etTitle;
@@ -69,7 +72,6 @@ public class AddRecordActivity extends BaseBackActivity {
     EditText etPrice;
     @Bind(R.id.spinner_account)
     AppCompatSpinner spinnerAccount;
-    private AccountController accountController;
 
     @Override
     protected int getContentViewId() {
@@ -79,14 +81,7 @@ public class AddRecordActivity extends BaseBackActivity {
     @Override
     protected boolean initData() {
         super.initData();
-
-        DbHelper dbHelper = new DbHelper(AddRecordActivity.this);
-
-        AccountRepo accountRepo = new AccountRepo(dbHelper);
-        accountController = new AccountController(accountRepo);
-        categoryController = new CategoryController(new CategoryRepo(dbHelper));
-        recordController = new RecordController(new RecordRepo(dbHelper), categoryController,
-                new AccountController(accountRepo));
+        MtApp.get().getAppComponent().inject(AddRecordActivity.this);
 
         record = getIntent().getParcelableExtra(KEY_RECORD);
         mode = (Mode) getIntent().getSerializableExtra(KEY_MODE);

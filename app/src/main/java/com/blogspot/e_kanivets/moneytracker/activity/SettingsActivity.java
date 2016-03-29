@@ -5,15 +5,16 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
-import com.blogspot.e_kanivets.moneytracker.DbHelper;
+import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.entity.Account;
-import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 public class SettingsActivity extends BaseBackActivity {
     @SuppressWarnings("unused")
@@ -35,14 +36,14 @@ public class SettingsActivity extends BaseBackActivity {
     }
 
     public static class SettingsFragment extends PreferenceFragment {
-        private AccountController accountController;
+        @Inject
+        AccountController accountController;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
-            DbHelper dbHelper = new DbHelper(getActivity());
-            accountController = new AccountController(new AccountRepo(dbHelper));
+            MtApp.get().getAppComponent().inject(SettingsFragment.this);
 
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.preferences);

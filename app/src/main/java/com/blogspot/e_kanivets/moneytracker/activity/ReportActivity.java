@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.widget.ExpandableListView;
 
+import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.ExpandableListReportAdapter;
@@ -13,14 +14,14 @@ import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.entity.Account;
 import com.blogspot.e_kanivets.moneytracker.model.Period;
 import com.blogspot.e_kanivets.moneytracker.entity.Record;
-import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
-import com.blogspot.e_kanivets.moneytracker.repo.ExchangeRateRepo;
 import com.blogspot.e_kanivets.moneytracker.report.ReportConverter;
 import com.blogspot.e_kanivets.moneytracker.report.ReportMaker;
 import com.blogspot.e_kanivets.moneytracker.report.base.IReport;
 import com.blogspot.e_kanivets.moneytracker.ui.ShortSummaryPresenter;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 
@@ -31,9 +32,15 @@ public class ReportActivity extends BaseBackActivity {
     public static final String KEY_PERIOD = "key_period";
     public static final String KEY_RECORD_LIST = "key_record_list";
 
+    @Inject
+    ExchangeRateController rateController;
+    @Inject
+    AccountController accountController;
+
+    private IReport report;
+
     @Bind(R.id.exp_list_view)
     ExpandableListView expandableListView;
-    private IReport report;
 
     @Override
     protected int getContentViewId() {
@@ -50,9 +57,7 @@ public class ReportActivity extends BaseBackActivity {
         Period period = getIntent().getParcelableExtra(KEY_PERIOD);
         if (period == null) return false;
 
-        DbHelper dbHelper = new DbHelper(ReportActivity.this);
-        AccountController accountController = new AccountController(new AccountRepo(dbHelper));
-        ExchangeRateController rateController = new ExchangeRateController(new ExchangeRateRepo(dbHelper));
+        MtApp.get().getAppComponent().inject(ReportActivity.this);
 
         String currency = DbHelper.DEFAULT_ACCOUNT_CURRENCY;
         Account defaultAccount = accountController.readDefaultAccount();
@@ -92,9 +97,7 @@ public class ReportActivity extends BaseBackActivity {
         }
 
         builder.setMessage(sb.toString());
-
         builder.setPositiveButton(android.R.string.ok, null);
-
         builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
