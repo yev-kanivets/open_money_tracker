@@ -47,7 +47,7 @@ public class RecordRepoTest extends TestCase {
         expected.put(DbHelper.TYPE_COLUMN, Record.TYPE_EXPENSE);
         expected.put(DbHelper.TITLE_COLUMN, "title");
         expected.put(DbHelper.CATEGORY_ID_COLUMN, 1L);
-        expected.put(DbHelper.PRICE_COLUMN, 100);
+        expected.put(DbHelper.PRICE_COLUMN, 100.0);
         expected.put(DbHelper.ACCOUNT_ID_COLUMN, 1L);
         expected.put(DbHelper.CURRENCY_COLUMN, "NON");
 
