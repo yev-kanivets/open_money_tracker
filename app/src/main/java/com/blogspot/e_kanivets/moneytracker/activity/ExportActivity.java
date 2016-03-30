@@ -1,6 +1,9 @@
 package com.blogspot.e_kanivets.moneytracker.activity;
 
-import android.os.Environment;
+import android.content.Intent;
+import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.v4.content.FileProvider;
 
 import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
@@ -40,7 +43,13 @@ public class ExportActivity extends BaseBackActivity {
     public void exportRecords() {
         List<String> records = recordController.getRecordsForExport(0, Long.MAX_VALUE);
 
-        File outFile = new File(Environment.getExternalStorageDirectory(), Constants.DEFAULT_EXPORT_FILE_NAME);
+        File exportDir = new File(getCacheDir(), "export");
+        boolean exportDirCreated = exportDir.mkdirs();
+
+        File outFile;
+        if (exportDirCreated) outFile = new File(exportDir, Constants.DEFAULT_EXPORT_FILE_NAME);
+        else return;
+
         PrintWriter pw = null;
         try {
             pw = new PrintWriter(outFile);
@@ -56,6 +65,18 @@ public class ExportActivity extends BaseBackActivity {
 
             pw.flush();
             pw.close();
+
+            shareExportedRecords(outFile);
         }
+    }
+
+    private void shareExportedRecords(@NonNull File exportFile) {
+        Uri fileUri = FileProvider.getUriForFile(ExportActivity.this, getPackageName(), exportFile);
+
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+        sendIntent.setType("text/plain");
+        startActivity(Intent.createChooser(sendIntent, "Share exported records"));
     }
 }
