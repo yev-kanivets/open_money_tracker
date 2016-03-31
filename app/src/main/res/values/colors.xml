@@ -21,6 +21,7 @@
     <color name="yellow_light">#ffbd21</color>
     <color name="yellow_dark">#ff8a00</color>
 
+    <color name="text_white">#ffffffff</color>
     <color name="text_black">#de000000</color>
     <color name="text_grey">#8A000000</color>
 

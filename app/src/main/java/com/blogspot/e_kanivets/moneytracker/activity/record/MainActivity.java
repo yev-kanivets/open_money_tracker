@@ -1,13 +1,14 @@
 package com.blogspot.e_kanivets.moneytracker.activity.record;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.MtApp;
@@ -60,6 +61,10 @@ public class MainActivity extends BaseDrawerActivity {
     @Bind(R.id.spinner_period)
     PeriodSpinner spinner;
 
+    TextView tvDefaultAccountTitle;
+    TextView tvDefaultAccountSum;
+    TextView tvCurrency;
+
     @Override
     protected int getContentViewId() {
         return R.layout.activity_main;
@@ -81,8 +86,9 @@ public class MainActivity extends BaseDrawerActivity {
 
         setTitle(R.string.title_records);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        tvDefaultAccountTitle = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_default_account_title);
+        tvDefaultAccountSum = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_default_account_sum);
+        tvCurrency = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_currency);
 
         if (PrefUtils.checkRateDialog()) showAppRateDialog();
 
@@ -185,6 +191,8 @@ public class MainActivity extends BaseDrawerActivity {
         ReportMaker reportMaker = new ReportMaker(rateController);
         IReport report = reportMaker.getReport(currency, period, recordList);
         summaryPresenter.update(report);
+
+        fillDefaultAccount();
     }
 
     private void showAppRateDialog() {
@@ -207,5 +215,15 @@ public class MainActivity extends BaseDrawerActivity {
         intent.putExtra(AddRecordActivity.KEY_MODE, mode);
         intent.putExtra(AddRecordActivity.KEY_TYPE, Record.TYPE_EXPENSE);
         startActivityForResult(intent, REQUEST_ACTION_RECORD);
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void fillDefaultAccount() {
+        Account account = accountController.readDefaultAccount();
+        if (account == null) return;
+
+        tvDefaultAccountTitle.setText(account.getTitle());
+        tvDefaultAccountSum.setText(Integer.toString(account.getCurSum()));
+        tvCurrency.setText(account.getCurrency());
     }
 }

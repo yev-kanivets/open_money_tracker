@@ -31,6 +31,8 @@ public abstract class BaseDrawerActivity extends BaseActivity
 
     @Bind(R.id.drawer_layout)
     DrawerLayout drawer;
+    @Bind(R.id.nav_view)
+    protected NavigationView navigationView;
 
     protected abstract void update();
 
@@ -54,6 +56,12 @@ public abstract class BaseDrawerActivity extends BaseActivity
         toggle.syncState();
 
         return toolbar;
+    }
+
+    @Override
+    protected void initViews() {
+        super.initViews();
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
