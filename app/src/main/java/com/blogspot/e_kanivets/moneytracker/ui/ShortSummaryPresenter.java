@@ -40,8 +40,9 @@ public class ShortSummaryPresenter {
         green = context.getResources().getColor(R.color.green);
     }
 
-    public View create() {
+    public View create(boolean shortSummary) {
         view = layoutInflater.inflate(R.layout.view_summary_records, null);
+        view.findViewById(R.id.iv_more).setVisibility(shortSummary ? View.VISIBLE : View.INVISIBLE);
 
         ViewHolder viewHolder = new ViewHolder(view);
         view.setTag(viewHolder);

@@ -94,7 +94,7 @@ public class MainActivity extends BaseDrawerActivity {
 
         registerForContextMenu(listView);
 
-        View summaryView = summaryPresenter.create();
+        View summaryView = summaryPresenter.create(true);
         listView.addHeaderView(summaryView);
         summaryView.setOnClickListener(new View.OnClickListener() {
             @Override

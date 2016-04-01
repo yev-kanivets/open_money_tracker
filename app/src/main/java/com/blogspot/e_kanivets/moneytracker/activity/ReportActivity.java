@@ -77,7 +77,7 @@ public class ReportActivity extends BaseBackActivity {
         initSpinnerCurrency();
 
         shortSummaryPresenter = new ShortSummaryPresenter(ReportActivity.this);
-        expandableListView.addHeaderView(shortSummaryPresenter.create());
+        expandableListView.addHeaderView(shortSummaryPresenter.create(false));
     }
 
     private void update(String currency) {
