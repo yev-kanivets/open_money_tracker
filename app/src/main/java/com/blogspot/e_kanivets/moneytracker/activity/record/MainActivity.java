@@ -190,7 +190,7 @@ public class MainActivity extends BaseDrawerActivity {
 
         ReportMaker reportMaker = new ReportMaker(rateController);
         IReport report = reportMaker.getReport(currency, period, recordList);
-        summaryPresenter.update(report);
+        summaryPresenter.update(report, currency, reportMaker.currencyNeeded(currency, recordList));
 
         fillDefaultAccount();
     }

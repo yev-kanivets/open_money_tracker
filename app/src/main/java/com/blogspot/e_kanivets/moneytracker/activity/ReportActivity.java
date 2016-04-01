@@ -1,7 +1,9 @@
 package com.blogspot.e_kanivets.moneytracker.activity;
 
-import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatSpinner;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
 
 import com.blogspot.e_kanivets.moneytracker.MtApp;
@@ -18,6 +20,7 @@ import com.blogspot.e_kanivets.moneytracker.report.ReportConverter;
 import com.blogspot.e_kanivets.moneytracker.report.ReportMaker;
 import com.blogspot.e_kanivets.moneytracker.report.base.IReport;
 import com.blogspot.e_kanivets.moneytracker.ui.ShortSummaryPresenter;
+import com.blogspot.e_kanivets.moneytracker.util.CurrencyProvider;
 
 import java.util.List;
 
@@ -37,8 +40,13 @@ public class ReportActivity extends BaseBackActivity {
     @Inject
     AccountController accountController;
 
-    private IReport report;
+    private List<Record> recordList;
+    private Period period;
 
+    private ShortSummaryPresenter shortSummaryPresenter;
+
+    @Bind(R.id.spinner_currency)
+    AppCompatSpinner spinnerCurrency;
     @Bind(R.id.exp_list_view)
     ExpandableListView expandableListView;
 
@@ -51,25 +59,13 @@ public class ReportActivity extends BaseBackActivity {
     protected boolean initData() {
         super.initData();
 
-        List<Record> recordList = getIntent().getParcelableArrayListExtra(KEY_RECORD_LIST);
+        recordList = getIntent().getParcelableArrayListExtra(KEY_RECORD_LIST);
         if (recordList == null) return false;
 
-        Period period = getIntent().getParcelableExtra(KEY_PERIOD);
+        period = getIntent().getParcelableExtra(KEY_PERIOD);
         if (period == null) return false;
 
         MtApp.get().getAppComponent().inject(ReportActivity.this);
-
-        String currency = DbHelper.DEFAULT_ACCOUNT_CURRENCY;
-        Account defaultAccount = accountController.readDefaultAccount();
-        if (defaultAccount != null) currency = defaultAccount.getCurrency();
-
-        ReportMaker reportMaker = new ReportMaker(rateController);
-        report = reportMaker.getReport(currency, period, recordList);
-
-        if (report == null) {
-            List<String> ratesNeeded = reportMaker.currencyNeeded(currency, recordList);
-            showExchangeRatesNeededDialog(currency, ratesNeeded);
-        }
 
         return true;
     }
@@ -78,33 +74,53 @@ public class ReportActivity extends BaseBackActivity {
     protected void initViews() {
         super.initViews();
 
-        if (report == null) return;
-        ReportConverter reportConverter = new ReportConverter(report);
+        initSpinnerCurrency();
 
-        ShortSummaryPresenter shortSummaryPresenter = new ShortSummaryPresenter(ReportActivity.this);
+        shortSummaryPresenter = new ShortSummaryPresenter(ReportActivity.this);
         expandableListView.addHeaderView(shortSummaryPresenter.create());
-        expandableListView.setAdapter(new ExpandableListReportAdapter(ReportActivity.this, reportConverter));
-        shortSummaryPresenter.update(report);
     }
 
-    private void showExchangeRatesNeededDialog(String currency, List<String> ratesNeeded) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(ReportActivity.this);
-        builder.setTitle(getString(R.string.cant_make_report));
+    private void update(String currency) {
+        ReportMaker reportMaker = new ReportMaker(rateController);
+        IReport report = reportMaker.getReport(currency, period, recordList);
 
-        StringBuilder sb = new StringBuilder(getString(R.string.rates_needed));
-        for (String str : ratesNeeded) {
-            sb.append("\n").append(str).append(getString(R.string.arrow)).append(currency);
+        ExpandableListReportAdapter adapter = null;
+
+        if (report != null) {
+            ReportConverter reportConverter = new ReportConverter(report);
+            adapter = new ExpandableListReportAdapter(ReportActivity.this, reportConverter);
         }
 
-        builder.setMessage(sb.toString());
-        builder.setPositiveButton(android.R.string.ok, null);
-        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+        expandableListView.setAdapter(adapter);
+        shortSummaryPresenter.update(report, currency, reportMaker.currencyNeeded(currency, recordList));
+    }
+
+    private void initSpinnerCurrency() {
+        List<String> currencyList = CurrencyProvider.getAllCurrencies();
+
+        spinnerCurrency.setAdapter(new ArrayAdapter<>(ReportActivity.this,
+                R.layout.view_spinner_item, currencyList));
+        spinnerCurrency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onDismiss(DialogInterface dialog) {
-                finish();
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                update((String) spinnerCurrency.getSelectedItem());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
 
-        builder.show();
+        String currency = DbHelper.DEFAULT_ACCOUNT_CURRENCY;
+        Account defaultAccount = accountController.readDefaultAccount();
+        if (defaultAccount != null) currency = defaultAccount.getCurrency();
+
+        for (int i = 0; i < currencyList.size(); i++) {
+            if (currency.equals(currencyList.get(i))) {
+                spinnerCurrency.setSelection(i);
+                break;
+            }
+        }
     }
 }
