@@ -3,7 +3,7 @@ package com.blogspot.e_kanivets.moneytracker.di.module;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.blogspot.e_kanivets.moneytracker.DbHelper;
+import com.blogspot.e_kanivets.moneytracker.repo.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.entity.Account;
 import com.blogspot.e_kanivets.moneytracker.entity.Category;
 import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRate;

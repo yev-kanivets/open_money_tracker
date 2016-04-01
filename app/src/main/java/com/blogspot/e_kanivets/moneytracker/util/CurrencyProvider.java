@@ -1,6 +1,6 @@
 package com.blogspot.e_kanivets.moneytracker.util;
 
-import com.blogspot.e_kanivets.moneytracker.DbHelper;
+import com.blogspot.e_kanivets.moneytracker.repo.DbHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;

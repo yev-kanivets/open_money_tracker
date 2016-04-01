@@ -1,4 +1,4 @@
-package com.blogspot.e_kanivets.moneytracker;
+package com.blogspot.e_kanivets.moneytracker.repo;
 
 import android.content.ContentValues;
 import android.content.Context;
