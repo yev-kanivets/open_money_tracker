@@ -131,11 +131,18 @@ public class PeriodSpinner extends AppCompatSpinner {
         if (lastPeriod == null) return;
         ChangeDateDialog dialog = new ChangeDateDialog(context, lastPeriod.getFirst(),
                 new ChangeDateDialog.OnDateChangedListener() {
-            @Override
-            public void OnDataChanged(Date fromDate) {
-                showToDateDialog(fromDate);
-            }
-        });
+                    @Override
+                    public void OnDataChanged(Date fromDate) {
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTime(fromDate);
+                        cal.set(Calendar.HOUR_OF_DAY, 0);
+                        cal.set(Calendar.MINUTE, 0);
+                        cal.set(Calendar.SECOND, 0);
+                        cal.set(Calendar.MILLISECOND, 0);
+
+                        showToDateDialog(cal.getTime());
+                    }
+                });
         dialog.show();
     }
 
@@ -146,7 +153,14 @@ public class PeriodSpinner extends AppCompatSpinner {
                 new ChangeDateDialog.OnDateChangedListener() {
                     @Override
                     public void OnDataChanged(Date toDate) {
-                        setPeriod(new Period(fromDate, toDate, Period.TYPE_CUSTOM));
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTime(toDate);
+                        cal.set(Calendar.HOUR_OF_DAY, 23);
+                        cal.set(Calendar.MINUTE, 59);
+                        cal.set(Calendar.SECOND, 59);
+                        cal.set(Calendar.MILLISECOND, 999);
+
+                        setPeriod(new Period(fromDate, cal.getTime(), Period.TYPE_CUSTOM));
                     }
                 });
         dialog.show();
