@@ -8,8 +8,6 @@
     <string name="price">Цена</string>
     <string name="add_income">Добавить доход</string>
     <string name="add_expense">Добавить расход</string>
-    <string name="ok">OK</string>
-    <string name="cancel">Отмена</string>
     <string name="add">Добавить</string>
 
     <string name="wrong_number_text">Извините, но введенные данные не верны!</string>
@@ -49,5 +47,15 @@
     <string name="title_exchange_rates">Курсы обмена</string>
     <string name="add_exchange_rate">Добавить курс обмена</string>
     <string name="account_was_removed">Счет был удален</string>
+
+    <string name="short_summary">Краткий отчет</string>
+    <string name="custom">Другой</string>
+    <string name="summary">Сводка</string>
+    <string name="currency">Валюта</string>
+    <string name="error_exchange_rates">Ошибка! Укажите курсы обмена.</string>
+    <string name="amount">Количество</string>
+    <string name="title_settings">Настройки</string>
+    <string name="settings">Настройки</string>
+    <string name="default_account">Счет по умолчанию</string>
 
 </resources>

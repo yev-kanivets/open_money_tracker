@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Money Tracker</string>
+
+    <string name="title">Назва</string>
+    <string name="category">Категорія</string>
+    <string name="price">Ціна</string>
+    <string name="add_income">Додати дохід</string>
+    <string name="add_expense">Додати витрату</string>
+    <string name="add">Додати</string>
+
+    <string name="wrong_number_text">Пробачте, але введені дані не корректні!</string>
+    <string name="report">Звіт</string>
+    <string name="change_date">ЗМІНИТИ ДАТУ</string>
+    <string name="total">СУМА</string>
+    <string name="total_incomes">Сумарний дохід</string>
+    <string name="total_expenses">Сумарна витрата</string>
+    <string name="edit">Редактувати</string>
+    <string name="delete">Видалити</string>
+
+    <string name="day">День</string>
+    <string name="week">Тиждень</string>
+    <string name="month">Місяць</string>
+    <string name="year">Рік</string>
+
+    <string name="like_money_tracker">Вам подобається MoneyTracker?</string>
+    <string name="rate_it_on_gp">Оцініть його на Google Play!</string>
+    <string name="maybe_later">Можливо пізніше</string>
+    <string name="no_thank_you">Ні, дякую</string>
+    <string name="yes_very">Так!</string>
+
+    <string name="title_records">Записи</string>
+    <string name="title_accounts">Рахунки</string>
+    <string name="title_export">Експорт</string>
+    <string name="title_add_income">Додати дохід</string>
+    <string name="title_add_expense">Додати витрату</string>
+    <string name="title_add_account">Додати рахунок</string>
+
+    <string name="export">Експорт</string>
+    <string name="add_account">Додати рахунок</string>
+    <string name="initial_sum">Початкова сума</string>
+    <string name="account">Рахунок</string>
+    <string name="transfer">Трансфер</string>
+    <string name="from">З рахунку</string>
+    <string name="to">На рахунок</string>
+    <string name="title_exchange_rates">Курси обміну</string>
+    <string name="add_exchange_rate">Додати курс обміну</string>
+    <string name="account_was_removed">Рахунок було видалено</string>
+
+    <string name="short_summary">Короткий звіт</string>
+    <string name="custom">Інший</string>
+    <string name="summary">Резюме</string>
+    <string name="currency">Валюта</string>
+    <string name="error_exchange_rates">Помилка! Вкажіть курси обміну.</string>
+    <string name="amount">Кількість</string>
+    <string name="title_settings">Налаштування</string>
+    <string name="settings">Налаштування</string>
+    <string name="default_account">Рахунок за замовчуванням</string>
+
+</resources>
