@@ -15,6 +15,7 @@ import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.ExchangeRateAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
 import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRate;
+import com.blogspot.e_kanivets.moneytracker.util.ExchangeRatesSummarizer;
 
 import java.util.Collections;
 import java.util.List;
@@ -103,7 +104,7 @@ public class ExchangeRatesActivity extends BaseBackActivity {
     }
 
     private void update() {
-        exchangeRateList = rateController.readAll();
+        exchangeRateList = new ExchangeRatesSummarizer(rateController.readAll()).getSummaryList();
         Collections.reverse(exchangeRateList);
 
         listView.setAdapter(new ExchangeRateAdapter(ExchangeRatesActivity.this, exchangeRateList));
