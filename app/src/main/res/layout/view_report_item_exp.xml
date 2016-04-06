@@ -1,48 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/transparent">
+    android:background="@android:color/transparent"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/half_margin"
+    android:paddingEnd="@dimen/activity_horizontal_margin"
+    android:paddingStart="@dimen/zero_margin"
+    android:paddingTop="@dimen/half_margin">
 
-    <View
-        android:id="@+id/line"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/black"
-        android:visibility="gone" />
+    <TextView
+        android:id="@+id/tv_category"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:background="@android:color/transparent"
+        android:gravity="start"
+        android:minWidth="5dp"
+        android:paddingEnd="@dimen/zero_margin"
+        android:paddingStart="?android:attr/expandableListPreferredItemPaddingLeft"
+        android:theme="@style/Text_Body2" />
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/tv_total"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:id="@+id/tv_category"
-            android:textSize="18sp"
-            android:layout_gravity="center"
-            android:minWidth="5dp"
-            android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft"
-            android:background="@android:color/transparent"
-            android:layout_weight="1"
-            android:layout_margin="10dp"
-            android:gravity="left" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/tv_total"
-            android:textSize="18sp"
-            android:layout_gravity="center_vertical"
-            android:background="@android:color/transparent"
-            android:layout_margin="10dp"
-            android:gravity="right" />
-
-    </LinearLayout>
+        android:layout_gravity="center_vertical"
+        android:background="@android:color/transparent"
+        android:gravity="end"
+        android:theme="@style/Text_Body2" />
 
 </LinearLayout>

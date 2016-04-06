@@ -8,13 +8,8 @@ package com.blogspot.e_kanivets.moneytracker.util;
  */
 public interface Constants {
     String GP_MARKET = "market://details?id=";
-    String APP_RATED = "app_rated";
-    String LAUNCH_COUNT = "launch_count";
     int RATE_PERIOD = 5;
-    String CONTRIBUTION = "contribution";
-    String KEY_USED_PERIOD = "key_used_period";
 
-    int DEFAULT_USED_PERIOD = 1;
     String TITLE_PARAM_NAME = "title";
     String PRICE_PARAM_NAME = "price";
 

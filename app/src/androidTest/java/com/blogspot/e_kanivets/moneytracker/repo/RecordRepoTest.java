@@ -3,7 +3,6 @@ package com.blogspot.e_kanivets.moneytracker.repo;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import com.blogspot.e_kanivets.moneytracker.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.entity.Record;
 
 import junit.framework.TestCase;
@@ -47,7 +46,7 @@ public class RecordRepoTest extends TestCase {
         expected.put(DbHelper.TYPE_COLUMN, Record.TYPE_EXPENSE);
         expected.put(DbHelper.TITLE_COLUMN, "title");
         expected.put(DbHelper.CATEGORY_ID_COLUMN, 1L);
-        expected.put(DbHelper.PRICE_COLUMN, 100);
+        expected.put(DbHelper.PRICE_COLUMN, 100.0);
         expected.put(DbHelper.ACCOUNT_ID_COLUMN, 1L);
         expected.put(DbHelper.CURRENCY_COLUMN, "NON");
 

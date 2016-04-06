@@ -1,34 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:paddingBottom="@dimen/half_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/half_margin"
-    tools:context="com.blogspot.e_kanivets.moneytracker.activity.AddExchangeRateActivity">
+    android:paddingEnd="@dimen/activity_horizontal_margin"
+    android:paddingStart="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/half_margin">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="1" />
+        android:text="@string/one"
+        android:theme="@style/Text_Body2" />
 
     <TextView
         android:id="@+id/tv_from_currency"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:gravity="center|right" />
+        android:gravity="center|end"
+        android:theme="@style/Text_Body2" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="=" />
+        android:text="@string/equal"
+        android:theme="@style/Text_Body1" />
 
     <TextView
         android:id="@+id/tv_amount"
@@ -36,20 +37,23 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:maxLines="1" />
+        android:maxLines="1"
+        android:theme="@style/Text_Body2" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="*" />
+        android:text="@string/multiply"
+        android:theme="@style/Text_Body1" />
 
     <TextView
         android:id="@+id/tv_to_currency"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:gravity="center|left" />
+        android:gravity="center|start"
+        android:theme="@style/Text_Body2" />
 
 </LinearLayout>

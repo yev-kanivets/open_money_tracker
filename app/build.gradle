@@ -6,10 +6,10 @@ android {
     buildToolsVersion '21.1.2'
     defaultConfig {
         applicationId 'com.blogspot.e_kanivets.moneytracker'
-        minSdkVersion 10
+        minSdkVersion 17
         targetSdkVersion 23
-        versionCode 4
-        versionName '1.4.0'
+        versionCode 5
+        versionName '1.5.0'
     }
     signingConfigs {
         releaseConfig {
@@ -45,8 +45,9 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:support-v4:23.0.0'
-    compile 'com.android.support:appcompat-v7:23.0.0'
+    compile 'com.android.support:support-v4:23.2.1'
+    compile 'com.android.support:appcompat-v7:23.2.1'
+    compile 'com.android.support:design:23.2.1'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.google.dagger:dagger:2.0.1'
 
@@ -55,8 +56,7 @@ dependencies {
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:2.0.43-beta'
-
-    androidTestCompile "com.crittercism.dexmaker:dexmaker:1.4"
-    androidTestCompile "com.crittercism.dexmaker:dexmaker-dx:1.4"
-    androidTestCompile "com.crittercism.dexmaker:dexmaker-mockito:1.4"
+    androidTestCompile 'com.crittercism.dexmaker:dexmaker:1.4'
+    androidTestCompile 'com.crittercism.dexmaker:dexmaker-dx:1.4'
+    androidTestCompile 'com.crittercism.dexmaker:dexmaker-mockito:1.4'
 }

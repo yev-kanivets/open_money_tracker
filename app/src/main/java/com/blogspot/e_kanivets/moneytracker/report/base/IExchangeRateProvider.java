@@ -2,6 +2,7 @@ package com.blogspot.e_kanivets.moneytracker.report.base;
 
 import android.support.annotation.Nullable;
 
+import com.blogspot.e_kanivets.moneytracker.entity.Account;
 import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRate;
 import com.blogspot.e_kanivets.moneytracker.entity.Record;
 
@@ -20,4 +21,13 @@ public interface IExchangeRateProvider {
      */
     @Nullable
     ExchangeRate getRate(@Nullable Record record);
+
+    /**
+     * Gives an exchange rate for given account.
+     *
+     * @param account to request an exchange rate for
+     * @return exchange rate
+     */
+    @Nullable
+    ExchangeRate getRate(@Nullable Account account);
 }

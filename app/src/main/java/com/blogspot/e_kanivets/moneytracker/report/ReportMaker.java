@@ -4,9 +4,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
+import com.blogspot.e_kanivets.moneytracker.entity.Account;
 import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRate;
 import com.blogspot.e_kanivets.moneytracker.model.Period;
 import com.blogspot.e_kanivets.moneytracker.entity.Record;
+import com.blogspot.e_kanivets.moneytracker.report.base.IAccountsReport;
 import com.blogspot.e_kanivets.moneytracker.report.base.IExchangeRateProvider;
 import com.blogspot.e_kanivets.moneytracker.report.base.IReport;
 
@@ -36,12 +38,37 @@ public class ReportMaker {
         return new Report(currency, period, recordList, rateProvider);
     }
 
+    @Nullable
+    public IAccountsReport getAccountsReport(String currency, List<Account> accountList) {
+        if (currencyNeededAccounts(currency, accountList).size() != 0) return null;
+
+        IExchangeRateProvider rateProvider = new ExchangeRateProvider(currency, rateController);
+        return new AccountsReport(currency, accountList, rateProvider);
+    }
+
     @NonNull
     public List<String> currencyNeeded(String currency, List<Record> recordList) {
         Set<String> currencies = new TreeSet<>();
 
         for (Record record : recordList) {
             currencies.add(record.getCurrency());
+        }
+
+        currencies.remove(currency);
+
+        for (ExchangeRate rate : rateController.readAll()) {
+            if (rate.getToCurrency().equals(currency)) currencies.remove(rate.getFromCurrency());
+        }
+
+        return new ArrayList<>(currencies);
+    }
+
+    @NonNull
+    public List<String> currencyNeededAccounts(String currency, List<Account> accountList) {
+        Set<String> currencies = new TreeSet<>();
+
+        for (Account account : accountList) {
+            currencies.add(account.getCurrency());
         }
 
         currencies.remove(currency);

@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
+import com.blogspot.e_kanivets.moneytracker.entity.Account;
 import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRate;
 import com.blogspot.e_kanivets.moneytracker.entity.Record;
 import com.blogspot.e_kanivets.moneytracker.report.base.IExchangeRateProvider;
@@ -43,6 +44,16 @@ public class ExchangeRateProvider implements IExchangeRateProvider {
         if (record == null) return null;
 
         String fromCurrency = record.getCurrency();
+
+        return rateMap.get(fromCurrency);
+    }
+
+    @Nullable
+    @Override
+    public ExchangeRate getRate(@Nullable Account account) {
+        if (account == null) return null;
+
+        String fromCurrency = account.getCurrency();
 
         return rateMap.get(fromCurrency);
     }
