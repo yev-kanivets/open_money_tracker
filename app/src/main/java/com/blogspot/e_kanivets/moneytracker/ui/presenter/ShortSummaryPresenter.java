@@ -1,14 +1,13 @@
-package com.blogspot.e_kanivets.moneytracker.ui;
+package com.blogspot.e_kanivets.moneytracker.ui.presenter;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.report.base.IReport;
+import com.blogspot.e_kanivets.moneytracker.ui.presenter.base.BaseSummaryPresenter;
 
 import java.util.List;
 import java.util.Locale;
@@ -22,10 +21,7 @@ import butterknife.ButterKnife;
  *
  * @author Evgenii Kanivets
  */
-public class ShortSummaryPresenter {
-    private final LayoutInflater layoutInflater;
-
-    private Context context;
+public class ShortSummaryPresenter extends BaseSummaryPresenter {
 
     private int red;
     private int green;
@@ -76,16 +72,6 @@ public class ShortSummaryPresenter {
     private String format(double amount, String currency) {
         return (amount >= 0 ? "+ " : "- ") + String.format(Locale.getDefault(), "%.0f", Math.abs(amount))
                 + " " + currency;
-    }
-
-    private String createRatesNeededList(String currency, List<String> ratesNeeded) {
-        StringBuilder sb = new StringBuilder(context.getString(R.string.error_exchange_rates));
-
-        for (String str : ratesNeeded) {
-            sb.append("\n").append(str).append(context.getString(R.string.arrow)).append(currency);
-        }
-
-        return sb.toString();
     }
 
     public static class ViewHolder {

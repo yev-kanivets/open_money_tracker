@@ -26,7 +26,7 @@ import com.blogspot.e_kanivets.moneytracker.report.ReportMaker;
 import com.blogspot.e_kanivets.moneytracker.report.base.IReport;
 import com.blogspot.e_kanivets.moneytracker.ui.AppRateDialog;
 import com.blogspot.e_kanivets.moneytracker.ui.PeriodSpinner;
-import com.blogspot.e_kanivets.moneytracker.ui.ShortSummaryPresenter;
+import com.blogspot.e_kanivets.moneytracker.ui.presenter.ShortSummaryPresenter;
 import com.blogspot.e_kanivets.moneytracker.util.PrefUtils;
 
 import java.util.ArrayList;

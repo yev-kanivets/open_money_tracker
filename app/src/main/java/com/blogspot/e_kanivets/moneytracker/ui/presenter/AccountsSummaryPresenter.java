@@ -1,4 +1,4 @@
-package com.blogspot.e_kanivets.moneytracker.ui;
+package com.blogspot.e_kanivets.moneytracker.ui.presenter;
 
 import android.content.Context;
 import android.support.v7.widget.AppCompatSpinner;
@@ -16,6 +16,7 @@ import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
 import com.blogspot.e_kanivets.moneytracker.entity.Account;
 import com.blogspot.e_kanivets.moneytracker.report.ReportMaker;
 import com.blogspot.e_kanivets.moneytracker.report.base.IAccountsReport;
+import com.blogspot.e_kanivets.moneytracker.ui.presenter.base.BaseSummaryPresenter;
 import com.blogspot.e_kanivets.moneytracker.util.CurrencyProvider;
 
 import java.util.List;
@@ -32,9 +33,7 @@ import butterknife.ButterKnife;
  *
  * @author Evgenii Kanivets
  */
-public class AccountsSummaryPresenter {
-    private Context context;
-    private final LayoutInflater layoutInflater;
+public class AccountsSummaryPresenter extends BaseSummaryPresenter {
 
     @Inject
     ExchangeRateController rateController;
@@ -105,7 +104,8 @@ public class AccountsSummaryPresenter {
 
         if (report == null) {
             viewHolder.tvTotal.setTextColor(red);
-            viewHolder.tvTotal.setText(R.string.error_exchange_rates);
+            viewHolder.tvTotal.setText(createRatesNeededList(currency,
+                    reportMaker.currencyNeededAccounts(currency, accountController.readAll())));
             viewHolder.tvCurrency.setText("");
         } else {
             viewHolder.tvTotal.setTextColor(report.getTotal() >= 0 ? green : red);

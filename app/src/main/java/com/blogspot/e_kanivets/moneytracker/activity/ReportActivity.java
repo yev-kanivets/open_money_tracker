@@ -19,7 +19,7 @@ import com.blogspot.e_kanivets.moneytracker.entity.Record;
 import com.blogspot.e_kanivets.moneytracker.report.ReportConverter;
 import com.blogspot.e_kanivets.moneytracker.report.ReportMaker;
 import com.blogspot.e_kanivets.moneytracker.report.base.IReport;
-import com.blogspot.e_kanivets.moneytracker.ui.ShortSummaryPresenter;
+import com.blogspot.e_kanivets.moneytracker.ui.presenter.ShortSummaryPresenter;
 import com.blogspot.e_kanivets.moneytracker.util.CurrencyProvider;
 
 import java.util.List;

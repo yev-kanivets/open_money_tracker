@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
+import android.util.Log;
 
 import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
@@ -45,9 +46,10 @@ public class ExportActivity extends BaseBackActivity {
 
         File exportDir = new File(getCacheDir(), "export");
         boolean exportDirCreated = exportDir.mkdirs();
+        Log.d(TAG, "exportDirCreated: " + exportDirCreated);
 
         File outFile;
-        if (exportDirCreated) outFile = new File(exportDir, Constants.DEFAULT_EXPORT_FILE_NAME);
+        if (exportDir.exists()) outFile = new File(exportDir, Constants.DEFAULT_EXPORT_FILE_NAME);
         else return;
 
         PrintWriter pw = null;
