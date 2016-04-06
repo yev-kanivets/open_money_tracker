@@ -14,7 +14,7 @@ import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.AccountAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
-import com.blogspot.e_kanivets.moneytracker.ui.AccountsSummaryPresenter;
+import com.blogspot.e_kanivets.moneytracker.ui.presenter.AccountsSummaryPresenter;
 
 import javax.inject.Inject;
 

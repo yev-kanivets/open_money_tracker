@@ -12,7 +12,7 @@ import com.blogspot.e_kanivets.moneytracker.activity.record.AddRecordActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.record.MainActivity;
 import com.blogspot.e_kanivets.moneytracker.di.module.ControllerModule;
 import com.blogspot.e_kanivets.moneytracker.di.module.RepoModule;
-import com.blogspot.e_kanivets.moneytracker.ui.AccountsSummaryPresenter;
+import com.blogspot.e_kanivets.moneytracker.ui.presenter.AccountsSummaryPresenter;
 
 import javax.inject.Singleton;
 
