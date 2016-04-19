@@ -5,7 +5,8 @@ import android.app.Application;
 import com.blogspot.e_kanivets.moneytracker.di.AppComponent;
 import com.blogspot.e_kanivets.moneytracker.di.DaggerAppComponent;
 import com.blogspot.e_kanivets.moneytracker.di.module.ControllerModule;
-import com.blogspot.e_kanivets.moneytracker.di.module.RepoModule;
+import com.blogspot.e_kanivets.moneytracker.di.module.repo.CachedRepoModule;
+import com.blogspot.e_kanivets.moneytracker.di.module.repo.RepoModule;
 
 /**
  * Custom application implementation.
@@ -37,7 +38,7 @@ public class MtApp extends Application {
 
     private AppComponent buildComponent() {
         return DaggerAppComponent.builder()
-                .repoModule(new RepoModule(get()))
+                .cachedRepoModule(new CachedRepoModule(get()))
                 .controllerModule(new ControllerModule())
                 .build();
     }
