@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.CategoryController;
+import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController;
 import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
 import com.blogspot.e_kanivets.moneytracker.controller.RecordController;
 import com.blogspot.e_kanivets.moneytracker.controller.TransferController;
@@ -64,5 +65,12 @@ public class ControllerModule {
     public TransferController providesTransferController(IRepo<Transfer> transferRepo,
                                                          AccountController accountController) {
         return new TransferController(transferRepo, accountController);
+    }
+
+    @Provides
+    @NonNull
+    @Singleton
+    public CurrencyController providesCurrencyController(AccountController accountController) {
+        return new CurrencyController(accountController);
     }
 }

@@ -10,7 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.blogspot.e_kanivets.moneytracker.repo.DbHelper;
+import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController;
 import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.ReportActivity;
@@ -53,6 +53,8 @@ public class MainActivity extends BaseDrawerActivity {
     ExchangeRateController rateController;
     @Inject
     AccountController accountController;
+    @Inject
+    CurrencyController currencyController;
 
     private ShortSummaryPresenter summaryPresenter;
 
@@ -184,9 +186,7 @@ public class MainActivity extends BaseDrawerActivity {
 
         listView.setAdapter(new RecordAdapter(MainActivity.this, recordList));
 
-        String currency = DbHelper.DEFAULT_ACCOUNT_CURRENCY;
-        Account defaultAccount = accountController.readDefaultAccount();
-        if (defaultAccount != null) currency = defaultAccount.getCurrency();
+        String currency = currencyController.readDefaultCurrency();
 
         ReportMaker reportMaker = new ReportMaker(rateController);
         IReport report = reportMaker.getReport(currency, period, recordList);
@@ -219,11 +219,11 @@ public class MainActivity extends BaseDrawerActivity {
 
     @SuppressLint("SetTextI18n")
     private void fillDefaultAccount() {
-        Account account = accountController.readDefaultAccount();
-        if (account == null) return;
+        Account defaultAccount = accountController.readDefaultAccount();
+        if (defaultAccount == null) return;
 
-        tvDefaultAccountTitle.setText(account.getTitle());
-        tvDefaultAccountSum.setText(Integer.toString(account.getCurSum()));
-        tvCurrency.setText(account.getCurrency());
+        tvDefaultAccountTitle.setText(defaultAccount.getTitle());
+        tvDefaultAccountSum.setText(Integer.toString(defaultAccount.getCurSum()));
+        tvCurrency.setText(defaultAccount.getCurrency());
     }
 }
