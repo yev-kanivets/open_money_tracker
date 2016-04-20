@@ -1,4 +1,4 @@
-package com.blogspot.e_kanivets.moneytracker.di.module;
+package com.blogspot.e_kanivets.moneytracker.di.module.repo;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

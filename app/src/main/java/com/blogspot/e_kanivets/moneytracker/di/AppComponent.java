@@ -10,8 +10,8 @@ import com.blogspot.e_kanivets.moneytracker.activity.exchange_rate.AddExchangeRa
 import com.blogspot.e_kanivets.moneytracker.activity.exchange_rate.ExchangeRatesActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.record.AddRecordActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.record.MainActivity;
+import com.blogspot.e_kanivets.moneytracker.di.module.repo.CachedRepoModule;
 import com.blogspot.e_kanivets.moneytracker.di.module.ControllerModule;
-import com.blogspot.e_kanivets.moneytracker.di.module.RepoModule;
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.AccountsSummaryPresenter;
 
 import javax.inject.Singleton;
@@ -24,7 +24,7 @@ import dagger.Component;
  *
  * @author Evgenii Kanivets
  */
-@Component(modules = {RepoModule.class, ControllerModule.class})
+@Component(modules = {CachedRepoModule.class, ControllerModule.class})
 @Singleton
 public interface AppComponent {
     void inject(MainActivity mainActivity);
