@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.blogspot.e_kanivets.moneytracker.entity.Account;
 import com.blogspot.e_kanivets.moneytracker.repo.DbHelper;
+import com.blogspot.e_kanivets.moneytracker.util.PrefUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,9 +39,15 @@ public class CurrencyController {
 
     @NonNull
     public String readDefaultCurrency() {
-        String currency = DbHelper.DEFAULT_ACCOUNT_CURRENCY;
-        Account defaultAccount = accountController.readDefaultAccount();
-        if (defaultAccount != null) currency = defaultAccount.getCurrency();
+        // First of all read from Prefs
+        String currency = PrefUtils.readDefaultCurrency();
+
+        // If don't have default currency, try to use currency of default account
+        if (currency == null) {
+            currency = DbHelper.DEFAULT_ACCOUNT_CURRENCY;
+            Account defaultAccount = accountController.readDefaultAccount();
+            if (defaultAccount != null) currency = defaultAccount.getCurrency();
+        }
 
         return currency;
     }

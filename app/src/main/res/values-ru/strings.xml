@@ -57,5 +57,6 @@
     <string name="title_settings">Настройки</string>
     <string name="settings">Настройки</string>
     <string name="default_account">Счет по умолчанию</string>
+    <string name="default_currency">Валюта по умолчанию</string>
 
 </resources>

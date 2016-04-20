@@ -4,4 +4,9 @@
         android:key="@string/pref_default_account"
         android:summary="%s"
         android:title="@string/default_account" />
+
+    <ListPreference
+        android:key="@string/pref_default_currency"
+        android:summary="%s"
+        android:title="@string/default_currency" />
 </PreferenceScreen>
