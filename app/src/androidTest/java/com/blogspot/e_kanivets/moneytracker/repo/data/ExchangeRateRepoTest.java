@@ -1,9 +1,10 @@
-package com.blogspot.e_kanivets.moneytracker.repo;
+package com.blogspot.e_kanivets.moneytracker.repo.data;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 
 import com.blogspot.e_kanivets.moneytracker.entity.data.ExchangeRate;
+import com.blogspot.e_kanivets.moneytracker.repo.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.repo.data.ExchangeRateRepo;
 
 import junit.framework.TestCase;
