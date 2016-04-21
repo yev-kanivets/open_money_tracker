@@ -9,11 +9,11 @@ import com.blogspot.e_kanivets.moneytracker.entity.data.Category;
 import com.blogspot.e_kanivets.moneytracker.entity.data.ExchangeRate;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Transfer;
-import com.blogspot.e_kanivets.moneytracker.repo.AccountRepo;
-import com.blogspot.e_kanivets.moneytracker.repo.CategoryRepo;
-import com.blogspot.e_kanivets.moneytracker.repo.ExchangeRateRepo;
-import com.blogspot.e_kanivets.moneytracker.repo.RecordRepo;
-import com.blogspot.e_kanivets.moneytracker.repo.TransferRepo;
+import com.blogspot.e_kanivets.moneytracker.repo.data.AccountRepo;
+import com.blogspot.e_kanivets.moneytracker.repo.data.CategoryRepo;
+import com.blogspot.e_kanivets.moneytracker.repo.data.ExchangeRateRepo;
+import com.blogspot.e_kanivets.moneytracker.repo.data.RecordRepo;
+import com.blogspot.e_kanivets.moneytracker.repo.data.TransferRepo;
 import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo;
 
 import javax.inject.Singleton;

@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import com.blogspot.e_kanivets.moneytracker.entity.data.Transfer;
+import com.blogspot.e_kanivets.moneytracker.repo.data.TransferRepo;
 
 import junit.framework.TestCase;
 

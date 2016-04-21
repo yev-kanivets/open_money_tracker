@@ -85,7 +85,8 @@ public class RecordAdapter extends BaseAdapter {
         viewHolder.tvPrice.setText((record.isIncome() ? "+ " : "- ")
                 + Integer.toString((int) record.getPrice()));
         viewHolder.tvTitle.setText(record.getTitle());
-        viewHolder.tvCategory.setText(record.getCategory().getName());
+        if (record.getCategory() != null)
+            viewHolder.tvCategory.setText(record.getCategory().getName());
         viewHolder.tvCurrency.setText(record.getCurrency());
 
         return convertView;

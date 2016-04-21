@@ -1,4 +1,4 @@
-package com.blogspot.e_kanivets.moneytracker.repo;
+package com.blogspot.e_kanivets.moneytracker.repo.data;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.blogspot.e_kanivets.moneytracker.entity.data.Transfer;
+import com.blogspot.e_kanivets.moneytracker.repo.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.repo.base.BaseRepo;
 import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo;
 

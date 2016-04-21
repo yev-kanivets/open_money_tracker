@@ -1,4 +1,4 @@
-package com.blogspot.e_kanivets.moneytracker.repo;
+package com.blogspot.e_kanivets.moneytracker.repo.data;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record;
+import com.blogspot.e_kanivets.moneytracker.repo.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.repo.base.BaseRepo;
 import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo;
 
@@ -36,7 +37,8 @@ public class RecordRepo extends BaseRepo<Record> {
     @Override
     protected ContentValues contentValues(@Nullable Record record) {
         ContentValues contentValues = new ContentValues();
-        if (record == null) return null;
+        if (record == null || record.getCategory() == null || record.getAccount() == null)
+            return null;
 
         contentValues.put(DbHelper.TIME_COLUMN, record.getTime());
         contentValues.put(DbHelper.TYPE_COLUMN, record.getType());

@@ -104,9 +104,10 @@ public class Report implements IReport {
                     break;
             }
 
-            String categoryName = record.getCategory().getName();
+            String categoryName = null;
+            if (record.getCategory() != null) categoryName = record.getCategory().getName();
 
-            if (!categorySortedMap.containsKey(categoryName))
+            if (categoryName != null && !categorySortedMap.containsKey(categoryName))
                 categorySortedMap.put(categoryName, new ArrayList<Record>());
             categorySortedMap.get(categoryName).add(record);
         }
