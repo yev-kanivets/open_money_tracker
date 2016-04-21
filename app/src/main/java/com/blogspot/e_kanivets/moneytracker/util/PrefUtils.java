@@ -3,6 +3,7 @@ package com.blogspot.e_kanivets.moneytracker.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 
 import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
@@ -83,6 +84,14 @@ public class PrefUtils {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MtApp.get());
 
         return Long.parseLong(preferences.getString(defaultAccountPref, "-1"));
+    }
+
+    @Nullable
+    public static String readDefaultCurrency() {
+        String defaultCurrencyPref = MtApp.get().getString(R.string.pref_default_currency);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(MtApp.get());
+
+        return preferences.getString(defaultCurrencyPref, null);
     }
 
     public static void writePeriod(Period period) {
