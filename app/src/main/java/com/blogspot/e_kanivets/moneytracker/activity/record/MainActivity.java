@@ -11,13 +11,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController;
-import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.ReportActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseDrawerActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.RecordAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
+import com.blogspot.e_kanivets.moneytracker.controller.PreferenceController;
 import com.blogspot.e_kanivets.moneytracker.controller.RecordController;
 import com.blogspot.e_kanivets.moneytracker.entity.Account;
 import com.blogspot.e_kanivets.moneytracker.entity.Record;
@@ -27,7 +27,6 @@ import com.blogspot.e_kanivets.moneytracker.report.base.IReport;
 import com.blogspot.e_kanivets.moneytracker.ui.AppRateDialog;
 import com.blogspot.e_kanivets.moneytracker.ui.PeriodSpinner;
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.ShortSummaryPresenter;
-import com.blogspot.e_kanivets.moneytracker.util.PrefUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -55,6 +54,8 @@ public class MainActivity extends BaseDrawerActivity {
     AccountController accountController;
     @Inject
     CurrencyController currencyController;
+    @Inject
+    PreferenceController preferenceController;
 
     private ShortSummaryPresenter summaryPresenter;
 
@@ -74,9 +75,10 @@ public class MainActivity extends BaseDrawerActivity {
 
     @Override
     protected boolean initData() {
-        PrefUtils.addLaunchCount();
-        MtApp.get().getAppComponent().inject(MainActivity.this);
+        super.initData();
+        getAppComponent().inject(MainActivity.this);
 
+        preferenceController.addLaunchCount();
         summaryPresenter = new ShortSummaryPresenter(MainActivity.this);
 
         return super.initData();
@@ -92,7 +94,7 @@ public class MainActivity extends BaseDrawerActivity {
         tvDefaultAccountSum = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_default_account_sum);
         tvCurrency = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_currency);
 
-        if (PrefUtils.checkRateDialog()) showAppRateDialog();
+        if (preferenceController.checkRateDialog()) showAppRateDialog();
 
         registerForContextMenu(listView);
 
@@ -109,11 +111,11 @@ public class MainActivity extends BaseDrawerActivity {
             @Override
             public void onPeriodSelected(Period period) {
                 MainActivity.this.period = period;
-                PrefUtils.writePeriod(period);
+                preferenceController.writePeriod(period);
                 update();
             }
         });
-        spinner.setPeriod(PrefUtils.readPeriod());
+        spinner.setPeriod(preferenceController.readPeriod());
     }
 
     @Override

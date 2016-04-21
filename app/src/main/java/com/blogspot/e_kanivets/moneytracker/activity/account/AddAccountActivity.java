@@ -6,7 +6,6 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 
-import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
@@ -43,7 +42,7 @@ public class AddAccountActivity extends BaseBackActivity {
     @Override
     protected boolean initData() {
         boolean result = super.initData();
-        MtApp.get().getAppComponent().inject(AddAccountActivity.this);
+        getAppComponent().inject(AddAccountActivity.this);
         return result;
     }
 

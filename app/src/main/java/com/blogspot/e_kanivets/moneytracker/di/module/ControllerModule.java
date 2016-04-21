@@ -1,11 +1,13 @@
 package com.blogspot.e_kanivets.moneytracker.di.module;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.CategoryController;
 import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController;
 import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
+import com.blogspot.e_kanivets.moneytracker.controller.PreferenceController;
 import com.blogspot.e_kanivets.moneytracker.controller.RecordController;
 import com.blogspot.e_kanivets.moneytracker.controller.TransferController;
 import com.blogspot.e_kanivets.moneytracker.entity.Account;
@@ -28,12 +30,18 @@ import dagger.Provides;
  */
 @Module
 public class ControllerModule {
+    private Context context;
+
+    public ControllerModule(Context context) {
+        this.context = context;
+    }
 
     @Provides
     @NonNull
     @Singleton
-    public AccountController providesAccountController(IRepo<Account> accountRepo) {
-        return new AccountController(accountRepo);
+    public AccountController providesAccountController(IRepo<Account> accountRepo,
+                                                       PreferenceController preferenceController) {
+        return new AccountController(accountRepo, preferenceController);
     }
 
     @Provides
@@ -70,7 +78,15 @@ public class ControllerModule {
     @Provides
     @NonNull
     @Singleton
-    public CurrencyController providesCurrencyController(AccountController accountController) {
-        return new CurrencyController(accountController);
+    public CurrencyController providesCurrencyController(AccountController accountController,
+                                                         PreferenceController preferenceController) {
+        return new CurrencyController(accountController, preferenceController);
+    }
+
+    @Provides
+    @NonNull
+    @Singleton
+    public PreferenceController providesPreferenceController() {
+        return new PreferenceController(context);
     }
 }

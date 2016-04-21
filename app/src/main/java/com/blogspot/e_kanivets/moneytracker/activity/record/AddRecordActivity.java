@@ -18,7 +18,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.CategoryAutoCompleteAdapter;
@@ -81,7 +80,7 @@ public class AddRecordActivity extends BaseBackActivity {
     @Override
     protected boolean initData() {
         super.initData();
-        MtApp.get().getAppComponent().inject(AddRecordActivity.this);
+        getAppComponent().inject(AddRecordActivity.this);
 
         record = getIntent().getParcelableExtra(KEY_RECORD);
         mode = (Mode) getIntent().getSerializableExtra(KEY_MODE);

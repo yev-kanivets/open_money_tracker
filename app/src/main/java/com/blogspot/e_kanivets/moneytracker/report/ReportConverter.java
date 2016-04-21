@@ -7,7 +7,6 @@ import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.report.base.IReport;
 import com.blogspot.e_kanivets.moneytracker.report.model.CategoryRecord;
 import com.blogspot.e_kanivets.moneytracker.report.model.SummaryRecord;
-import com.blogspot.e_kanivets.moneytracker.util.Constants;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +20,9 @@ import java.util.Map;
  * @author Evgenii Kanivets
  */
 public class ReportConverter {
+    public static final String TITLE_PARAM_NAME = "title";
+    public static final String PRICE_PARAM_NAME = "price";
+
     private final IReport report;
 
     public ReportConverter(@NonNull IReport report) {
@@ -32,8 +34,8 @@ public class ReportConverter {
 
         for (CategoryRecord categoryRecord : report.getSummary()) {
             Map<String, String> m = new HashMap<>();
-            m.put(Constants.TITLE_PARAM_NAME, categoryRecord.getTitle());
-            m.put(Constants.PRICE_PARAM_NAME, Double.toString(categoryRecord.getAmount()));
+            m.put(TITLE_PARAM_NAME, categoryRecord.getTitle());
+            m.put(PRICE_PARAM_NAME, Double.toString(categoryRecord.getAmount()));
 
             groupData.add(m);
         }
@@ -48,7 +50,7 @@ public class ReportConverter {
 
     @NonNull
     public String[] getGroupFrom() {
-        return new String[]{Constants.TITLE_PARAM_NAME, Constants.PRICE_PARAM_NAME};
+        return new String[]{TITLE_PARAM_NAME, PRICE_PARAM_NAME};
     }
 
     @NonNull
@@ -64,8 +66,8 @@ public class ReportConverter {
             List<Map<String, String>> childDataItem = new ArrayList<>();
             for (SummaryRecord summaryRecord : categoryRecord.getSummaryRecordList()) {
                 Map<String, String> m = new HashMap<>();
-                m.put(Constants.TITLE_PARAM_NAME, summaryRecord.getTitle());
-                m.put(Constants.PRICE_PARAM_NAME, Double.toString(summaryRecord.getAmount()));
+                m.put(TITLE_PARAM_NAME, summaryRecord.getTitle());
+                m.put(PRICE_PARAM_NAME, Double.toString(summaryRecord.getAmount()));
 
                 childDataItem.add(m);
             }
@@ -83,7 +85,7 @@ public class ReportConverter {
 
     @NonNull
     public String[] getChildFrom() {
-        return new String[]{Constants.TITLE_PARAM_NAME, Constants.PRICE_PARAM_NAME};
+        return new String[]{TITLE_PARAM_NAME, PRICE_PARAM_NAME};
     }
 
     @NonNull

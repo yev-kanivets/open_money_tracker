@@ -7,7 +7,6 @@ import com.blogspot.e_kanivets.moneytracker.entity.Account;
 import com.blogspot.e_kanivets.moneytracker.entity.Record;
 import com.blogspot.e_kanivets.moneytracker.entity.Transfer;
 import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo;
-import com.blogspot.e_kanivets.moneytracker.util.PrefUtils;
 
 import java.util.List;
 
@@ -21,8 +20,11 @@ public class AccountController extends BaseController<Account> {
     @SuppressWarnings("unused")
     private static final String TAG = "AccountController";
 
-    public AccountController(IRepo<Account> accountRepo) {
+    private final PreferenceController preferenceController;
+
+    public AccountController(IRepo<Account> accountRepo, PreferenceController preferenceController) {
         super(accountRepo);
+        this.preferenceController = preferenceController;
     }
 
     public boolean recordAdded(@Nullable Record record) {
@@ -99,7 +101,7 @@ public class AccountController extends BaseController<Account> {
 
     @Nullable
     public Account readDefaultAccount() {
-        long defaultAccountId = PrefUtils.readDefaultAccountId();
+        long defaultAccountId = preferenceController.readDefaultAccountId();
 
         if (defaultAccountId == -1) return getFirstAccount();
         else {

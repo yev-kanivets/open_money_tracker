@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.AccountAdapter;
@@ -44,7 +43,7 @@ public class AccountsActivity extends BaseBackActivity {
     @Override
     protected boolean initData() {
         boolean result = super.initData();
-        MtApp.get().getAppComponent().inject(AccountsActivity.this);
+        getAppComponent().inject(AccountsActivity.this);
         summaryPresenter = new AccountsSummaryPresenter(AccountsActivity.this);
         return result;
     }

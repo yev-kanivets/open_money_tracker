@@ -6,11 +6,9 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 
-import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.controller.RecordController;
-import com.blogspot.e_kanivets.moneytracker.util.Constants;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -25,6 +23,8 @@ public class ExportActivity extends BaseBackActivity {
     @SuppressWarnings("unused")
     private static final String TAG = "ExportActivity";
 
+    private static final String DEFAULT_EXPORT_FILE_NAME = "money_tracker.csv";
+
     @Inject
     RecordController recordController;
 
@@ -36,7 +36,7 @@ public class ExportActivity extends BaseBackActivity {
     @Override
     protected boolean initData() {
         boolean result = super.initData();
-        MtApp.get().getAppComponent().inject(ExportActivity.this);
+        getAppComponent().inject(ExportActivity.this);
         return result;
     }
 
@@ -49,7 +49,7 @@ public class ExportActivity extends BaseBackActivity {
         Log.d(TAG, "exportDirCreated: " + exportDirCreated);
 
         File outFile;
-        if (exportDir.exists()) outFile = new File(exportDir, Constants.DEFAULT_EXPORT_FILE_NAME);
+        if (exportDir.exists()) outFile = new File(exportDir, DEFAULT_EXPORT_FILE_NAME);
         else return;
 
         PrintWriter pw = null;
