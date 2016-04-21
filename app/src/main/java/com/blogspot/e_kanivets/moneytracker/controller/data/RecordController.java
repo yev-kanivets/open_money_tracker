@@ -33,7 +33,9 @@ public class RecordController extends BaseController<Record> {
 
     @Override
     @SuppressWarnings("SimplifiableIfStatement")
-    public Record create(Record record) {
+    public Record create(@Nullable Record record) {
+        if (record == null) return null;
+
         record = validateRecord(record);
 
         Record createdRecord = repo.create(record);
@@ -46,7 +48,9 @@ public class RecordController extends BaseController<Record> {
 
     @Override
     @SuppressWarnings("SimplifiableIfStatement")
-    public Record update(Record record) {
+    public Record update(@Nullable Record record) {
+        if (record == null) return null;
+
         record = validateRecord(record);
 
         Record oldRecord = read(record.getId());
@@ -151,7 +155,7 @@ public class RecordController extends BaseController<Record> {
         return result;
     }
 
-    private Record validateRecord(Record record) {
+    private Record validateRecord(@NonNull Record record) {
         if (record.getCategory() == null) return record;
 
         Category category = categoryController.readOrCreate(record.getCategory().getName());
