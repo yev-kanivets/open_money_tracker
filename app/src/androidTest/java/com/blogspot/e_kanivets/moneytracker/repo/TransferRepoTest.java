@@ -3,7 +3,7 @@ package com.blogspot.e_kanivets.moneytracker.repo;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import com.blogspot.e_kanivets.moneytracker.entity.Transfer;
+import com.blogspot.e_kanivets.moneytracker.entity.data.Transfer;
 
 import junit.framework.TestCase;
 

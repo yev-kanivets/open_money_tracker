@@ -3,18 +3,19 @@ package com.blogspot.e_kanivets.moneytracker.di.module;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
-import com.blogspot.e_kanivets.moneytracker.controller.CategoryController;
+import com.blogspot.e_kanivets.moneytracker.controller.PeriodController;
+import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController;
+import com.blogspot.e_kanivets.moneytracker.controller.data.CategoryController;
 import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController;
-import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
+import com.blogspot.e_kanivets.moneytracker.controller.data.ExchangeRateController;
 import com.blogspot.e_kanivets.moneytracker.controller.PreferenceController;
-import com.blogspot.e_kanivets.moneytracker.controller.RecordController;
-import com.blogspot.e_kanivets.moneytracker.controller.TransferController;
-import com.blogspot.e_kanivets.moneytracker.entity.Account;
-import com.blogspot.e_kanivets.moneytracker.entity.Category;
-import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRate;
-import com.blogspot.e_kanivets.moneytracker.entity.Record;
-import com.blogspot.e_kanivets.moneytracker.entity.Transfer;
+import com.blogspot.e_kanivets.moneytracker.controller.data.RecordController;
+import com.blogspot.e_kanivets.moneytracker.controller.data.TransferController;
+import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
+import com.blogspot.e_kanivets.moneytracker.entity.data.Category;
+import com.blogspot.e_kanivets.moneytracker.entity.data.ExchangeRate;
+import com.blogspot.e_kanivets.moneytracker.entity.data.Record;
+import com.blogspot.e_kanivets.moneytracker.entity.data.Transfer;
 import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo;
 
 import javax.inject.Singleton;
@@ -88,5 +89,12 @@ public class ControllerModule {
     @Singleton
     public PreferenceController providesPreferenceController() {
         return new PreferenceController(context);
+    }
+
+    @Provides
+    @NonNull
+    @Singleton
+    public PeriodController providesPeriodController(PreferenceController preferenceController) {
+        return new PeriodController(preferenceController);
     }
 }

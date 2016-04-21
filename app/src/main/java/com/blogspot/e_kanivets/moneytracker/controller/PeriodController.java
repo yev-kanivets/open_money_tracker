@@ -1,91 +1,61 @@
-package com.blogspot.e_kanivets.moneytracker.model;
+package com.blogspot.e_kanivets.moneytracker.controller;
 
-import android.annotation.SuppressLint;
-import android.os.Parcel;
-import android.os.Parcelable;
+import com.blogspot.e_kanivets.moneytracker.entity.Period;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Entity class for Period which consists from two dates. Immutable.
- * Created on 10/09/14.
+ * Controller class to encapsulate {@link Period} handling logic.
+ * Not deal with {@link com.blogspot.e_kanivets.moneytracker.repo.base.IRepo} instances as others.
+ * Created on 4/21/16.
  *
  * @author Evgenii Kanivets
  */
-public class Period implements Parcelable {
+public class PeriodController {
+    private PreferenceController preferenceController;
 
-    public static final String TYPE_DAY = "day";
-    public static final String TYPE_WEEK = "week";
-    public static final String TYPE_MONTH = "month";
-    public static final String TYPE_YEAR = "year";
-    public static final String TYPE_CUSTOM = "custom";
-
-    @SuppressLint("SimpleDateFormat")
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM, yyyy");
-
-    private Date first;
-    private Date last;
-    private String type;
-
-    public Period(Date first, Date last, String type) {
-        this.first = new Date(first.getTime());
-        this.last = new Date(last.getTime());
-        this.type = type;
+    public PeriodController(PreferenceController preferenceController) {
+        this.preferenceController = preferenceController;
     }
 
-    protected Period(Parcel in) {
-        first = new Date(in.readLong());
-        last = new Date(in.readLong());
-        type = in.readString();
-    }
+    public Period readLastUsedPeriod() {
+        long first = preferenceController.readFirstTs();
+        long last = preferenceController.readLastTs();
+        String type = preferenceController.readPeriodType();
 
-    public static final Creator<Period> CREATOR = new Creator<Period>() {
-        @Override
-        public Period createFromParcel(Parcel in) {
-            return new Period(in);
+        if (first == -1 || last == -1 || type == null) return weekPeriod();
+        else {
+            switch (type) {
+                case Period.TYPE_DAY:
+                    return dayPeriod();
+
+                case Period.TYPE_WEEK:
+                    return weekPeriod();
+
+                case Period.TYPE_MONTH:
+                    return monthPeriod();
+
+                case Period.TYPE_YEAR:
+                    return yearPeriod();
+
+                case Period.TYPE_CUSTOM:
+                    return weekPeriod();
+
+                default:
+                    return weekPeriod();
+
+            }
         }
-
-        @Override
-        public Period[] newArray(int size) {
-            return new Period[size];
-        }
-    };
-
-    public Date getFirst() {
-        return first;
     }
 
-    public Date getLast() {
-        return last;
+    public void writeLastUsedPeriod(Period period) {
+        preferenceController.writeFirstTs(period.getFirst().getTime());
+        preferenceController.writeLastTs(period.getLast().getTime());
+        preferenceController.writePeriodType(period.getType());
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public String getFirstDay() {
-        return dateFormat.format(getFirst());
-    }
-
-    public String getLastDay() {
-        return dateFormat.format(getLast());
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(first.getTime());
-        dest.writeLong(last.getTime());
-        dest.writeString(type);
-    }
-
-    public static Period dayPeriod() {
+    public Period dayPeriod() {
         //set start of day
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -103,10 +73,10 @@ public class Period implements Parcelable {
 
         Date last = cal.getTime();
 
-        return new Period(first, last, TYPE_DAY);
+        return new Period(first, last, Period.TYPE_DAY);
     }
 
-    public static Period weekPeriod() {
+    public Period weekPeriod() {
         // set start of week
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -128,10 +98,10 @@ public class Period implements Parcelable {
 
         Date last = cal.getTime();
 
-        return new Period(first, last, TYPE_WEEK);
+        return new Period(first, last, Period.TYPE_WEEK);
     }
 
-    public static Period monthPeriod() {
+    public Period monthPeriod() {
         //set start of month
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -153,10 +123,10 @@ public class Period implements Parcelable {
 
         Date last = cal.getTime();
 
-        return new Period(first, last, TYPE_MONTH);
+        return new Period(first, last, Period.TYPE_MONTH);
     }
 
-    public static Period yearPeriod() {
+    public Period yearPeriod() {
         //set start of year
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -180,15 +150,6 @@ public class Period implements Parcelable {
 
         Date last = cal.getTime();
 
-        return new Period(first, last, TYPE_YEAR);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o instanceof Period) {
-            Period period = (Period) o;
-            return this.first.equals(period.getFirst())
-                    && this.last.equals(period.getLast());
-        } else return false;
+        return new Period(first, last, Period.TYPE_YEAR);
     }
 }

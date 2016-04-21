@@ -2,7 +2,7 @@ package com.blogspot.e_kanivets.moneytracker.report.base;
 
 import android.support.annotation.NonNull;
 
-import com.blogspot.e_kanivets.moneytracker.model.Period;
+import com.blogspot.e_kanivets.moneytracker.entity.Period;
 import com.blogspot.e_kanivets.moneytracker.report.model.CategoryRecord;
 
 import java.util.List;

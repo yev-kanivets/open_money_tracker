@@ -2,7 +2,7 @@ package com.blogspot.e_kanivets.moneytracker.util;
 
 import android.support.annotation.NonNull;
 
-import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRate;
+import com.blogspot.e_kanivets.moneytracker.entity.data.ExchangeRate;
 
 import java.util.ArrayList;
 import java.util.Collections;

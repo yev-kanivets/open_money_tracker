@@ -1,8 +1,8 @@
-package com.blogspot.e_kanivets.moneytracker.controller;
+package com.blogspot.e_kanivets.moneytracker.controller.data;
 
 import com.blogspot.e_kanivets.moneytracker.repo.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.controller.base.BaseController;
-import com.blogspot.e_kanivets.moneytracker.entity.Category;
+import com.blogspot.e_kanivets.moneytracker.entity.data.Category;
 import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo;
 
 import java.util.List;

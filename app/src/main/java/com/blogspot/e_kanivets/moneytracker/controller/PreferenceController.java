@@ -7,10 +7,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.model.Period;
 
 /**
  * Controller class to encapsulate Shared Preferences handling logic.
+ * Not deal with {@link com.blogspot.e_kanivets.moneytracker.repo.base.IRepo} instances as others.
  * Created on 4/21/16.
  *
  * @author Evgenii Kanivets
@@ -55,35 +55,28 @@ public class PreferenceController {
         editor.apply();
     }
 
-    public Period readPeriod() {
+    public void writeFirstTs(long firstTs) {
         SharedPreferences preferences = getDefaultPrefs();
-        long first = preferences.getLong(KEY_FIRST_TS, -1);
-        long last = preferences.getLong(KEY_LAST_TS, -1);
-        String type = preferences.getString(KEY_PERIOD_TYPE, null);
+        SharedPreferences.Editor editor = preferences.edit();
 
-        if (first == -1 || last == -1 || type == null) return Period.weekPeriod();
-        else {
-            switch (type) {
-                case Period.TYPE_DAY:
-                    return Period.dayPeriod();
+        editor.putLong(KEY_FIRST_TS, firstTs);
+        editor.apply();
+    }
 
-                case Period.TYPE_WEEK:
-                    return Period.weekPeriod();
+    public void writeLastTs(long lastTs) {
+        SharedPreferences preferences = getDefaultPrefs();
+        SharedPreferences.Editor editor = preferences.edit();
 
-                case Period.TYPE_MONTH:
-                    return Period.monthPeriod();
+        editor.putLong(KEY_LAST_TS, lastTs);
+        editor.apply();
+    }
 
-                case Period.TYPE_YEAR:
-                    return Period.yearPeriod();
+    public void writePeriodType(String periodType) {
+        SharedPreferences preferences = getDefaultPrefs();
+        SharedPreferences.Editor editor = preferences.edit();
 
-                case Period.TYPE_CUSTOM:
-                    return Period.weekPeriod();
-
-                default:
-                    return Period.weekPeriod();
-
-            }
-        }
+        editor.putString(KEY_PERIOD_TYPE, periodType);
+        editor.apply();
     }
 
     public long readDefaultAccountId() {
@@ -101,15 +94,17 @@ public class PreferenceController {
         return preferences.getString(defaultCurrencyPref, null);
     }
 
-    public void writePeriod(Period period) {
-        SharedPreferences preferences = getDefaultPrefs();
-        SharedPreferences.Editor editor = preferences.edit();
+    public long readFirstTs() {
+        return getDefaultPrefs().getLong(KEY_FIRST_TS, -1);
+    }
 
-        editor.putLong(KEY_FIRST_TS, period.getFirst().getTime());
-        editor.putLong(KEY_LAST_TS, period.getLast().getTime());
-        editor.putString(KEY_PERIOD_TYPE, period.getType());
+    public long readLastTs() {
+        return getDefaultPrefs().getLong(KEY_LAST_TS, -1);
+    }
 
-        editor.apply();
+    @Nullable
+    public String readPeriodType() {
+        return getDefaultPrefs().getString(KEY_PERIOD_TYPE, null);
     }
 
     private SharedPreferences getDefaultPrefs() {

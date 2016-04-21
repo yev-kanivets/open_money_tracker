@@ -2,7 +2,8 @@ package com.blogspot.e_kanivets.moneytracker.controller;
 
 import android.support.annotation.NonNull;
 
-import com.blogspot.e_kanivets.moneytracker.entity.Account;
+import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController;
+import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
 import com.blogspot.e_kanivets.moneytracker.repo.DbHelper;
 
 import java.util.ArrayList;

@@ -15,13 +15,14 @@ import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.ReportActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseDrawerActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.RecordAdapter;
-import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
-import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
+import com.blogspot.e_kanivets.moneytracker.controller.PeriodController;
+import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController;
+import com.blogspot.e_kanivets.moneytracker.controller.data.ExchangeRateController;
 import com.blogspot.e_kanivets.moneytracker.controller.PreferenceController;
-import com.blogspot.e_kanivets.moneytracker.controller.RecordController;
-import com.blogspot.e_kanivets.moneytracker.entity.Account;
-import com.blogspot.e_kanivets.moneytracker.entity.Record;
-import com.blogspot.e_kanivets.moneytracker.model.Period;
+import com.blogspot.e_kanivets.moneytracker.controller.data.RecordController;
+import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
+import com.blogspot.e_kanivets.moneytracker.entity.data.Record;
+import com.blogspot.e_kanivets.moneytracker.entity.Period;
 import com.blogspot.e_kanivets.moneytracker.report.ReportMaker;
 import com.blogspot.e_kanivets.moneytracker.report.base.IReport;
 import com.blogspot.e_kanivets.moneytracker.ui.AppRateDialog;
@@ -56,6 +57,8 @@ public class MainActivity extends BaseDrawerActivity {
     CurrencyController currencyController;
     @Inject
     PreferenceController preferenceController;
+    @Inject
+    PeriodController periodController;
 
     private ShortSummaryPresenter summaryPresenter;
 
@@ -111,11 +114,11 @@ public class MainActivity extends BaseDrawerActivity {
             @Override
             public void onPeriodSelected(Period period) {
                 MainActivity.this.period = period;
-                preferenceController.writePeriod(period);
+                periodController.writeLastUsedPeriod(period);
                 update();
             }
         });
-        spinner.setPeriod(preferenceController.readPeriod());
+        spinner.setPeriod(periodController.readLastUsedPeriod());
     }
 
     @Override

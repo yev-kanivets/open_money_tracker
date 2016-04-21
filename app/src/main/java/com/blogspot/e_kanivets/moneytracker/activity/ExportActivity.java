@@ -8,7 +8,7 @@ import android.util.Log;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
-import com.blogspot.e_kanivets.moneytracker.controller.RecordController;
+import com.blogspot.e_kanivets.moneytracker.controller.data.RecordController;
 
 import java.io.File;
 import java.io.FileNotFoundException;

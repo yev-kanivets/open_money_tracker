@@ -7,11 +7,15 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
+import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.model.Period;
+import com.blogspot.e_kanivets.moneytracker.controller.PeriodController;
+import com.blogspot.e_kanivets.moneytracker.entity.Period;
 
 import java.util.Calendar;
 import java.util.Date;
+
+import javax.inject.Inject;
 
 /**
  * Custom Spinner view to encapsulate a Period logic.
@@ -21,6 +25,9 @@ import java.util.Date;
  */
 public class PeriodSpinner extends AppCompatSpinner {
     private Context context;
+
+    @Inject
+    PeriodController periodController;
 
     private OnPeriodSelectedListener periodSelectedListener;
     private AdapterView.OnItemSelectedListener listener;
@@ -82,6 +89,7 @@ public class PeriodSpinner extends AppCompatSpinner {
 
     private void init(Context context) {
         this.context = context;
+        MtApp.get().getAppComponent().inject(PeriodSpinner.this);
 
         setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_list_item_1,
                 getResources().getStringArray(R.array.array_periods)));
@@ -95,19 +103,19 @@ public class PeriodSpinner extends AppCompatSpinner {
 
                 switch (position) {
                     case 0:
-                        setPeriod(Period.dayPeriod());
+                        setPeriod(periodController.dayPeriod());
                         break;
 
                     case 1:
-                        setPeriod(Period.weekPeriod());
+                        setPeriod(periodController.weekPeriod());
                         break;
 
                     case 2:
-                        setPeriod(Period.monthPeriod());
+                        setPeriod(periodController.monthPeriod());
                         break;
 
                     case 3:
-                        setPeriod(Period.yearPeriod());
+                        setPeriod(periodController.yearPeriod());
                         break;
 
                     case 4:

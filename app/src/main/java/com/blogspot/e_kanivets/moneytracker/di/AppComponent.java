@@ -13,6 +13,7 @@ import com.blogspot.e_kanivets.moneytracker.activity.record.MainActivity;
 import com.blogspot.e_kanivets.moneytracker.di.module.repo.CachedRepoModule;
 import com.blogspot.e_kanivets.moneytracker.di.module.ControllerModule;
 import com.blogspot.e_kanivets.moneytracker.ui.AppRateDialog;
+import com.blogspot.e_kanivets.moneytracker.ui.PeriodSpinner;
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.AccountsSummaryPresenter;
 
 import javax.inject.Singleton;
@@ -51,4 +52,6 @@ public interface AppComponent {
     void inject(AccountsSummaryPresenter accountsSummaryPresenter);
 
     void inject(AppRateDialog appRateDialog);
+
+    void inject(PeriodSpinner periodSpinner);
 }

@@ -1,7 +1,7 @@
-package com.blogspot.e_kanivets.moneytracker.controller;
+package com.blogspot.e_kanivets.moneytracker.controller.data;
 
 import com.blogspot.e_kanivets.moneytracker.controller.base.BaseController;
-import com.blogspot.e_kanivets.moneytracker.entity.Transfer;
+import com.blogspot.e_kanivets.moneytracker.entity.data.Transfer;
 import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo;
 
 /**
