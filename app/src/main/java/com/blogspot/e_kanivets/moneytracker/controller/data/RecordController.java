@@ -65,7 +65,7 @@ public class RecordController extends BaseController<Record> {
 
     @Override
     @SuppressWarnings("SimplifiableIfStatement")
-    public boolean delete(Record record) {
+    public boolean delete(@Nullable Record record) {
         if (repo.delete(record)) return accountController.recordDeleted(record);
         else return false;
     }
