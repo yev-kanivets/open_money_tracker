@@ -6,12 +6,11 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 
-import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController;
-import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
-import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRate;
+import com.blogspot.e_kanivets.moneytracker.controller.data.ExchangeRateController;
+import com.blogspot.e_kanivets.moneytracker.entity.data.ExchangeRate;
 
 import java.util.ArrayList;
 
@@ -43,7 +42,7 @@ public class AddExchangeRateActivity extends BaseBackActivity {
     @Override
     protected boolean initData() {
         boolean result = super.initData();
-        MtApp.get().getAppComponent().inject(AddExchangeRateActivity.this);
+        getAppComponent().inject(AddExchangeRateActivity.this);
         return result;
     }
 

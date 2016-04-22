@@ -3,11 +3,11 @@ package com.blogspot.e_kanivets.moneytracker.report;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.blogspot.e_kanivets.moneytracker.entity.Account;
-import com.blogspot.e_kanivets.moneytracker.entity.Category;
-import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRate;
-import com.blogspot.e_kanivets.moneytracker.entity.Record;
-import com.blogspot.e_kanivets.moneytracker.model.Period;
+import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
+import com.blogspot.e_kanivets.moneytracker.entity.data.Category;
+import com.blogspot.e_kanivets.moneytracker.entity.data.ExchangeRate;
+import com.blogspot.e_kanivets.moneytracker.entity.data.Record;
+import com.blogspot.e_kanivets.moneytracker.entity.Period;
 import com.blogspot.e_kanivets.moneytracker.report.base.IExchangeRateProvider;
 import com.blogspot.e_kanivets.moneytracker.report.base.IReport;
 import com.blogspot.e_kanivets.moneytracker.report.model.CategoryRecord;

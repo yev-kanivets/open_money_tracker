@@ -9,12 +9,11 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 
-import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.ExchangeRateAdapter;
-import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
-import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRate;
+import com.blogspot.e_kanivets.moneytracker.controller.data.ExchangeRateController;
+import com.blogspot.e_kanivets.moneytracker.entity.data.ExchangeRate;
 import com.blogspot.e_kanivets.moneytracker.util.ExchangeRatesSummarizer;
 
 import java.util.Collections;
@@ -47,7 +46,7 @@ public class ExchangeRatesActivity extends BaseBackActivity {
     @Override
     protected boolean initData() {
         boolean result = super.initData();
-        MtApp.get().getAppComponent().inject(ExchangeRatesActivity.this);
+        getAppComponent().inject(ExchangeRatesActivity.this);
         return result;
     }
 

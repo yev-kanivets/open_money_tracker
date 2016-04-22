@@ -1,0 +1,124 @@
+package com.blogspot.e_kanivets.moneytracker.controller.data;
+
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
+import com.blogspot.e_kanivets.moneytracker.entity.data.Category;
+import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo;
+
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.*;
+
+/**
+ * JUnit4 test case.
+ * Created on 4/21/16.
+ *
+ * @author Evgenii Kanivets
+ */
+public class CategoryControllerTest {
+
+    @Test
+    public void testReadOrCreate() throws Exception {
+        CategoryController categoryController = new CategoryController(emptyRepo);
+
+        assertNull(categoryController.readOrCreate(null));
+        assertNull(categoryController.readOrCreate(""));
+
+        Category result = categoryController.readOrCreate("category 1");
+        assertEquals("category 1", result.getName());
+
+        result = categoryController.readOrCreate("category 1");
+        assertEquals("category 1", result.getName());
+
+        categoryController = new CategoryController(repo);
+
+        result = categoryController.readOrCreate("category 1");
+        assertEquals("category 1", result.getName());
+
+        result = categoryController.readOrCreate("Category 1");
+        assertEquals("Category 1", result.getName());
+    }
+
+    private IRepo<Category> emptyRepo = new IRepo<Category>() {
+        @Nullable
+        @Override
+        public Category create(@Nullable Category instance) {
+            return instance;
+        }
+
+        @Nullable
+        @Override
+        public Category read(long id) {
+            return null;
+        }
+
+        @Nullable
+        @Override
+        public Category update(@Nullable Category instance) {
+            return null;
+        }
+
+        @Override
+        public boolean delete(@Nullable Category instance) {
+            return false;
+        }
+
+        @NonNull
+        @Override
+        public List<Category> readAll() {
+            return new ArrayList<>();
+        }
+
+        @NonNull
+        @Override
+        public List<Category> readWithCondition(@Nullable String condition, @Nullable String[] args) {
+            return new ArrayList<>();
+        }
+    };
+
+    private IRepo<Category> repo = new IRepo<Category>() {
+        private Category category = new Category(1, "Category 1");
+
+        @Nullable
+        @Override
+        public Category create(@Nullable Category instance) {
+            return instance;
+        }
+
+        @Nullable
+        @Override
+        public Category read(long id) {
+            if (id == 1) return category;
+            else return null;
+        }
+
+        @Nullable
+        @Override
+        public Category update(@Nullable Category instance) {
+            return null;
+        }
+
+        @Override
+        public boolean delete(@Nullable Category instance) {
+            return false;
+        }
+
+        @NonNull
+        @Override
+        public List<Category> readAll() {
+            ArrayList<Category> categories = new ArrayList<>();
+            categories.add(category);
+            return categories;
+        }
+
+        @NonNull
+        @Override
+        public List<Category> readWithCondition(@Nullable String condition, @Nullable String[] args) {
+            return new ArrayList<>();
+        }
+    };
+}

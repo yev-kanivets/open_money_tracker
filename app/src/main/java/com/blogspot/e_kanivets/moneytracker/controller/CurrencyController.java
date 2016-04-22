@@ -2,9 +2,9 @@ package com.blogspot.e_kanivets.moneytracker.controller;
 
 import android.support.annotation.NonNull;
 
-import com.blogspot.e_kanivets.moneytracker.entity.Account;
+import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController;
+import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
 import com.blogspot.e_kanivets.moneytracker.repo.DbHelper;
-import com.blogspot.e_kanivets.moneytracker.util.PrefUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,12 +23,14 @@ import java.util.Set;
  */
 public class CurrencyController {
     private AccountController accountController;
+    private PreferenceController preferenceController;
 
     @NonNull
     private List<String> currencyList;
 
-    public CurrencyController(AccountController accountController) {
+    public CurrencyController(AccountController accountController, PreferenceController preferenceController) {
         this.accountController = accountController;
+        this.preferenceController = preferenceController;
         currencyList = fetchCurrencies();
     }
 
@@ -40,7 +42,7 @@ public class CurrencyController {
     @NonNull
     public String readDefaultCurrency() {
         // First of all read from Prefs
-        String currency = PrefUtils.readDefaultCurrency();
+        String currency = preferenceController.readDefaultCurrency();
 
         // If don't have default currency, try to use currency of default account
         if (currency == null) {

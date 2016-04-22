@@ -8,9 +8,9 @@ import android.preference.PreferenceFragment;
 import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
-import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
+import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController;
-import com.blogspot.e_kanivets.moneytracker.entity.Account;
+import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
 
 import java.util.ArrayList;
 import java.util.List;

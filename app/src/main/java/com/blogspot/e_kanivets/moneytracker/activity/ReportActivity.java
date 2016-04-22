@@ -6,14 +6,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
 
-import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.ExpandableListReportAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController;
-import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
-import com.blogspot.e_kanivets.moneytracker.model.Period;
-import com.blogspot.e_kanivets.moneytracker.entity.Record;
+import com.blogspot.e_kanivets.moneytracker.controller.data.ExchangeRateController;
+import com.blogspot.e_kanivets.moneytracker.entity.Period;
+import com.blogspot.e_kanivets.moneytracker.entity.data.Record;
 import com.blogspot.e_kanivets.moneytracker.report.ReportConverter;
 import com.blogspot.e_kanivets.moneytracker.report.ReportMaker;
 import com.blogspot.e_kanivets.moneytracker.report.base.IReport;
@@ -55,14 +54,13 @@ public class ReportActivity extends BaseBackActivity {
     @Override
     protected boolean initData() {
         super.initData();
+        getAppComponent().inject(ReportActivity.this);
 
         recordList = getIntent().getParcelableArrayListExtra(KEY_RECORD_LIST);
         if (recordList == null) return false;
 
         period = getIntent().getParcelableExtra(KEY_PERIOD);
         if (period == null) return false;
-
-        MtApp.get().getAppComponent().inject(ReportActivity.this);
 
         return true;
     }

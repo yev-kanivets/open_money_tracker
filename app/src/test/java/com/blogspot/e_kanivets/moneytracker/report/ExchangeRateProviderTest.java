@@ -3,9 +3,9 @@ package com.blogspot.e_kanivets.moneytracker.report;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
-import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRate;
-import com.blogspot.e_kanivets.moneytracker.entity.Record;
+import com.blogspot.e_kanivets.moneytracker.controller.data.ExchangeRateController;
+import com.blogspot.e_kanivets.moneytracker.entity.data.ExchangeRate;
+import com.blogspot.e_kanivets.moneytracker.entity.data.Record;
 import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo;
 import com.blogspot.e_kanivets.moneytracker.report.base.IExchangeRateProvider;
 
