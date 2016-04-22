@@ -56,20 +56,15 @@ public class PeriodController {
     }
 
     public Period dayPeriod() {
-        //set start of day
         Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
+
+        //set start of day
+        setDayStart(cal);
 
         Date first = cal.getTime();
 
-        //set end of day
-        cal.set(Calendar.HOUR_OF_DAY, 23);
-        cal.set(Calendar.MINUTE, 59);
-        cal.set(Calendar.SECOND, 59);
-        cal.set(Calendar.MILLISECOND, 999);
+        // set end of day
+        setDayEnd(cal);
 
         Date last = cal.getTime();
 
@@ -77,24 +72,17 @@ public class PeriodController {
     }
 
     public Period weekPeriod() {
-        // set start of week
         Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
 
-        // set first day of week
+        // set start of week
         cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
+        setDayStart(cal);
 
         Date first = cal.getTime();
 
         // set last day of week
         cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek() + 6);
-        cal.set(Calendar.HOUR_OF_DAY, 23);
-        cal.set(Calendar.MINUTE, 59);
-        cal.set(Calendar.SECOND, 59);
-        cal.set(Calendar.MILLISECOND, 999);
+        setDayEnd(cal);
 
         Date last = cal.getTime();
 
@@ -102,24 +90,17 @@ public class PeriodController {
     }
 
     public Period monthPeriod() {
-        //set start of month
         Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
 
+        // set start of month
         cal.set(Calendar.DAY_OF_MONTH, 1);
+        setDayStart(cal);
 
         Date first = cal.getTime();
 
-        //set end of month
-        cal.set(Calendar.HOUR_OF_DAY, 23);
-        cal.set(Calendar.MINUTE, 59);
-        cal.set(Calendar.SECOND, 59);
-        cal.set(Calendar.MILLISECOND, 999);
-
+        // set end of month
         cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+        setDayEnd(cal);
 
         Date last = cal.getTime();
 
@@ -127,29 +108,36 @@ public class PeriodController {
     }
 
     public Period yearPeriod() {
-        //set start of year
         Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
 
+        // set start of year
         cal.set(Calendar.MONTH, Calendar.JANUARY);
         cal.set(Calendar.DAY_OF_MONTH, 1);
+        setDayStart(cal);
 
         Date first = cal.getTime();
 
-        //set end of year
-        cal.set(Calendar.HOUR_OF_DAY, 23);
-        cal.set(Calendar.MINUTE, 59);
-        cal.set(Calendar.SECOND, 59);
-        cal.set(Calendar.MILLISECOND, 999);
-
+        // set end of year
         cal.set(Calendar.MONTH, Calendar.DECEMBER);
         cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+        setDayEnd(cal);
 
         Date last = cal.getTime();
 
         return new Period(first, last, Period.TYPE_YEAR);
+    }
+
+    private void setDayStart(Calendar cal) {
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+    }
+
+    private void setDayEnd(Calendar cal) {
+        cal.set(Calendar.HOUR_OF_DAY, 23);
+        cal.set(Calendar.MINUTE, 59);
+        cal.set(Calendar.SECOND, 59);
+        cal.set(Calendar.MILLISECOND, 999);
     }
 }
