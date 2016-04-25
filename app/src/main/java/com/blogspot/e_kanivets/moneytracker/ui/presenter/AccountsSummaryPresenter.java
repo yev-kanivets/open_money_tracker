@@ -8,16 +8,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.blogspot.e_kanivets.moneytracker.repo.DbHelper;
+import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController;
 import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
-import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
-import com.blogspot.e_kanivets.moneytracker.entity.Account;
+import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController;
+import com.blogspot.e_kanivets.moneytracker.controller.data.ExchangeRateController;
 import com.blogspot.e_kanivets.moneytracker.report.ReportMaker;
 import com.blogspot.e_kanivets.moneytracker.report.base.IAccountsReport;
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.base.BaseSummaryPresenter;
-import com.blogspot.e_kanivets.moneytracker.util.CurrencyProvider;
 
 import java.util.List;
 import java.util.Locale;
@@ -39,6 +37,8 @@ public class AccountsSummaryPresenter extends BaseSummaryPresenter {
     ExchangeRateController rateController;
     @Inject
     AccountController accountController;
+    @Inject
+    CurrencyController currencyController;
 
     private int red;
     private int green;
@@ -63,14 +63,12 @@ public class AccountsSummaryPresenter extends BaseSummaryPresenter {
         final ViewHolder viewHolder = new ViewHolder(view);
         view.setTag(viewHolder);
 
-        List<String> currencyList = CurrencyProvider.getAllCurrencies();
+        List<String> currencyList = currencyController.readAll();
 
         viewHolder.spinnerCurrency.setAdapter(new ArrayAdapter<>(context,
                 android.R.layout.simple_list_item_1, currencyList));
 
-        String currency = DbHelper.DEFAULT_ACCOUNT_CURRENCY;
-        Account defaultAccount = accountController.readDefaultAccount();
-        if (defaultAccount != null) currency = defaultAccount.getCurrency();
+        String currency = currencyController.readDefaultCurrency();
 
         for (int i = 0; i < currencyList.size(); i++) {
             String item = currencyList.get(i);

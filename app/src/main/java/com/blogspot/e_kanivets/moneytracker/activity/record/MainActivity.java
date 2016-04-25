@@ -10,24 +10,24 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.blogspot.e_kanivets.moneytracker.repo.DbHelper;
-import com.blogspot.e_kanivets.moneytracker.MtApp;
+import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.ReportActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseDrawerActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.RecordAdapter;
-import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
-import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
-import com.blogspot.e_kanivets.moneytracker.controller.RecordController;
-import com.blogspot.e_kanivets.moneytracker.entity.Account;
-import com.blogspot.e_kanivets.moneytracker.entity.Record;
-import com.blogspot.e_kanivets.moneytracker.model.Period;
+import com.blogspot.e_kanivets.moneytracker.controller.PeriodController;
+import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController;
+import com.blogspot.e_kanivets.moneytracker.controller.data.ExchangeRateController;
+import com.blogspot.e_kanivets.moneytracker.controller.PreferenceController;
+import com.blogspot.e_kanivets.moneytracker.controller.data.RecordController;
+import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
+import com.blogspot.e_kanivets.moneytracker.entity.data.Record;
+import com.blogspot.e_kanivets.moneytracker.entity.Period;
 import com.blogspot.e_kanivets.moneytracker.report.ReportMaker;
 import com.blogspot.e_kanivets.moneytracker.report.base.IReport;
 import com.blogspot.e_kanivets.moneytracker.ui.AppRateDialog;
 import com.blogspot.e_kanivets.moneytracker.ui.PeriodSpinner;
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.ShortSummaryPresenter;
-import com.blogspot.e_kanivets.moneytracker.util.PrefUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -53,6 +53,12 @@ public class MainActivity extends BaseDrawerActivity {
     ExchangeRateController rateController;
     @Inject
     AccountController accountController;
+    @Inject
+    CurrencyController currencyController;
+    @Inject
+    PreferenceController preferenceController;
+    @Inject
+    PeriodController periodController;
 
     private ShortSummaryPresenter summaryPresenter;
 
@@ -72,9 +78,10 @@ public class MainActivity extends BaseDrawerActivity {
 
     @Override
     protected boolean initData() {
-        PrefUtils.addLaunchCount();
-        MtApp.get().getAppComponent().inject(MainActivity.this);
+        super.initData();
+        getAppComponent().inject(MainActivity.this);
 
+        preferenceController.addLaunchCount();
         summaryPresenter = new ShortSummaryPresenter(MainActivity.this);
 
         return super.initData();
@@ -90,7 +97,7 @@ public class MainActivity extends BaseDrawerActivity {
         tvDefaultAccountSum = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_default_account_sum);
         tvCurrency = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_currency);
 
-        if (PrefUtils.checkRateDialog()) showAppRateDialog();
+        if (preferenceController.checkRateDialog()) showAppRateDialog();
 
         registerForContextMenu(listView);
 
@@ -107,11 +114,11 @@ public class MainActivity extends BaseDrawerActivity {
             @Override
             public void onPeriodSelected(Period period) {
                 MainActivity.this.period = period;
-                PrefUtils.writePeriod(period);
+                periodController.writeLastUsedPeriod(period);
                 update();
             }
         });
-        spinner.setPeriod(PrefUtils.readPeriod());
+        spinner.setPeriod(periodController.readLastUsedPeriod());
     }
 
     @Override
@@ -184,9 +191,7 @@ public class MainActivity extends BaseDrawerActivity {
 
         listView.setAdapter(new RecordAdapter(MainActivity.this, recordList));
 
-        String currency = DbHelper.DEFAULT_ACCOUNT_CURRENCY;
-        Account defaultAccount = accountController.readDefaultAccount();
-        if (defaultAccount != null) currency = defaultAccount.getCurrency();
+        String currency = currencyController.readDefaultCurrency();
 
         ReportMaker reportMaker = new ReportMaker(rateController);
         IReport report = reportMaker.getReport(currency, period, recordList);
@@ -219,11 +224,11 @@ public class MainActivity extends BaseDrawerActivity {
 
     @SuppressLint("SetTextI18n")
     private void fillDefaultAccount() {
-        Account account = accountController.readDefaultAccount();
-        if (account == null) return;
+        Account defaultAccount = accountController.readDefaultAccount();
+        if (defaultAccount == null) return;
 
-        tvDefaultAccountTitle.setText(account.getTitle());
-        tvDefaultAccountSum.setText(Integer.toString(account.getCurSum()));
-        tvCurrency.setText(account.getCurrency());
+        tvDefaultAccountTitle.setText(defaultAccount.getTitle());
+        tvDefaultAccountSum.setText(Integer.toString(defaultAccount.getCurSum()));
+        tvCurrency.setText(defaultAccount.getCurrency());
     }
 }

@@ -6,12 +6,11 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 
-import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
-import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
-import com.blogspot.e_kanivets.moneytracker.entity.Account;
-import com.blogspot.e_kanivets.moneytracker.util.CurrencyProvider;
+import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController;
+import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController;
+import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
 
 import java.util.ArrayList;
 
@@ -25,6 +24,8 @@ public class AddAccountActivity extends BaseBackActivity {
 
     @Inject
     AccountController accountController;
+    @Inject
+    CurrencyController currencyController;
 
     @Bind(R.id.et_title)
     EditText etTitle;
@@ -41,7 +42,7 @@ public class AddAccountActivity extends BaseBackActivity {
     @Override
     protected boolean initData() {
         boolean result = super.initData();
-        MtApp.get().getAppComponent().inject(AddAccountActivity.this);
+        getAppComponent().inject(AddAccountActivity.this);
         return result;
     }
 
@@ -51,7 +52,7 @@ public class AddAccountActivity extends BaseBackActivity {
 
         spinner.setAdapter(new ArrayAdapter<>(AddAccountActivity.this,
                 R.layout.view_spinner_item,
-                new ArrayList<>(CurrencyProvider.getAllCurrencies())));
+                new ArrayList<>(currencyController.readAll())));
     }
 
     @Override

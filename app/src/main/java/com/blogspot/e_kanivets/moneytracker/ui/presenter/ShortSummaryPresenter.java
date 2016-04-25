@@ -56,7 +56,8 @@ public class ShortSummaryPresenter extends BaseSummaryPresenter {
             viewHolder.tvTotal.setTextColor(red);
             viewHolder.tvTotal.setText(createRatesNeededList(currency, ratesNeeded));
         } else {
-            viewHolder.tvPeriod.setText(report.getPeriod().getFirstDay() + " - " + report.getPeriod().getLastDay());
+            viewHolder.tvPeriod.setText(context.getString(R.string.period_from_to,
+                    report.getPeriod().getFirstDay(), report.getPeriod().getLastDay()));
 
             viewHolder.tvTotalIncome.setTextColor(report.getTotalIncome() >= 0 ? green : red);
             viewHolder.tvTotalIncome.setText(format(report.getTotalIncome(), report.getCurrency()));

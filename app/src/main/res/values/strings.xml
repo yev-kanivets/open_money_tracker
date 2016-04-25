@@ -61,6 +61,9 @@
     <string name="settings">Settings</string>
     <string name="default_account">Default account</string>
     <string name="pref_default_account" translatable="false">pref_default_account</string>
+    <string name="pref_default_currency" translatable="false">pref_default_currency</string>
+    <string name="period_from_to" translatable="false">%1$s - %2$s</string>
+    <string name="default_currency">Default currency</string>
 
     <!-- Not translated strings -->
 

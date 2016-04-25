@@ -1,7 +1,7 @@
 package com.blogspot.e_kanivets.moneytracker.util;
 
-import com.blogspot.e_kanivets.moneytracker.controller.CategoryController;
-import com.blogspot.e_kanivets.moneytracker.entity.Category;
+import com.blogspot.e_kanivets.moneytracker.controller.data.CategoryController;
+import com.blogspot.e_kanivets.moneytracker.entity.data.Category;
 
 import java.util.ArrayList;
 import java.util.List;

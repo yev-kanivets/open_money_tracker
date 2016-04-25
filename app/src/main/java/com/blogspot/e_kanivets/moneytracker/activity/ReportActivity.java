@@ -6,21 +6,17 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
 
-import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.ExpandableListReportAdapter;
-import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
-import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
-import com.blogspot.e_kanivets.moneytracker.repo.DbHelper;
-import com.blogspot.e_kanivets.moneytracker.entity.Account;
-import com.blogspot.e_kanivets.moneytracker.model.Period;
-import com.blogspot.e_kanivets.moneytracker.entity.Record;
+import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController;
+import com.blogspot.e_kanivets.moneytracker.controller.data.ExchangeRateController;
+import com.blogspot.e_kanivets.moneytracker.entity.Period;
+import com.blogspot.e_kanivets.moneytracker.entity.data.Record;
 import com.blogspot.e_kanivets.moneytracker.report.ReportConverter;
 import com.blogspot.e_kanivets.moneytracker.report.ReportMaker;
 import com.blogspot.e_kanivets.moneytracker.report.base.IReport;
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.ShortSummaryPresenter;
-import com.blogspot.e_kanivets.moneytracker.util.CurrencyProvider;
 
 import java.util.List;
 
@@ -38,7 +34,7 @@ public class ReportActivity extends BaseBackActivity {
     @Inject
     ExchangeRateController rateController;
     @Inject
-    AccountController accountController;
+    CurrencyController currencyController;
 
     private List<Record> recordList;
     private Period period;
@@ -58,14 +54,13 @@ public class ReportActivity extends BaseBackActivity {
     @Override
     protected boolean initData() {
         super.initData();
+        getAppComponent().inject(ReportActivity.this);
 
         recordList = getIntent().getParcelableArrayListExtra(KEY_RECORD_LIST);
         if (recordList == null) return false;
 
         period = getIntent().getParcelableExtra(KEY_PERIOD);
         if (period == null) return false;
-
-        MtApp.get().getAppComponent().inject(ReportActivity.this);
 
         return true;
     }
@@ -96,7 +91,7 @@ public class ReportActivity extends BaseBackActivity {
     }
 
     private void initSpinnerCurrency() {
-        List<String> currencyList = CurrencyProvider.getAllCurrencies();
+        List<String> currencyList = currencyController.readAll();
 
         spinnerCurrency.setAdapter(new ArrayAdapter<>(ReportActivity.this,
                 R.layout.view_spinner_item, currencyList));
@@ -112,9 +107,7 @@ public class ReportActivity extends BaseBackActivity {
             }
         });
 
-        String currency = DbHelper.DEFAULT_ACCOUNT_CURRENCY;
-        Account defaultAccount = accountController.readDefaultAccount();
-        if (defaultAccount != null) currency = defaultAccount.getCurrency();
+        String currency = currencyController.readDefaultCurrency();
 
         for (int i = 0; i < currencyList.size(); i++) {
             if (currency.equals(currencyList.get(i))) {

@@ -6,19 +6,27 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.util.PrefUtils;
-import com.blogspot.e_kanivets.moneytracker.util.Constants;
+import com.blogspot.e_kanivets.moneytracker.controller.PreferenceController;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class AppRateDialog extends AlertDialog {
+    private static final String GP_MARKET = "market://details?id=";
+
     private Context context;
+
+    @Inject
+    PreferenceController preferenceController;
 
     public AppRateDialog(Context context) {
         super(context);
         this.context = context;
+        MtApp.get().getAppComponent().inject(AppRateDialog.this);
     }
 
     @Override
@@ -30,9 +38,8 @@ public class AppRateDialog extends AlertDialog {
 
     @OnClick(R.id.yes_button)
     public void yes() {
-        context.startActivity(new Intent(Intent.ACTION_VIEW,
-                Uri.parse(Constants.GP_MARKET + context.getPackageName())));
-        PrefUtils.appRated();
+        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(GP_MARKET + context.getPackageName())));
+        preferenceController.appRated();
         dismiss();
     }
 
@@ -43,7 +50,7 @@ public class AppRateDialog extends AlertDialog {
 
     @OnClick(R.id.thanksButton)
     public void thanks() {
-        PrefUtils.appRated();
+        preferenceController.appRated();
         dismiss();
     }
 

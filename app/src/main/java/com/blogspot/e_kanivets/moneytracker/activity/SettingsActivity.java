@@ -8,8 +8,9 @@ import android.preference.PreferenceFragment;
 import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
-import com.blogspot.e_kanivets.moneytracker.controller.AccountController;
-import com.blogspot.e_kanivets.moneytracker.entity.Account;
+import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController;
+import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController;
+import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,8 @@ public class SettingsActivity extends BaseBackActivity {
     public static class SettingsFragment extends PreferenceFragment {
         @Inject
         AccountController accountController;
+        @Inject
+        CurrencyController currencyController;
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,11 @@ public class SettingsActivity extends BaseBackActivity {
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.preferences);
 
+            setupDefaultAccountPref();
+            setupDefaultCurrencyPref();
+        }
+
+        private void setupDefaultAccountPref() {
             ListPreference defaultAccountPref = (ListPreference) findPreference(getString(R.string.pref_default_account));
             defaultAccountPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
@@ -63,6 +71,25 @@ public class SettingsActivity extends BaseBackActivity {
                 defaultAccountPref.setDefaultValue(Long.toString(accountList.get(0).getId()));
             defaultAccountPref.setEntries(getEntries(accountList));
             defaultAccountPref.setEntryValues(getEntryValues(accountList));
+        }
+
+        @SuppressWarnings("ToArrayCallWithZeroLengthArrayArgument")
+        private void setupDefaultCurrencyPref() {
+            ListPreference defaultCurrencyPref = (ListPreference) findPreference(getString(R.string.pref_default_currency));
+            defaultCurrencyPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    getActivity().setResult(RESULT_OK);
+                    return true;
+                }
+            });
+
+            List<String> currencyList = currencyController.readAll();
+            String defaultCurrency = currencyController.readDefaultCurrency();
+            defaultCurrencyPref.setDefaultValue(defaultCurrency);
+
+            defaultCurrencyPref.setEntries(currencyList.toArray(new String[0]));
+            defaultCurrencyPref.setEntryValues(currencyList.toArray(new String[0]));
         }
 
         @SuppressWarnings("ToArrayCallWithZeroLengthArrayArgument")

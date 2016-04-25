@@ -2,9 +2,9 @@ package com.blogspot.e_kanivets.moneytracker.report.base;
 
 import android.support.annotation.Nullable;
 
-import com.blogspot.e_kanivets.moneytracker.entity.Account;
-import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRate;
-import com.blogspot.e_kanivets.moneytracker.entity.Record;
+import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
+import com.blogspot.e_kanivets.moneytracker.entity.data.ExchangeRate;
+import com.blogspot.e_kanivets.moneytracker.entity.data.Record;
 
 /**
  * Interface that represents a contract of access to currency exchange rate.

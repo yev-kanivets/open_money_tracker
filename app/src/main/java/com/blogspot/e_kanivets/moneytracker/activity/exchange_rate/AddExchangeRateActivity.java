@@ -6,12 +6,11 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 
-import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
-import com.blogspot.e_kanivets.moneytracker.controller.ExchangeRateController;
-import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRate;
-import com.blogspot.e_kanivets.moneytracker.util.CurrencyProvider;
+import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController;
+import com.blogspot.e_kanivets.moneytracker.controller.data.ExchangeRateController;
+import com.blogspot.e_kanivets.moneytracker.entity.data.ExchangeRate;
 
 import java.util.ArrayList;
 
@@ -25,6 +24,8 @@ public class AddExchangeRateActivity extends BaseBackActivity {
 
     @Inject
     ExchangeRateController exchangeRateController;
+    @Inject
+    CurrencyController currencyController;
 
     @Bind(R.id.spinner_from_currency)
     AppCompatSpinner spinnerFromCurrency;
@@ -41,7 +42,7 @@ public class AddExchangeRateActivity extends BaseBackActivity {
     @Override
     protected boolean initData() {
         boolean result = super.initData();
-        MtApp.get().getAppComponent().inject(AddExchangeRateActivity.this);
+        getAppComponent().inject(AddExchangeRateActivity.this);
         return result;
     }
 
@@ -51,11 +52,11 @@ public class AddExchangeRateActivity extends BaseBackActivity {
 
         spinnerFromCurrency.setAdapter(new ArrayAdapter<>(AddExchangeRateActivity.this,
                 android.R.layout.simple_list_item_1,
-                new ArrayList<>(CurrencyProvider.getAllCurrencies())));
+                new ArrayList<>(currencyController.readAll())));
 
         spinnerToCurrency.setAdapter(new ArrayAdapter<>(AddExchangeRateActivity.this,
                 android.R.layout.simple_list_item_1,
-                new ArrayList<>(CurrencyProvider.getAllCurrencies())));
+                new ArrayList<>(currencyController.readAll())));
     }
 
     @Override
