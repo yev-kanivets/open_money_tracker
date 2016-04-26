@@ -14,6 +14,8 @@ import java.util.List;
 
 /**
  * Base implementation of {@link IRepo}.
+ * No need to call db.close() at all, because SQLiteOpenHelper manage it for us + cache instances.
+ * It will speed up all DB operations.
  * Created on 2/15/16.
  *
  * @author Evgenii Kanivets
@@ -42,8 +44,6 @@ public abstract class BaseRepo<T extends IEntity> implements IRepo<T> {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         long id = db.insert(getTable(), null, contentValues(instance));
-
-        db.close();
 
         if (id == -1) {
             Log.d(TAG, "Couldn't create record : " + instance);
@@ -74,8 +74,6 @@ public abstract class BaseRepo<T extends IEntity> implements IRepo<T> {
         String[] args = new String[]{Long.valueOf(instance.getId()).toString()};
         long rowsAffected = db.update(getTable(), contentValues(instance), "id=?", args);
 
-        db.close();
-
         if (rowsAffected == 0) {
             Log.d(TAG, "Couldn't update record : " + instance);
             return null;
@@ -101,8 +99,6 @@ public abstract class BaseRepo<T extends IEntity> implements IRepo<T> {
         String[] args = new String[]{Long.toString(instance.getId())};
         long rowsAffected = db.delete(getTable(), "id=?", args);
 
-        db.close();
-
         Log.d(TAG, instance + (rowsAffected == 0 ? " didn't " : " ") + "deleted");
 
         return rowsAffected != 0;
@@ -118,7 +114,6 @@ public abstract class BaseRepo<T extends IEntity> implements IRepo<T> {
         List<T> recordList = getListFromCursor(cursor);
 
         cursor.close();
-        db.close();
 
         return recordList;
     }
