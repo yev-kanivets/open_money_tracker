@@ -23,6 +23,7 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+import butterknife.OnItemClick;
 
 public class ExchangeRatesActivity extends BaseBackActivity {
     @SuppressWarnings("unused")
@@ -82,6 +83,14 @@ public class ExchangeRatesActivity extends BaseBackActivity {
     @OnClick(R.id.btn_add_exchange_rate)
     public void addExchangeRate() {
         Intent intent = new Intent(ExchangeRatesActivity.this, AddExchangeRateActivity.class);
+        startActivityForResult(intent, REQUEST_ADD_EXCHANGE_RATE);
+    }
+
+    @OnItemClick(R.id.list_view)
+    public void addExchangeRateOnBaseOfExisted(int position) {
+        if (position < 0 || position >= exchangeRateList.size()) return;
+        Intent intent = new Intent(ExchangeRatesActivity.this, AddExchangeRateActivity.class);
+        intent.putExtra(AddExchangeRateActivity.KEY_EXCHANGE_RATE, exchangeRateList.get(position));
         startActivityForResult(intent, REQUEST_ADD_EXCHANGE_RATE);
     }
 
