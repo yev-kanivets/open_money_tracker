@@ -5,12 +5,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.blogspot.e_kanivets.moneytracker.repo.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.entity.base.IEntity;
 
 import java.util.List;
+
+import timber.log.Timber;
 
 /**
  * Base implementation of {@link IRepo}.
@@ -21,8 +22,6 @@ import java.util.List;
  * @author Evgenii Kanivets
  */
 public abstract class BaseRepo<T extends IEntity> implements IRepo<T> {
-    private static final String TAG = "BaseRepo";
-
     protected DbHelper dbHelper;
 
     public BaseRepo(DbHelper dbHelper) {
@@ -46,11 +45,11 @@ public abstract class BaseRepo<T extends IEntity> implements IRepo<T> {
         long id = db.insert(getTable(), null, contentValues(instance));
 
         if (id == -1) {
-            Log.d(TAG, "Couldn't create record : " + instance);
+            Timber.d("Couldn't create record: %s", instance);
             return null;
         } else {
             T createdInstance = read(id);
-            Log.d(TAG, "Created record : " + createdInstance);
+            Timber.d("Created record: %s", createdInstance);
             return createdInstance;
         }
     }
@@ -75,11 +74,11 @@ public abstract class BaseRepo<T extends IEntity> implements IRepo<T> {
         long rowsAffected = db.update(getTable(), contentValues(instance), "id=?", args);
 
         if (rowsAffected == 0) {
-            Log.d(TAG, "Couldn't update record : " + instance);
+            Timber.d("Couldn't update record: %s", instance);
             return null;
         } else {
             T updatedInstance = read(instance.getId());
-            Log.d(TAG, "Updated record : " + updatedInstance);
+            Timber.d("Updated record: %s", updatedInstance);
             return updatedInstance;
         }
     }
@@ -99,7 +98,7 @@ public abstract class BaseRepo<T extends IEntity> implements IRepo<T> {
         String[] args = new String[]{Long.toString(instance.getId())};
         long rowsAffected = db.delete(getTable(), "id=?", args);
 
-        Log.d(TAG, instance + (rowsAffected == 0 ? " didn't " : " ") + "deleted");
+        Timber.d("%s %s deleted", instance, (rowsAffected == 0 ? " didn't " : " "));
 
         return rowsAffected != 0;
     }
