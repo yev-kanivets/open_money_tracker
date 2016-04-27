@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.blogspot.e_kanivets.moneytracker.R;
+import com.blogspot.e_kanivets.moneytracker.activity.ChartsActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.ExportActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.SettingsActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.account.AccountsActivity;
@@ -75,6 +76,10 @@ public abstract class BaseDrawerActivity extends BaseActivity
             case R.id.nav_rates:
                 startActivityForResult(new Intent(BaseDrawerActivity.this, ExchangeRatesActivity.class),
                         REQUEST_RATES);
+                break;
+
+            case R.id.nav_charts:
+                startActivity(new Intent(BaseDrawerActivity.this, ChartsActivity.class));
                 break;
 
             case R.id.nav_export:

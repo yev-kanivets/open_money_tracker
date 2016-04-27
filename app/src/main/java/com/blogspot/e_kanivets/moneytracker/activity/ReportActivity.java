@@ -13,9 +13,9 @@ import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.ExchangeRateController;
 import com.blogspot.e_kanivets.moneytracker.entity.Period;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record;
-import com.blogspot.e_kanivets.moneytracker.report.ReportConverter;
+import com.blogspot.e_kanivets.moneytracker.report.record.RecordReportConverter;
 import com.blogspot.e_kanivets.moneytracker.report.ReportMaker;
-import com.blogspot.e_kanivets.moneytracker.report.base.IReport;
+import com.blogspot.e_kanivets.moneytracker.report.record.IRecordReport;
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.ShortSummaryPresenter;
 
 import java.util.List;
@@ -77,13 +77,13 @@ public class ReportActivity extends BaseBackActivity {
 
     private void update(String currency) {
         ReportMaker reportMaker = new ReportMaker(rateController);
-        IReport report = reportMaker.getReport(currency, period, recordList);
+        IRecordReport report = reportMaker.getReport(currency, period, recordList);
 
         ExpandableListReportAdapter adapter = null;
 
         if (report != null) {
-            ReportConverter reportConverter = new ReportConverter(report);
-            adapter = new ExpandableListReportAdapter(ReportActivity.this, reportConverter);
+            RecordReportConverter recordReportConverter = new RecordReportConverter(report);
+            adapter = new ExpandableListReportAdapter(ReportActivity.this, recordReportConverter);
         }
 
         expandableListView.setAdapter(adapter);

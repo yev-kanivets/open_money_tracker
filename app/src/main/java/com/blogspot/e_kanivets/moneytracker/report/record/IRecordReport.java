@@ -1,9 +1,9 @@
-package com.blogspot.e_kanivets.moneytracker.report.base;
+package com.blogspot.e_kanivets.moneytracker.report.record;
 
 import android.support.annotation.NonNull;
 
 import com.blogspot.e_kanivets.moneytracker.entity.Period;
-import com.blogspot.e_kanivets.moneytracker.report.model.CategoryRecord;
+import com.blogspot.e_kanivets.moneytracker.report.record.model.CategoryRecord;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author Evgenii Kanivets
  */
-public interface IReport {
+public interface IRecordReport {
     /**
      * @return code of report currency
      */

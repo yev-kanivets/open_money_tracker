@@ -8,7 +8,7 @@ import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 
 import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.report.ReportConverter;
+import com.blogspot.e_kanivets.moneytracker.report.record.RecordReportConverter;
 
 import java.util.List;
 import java.util.Locale;
@@ -32,7 +32,7 @@ public class ExpandableListReportAdapter extends SimpleExpandableListAdapter {
     private int red;
     private int green;
 
-    public ExpandableListReportAdapter(Context context, ReportConverter converter) {
+    public ExpandableListReportAdapter(Context context, RecordReportConverter converter) {
         this(context, converter.getGroupData(), converter.getGroupLayout(),
                 converter.getGroupFrom(), converter.getGroupTo(), converter.getChildData(),
                 converter.getChildLayout(), converter.getChildFrom(), converter.getChildTo());
@@ -75,7 +75,7 @@ public class ExpandableListReportAdapter extends SimpleExpandableListAdapter {
         if (viewHolder == null) viewHolder = new ViewHolder(view);
 
         /* Customize view to fit to model and UI */
-        Double price = Double.parseDouble(values.get(ReportConverter.PRICE_PARAM_NAME));
+        Double price = Double.parseDouble(values.get(RecordReportConverter.PRICE_PARAM_NAME));
 
         if (groupView) view.setBackgroundColor(price < 0 ? whiteRed : whiteGreen);
         else view.setBackgroundColor(white);
@@ -83,7 +83,7 @@ public class ExpandableListReportAdapter extends SimpleExpandableListAdapter {
         //Set color of total
         viewHolder.tvTotal.setTextColor(price >= 0 ? green : red);
 
-        viewHolder.tvCategory.setText(values.get(ReportConverter.TITLE_PARAM_NAME));
+        viewHolder.tvCategory.setText(values.get(RecordReportConverter.TITLE_PARAM_NAME));
         viewHolder.tvTotal.setText(format(price));
     }
 
