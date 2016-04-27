@@ -65,6 +65,7 @@
     <string name="period_from_to" translatable="false">%1$s - %2$s</string>
     <string name="default_currency">Default currency</string>
 
-    <!-- Not translated strings -->
+    <string name="title_charts">Charts</string>
 
+    <!-- Not translated strings -->
 </resources>

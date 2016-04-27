@@ -59,4 +59,6 @@
     <string name="default_account">Счет по умолчанию</string>
     <string name="default_currency">Валюта по умолчанию</string>
 
+    <string name="title_charts">Графики</string>
+
 </resources>

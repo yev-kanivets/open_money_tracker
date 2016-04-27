@@ -59,4 +59,6 @@
     <string name="default_account">Рахунок за замовчуванням</string>
     <string name="default_currency">Валюта за замовчуванням</string>
 
+    <string name="title_charts">Графіки</string>
+
 </resources>
