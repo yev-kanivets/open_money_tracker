@@ -77,7 +77,7 @@ public class ReportActivity extends BaseBackActivity {
 
     private void update(String currency) {
         ReportMaker reportMaker = new ReportMaker(rateController);
-        IRecordReport report = reportMaker.getReport(currency, period, recordList);
+        IRecordReport report = reportMaker.getRecordReport(currency, period, recordList);
 
         ExpandableListReportAdapter adapter = null;
 

@@ -66,6 +66,8 @@
     <string name="default_currency">Default currency</string>
 
     <string name="title_charts">Charts</string>
+    <string name="incomes">Incomes</string>
+    <string name="expenses">Expenses</string>
 
     <!-- Not translated strings -->
 </resources>

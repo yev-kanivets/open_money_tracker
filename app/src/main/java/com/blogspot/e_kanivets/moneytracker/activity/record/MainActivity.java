@@ -194,7 +194,7 @@ public class MainActivity extends BaseDrawerActivity {
         String currency = currencyController.readDefaultCurrency();
 
         ReportMaker reportMaker = new ReportMaker(rateController);
-        IRecordReport report = reportMaker.getReport(currency, period, recordList);
+        IRecordReport report = reportMaker.getRecordReport(currency, period, recordList);
         summaryPresenter.update(report, currency, reportMaker.currencyNeeded(currency, recordList));
 
         fillDefaultAccount();

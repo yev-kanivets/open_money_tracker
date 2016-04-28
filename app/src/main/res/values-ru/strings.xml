@@ -60,5 +60,7 @@
     <string name="default_currency">Валюта по умолчанию</string>
 
     <string name="title_charts">Графики</string>
+    <string name="incomes">Доходы</string>
+    <string name="expenses">Расходы</string>
 
 </resources>
