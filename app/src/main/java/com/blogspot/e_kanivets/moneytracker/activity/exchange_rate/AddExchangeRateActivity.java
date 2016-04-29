@@ -1,5 +1,6 @@
 package com.blogspot.e_kanivets.moneytracker.activity.exchange_rate;
 
+import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatSpinner;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,6 +14,7 @@ import com.blogspot.e_kanivets.moneytracker.controller.data.ExchangeRateControll
 import com.blogspot.e_kanivets.moneytracker.entity.data.ExchangeRate;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -22,10 +24,16 @@ public class AddExchangeRateActivity extends BaseBackActivity {
     @SuppressWarnings("unused")
     private static final String TAG = "AddExchangeRateActivity";
 
+    public static final String KEY_EXCHANGE_RATE = "key_exchange_rate";
+
     @Inject
     ExchangeRateController exchangeRateController;
     @Inject
     CurrencyController currencyController;
+
+    // This field passed from Intent and may be used for presetting from/to spinner values
+    @Nullable
+    private ExchangeRate exchangeRate;
 
     @Bind(R.id.spinner_from_currency)
     AppCompatSpinner spinnerFromCurrency;
@@ -43,20 +51,36 @@ public class AddExchangeRateActivity extends BaseBackActivity {
     protected boolean initData() {
         boolean result = super.initData();
         getAppComponent().inject(AddExchangeRateActivity.this);
+
+        exchangeRate = getIntent().getParcelableExtra(KEY_EXCHANGE_RATE);
+
         return result;
     }
 
     @Override
     protected void initViews() {
         super.initViews();
+        List<String> currencyList = currencyController.readAll();
 
         spinnerFromCurrency.setAdapter(new ArrayAdapter<>(AddExchangeRateActivity.this,
                 android.R.layout.simple_list_item_1,
-                new ArrayList<>(currencyController.readAll())));
+                new ArrayList<>(currencyList)));
 
         spinnerToCurrency.setAdapter(new ArrayAdapter<>(AddExchangeRateActivity.this,
                 android.R.layout.simple_list_item_1,
-                new ArrayList<>(currencyController.readAll())));
+                new ArrayList<>(currencyList)));
+
+        // Set selections from passed ExchangeRate
+        if (exchangeRate != null) {
+            for (int i = 0; i < currencyList.size(); i++) {
+                if (currencyList.get(i).equals(exchangeRate.getFromCurrency())) {
+                    spinnerFromCurrency.setSelection(i);
+                }
+                if (currencyList.get(i).equals(exchangeRate.getToCurrency())) {
+                    spinnerToCurrency.setSelection(i);
+                }
+            }
+        }
     }
 
     @Override

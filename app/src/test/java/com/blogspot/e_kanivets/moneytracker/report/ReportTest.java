@@ -9,9 +9,10 @@ import com.blogspot.e_kanivets.moneytracker.entity.data.ExchangeRate;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record;
 import com.blogspot.e_kanivets.moneytracker.entity.Period;
 import com.blogspot.e_kanivets.moneytracker.report.base.IExchangeRateProvider;
-import com.blogspot.e_kanivets.moneytracker.report.base.IReport;
-import com.blogspot.e_kanivets.moneytracker.report.model.CategoryRecord;
-import com.blogspot.e_kanivets.moneytracker.report.model.SummaryRecord;
+import com.blogspot.e_kanivets.moneytracker.report.record.IRecordReport;
+import com.blogspot.e_kanivets.moneytracker.report.record.model.CategoryRecord;
+import com.blogspot.e_kanivets.moneytracker.report.record.model.SummaryRecord;
+import com.blogspot.e_kanivets.moneytracker.report.record.RecordReport;
 
 import org.junit.After;
 import org.junit.Before;
@@ -47,13 +48,13 @@ public class ReportTest {
 
     @Test
     public void testForNulls() throws Exception {
-        IReport report;
+        IRecordReport report;
 
         Period period = new Period(new Date(1), new Date(), Period.TYPE_CUSTOM);
         List<Record> recordList = new ArrayList<>();
 
         try {
-            report = new Report(null, period, recordList, rateProvider);
+            report = new RecordReport(null, period, recordList, rateProvider);
         } catch (NullPointerException e) {
             report = null;
         }
@@ -61,7 +62,7 @@ public class ReportTest {
         assertNull(report);
 
         try {
-            report = new Report(currency, null, recordList, rateProvider);
+            report = new RecordReport(currency, null, recordList, rateProvider);
         } catch (NullPointerException e) {
             report = null;
         }
@@ -69,7 +70,7 @@ public class ReportTest {
         assertNull(report);
 
         try {
-            report = new Report(currency, period, null, rateProvider);
+            report = new RecordReport(currency, period, null, rateProvider);
         } catch (NullPointerException e) {
             report = null;
         }
@@ -77,7 +78,7 @@ public class ReportTest {
         assertNull(report);
 
         try {
-            report = new Report(currency, period, recordList, null);
+            report = new RecordReport(currency, period, recordList, null);
         } catch (NullPointerException e) {
             report = null;
         }
@@ -85,7 +86,7 @@ public class ReportTest {
         assertNull(report);
 
         try {
-            report = new Report(null, null, null, null);
+            report = new RecordReport(null, null, null, null);
         } catch (NullPointerException e) {
             report = null;
         }
@@ -93,7 +94,7 @@ public class ReportTest {
         assertNull(report);
 
         try {
-            report = new Report(currency, period, recordList, rateProvider);
+            report = new RecordReport(currency, period, recordList, rateProvider);
         } catch (NullPointerException e) {
             report = null;
         }
@@ -106,12 +107,12 @@ public class ReportTest {
         Period period = new Period(new Date(1), new Date(), Period.TYPE_CUSTOM);
         List<Record> recordList = new ArrayList<>();
 
-        IReport report = new Report(currency, period, recordList, rateProvider);
+        IRecordReport report = new RecordReport(currency, period, recordList, rateProvider);
 
         assertEquals(currency, report.getCurrency());
 
         currency = "KHI";
-        report = new Report(currency, period, recordList, rateProvider);
+        report = new RecordReport(currency, period, recordList, rateProvider);
 
         assertEquals(currency, report.getCurrency());
     }
@@ -121,12 +122,12 @@ public class ReportTest {
         Period period = new Period(new Date(1), new Date(), Period.TYPE_CUSTOM);
         List<Record> recordList = new ArrayList<>();
 
-        IReport report = new Report(currency, period, recordList, rateProvider);
+        IRecordReport report = new RecordReport(currency, period, recordList, rateProvider);
 
         assertEquals(period, report.getPeriod());
 
         period = new Period(new Date(3), new Date(100), Period.TYPE_CUSTOM);
-        report = new Report(currency, period, recordList, rateProvider);
+        report = new RecordReport(currency, period, recordList, rateProvider);
 
         assertEquals(period, report.getPeriod());
     }
@@ -137,7 +138,7 @@ public class ReportTest {
 
         List<Record> recordList = getRecordList();
 
-        IReport report = new Report(currency, period, recordList, rateProvider);
+        IRecordReport report = new RecordReport(currency, period, recordList, rateProvider);
 
         double expectedTotal = 10 * 4 - 2 + 5 - 10 * 4;
         assertEquals(expectedTotal, report.getTotal(), 0.0000000001);
@@ -149,7 +150,7 @@ public class ReportTest {
 
         List<Record> recordList = getRecordList();
 
-        IReport report = new Report(currency, period, recordList, rateProvider);
+        IRecordReport report = new RecordReport(currency, period, recordList, rateProvider);
 
         double expectedTotal = 10 * 4 + 5;
         assertEquals(expectedTotal, report.getTotalIncome(), 0.0000000001);
@@ -161,7 +162,7 @@ public class ReportTest {
 
         List<Record> recordList = getRecordList();
 
-        IReport report = new Report(currency, period, recordList, rateProvider);
+        IRecordReport report = new RecordReport(currency, period, recordList, rateProvider);
 
         double expectedTotal = -2 - 10 * 4;
         assertEquals(expectedTotal, report.getTotalExpense(), 0.0000000001);
@@ -186,7 +187,7 @@ public class ReportTest {
         Record record4 = new Record(4, 3, Record.TYPE_EXPENSE, "4", category, 10, account2, "USD");
         recordList.add(record4);
 
-        IReport report = new Report(currency, period, recordList, rateProvider);
+        IRecordReport report = new RecordReport(currency, period, recordList, rateProvider);
 
         List<CategoryRecord> categoryRecordList = new ArrayList<>();
 

@@ -1,4 +1,4 @@
-package com.blogspot.e_kanivets.moneytracker.report.base;
+package com.blogspot.e_kanivets.moneytracker.report.account;
 
 import android.support.annotation.NonNull;
 

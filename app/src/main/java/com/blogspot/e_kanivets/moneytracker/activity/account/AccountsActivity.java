@@ -117,6 +117,7 @@ public class AccountsActivity extends BaseBackActivity {
 
                 case REQUEST_TRANSFER:
                     update();
+                    setResult(RESULT_OK);
                     break;
 
                 default:

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
-import android.util.Log;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
@@ -18,6 +17,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.OnClick;
+import timber.log.Timber;
 
 public class ExportActivity extends BaseBackActivity {
     @SuppressWarnings("unused")
@@ -46,7 +46,7 @@ public class ExportActivity extends BaseBackActivity {
 
         File exportDir = new File(getCacheDir(), "export");
         boolean exportDirCreated = exportDir.mkdirs();
-        Log.d(TAG, "exportDirCreated: " + exportDirCreated);
+        Timber.d("ExportDirCreated: %b", exportDirCreated);
 
         File outFile;
         if (exportDir.exists()) outFile = new File(exportDir, DEFAULT_EXPORT_FILE_NAME);

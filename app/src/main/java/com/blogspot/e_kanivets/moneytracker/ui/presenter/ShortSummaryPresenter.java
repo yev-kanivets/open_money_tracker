@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.report.base.IReport;
+import com.blogspot.e_kanivets.moneytracker.report.record.IRecordReport;
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.base.BaseSummaryPresenter;
 
 import java.util.List;
@@ -46,7 +46,7 @@ public class ShortSummaryPresenter extends BaseSummaryPresenter {
         return view;
     }
 
-    public void update(IReport report, String currency, List<String> ratesNeeded) {
+    public void update(IRecordReport report, String currency, List<String> ratesNeeded) {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
         if (report == null) {

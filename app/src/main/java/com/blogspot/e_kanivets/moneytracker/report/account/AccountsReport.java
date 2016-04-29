@@ -1,10 +1,10 @@
-package com.blogspot.e_kanivets.moneytracker.report;
+package com.blogspot.e_kanivets.moneytracker.report.account;
 
 import android.support.annotation.NonNull;
 
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
 import com.blogspot.e_kanivets.moneytracker.entity.data.ExchangeRate;
-import com.blogspot.e_kanivets.moneytracker.report.base.IAccountsReport;
+import com.blogspot.e_kanivets.moneytracker.report.account.IAccountsReport;
 import com.blogspot.e_kanivets.moneytracker.report.base.IExchangeRateProvider;
 
 import java.util.List;
