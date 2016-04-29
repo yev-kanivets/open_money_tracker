@@ -45,7 +45,7 @@
     <string name="to">To</string>
     <string name="title_exchange_rates">Exchange rates</string>
     <string name="add_exchange_rate">Add exchange rate</string>
-    <string name="arrow" translatable="false"><![CDATA[" -> "]]></string>
+    <string name="arrow" translatable="false">" -> "</string>
     <string name="account_was_removed">Account was removed</string>
     <string name="one" translatable="false">1</string>
     <string name="equal" translatable="false">=</string>
@@ -65,6 +65,9 @@
     <string name="period_from_to" translatable="false">%1$s - %2$s</string>
     <string name="default_currency">Default currency</string>
 
-    <!-- Not translated strings -->
+    <string name="title_charts">Charts</string>
+    <string name="incomes">Incomes</string>
+    <string name="expenses">Expenses</string>
 
+    <!-- Not translated strings -->
 </resources>

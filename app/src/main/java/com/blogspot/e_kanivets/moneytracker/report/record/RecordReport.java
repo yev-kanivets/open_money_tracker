@@ -1,4 +1,4 @@
-package com.blogspot.e_kanivets.moneytracker.report;
+package com.blogspot.e_kanivets.moneytracker.report.record;
 
 import android.support.annotation.NonNull;
 
@@ -6,9 +6,8 @@ import com.blogspot.e_kanivets.moneytracker.entity.data.ExchangeRate;
 import com.blogspot.e_kanivets.moneytracker.entity.Period;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record;
 import com.blogspot.e_kanivets.moneytracker.report.base.IExchangeRateProvider;
-import com.blogspot.e_kanivets.moneytracker.report.base.IReport;
-import com.blogspot.e_kanivets.moneytracker.report.model.CategoryRecord;
-import com.blogspot.e_kanivets.moneytracker.report.model.SummaryRecord;
+import com.blogspot.e_kanivets.moneytracker.report.record.model.CategoryRecord;
+import com.blogspot.e_kanivets.moneytracker.report.record.model.SummaryRecord;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,14 +17,14 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * First {@link IReport} implementation.
+ * First {@link IRecordReport} implementation.
  * Created on 2/25/16.
  *
  * @author Evgenii Kanivets
  */
-public class Report implements IReport {
+public class RecordReport implements IRecordReport {
     @SuppressWarnings("unused")
-    private static final String TAG = "Report";
+    private static final String TAG = "RecordReport";
 
     private String currency;
     private Period period;
@@ -35,7 +34,7 @@ public class Report implements IReport {
     private double totalExpense;
     private List<CategoryRecord> categoryRecordList;
 
-    public Report(String currency, Period period, List<Record> recordList, IExchangeRateProvider rateProvider) {
+    public RecordReport(String currency, Period period, List<Record> recordList, IExchangeRateProvider rateProvider) {
         if (currency == null || period == null || recordList == null || rateProvider == null)
             throw new NullPointerException("Params can't be null");
 

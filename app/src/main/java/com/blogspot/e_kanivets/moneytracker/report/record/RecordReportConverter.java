@@ -1,12 +1,11 @@
-package com.blogspot.e_kanivets.moneytracker.report;
+package com.blogspot.e_kanivets.moneytracker.report.record;
 
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 
 import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.report.base.IReport;
-import com.blogspot.e_kanivets.moneytracker.report.model.CategoryRecord;
-import com.blogspot.e_kanivets.moneytracker.report.model.SummaryRecord;
+import com.blogspot.e_kanivets.moneytracker.report.record.model.CategoryRecord;
+import com.blogspot.e_kanivets.moneytracker.report.record.model.SummaryRecord;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,18 +13,18 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Util class to convert {@link Report} to {@link android.widget.ExpandableListView} input data.
+ * Util class to convert {@link RecordReport} to {@link android.widget.ExpandableListView} input data.
  * Created on 2/26/16.
  *
  * @author Evgenii Kanivets
  */
-public class ReportConverter {
+public class RecordReportConverter {
     public static final String TITLE_PARAM_NAME = "title";
     public static final String PRICE_PARAM_NAME = "price";
 
-    private final IReport report;
+    private final IRecordReport report;
 
-    public ReportConverter(@NonNull IReport report) {
+    public RecordReportConverter(@NonNull IRecordReport report) {
         this.report = report;
     }
 

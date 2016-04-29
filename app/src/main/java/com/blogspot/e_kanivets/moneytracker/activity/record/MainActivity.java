@@ -24,7 +24,7 @@ import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record;
 import com.blogspot.e_kanivets.moneytracker.entity.Period;
 import com.blogspot.e_kanivets.moneytracker.report.ReportMaker;
-import com.blogspot.e_kanivets.moneytracker.report.base.IReport;
+import com.blogspot.e_kanivets.moneytracker.report.record.IRecordReport;
 import com.blogspot.e_kanivets.moneytracker.ui.AppRateDialog;
 import com.blogspot.e_kanivets.moneytracker.ui.PeriodSpinner;
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.ShortSummaryPresenter;
@@ -194,7 +194,7 @@ public class MainActivity extends BaseDrawerActivity {
         String currency = currencyController.readDefaultCurrency();
 
         ReportMaker reportMaker = new ReportMaker(rateController);
-        IReport report = reportMaker.getReport(currency, period, recordList);
+        IRecordReport report = reportMaker.getRecordReport(currency, period, recordList);
         summaryPresenter.update(report, currency, reportMaker.currencyNeeded(currency, recordList));
 
         fillDefaultAccount();

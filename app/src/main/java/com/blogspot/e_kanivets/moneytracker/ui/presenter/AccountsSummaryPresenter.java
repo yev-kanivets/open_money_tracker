@@ -14,7 +14,7 @@ import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.ExchangeRateController;
 import com.blogspot.e_kanivets.moneytracker.report.ReportMaker;
-import com.blogspot.e_kanivets.moneytracker.report.base.IAccountsReport;
+import com.blogspot.e_kanivets.moneytracker.report.account.IAccountsReport;
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.base.BaseSummaryPresenter;
 
 import java.util.List;

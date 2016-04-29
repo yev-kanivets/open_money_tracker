@@ -8,9 +8,13 @@ import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
 import com.blogspot.e_kanivets.moneytracker.entity.data.ExchangeRate;
 import com.blogspot.e_kanivets.moneytracker.entity.Period;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record;
-import com.blogspot.e_kanivets.moneytracker.report.base.IAccountsReport;
+import com.blogspot.e_kanivets.moneytracker.report.account.AccountsReport;
+import com.blogspot.e_kanivets.moneytracker.report.account.IAccountsReport;
 import com.blogspot.e_kanivets.moneytracker.report.base.IExchangeRateProvider;
-import com.blogspot.e_kanivets.moneytracker.report.base.IReport;
+import com.blogspot.e_kanivets.moneytracker.report.chart.IMonthReport;
+import com.blogspot.e_kanivets.moneytracker.report.chart.MonthReport;
+import com.blogspot.e_kanivets.moneytracker.report.record.IRecordReport;
+import com.blogspot.e_kanivets.moneytracker.report.record.RecordReport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +22,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * Util class to encapsulate {@link Report} generation logic.
+ * Util class to encapsulate {@link RecordReport} generation logic.
  * Created on 2/26/16.
  *
  * @author Evgenii Kanivets
@@ -31,11 +35,11 @@ public class ReportMaker {
     }
 
     @Nullable
-    public IReport getReport(String currency, Period period, List<Record> recordList) {
+    public IRecordReport getRecordReport(String currency, Period period, List<Record> recordList) {
         if (currencyNeeded(currency, recordList).size() != 0) return null;
 
         IExchangeRateProvider rateProvider = new ExchangeRateProvider(currency, rateController);
-        return new Report(currency, period, recordList, rateProvider);
+        return new RecordReport(currency, period, recordList, rateProvider);
     }
 
     @Nullable
@@ -44,6 +48,14 @@ public class ReportMaker {
 
         IExchangeRateProvider rateProvider = new ExchangeRateProvider(currency, rateController);
         return new AccountsReport(currency, accountList, rateProvider);
+    }
+
+    @Nullable
+    public IMonthReport getMonthReport(String currency, List<Record> recordList) {
+        if (currencyNeeded(currency, recordList).size() != 0) return null;
+
+        IExchangeRateProvider rateProvider = new ExchangeRateProvider(currency, rateController);
+        return new MonthReport(recordList, currency, rateProvider);
     }
 
     @NonNull
