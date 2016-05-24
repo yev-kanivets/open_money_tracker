@@ -60,18 +60,23 @@ public class ShortSummaryPresenter extends BaseSummaryPresenter {
                     report.getPeriod().getFirstDay(), report.getPeriod().getLastDay()));
 
             viewHolder.tvTotalIncome.setTextColor(report.getTotalIncome() >= 0 ? green : red);
-            viewHolder.tvTotalIncome.setText(format(report.getTotalIncome(), report.getCurrency()));
+            viewHolder.tvTotalIncome.setText(formatIncome(report.getTotalIncome(), report.getCurrency()));
 
-            viewHolder.tvTotalExpense.setTextColor(report.getTotalExpense() >= 0 ? green : red);
-            viewHolder.tvTotalExpense.setText(format(report.getTotalExpense(), report.getCurrency()));
+            viewHolder.tvTotalExpense.setTextColor(report.getTotalExpense() > 0 ? green : red);
+            viewHolder.tvTotalExpense.setText(formatExpense(report.getTotalExpense(), report.getCurrency()));
 
             viewHolder.tvTotal.setTextColor(report.getTotal() >= 0 ? green : red);
-            viewHolder.tvTotal.setText(format(report.getTotal(), report.getCurrency()));
+            viewHolder.tvTotal.setText(formatIncome(report.getTotal(), report.getCurrency()));
         }
     }
 
-    private String format(double amount, String currency) {
+    private String formatIncome(double amount, String currency) {
         return (amount >= 0 ? "+ " : "- ") + String.format(Locale.getDefault(), "%.0f", Math.abs(amount))
+                + " " + currency;
+    }
+
+    private String formatExpense(double amount, String currency) {
+        return (amount > 0 ? "+ " : "- ") + String.format(Locale.getDefault(), "%.0f", Math.abs(amount))
                 + " " + currency;
     }
 
