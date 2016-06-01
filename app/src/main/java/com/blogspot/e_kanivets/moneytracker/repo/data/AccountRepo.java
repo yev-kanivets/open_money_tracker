@@ -42,6 +42,7 @@ public class AccountRepo extends BaseRepo<Account> {
         contentValues.put(DbHelper.TITLE_COLUMN, account.getTitle());
         contentValues.put(DbHelper.CUR_SUM_COLUMN, account.getCurSum());
         contentValues.put(DbHelper.CURRENCY_COLUMN, account.getCurrency());
+        contentValues.put(DbHelper.DECIMALS_COLUMN, account.getDecimals());
 
         return contentValues;
     }
@@ -58,13 +59,15 @@ public class AccountRepo extends BaseRepo<Account> {
             int titleColIndex = cursor.getColumnIndex(DbHelper.TITLE_COLUMN);
             int curSumColIndex = cursor.getColumnIndex(DbHelper.CUR_SUM_COLUMN);
             int currencyColIndex = cursor.getColumnIndex(DbHelper.CURRENCY_COLUMN);
+            int decimalsColIndex = cursor.getColumnIndex(DbHelper.DECIMALS_COLUMN);
 
             do {
                 // Read a account from DB
                 Account account = new Account(cursor.getLong(idColIndex),
                         cursor.getString(titleColIndex),
                         cursor.getInt(curSumColIndex),
-                        cursor.getString(currencyColIndex));
+                        cursor.getString(currencyColIndex),
+                        cursor.getInt(decimalsColIndex));
 
                 accountList.add(account);
             } while (cursor.moveToNext());

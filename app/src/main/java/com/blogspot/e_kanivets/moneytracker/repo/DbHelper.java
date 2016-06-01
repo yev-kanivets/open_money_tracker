@@ -15,7 +15,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     /* DB_VERSION = 1 */
     public static final String DB_NAME = "database";
-    public static final int DB_VERSION = 3;
+    public static final int DB_VERSION = 4;
     public static final String TABLE_RECORDS = "records";
     public static final String TABLE_CATEGORIES = "categories";
 
@@ -49,6 +49,11 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String TO_CURRENCY_COLUMN = "to_currency";
     public static final String AMOUNT_COLUMN = "amount";
 
+    /* DB_VERSION = 4 */
+    public static final String DECIMALS_COLUMN = "decimals";
+    public static final String DECIMALS_FROM_COLUMN = "decimals_from";
+    public static final String DECIMALS_TO_COLUMN = "decimals_to";
+
     public DbHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
@@ -57,7 +62,8 @@ public class DbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         //createDbVersion1(db);
         //createDbVersion2(db);
-        createDbVersion3(db);
+        //createDbVersion3(db);
+        createDbVersion4(db);
     }
 
     @Override
@@ -65,12 +71,23 @@ public class DbHelper extends SQLiteOpenHelper {
         if (oldVersion < 2) {
             db.beginTransaction();
 
-            createAccountsTable(db);
+            db.execSQL("CREATE TABLE " + TABLE_ACCOUNTS + "("
+                    + ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + CREATED_AT_COLUMN + " INTEGER,"
+                    + TITLE_COLUMN + " TEXT,"
+                    + CUR_SUM_COLUMN + " INTEGER,"
+                    + CURRENCY_COLUMN + " TEXT );");
 
             /* Add account_id column into the records table */
             db.execSQL("ALTER TABLE " + TABLE_RECORDS + " ADD COLUMN " + ACCOUNT_ID_COLUMN + " INTEGER;");
 
-            createTransfersTable(db);
+            db.execSQL("CREATE TABLE " + TABLE_TRANSFERS + "("
+                    + ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + TIME_COLUMN + " INTEGER,"
+                    + FROM_ACCOUNT_ID_COLUMN + " INTEGER,"
+                    + TO_ACCOUNT_ID_COLUMN + " INTEGER,"
+                    + FROM_AMOUNT_COLUMN + " INTEGER,"
+                    + TO_AMOUNT_COLUMN + " INTEGER);");
 
             /* Insert default account for all records from DB_VERSION = 1 */
             long id = insertDefaultAccount(db);
@@ -81,7 +98,6 @@ public class DbHelper extends SQLiteOpenHelper {
             db.update(DbHelper.TABLE_RECORDS, contentValues, null, null);
 
             db.setTransactionSuccessful();
-
             db.endTransaction();
         }
 
@@ -94,7 +110,27 @@ public class DbHelper extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE " + TABLE_RECORDS + " ADD COLUMN " + CURRENCY_COLUMN + " INTEGER;");
 
             db.setTransactionSuccessful();
+            db.endTransaction();
+        }
 
+        if (oldVersion < 4) {
+            db.beginTransaction();
+
+            /* Add decimals column into the records table */
+            db.execSQL("ALTER TABLE " + TABLE_RECORDS + " ADD COLUMN "
+                    + DECIMALS_COLUMN + " INTEGER;");
+
+            /* Add decimals column into the accounts table */
+            db.execSQL("ALTER TABLE " + TABLE_ACCOUNTS + " ADD COLUMN "
+                    + DECIMALS_COLUMN + " INTEGER;");
+
+            /* Add decimal_from and decimals_to columns into the transfers table */
+            db.execSQL("ALTER TABLE " + TABLE_TRANSFERS + " ADD COLUMN "
+                    + DECIMALS_FROM_COLUMN + " INTEGER;");
+            db.execSQL("ALTER TABLE " + TABLE_TRANSFERS + " ADD COLUMN "
+                    + DECIMALS_TO_COLUMN + " INTEGER;");
+
+            db.setTransactionSuccessful();
             db.endTransaction();
         }
     }
@@ -129,13 +165,25 @@ public class DbHelper extends SQLiteOpenHelper {
                 + ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + NAME_COLUMN + " TEXT" + ");");
 
-        createAccountsTable(db);
+        db.execSQL("CREATE TABLE " + TABLE_ACCOUNTS + "("
+                + ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + CREATED_AT_COLUMN + " INTEGER,"
+                + TITLE_COLUMN + " TEXT,"
+                + CUR_SUM_COLUMN + " INTEGER,"
+                + CURRENCY_COLUMN + " TEXT );");
 
-        createTransfersTable(db);
+        db.execSQL("CREATE TABLE " + TABLE_TRANSFERS + "("
+                + ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + TIME_COLUMN + " INTEGER,"
+                + FROM_ACCOUNT_ID_COLUMN + " INTEGER,"
+                + TO_ACCOUNT_ID_COLUMN + " INTEGER,"
+                + FROM_AMOUNT_COLUMN + " INTEGER,"
+                + TO_AMOUNT_COLUMN + " INTEGER);");
 
         insertDefaultAccount(db);
     }
 
+    @SuppressWarnings("unused")
     private void createDbVersion3(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + TABLE_RECORDS + "("
                 + ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -151,25 +199,13 @@ public class DbHelper extends SQLiteOpenHelper {
                 + ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + NAME_COLUMN + " TEXT" + ");");
 
-        createAccountsTable(db);
-
-        createTransfersTable(db);
-
-        createRatesTable(db);
-
-        insertDefaultAccount(db);
-    }
-
-    private void createAccountsTable(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + TABLE_ACCOUNTS + "("
                 + ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + CREATED_AT_COLUMN + " INTEGER,"
                 + TITLE_COLUMN + " TEXT,"
                 + CUR_SUM_COLUMN + " INTEGER,"
                 + CURRENCY_COLUMN + " TEXT );");
-    }
 
-    private void createTransfersTable(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + TABLE_TRANSFERS + "("
                 + ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + TIME_COLUMN + " INTEGER,"
@@ -177,6 +213,49 @@ public class DbHelper extends SQLiteOpenHelper {
                 + TO_ACCOUNT_ID_COLUMN + " INTEGER,"
                 + FROM_AMOUNT_COLUMN + " INTEGER,"
                 + TO_AMOUNT_COLUMN + " INTEGER);");
+
+        createRatesTable(db);
+
+        insertDefaultAccount(db);
+    }
+
+    private void createDbVersion4(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE " + TABLE_RECORDS + "("
+                + ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + TIME_COLUMN + " INTEGER,"
+                + TYPE_COLUMN + " INTEGER,"
+                + TITLE_COLUMN + " TEXT,"
+                + CATEGORY_ID_COLUMN + " INTEGER,"
+                + PRICE_COLUMN + " INTEGER,"
+                + ACCOUNT_ID_COLUMN + " INTEGER,"
+                + CURRENCY_COLUMN + " TEXT,"
+                + DECIMALS_COLUMN + " INTEGER);");
+
+        db.execSQL("CREATE TABLE " + TABLE_CATEGORIES + "("
+                + ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + NAME_COLUMN + " TEXT" + ");");
+
+        db.execSQL("CREATE TABLE " + TABLE_ACCOUNTS + "("
+                + ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + CREATED_AT_COLUMN + " INTEGER,"
+                + TITLE_COLUMN + " TEXT,"
+                + CUR_SUM_COLUMN + " INTEGER,"
+                + CURRENCY_COLUMN + " TEXT,"
+                + DECIMALS_COLUMN + " INTEGER);");
+
+        db.execSQL("CREATE TABLE " + TABLE_TRANSFERS + "("
+                + ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + TIME_COLUMN + " INTEGER,"
+                + FROM_ACCOUNT_ID_COLUMN + " INTEGER,"
+                + TO_ACCOUNT_ID_COLUMN + " INTEGER,"
+                + FROM_AMOUNT_COLUMN + " INTEGER,"
+                + TO_AMOUNT_COLUMN + " INTEGER,"
+                + DECIMALS_FROM_COLUMN + " INTEGER,"
+                + DECIMALS_TO_COLUMN + " INTEGER);");
+
+        createRatesTable(db);
+
+        insertDefaultAccount(db);
     }
 
     private void createRatesTable(SQLiteDatabase db) {

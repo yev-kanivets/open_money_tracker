@@ -136,8 +136,12 @@ public class RecordReport implements IRecordReport {
                 convertedPrice *= exchangeRate.getAmount();
             }
 
+            int intConvertedPrice = (int) convertedPrice;
+            int decConvertedPrice = (int) ((convertedPrice - intConvertedPrice) * 100);
+
             Record convertedRecord = new Record(record.getId(), record.getTime(), record.getType(),
-                    record.getTitle(), record.getCategory(), convertedPrice, record.getAccount(), currency);
+                    record.getTitle(), record.getCategory(), intConvertedPrice, record.getAccount(),
+                    currency, decConvertedPrice);
 
             convertedRecordList.add(convertedRecord);
         }

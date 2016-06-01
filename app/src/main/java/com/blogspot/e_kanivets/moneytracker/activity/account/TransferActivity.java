@@ -109,7 +109,7 @@ public class TransferActivity extends BaseBackActivity {
         }
 
         Transfer transfer = new Transfer(System.currentTimeMillis(), fromAccount.getId(),
-                toAccount.getId(), fromAmount, toAmount);
+                toAccount.getId(), fromAmount, toAmount, 0, 0);
         transferController.create(transfer);
     }
 }

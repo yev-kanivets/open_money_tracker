@@ -12,22 +12,25 @@ import com.blogspot.e_kanivets.moneytracker.entity.base.BaseEntity;
  * @author Evgenii Kanivets
  */
 public class Account extends BaseEntity implements Parcelable {
-    private String title;
+    private final String title;
     private int curSum;
-    private String currency;
+    private final String currency;
+    private int decimals;
 
-    public Account(long id, String title, int curSum, String currency) {
+    public Account(long id, String title, int curSum, String currency, int decimals) {
         this.id = id;
         this.title = title;
         this.curSum = curSum;
         this.currency = currency;
+        this.decimals = decimals;
     }
 
-    public Account(String title, int curSum, String currency) {
+    public Account(String title, int curSum, String currency, int decimals) {
         this.id = -1;
         this.title = title;
         this.curSum = curSum;
         this.currency = currency;
+        this.decimals = decimals;
     }
 
     protected Account(Parcel in) {
@@ -35,6 +38,7 @@ public class Account extends BaseEntity implements Parcelable {
         title = in.readString();
         curSum = in.readInt();
         currency = in.readString();
+        decimals = in.readInt();
     }
 
     public static final Creator<Account> CREATOR = new Creator<Account>() {
@@ -57,16 +61,30 @@ public class Account extends BaseEntity implements Parcelable {
         return curSum;
     }
 
+    public int getDecimals() {
+        return decimals;
+    }
+
+    public double getFullSum() {
+        return getCurSum() + getDecimals() / 100.0;
+    }
+
     public String getCurrency() {
         return currency;
     }
 
-    public void put(int amount) {
-        curSum += amount;
+    public void put(double amount) {
+        double sum = curSum + decimals / 100.0;
+        sum += amount;
+        curSum = (int) sum;
+        decimals = (int) ((sum - curSum) * 100);
     }
 
-    public void take(int amount) {
-        curSum -= amount;
+    public void take(double amount) {
+        double sum = curSum + decimals / 100.0;
+        sum -= amount;
+        curSum = (int) sum;
+        decimals = (int) ((sum - curSum) * 100);
     }
 
     @SuppressWarnings("SimplifiableIfStatement")
@@ -77,7 +95,8 @@ public class Account extends BaseEntity implements Parcelable {
             return this.id == account.getId()
                     && equals(this.title, account.getTitle())
                     && this.curSum == account.getCurSum()
-                    && equals(this.currency, account.getCurrency());
+                    && equals(this.currency, account.getCurrency())
+                    && this.decimals == account.decimals;
         } else return false;
     }
 
@@ -89,7 +108,8 @@ public class Account extends BaseEntity implements Parcelable {
         sb.append("id = ").append(id).append(", ");
         sb.append("title = ").append(title).append(", ");
         sb.append("curSum = ").append(curSum).append(", ");
-        sb.append("currency = ").append(currency);
+        sb.append("currency = ").append(currency).append(", ");
+        sb.append("decimals = ").append(decimals);
         sb.append("}");
 
         return sb.toString();
@@ -106,5 +126,6 @@ public class Account extends BaseEntity implements Parcelable {
         dest.writeString(title);
         dest.writeInt(curSum);
         dest.writeString(currency);
+        dest.writeInt(decimals);
     }
 }

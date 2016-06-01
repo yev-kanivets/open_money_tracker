@@ -12,13 +12,18 @@ import com.blogspot.e_kanivets.moneytracker.entity.base.BaseEntity;
  * @author Evgenii Kanivets
  */
 public class Transfer extends BaseEntity implements Parcelable {
-    private long time;
-    private long fromAccountId;
-    private long toAccountId;
-    private int fromAmount;
-    private int toAmount;
+    private final long time;
+    private final long fromAccountId;
+    private final long toAccountId;
+    private final int fromAmount;
+    private final int toAmount;
+    private final int fromDecimals;
+    private final int toDecimals;
 
-    public Transfer(long id, long time, long fromAccountId, long toAccountId, int fromAmount, int toAmount) {
+    public Transfer(long id, long time, long fromAccountId, long toAccountId, int fromAmount,
+                    int toAmount, int fromDecimals, int toDecimals) {
+        this.fromDecimals = fromDecimals;
+        this.toDecimals = toDecimals;
         this.id = id;
         this.time = time;
         this.fromAccountId = fromAccountId;
@@ -27,12 +32,15 @@ public class Transfer extends BaseEntity implements Parcelable {
         this.toAmount = toAmount;
     }
 
-    public Transfer(long time, long fromAccountId, long toAccountId, int fromAmount, int toAmount) {
+    public Transfer(long time, long fromAccountId, long toAccountId, int fromAmount,
+                    int toAmount, int fromDecimals, int toDecimals) {
         this.time = time;
         this.fromAccountId = fromAccountId;
         this.toAccountId = toAccountId;
         this.fromAmount = fromAmount;
         this.toAmount = toAmount;
+        this.fromDecimals = fromDecimals;
+        this.toDecimals = toDecimals;
     }
 
     protected Transfer(Parcel in) {
@@ -41,6 +49,8 @@ public class Transfer extends BaseEntity implements Parcelable {
         toAccountId = in.readLong();
         fromAmount = in.readInt();
         toAmount = in.readInt();
+        fromDecimals = in.readInt();
+        toDecimals = in.readInt();
     }
 
     public static final Creator<Transfer> CREATOR = new Creator<Transfer>() {
@@ -80,16 +90,34 @@ public class Transfer extends BaseEntity implements Parcelable {
         return toAmount;
     }
 
+    public int getFromDecimals() {
+        return fromDecimals;
+    }
+
+    public int getToDecimals() {
+        return toDecimals;
+    }
+
+    public double getFullFromAmount() {
+        return fromAmount + fromDecimals / 100.0;
+    }
+
+    public double getFullToAmount() {
+        return toAmount + toDecimals / 100.0;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o instanceof Transfer) {
             Transfer transfer = (Transfer) o;
-            return this.id == transfer.getId()
-                    && this.time == transfer.getTime()
-                    && this.fromAccountId == transfer.getFromAccountId()
-                    && this.toAccountId == transfer.getToAccountId()
-                    && this.fromAmount == transfer.getFromAmount()
-                    && this.toAmount == transfer.getToAmount();
+            return this.id == transfer.id
+                    && this.time == transfer.time
+                    && this.fromAccountId == transfer.fromAccountId
+                    && this.toAccountId == transfer.toAccountId
+                    && this.fromAmount == transfer.fromAmount
+                    && this.toAmount == transfer.toAmount
+                    && this.fromDecimals == transfer.fromDecimals
+                    && this.toDecimals == transfer.toDecimals;
         } else return false;
     }
 
@@ -103,7 +131,9 @@ public class Transfer extends BaseEntity implements Parcelable {
         sb.append("fromAccountId = ").append(fromAccountId).append(", ");
         sb.append("toAccountId = ").append(toAccountId).append(", ");
         sb.append("fromAmount = ").append(fromAmount).append(", ");
-        sb.append("toAmount = ").append(toAmount);
+        sb.append("toAmount = ").append(toAmount).append(", ");
+        sb.append("fromDecimals = ").append(fromDecimals).append(", ");
+        sb.append("toDecimals = ").append(toDecimals);
         sb.append("}");
 
         return sb.toString();
@@ -121,5 +151,7 @@ public class Transfer extends BaseEntity implements Parcelable {
         dest.writeLong(toAccountId);
         dest.writeInt(fromAmount);
         dest.writeInt(toAmount);
+        dest.writeInt(fromDecimals);
+        dest.writeInt(toDecimals);
     }
 }

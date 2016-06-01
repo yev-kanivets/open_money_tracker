@@ -44,6 +44,8 @@ public class TransferRepo extends BaseRepo<Transfer> {
         contentValues.put(DbHelper.TO_ACCOUNT_ID_COLUMN, transfer.getToAccountId());
         contentValues.put(DbHelper.FROM_AMOUNT_COLUMN, transfer.getFromAmount());
         contentValues.put(DbHelper.TO_AMOUNT_COLUMN, transfer.getToAmount());
+        contentValues.put(DbHelper.DECIMALS_FROM_COLUMN, transfer.getFromDecimals());
+        contentValues.put(DbHelper.DECIMALS_TO_COLUMN, transfer.getToDecimals());
 
         return contentValues;
     }
@@ -62,6 +64,8 @@ public class TransferRepo extends BaseRepo<Transfer> {
             int idColToAccountId = cursor.getColumnIndex(DbHelper.TO_ACCOUNT_ID_COLUMN);
             int idColFromAmount = cursor.getColumnIndex(DbHelper.FROM_AMOUNT_COLUMN);
             int idColToAmount = cursor.getColumnIndex(DbHelper.TO_AMOUNT_COLUMN);
+            int idColDecimalsFrom = cursor.getColumnIndex(DbHelper.DECIMALS_FROM_COLUMN);
+            int idColDecimalsTo = cursor.getColumnIndex(DbHelper.DECIMALS_TO_COLUMN);
 
             do {
                 // Read a account from DB
@@ -70,7 +74,9 @@ public class TransferRepo extends BaseRepo<Transfer> {
                         cursor.getLong(idColFromAccountId),
                         cursor.getLong(idColToAccountId),
                         cursor.getInt(idColFromAmount),
-                        cursor.getInt(idColToAmount));
+                        cursor.getInt(idColToAmount),
+                        cursor.getInt(idColDecimalsFrom),
+                        cursor.getInt(idColDecimalsTo));
 
                 accountList.add(account);
             } while (cursor.moveToNext());

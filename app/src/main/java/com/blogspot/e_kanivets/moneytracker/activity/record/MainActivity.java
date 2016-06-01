@@ -228,7 +228,7 @@ public class MainActivity extends BaseDrawerActivity {
         if (defaultAccount == null) return;
 
         tvDefaultAccountTitle.setText(defaultAccount.getTitle());
-        tvDefaultAccountSum.setText(Integer.toString(defaultAccount.getCurSum()));
+        tvDefaultAccountSum.setText(Double.toString(defaultAccount.getCurSum()));
         tvCurrency.setText(defaultAccount.getCurrency());
     }
 }

@@ -244,12 +244,12 @@ public class AddRecordActivity extends BaseBackActivity {
             switch (type) {
                 case Record.TYPE_EXPENSE:
                     recordController.create(new Record(new Date().getTime(), Record.TYPE_EXPENSE,
-                            title, new Category(category), price, account, account.getCurrency()));
+                            title, new Category(category), price, account, account.getCurrency(), 0));
                     return true;
 
                 case Record.TYPE_INCOME:
                     recordController.create(new Record(new Date().getTime(), Record.TYPE_INCOME,
-                            title, new Category(category), price, account, account.getCurrency()));
+                            title, new Category(category), price, account, account.getCurrency(), 0));
                     return true;
 
                 default:
@@ -257,7 +257,7 @@ public class AddRecordActivity extends BaseBackActivity {
             }
         } else if (mode == Mode.MODE_EDIT) {
             Record updatedRecord = new Record(record.getId(), record.getTime(), record.getType(),
-                    title, new Category(category), price, account, account.getCurrency());
+                    title, new Category(category), price, account, account.getCurrency(), 0);
             recordController.update(updatedRecord);
 
             return true;
