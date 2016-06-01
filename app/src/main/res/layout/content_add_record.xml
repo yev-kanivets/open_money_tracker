@@ -29,9 +29,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/price"
-            android:inputType="numberSigned"
             android:maxLines="1"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:inputType="numberDecimal" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout

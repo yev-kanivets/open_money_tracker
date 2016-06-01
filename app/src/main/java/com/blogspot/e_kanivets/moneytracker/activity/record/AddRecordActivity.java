@@ -224,9 +224,9 @@ public class AddRecordActivity extends BaseBackActivity {
 
         //Check if price is valid
         //noinspection UnusedAssignment
-        int price = -1;
+        double price = -1;
         try {
-            price = Integer.parseInt(etPrice.getText().toString());
+            price = Double.parseDouble(etPrice.getText().toString());
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
@@ -240,19 +240,24 @@ public class AddRecordActivity extends BaseBackActivity {
         } else return false;
     }
 
-    private boolean doRecord(String title, String category, int price, @Nullable Account account) {
+    private boolean doRecord(String title, String category, double price, @Nullable Account account) {
         if (account == null) return false;
+
+        int intPrice = (int) price;
+        int decPrice = (int) ((price - intPrice) * 100);
 
         if (mode == Mode.MODE_ADD) {
             switch (type) {
                 case Record.TYPE_EXPENSE:
                     recordController.create(new Record(new Date().getTime(), Record.TYPE_EXPENSE,
-                            title, new Category(category), price, account, account.getCurrency(), 0));
+                            title, new Category(category), intPrice, account, account.getCurrency(),
+                            decPrice));
                     return true;
 
                 case Record.TYPE_INCOME:
                     recordController.create(new Record(new Date().getTime(), Record.TYPE_INCOME,
-                            title, new Category(category), price, account, account.getCurrency(), 0));
+                            title, new Category(category), intPrice, account, account.getCurrency(),
+                            decPrice));
                     return true;
 
                 default:
@@ -260,7 +265,8 @@ public class AddRecordActivity extends BaseBackActivity {
             }
         } else if (mode == Mode.MODE_EDIT) {
             Record updatedRecord = new Record(record.getId(), record.getTime(), record.getType(),
-                    title, new Category(category), price, account, account.getCurrency(), 0);
+                    title, new Category(category), intPrice, account, account.getCurrency(),
+                    decPrice);
             recordController.update(updatedRecord);
 
             return true;
