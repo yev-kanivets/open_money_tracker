@@ -48,7 +48,7 @@ public class AccountsReport implements IAccountsReport {
         total = 0;
 
         for (Account account : accountList) {
-            double convertedSum = account.getCurSum();
+            double convertedSum = account.getFullSum();
 
             if (!currency.equals(account.getCurrency())) {
                 ExchangeRate exchangeRate = rateProvider.getRate(account);

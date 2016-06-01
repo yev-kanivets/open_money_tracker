@@ -5,12 +5,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
+import com.blogspot.e_kanivets.moneytracker.controller.FormatController;
 import com.blogspot.e_kanivets.moneytracker.report.record.IRecordReport;
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.base.BaseSummaryPresenter;
 
 import java.util.List;
-import java.util.Locale;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -23,6 +26,9 @@ import butterknife.ButterKnife;
  */
 public class ShortSummaryPresenter extends BaseSummaryPresenter {
 
+    @Inject
+    FormatController formatController;
+
     private int red;
     private int green;
     private View view;
@@ -30,6 +36,7 @@ public class ShortSummaryPresenter extends BaseSummaryPresenter {
     @SuppressWarnings("deprecation")
     public ShortSummaryPresenter(Context context) {
         this.context = context;
+        MtApp.get().getAppComponent().inject(ShortSummaryPresenter.this);
 
         layoutInflater = LayoutInflater.from(context);
         red = context.getResources().getColor(R.color.red);
@@ -60,24 +67,17 @@ public class ShortSummaryPresenter extends BaseSummaryPresenter {
                     report.getPeriod().getFirstDay(), report.getPeriod().getLastDay()));
 
             viewHolder.tvTotalIncome.setTextColor(report.getTotalIncome() >= 0 ? green : red);
-            viewHolder.tvTotalIncome.setText(formatIncome(report.getTotalIncome(), report.getCurrency()));
+            viewHolder.tvTotalIncome.setText(formatController.formatIncome(report.getTotalIncome(),
+                    report.getCurrency()));
 
             viewHolder.tvTotalExpense.setTextColor(report.getTotalExpense() > 0 ? green : red);
-            viewHolder.tvTotalExpense.setText(formatExpense(report.getTotalExpense(), report.getCurrency()));
+            viewHolder.tvTotalExpense.setText(formatController.formatExpense(report.getTotalExpense(),
+                    report.getCurrency()));
 
             viewHolder.tvTotal.setTextColor(report.getTotal() >= 0 ? green : red);
-            viewHolder.tvTotal.setText(formatIncome(report.getTotal(), report.getCurrency()));
+            viewHolder.tvTotal.setText(formatController.formatIncome(report.getTotal(),
+                    report.getCurrency()));
         }
-    }
-
-    private String formatIncome(double amount, String currency) {
-        return (amount >= 0 ? "+ " : "- ") + String.format(Locale.getDefault(), "%.0f", Math.abs(amount))
-                + " " + currency;
-    }
-
-    private String formatExpense(double amount, String currency) {
-        return (amount > 0 ? "+ " : "- ") + String.format(Locale.getDefault(), "%.0f", Math.abs(amount))
-                + " " + currency;
     }
 
     public static class ViewHolder {

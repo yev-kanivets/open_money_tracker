@@ -92,11 +92,11 @@ public class RecordReport implements IRecordReport {
         for (Record record : convertedRecordList) {
             switch (record.getType()) {
                 case Record.TYPE_INCOME:
-                    totalIncome += record.getPrice();
+                    totalIncome += record.getFullPrice();
                     break;
 
                 case Record.TYPE_EXPENSE:
-                    totalExpense -= record.getPrice();
+                    totalExpense -= record.getFullPrice();
                     break;
 
                 default:
@@ -128,7 +128,7 @@ public class RecordReport implements IRecordReport {
         List<Record> convertedRecordList = new ArrayList<>();
 
         for (Record record : recordList) {
-            double convertedPrice = record.getPrice();
+            double convertedPrice = record.getFullPrice();
 
             if (!currency.equals(record.getCurrency())) {
                 ExchangeRate exchangeRate = rateProvider.getRate(record);
@@ -208,10 +208,10 @@ public class RecordReport implements IRecordReport {
     private double getAmount(Record record) {
         switch (record.getType()) {
             case Record.TYPE_INCOME:
-                return record.getPrice();
+                return record.getFullPrice();
 
             case Record.TYPE_EXPENSE:
-                return -record.getPrice();
+                return -record.getFullPrice();
 
             default:
                 return 0;

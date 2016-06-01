@@ -8,12 +8,16 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
+import com.blogspot.e_kanivets.moneytracker.controller.FormatController;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -25,6 +29,9 @@ import butterknife.ButterKnife;
  * @author Evgenii Kanivets
  */
 public class RecordAdapter extends BaseAdapter {
+    @Inject
+    FormatController formatController;
+
     private Context context;
     private List<Record> records;
 
@@ -35,6 +42,8 @@ public class RecordAdapter extends BaseAdapter {
 
     @SuppressWarnings("deprecation")
     public RecordAdapter(Context context, List<Record> records) {
+        MtApp.get().getAppComponent().inject(RecordAdapter.this);
+
         this.context = context;
         this.records = records;
 
@@ -82,8 +91,8 @@ public class RecordAdapter extends BaseAdapter {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         viewHolder.tvDateAndTime.setText(dateFormat.format(new Date(record.getTime())));
 
-        viewHolder.tvPrice.setText((record.isIncome() ? "+ " : "- ")
-                + Integer.toString((int) record.getPrice()));
+        viewHolder.tvPrice.setText(formatController.formatAmount(
+                (record.isIncome() ? 1 : -1) * record.getFullPrice()));
         viewHolder.tvTitle.setText(record.getTitle());
         if (record.getCategory() != null)
             viewHolder.tvCategory.setText(record.getCategory().getName());

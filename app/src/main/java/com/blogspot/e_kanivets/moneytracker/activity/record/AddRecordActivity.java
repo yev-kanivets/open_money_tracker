@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.CategoryAutoCompleteAdapter;
+import com.blogspot.e_kanivets.moneytracker.controller.FormatController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.CategoryController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.RecordController;
@@ -62,6 +63,8 @@ public class AddRecordActivity extends BaseBackActivity {
     RecordController recordController;
     @Inject
     AccountController accountController;
+    @Inject
+    FormatController formatController;
 
     @Bind(R.id.et_title)
     EditText etTitle;
@@ -96,11 +99,11 @@ public class AddRecordActivity extends BaseBackActivity {
     protected void initViews() {
         super.initViews();
 
-        //Add texts to dialog if it's edit dialog
+        // Add texts to dialog if it's edit dialog
         if (mode == Mode.MODE_EDIT) {
             etTitle.setText(record.getTitle());
             if (record.getCategory() != null) etCategory.setText(record.getCategory().getName());
-            etPrice.setText(Integer.toString((int) record.getPrice()));
+            etPrice.setText(formatController.formatAmount(record.getFullPrice()));
         }
 
         presentSpinnerAccount();

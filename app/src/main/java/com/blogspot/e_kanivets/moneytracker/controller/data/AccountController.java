@@ -36,11 +36,11 @@ public class AccountController extends BaseController<Account> {
 
         switch (record.getType()) {
             case Record.TYPE_EXPENSE:
-                account.take((int) record.getPrice());
+                account.take(record.getFullPrice());
                 break;
 
             case Record.TYPE_INCOME:
-                account.put((int) record.getPrice());
+                account.put(record.getFullPrice());
                 break;
 
             default:
@@ -60,11 +60,11 @@ public class AccountController extends BaseController<Account> {
 
         switch (record.getType()) {
             case Record.TYPE_EXPENSE:
-                account.put((int) record.getPrice());
+                account.put(record.getFullPrice());
                 break;
 
             case Record.TYPE_INCOME:
-                account.take((int) record.getPrice());
+                account.take(record.getFullPrice());
                 break;
 
             default:
@@ -91,8 +91,8 @@ public class AccountController extends BaseController<Account> {
 
         if (fromAccount == null || toAccount == null) return false;
 
-        fromAccount.take(transfer.getFromAmount());
-        toAccount.put(transfer.getToAmount());
+        fromAccount.take(transfer.getFullFromAmount());
+        toAccount.put(transfer.getFullToAmount());
 
         repo.update(fromAccount);
         repo.update(toAccount);
