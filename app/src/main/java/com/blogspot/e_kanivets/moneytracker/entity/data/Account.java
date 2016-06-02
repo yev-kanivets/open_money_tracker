@@ -77,14 +77,16 @@ public class Account extends BaseEntity implements Parcelable {
         double sum = curSum + decimals / 100.0;
         sum += amount;
         curSum = (int) sum;
-        decimals = (int) ((sum - curSum) * 100);
+        // Strange calculation because of double type precision issue
+        decimals = (int) Math.round(sum * 100 - curSum * 100);
     }
 
     public void take(double amount) {
         double sum = curSum + decimals / 100.0;
         sum -= amount;
         curSum = (int) sum;
-        decimals = (int) ((sum - curSum) * 100);
+        // Strange calculation because of double type precision issue
+        decimals = (int) Math.round(sum * 100 - curSum * 100);
     }
 
     @SuppressWarnings("SimplifiableIfStatement")

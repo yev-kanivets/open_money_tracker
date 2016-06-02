@@ -137,7 +137,8 @@ public class RecordReport implements IRecordReport {
             }
 
             int intConvertedPrice = (int) convertedPrice;
-            int decConvertedPrice = (int) ((convertedPrice - intConvertedPrice) * 100);
+            // Strange calculation because of double type precision issue
+            int decConvertedPrice = (int) Math.round(convertedPrice * 100 - intConvertedPrice * 100);
 
             Record convertedRecord = new Record(record.getId(), record.getTime(), record.getType(),
                     record.getTitle(), record.getCategory(), intConvertedPrice, record.getAccount(),

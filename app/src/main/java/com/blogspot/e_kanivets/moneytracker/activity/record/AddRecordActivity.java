@@ -231,7 +231,7 @@ public class AddRecordActivity extends BaseBackActivity {
             e.printStackTrace();
         }
 
-        if (price >= 0 && price <= 1000000000 && spinnerAccount.getSelectedItemPosition() >= 0) {
+        if (price >= 0.0 && price <= 1000000000.0 && spinnerAccount.getSelectedItemPosition() >= 0) {
             Account account = null;
             if (spinnerAccount.isEnabled())
                 account = accountList.get(spinnerAccount.getSelectedItemPosition());
@@ -244,7 +244,8 @@ public class AddRecordActivity extends BaseBackActivity {
         if (account == null) return false;
 
         int intPrice = (int) price;
-        int decPrice = (int) ((price - intPrice) * 100);
+        // Strange calculation because of double type precision issue
+        int decPrice = (int) Math.round(price * 100 - intPrice * 100);
 
         if (mode == Mode.MODE_ADD) {
             switch (type) {

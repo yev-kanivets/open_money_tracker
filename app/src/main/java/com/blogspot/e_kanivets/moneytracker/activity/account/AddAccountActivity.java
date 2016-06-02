@@ -82,7 +82,8 @@ public class AddAccountActivity extends BaseBackActivity {
         String currency = (String) spinner.getSelectedItem();
 
         int intInitSum = (int) initSum;
-        int decInitSum = (int) ((initSum - intInitSum) * 100);
+        // Strange calculation because of double type precision issue
+        int decInitSum = (int) Math.round(initSum * 100 - intInitSum * 100);
 
         Account account = new Account(title, intInitSum, currency, decInitSum);
 

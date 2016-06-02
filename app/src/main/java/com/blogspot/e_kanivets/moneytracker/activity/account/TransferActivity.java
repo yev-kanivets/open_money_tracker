@@ -109,9 +109,12 @@ public class TransferActivity extends BaseBackActivity {
         }
 
         int intFromAmount = (int) fromAmount;
-        int decFromAmount = (int) ((fromAmount - intFromAmount) * 100);
+        // Strange calculation because of double type precision issue
+        int decFromAmount = (int) Math.round(fromAmount * 100 - intFromAmount * 100);
+
         int intToAmount = (int) toAmount;
-        int decToAmount = (int) ((toAmount - intToAmount) * 100);
+        // Strange calculation because of double type precision issue
+        int decToAmount = (int) Math.round(toAmount * 100 - intToAmount * 100);
 
         Transfer transfer = new Transfer(System.currentTimeMillis(), fromAccount.getId(),
                 toAccount.getId(), intFromAmount, intToAmount, decFromAmount, decToAmount);
