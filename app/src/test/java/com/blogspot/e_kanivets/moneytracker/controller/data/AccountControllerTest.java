@@ -52,7 +52,7 @@ public class AccountControllerTest {
     @Test
     public void testRecordAdded() throws Exception {
         Category category = new Category(1, "c1");
-        Account account = new Account(1, "a1", 100, "NON", decimals);
+        Account account = new Account(1, "a1", 100, "NON", 0);
         repo.create(account);
 
         Record income = new Record(1, 1, Record.TYPE_INCOME, "income", category, 10, account,
@@ -78,7 +78,7 @@ public class AccountControllerTest {
     @Test
     public void testRecordDeleted() throws Exception {
         Category category = new Category(1, "c1");
-        Account account = new Account(1, "a1", 100, "NON", decimals);
+        Account account = new Account(1, "a1", 100, "NON", 0);
         repo.create(account);
 
         Record income = new Record(1, 1, Record.TYPE_INCOME, "income", category, 10, account,
@@ -104,7 +104,7 @@ public class AccountControllerTest {
     @Test
     public void testRecordUpdated() throws Exception {
         Category category = new Category(1, "c1");
-        Account account = new Account(1, "a1", 100, "NON", decimals);
+        Account account = new Account(1, "a1", 100, "NON", 0);
         repo.create(account);
 
         Record incomeOld = new Record(1, 1, Record.TYPE_INCOME, "income", category, 10, account,
@@ -139,8 +139,8 @@ public class AccountControllerTest {
 
     @Test
     public void testTransferDone() throws Exception {
-        Account account1 = new Account(1, "a1", 100, "NON", decimals);
-        Account account2 = new Account(2, "a2", 0, "NON", decimals);
+        Account account1 = new Account(1, "a1", 100, "NON", 0);
+        Account account2 = new Account(2, "a2", 0, "NON", 0);
 
         repo.create(account1);
         repo.create(account2);
@@ -149,22 +149,22 @@ public class AccountControllerTest {
         assertEquals(100, account1.getCurSum());
         assertEquals(0, account2.getCurSum());
 
-        Transfer transfer = new Transfer(1, 1, account1.getId(), account2.getId(), 10, 10, fromDecimals, toDecimals);
+        Transfer transfer = new Transfer(1, 1, account1.getId(), account2.getId(), 10, 10, 0, 0);
         accountController.transferDone(transfer);
         assertEquals(90, account1.getCurSum());
         assertEquals(10, account2.getCurSum());
 
-        transfer = new Transfer(2, 1, account1.getId(), account2.getId(), 10, 10, fromDecimals, toDecimals);
+        transfer = new Transfer(2, 1, account1.getId(), account2.getId(), 10, 10, 0, 0);
         accountController.transferDone(transfer);
         assertEquals(80, account1.getCurSum());
         assertEquals(20, account2.getCurSum());
 
-        transfer = new Transfer(2, 1, account2.getId(), account1.getId(), 20, 20, fromDecimals, toDecimals);
+        transfer = new Transfer(2, 1, account2.getId(), account1.getId(), 20, 20, 0, 0);
         accountController.transferDone(transfer);
         assertEquals(100, account1.getCurSum());
         assertEquals(0, account2.getCurSum());
 
-        transfer = new Transfer(2, 1, account1.getId(), account2.getId(), 0, 100, fromDecimals, toDecimals);
+        transfer = new Transfer(2, 1, account1.getId(), account2.getId(), 0, 100, 0, 0);
         accountController.transferDone(transfer);
         assertEquals(100, account1.getCurSum());
         assertEquals(100, account2.getCurSum());
@@ -174,11 +174,11 @@ public class AccountControllerTest {
     public void testReadDefaultAccount() throws Exception {
         assertNull(accountController.readDefaultAccount());
 
-        Account account1 = new Account(1, "a1", 100, "NON", decimals);
+        Account account1 = new Account(1, "a1", 100, "NON", 0);
         repo.create(account1);
         assertEquals(account1, accountController.readDefaultAccount());
 
-        Account account2 = new Account(2, "a2", 0, "NON", decimals);
+        Account account2 = new Account(2, "a2", 0, "NON", 0);
         repo.create(account2);
         assertEquals(account1, accountController.readDefaultAccount());
 

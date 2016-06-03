@@ -24,7 +24,7 @@ public class TransferControllerTest {
     @Test
     public void testCreate() throws Exception {
         AccountController mock = Mockito.mock(AccountController.class);
-        Transfer transfer = new Transfer(1, 1, 1, 2, 10, 20, fromDecimals, toDecimals);
+        Transfer transfer = new Transfer(1, 1, 1, 2, 10, 20, 0, 0);
 
         Mockito.when(mock.transferDone(transfer)).thenReturn(true);
         Mockito.when(mock.transferDone(null)).thenReturn(false);

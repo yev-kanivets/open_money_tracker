@@ -26,7 +26,7 @@ public class CurrencyControllerTest {
         Mockito.when(accountMock.readDefaultAccount()).thenReturn(null);
         assertEquals("NON", currencyController.readDefaultCurrency());
 
-        Account account = new Account(1, "a1", 100, "ACM", decimals);
+        Account account = new Account(1, "a1", 100, "ACM", 0);
         Mockito.when(prefsMock.readDefaultCurrency()).thenReturn(null);
         Mockito.when(accountMock.readDefaultAccount()).thenReturn(account);
         assertEquals(account.getCurrency(), currencyController.readDefaultCurrency());
