@@ -32,15 +32,14 @@ public class Transfer extends BaseEntity implements Parcelable {
         this.toAmount = toAmount;
     }
 
-    public Transfer(long time, long fromAccountId, long toAccountId, int fromAmount,
-                    int toAmount, int fromDecimals, int toDecimals) {
+    public Transfer(long time, long fromAccountId, long toAccountId, double fromAmount, double toAmount) {
         this.time = time;
         this.fromAccountId = fromAccountId;
         this.toAccountId = toAccountId;
-        this.fromAmount = fromAmount;
-        this.toAmount = toAmount;
-        this.fromDecimals = fromDecimals;
-        this.toDecimals = toDecimals;
+        this.fromAmount = getInteger(fromAmount);
+        this.fromDecimals = getDecimal(fromAmount);
+        this.toAmount = getInteger(toAmount);
+        this.toDecimals = getDecimal(toAmount);
     }
 
     protected Transfer(Parcel in) {

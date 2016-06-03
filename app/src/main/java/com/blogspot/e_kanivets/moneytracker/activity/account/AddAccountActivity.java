@@ -81,12 +81,7 @@ public class AddAccountActivity extends BaseBackActivity {
         double initSum = Double.parseDouble(etInitSum.getText().toString().trim());
         String currency = (String) spinner.getSelectedItem();
 
-        int intInitSum = (int) initSum;
-        // Strange calculation because of double type precision issue
-        int decInitSum = (int) Math.round(initSum * 100 - intInitSum * 100);
-
-        Account account = new Account(title, intInitSum, currency, decInitSum);
-
+        Account account = new Account(title, initSum, currency);
         accountController.create(account);
     }
 }

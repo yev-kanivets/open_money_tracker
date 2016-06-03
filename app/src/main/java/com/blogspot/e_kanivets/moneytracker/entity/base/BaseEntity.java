@@ -18,4 +18,13 @@ public abstract class BaseEntity implements IEntity {
         if (str1 == null) return str2 == null;
         else return str1.equals(str2);
     }
+
+    protected int getInteger(double value) {
+        return (int) value;
+    }
+
+    protected int getDecimal(double value) {
+        // Strange calculation because of double type precision issue
+        return  (int) Math.round(value * 100 - getInteger(value) * 100);
+    }
 }

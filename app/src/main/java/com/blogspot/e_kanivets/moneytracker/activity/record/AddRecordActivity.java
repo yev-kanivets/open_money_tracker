@@ -243,22 +243,16 @@ public class AddRecordActivity extends BaseBackActivity {
     private boolean doRecord(String title, String category, double price, @Nullable Account account) {
         if (account == null) return false;
 
-        int intPrice = (int) price;
-        // Strange calculation because of double type precision issue
-        int decPrice = (int) Math.round(price * 100 - intPrice * 100);
-
         if (mode == Mode.MODE_ADD) {
             switch (type) {
                 case Record.TYPE_EXPENSE:
                     recordController.create(new Record(new Date().getTime(), Record.TYPE_EXPENSE,
-                            title, new Category(category), intPrice, account, account.getCurrency(),
-                            decPrice));
+                            title, new Category(category), price, account, account.getCurrency()));
                     return true;
 
                 case Record.TYPE_INCOME:
                     recordController.create(new Record(new Date().getTime(), Record.TYPE_INCOME,
-                            title, new Category(category), intPrice, account, account.getCurrency(),
-                            decPrice));
+                            title, new Category(category), price, account, account.getCurrency()));
                     return true;
 
                 default:
@@ -266,8 +260,7 @@ public class AddRecordActivity extends BaseBackActivity {
             }
         } else if (mode == Mode.MODE_EDIT) {
             Record updatedRecord = new Record(record.getId(), record.getTime(), record.getType(),
-                    title, new Category(category), intPrice, account, account.getCurrency(),
-                    decPrice);
+                    title, new Category(category), price, account, account.getCurrency());
             recordController.update(updatedRecord);
 
             return true;

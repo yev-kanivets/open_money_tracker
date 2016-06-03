@@ -50,17 +50,30 @@ public class Record extends BaseEntity implements Parcelable {
         this.decimals = decimals;
     }
 
-    public Record(long time, int type, String title, Category category, int price, Account account,
-                  String currency, int decimals) {
+    public Record(long id, long time, int type, String title, Category category, double price,
+                  Account account, String currency) {
+        this.id = id;
+        this.time = time;
+        this.type = type;
+        this.title = title;
+        this.category = category;
+        this.account = account;
+        this.currency = currency;
+        this.price = getInteger(price);
+        this.decimals = getDecimal(price);
+    }
+
+    public Record(long time, int type, String title, Category category, double price, Account account,
+                  String currency) {
         this.id = -1;
         this.time = time;
         this.type = type;
         this.title = title;
         this.category = category;
-        this.price = price;
         this.account = account;
         this.currency = currency;
-        this.decimals = decimals;
+        this.price = getInteger(price);
+        this.decimals = getDecimal(price);
     }
 
     protected Record(Parcel in) {

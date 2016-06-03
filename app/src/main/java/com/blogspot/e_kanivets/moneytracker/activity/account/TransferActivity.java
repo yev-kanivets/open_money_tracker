@@ -108,16 +108,8 @@ public class TransferActivity extends BaseBackActivity {
             e.printStackTrace();
         }
 
-        int intFromAmount = (int) fromAmount;
-        // Strange calculation because of double type precision issue
-        int decFromAmount = (int) Math.round(fromAmount * 100 - intFromAmount * 100);
-
-        int intToAmount = (int) toAmount;
-        // Strange calculation because of double type precision issue
-        int decToAmount = (int) Math.round(toAmount * 100 - intToAmount * 100);
-
         Transfer transfer = new Transfer(System.currentTimeMillis(), fromAccount.getId(),
-                toAccount.getId(), intFromAmount, intToAmount, decFromAmount, decToAmount);
+                toAccount.getId(), fromAmount, toAmount);
         transferController.create(transfer);
     }
 }

@@ -25,12 +25,12 @@ public class Account extends BaseEntity implements Parcelable {
         this.decimals = decimals;
     }
 
-    public Account(String title, int curSum, String currency, int decimals) {
+    public Account(String title, double curSum, String currency) {
         this.id = -1;
         this.title = title;
-        this.curSum = curSum;
         this.currency = currency;
-        this.decimals = decimals;
+        this.curSum = getInteger(curSum);
+        this.decimals = getDecimal(curSum);
     }
 
     protected Account(Parcel in) {
@@ -76,17 +76,15 @@ public class Account extends BaseEntity implements Parcelable {
     public void put(double amount) {
         double sum = curSum + decimals / 100.0;
         sum += amount;
-        curSum = (int) sum;
-        // Strange calculation because of double type precision issue
-        decimals = (int) Math.round(sum * 100 - curSum * 100);
+        curSum = getInteger(sum);
+        decimals = getDecimal(sum);
     }
 
     public void take(double amount) {
         double sum = curSum + decimals / 100.0;
         sum -= amount;
-        curSum = (int) sum;
-        // Strange calculation because of double type precision issue
-        decimals = (int) Math.round(sum * 100 - curSum * 100);
+        curSum = getInteger(sum);
+        decimals = getDecimal(sum);
     }
 
     @SuppressWarnings("SimplifiableIfStatement")
