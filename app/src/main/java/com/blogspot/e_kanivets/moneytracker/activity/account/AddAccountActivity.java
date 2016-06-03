@@ -78,11 +78,10 @@ public class AddAccountActivity extends BaseBackActivity {
 
     private void addAccount() {
         String title = etTitle.getText().toString().trim();
-        int initSum = Integer.parseInt(etInitSum.getText().toString().trim());
+        double initSum = Double.parseDouble(etInitSum.getText().toString().trim());
         String currency = (String) spinner.getSelectedItem();
 
         Account account = new Account(title, initSum, currency);
-
         accountController.create(account);
     }
 }

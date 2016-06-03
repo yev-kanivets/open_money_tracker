@@ -91,7 +91,7 @@ public class MonthReport implements IMonthReport {
             if (monthMap.get(timestamp) == null) monthMap.put(timestamp, new MonthNode(timestamp));
             MonthNode node = monthMap.get(timestamp);
 
-            double convertedPrice = record.getPrice();
+            double convertedPrice = record.getFullPrice();
             if (!currency.equals(record.getCurrency())) {
                 ExchangeRate exchangeRate = rateProvider.getRate(record);
                 if (exchangeRate == null) throw new NullPointerException("No exchange rate found");

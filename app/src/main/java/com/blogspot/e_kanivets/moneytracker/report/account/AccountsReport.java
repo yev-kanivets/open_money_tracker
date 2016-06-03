@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
 import com.blogspot.e_kanivets.moneytracker.entity.data.ExchangeRate;
-import com.blogspot.e_kanivets.moneytracker.report.account.IAccountsReport;
 import com.blogspot.e_kanivets.moneytracker.report.base.IExchangeRateProvider;
 
 import java.util.List;
@@ -49,7 +48,7 @@ public class AccountsReport implements IAccountsReport {
         total = 0;
 
         for (Account account : accountList) {
-            int convertedSum = account.getCurSum();
+            double convertedSum = account.getFullSum();
 
             if (!currency.equals(account.getCurrency())) {
                 ExchangeRate exchangeRate = rateProvider.getRate(account);

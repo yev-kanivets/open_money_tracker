@@ -63,4 +63,5 @@
     <string name="incomes">Доходи</string>
     <string name="expenses">Витрати</string>
 
+    <string name="display_precision">Точність відображення</string>
 </resources>

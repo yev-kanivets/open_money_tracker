@@ -40,10 +40,10 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="@string/amount"
-                android:inputType="number"
                 android:maxLines="1"
                 android:nextFocusDown="@+id/et_to_amount"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:inputType="numberDecimal" />
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 
@@ -77,9 +77,9 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="@string/amount"
-                android:inputType="number"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:inputType="numberDecimal" />
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 

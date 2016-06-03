@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController;
 import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
+import com.blogspot.e_kanivets.moneytracker.controller.FormatController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.ExchangeRateController;
 import com.blogspot.e_kanivets.moneytracker.report.ReportMaker;
@@ -39,6 +40,8 @@ public class AccountsSummaryPresenter extends BaseSummaryPresenter {
     AccountController accountController;
     @Inject
     CurrencyController currencyController;
+    @Inject
+    FormatController formatController;
 
     private int red;
     private int green;
@@ -107,14 +110,10 @@ public class AccountsSummaryPresenter extends BaseSummaryPresenter {
             viewHolder.tvCurrency.setText("");
         } else {
             viewHolder.tvTotal.setTextColor(report.getTotal() >= 0 ? green : red);
-            viewHolder.tvTotal.setText(format(report.getTotal()));
+            viewHolder.tvTotal.setText(formatController.formatSignedAmount(report.getTotal()));
             viewHolder.tvCurrency.setTextColor(report.getTotal() >= 0 ? green : red);
             viewHolder.tvCurrency.setText(report.getCurrency());
         }
-    }
-
-    private String format(double amount) {
-        return (amount >= 0 ? "+ " : "- ") + String.format(Locale.getDefault(), "%.0f", Math.abs(amount));
     }
 
     public static class ViewHolder {

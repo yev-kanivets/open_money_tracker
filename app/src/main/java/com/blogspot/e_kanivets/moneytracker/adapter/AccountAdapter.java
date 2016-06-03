@@ -8,11 +8,14 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
+import com.blogspot.e_kanivets.moneytracker.controller.FormatController;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
 
 import java.util.List;
-import java.util.Locale;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -24,6 +27,9 @@ import butterknife.ButterKnife;
  * @author Evgenii Kanivets
  */
 public class AccountAdapter extends BaseAdapter {
+    @Inject
+    FormatController formatController;
+
     private Context context;
     private List<Account> accounts;
 
@@ -34,6 +40,8 @@ public class AccountAdapter extends BaseAdapter {
 
     @SuppressWarnings("deprecation")
     public AccountAdapter(Context context, List<Account> accounts) {
+        MtApp.get().getAppComponent().inject(AccountAdapter.this);
+
         this.context = context;
         this.accounts = accounts;
 
@@ -74,20 +82,16 @@ public class AccountAdapter extends BaseAdapter {
 
         Account account = accounts.get(position);
 
-        convertView.setBackgroundColor(account.getCurSum() >= 0 ? whiteGreen : whiteRed);
+        convertView.setBackgroundColor(account.getFullSum() >= 0.0 ? whiteGreen : whiteRed);
 
-        viewHolder.tvCurSum.setTextColor(account.getCurSum() >= 0 ? green : red);
-        viewHolder.tvCurrency.setTextColor(account.getCurSum() >= 0 ? green : red);
+        viewHolder.tvCurSum.setTextColor(account.getFullSum() >= 0.0 ? green : red);
+        viewHolder.tvCurrency.setTextColor(account.getFullSum() >= 0.0 ? green : red);
 
         viewHolder.tvTitle.setText(account.getTitle());
-        viewHolder.tvCurSum.setText(format(account.getCurSum()));
+        viewHolder.tvCurSum.setText(formatController.formatSignedAmount(account.getFullSum()));
         viewHolder.tvCurrency.setText(account.getCurrency());
 
         return convertView;
-    }
-
-    private String format(double amount) {
-        return (amount >= 0 ? "+ " : "- ") + String.format(Locale.getDefault(), "%.0f", Math.abs(amount));
     }
 
     public static class ViewHolder {

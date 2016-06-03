@@ -5,7 +5,6 @@ import android.database.Cursor;
 
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record;
 import com.blogspot.e_kanivets.moneytracker.repo.DbHelper;
-import com.blogspot.e_kanivets.moneytracker.repo.data.RecordRepo;
 
 import junit.framework.TestCase;
 
@@ -41,16 +40,17 @@ public class RecordRepoTest extends TestCase {
     }
 
     public void testContentValues() throws Exception {
-        Record record = new Record(1, 1, Record.TYPE_EXPENSE, "title", 1, 100, 1, "NON");
+        Record record = new Record(1, 1, Record.TYPE_EXPENSE, "title", 1, 100, 1, "NON", 50);
 
         ContentValues expected = new ContentValues();
         expected.put(DbHelper.TIME_COLUMN, 1L);
         expected.put(DbHelper.TYPE_COLUMN, Record.TYPE_EXPENSE);
         expected.put(DbHelper.TITLE_COLUMN, "title");
         expected.put(DbHelper.CATEGORY_ID_COLUMN, 1L);
-        expected.put(DbHelper.PRICE_COLUMN, 100.0);
+        expected.put(DbHelper.PRICE_COLUMN, 100);
         expected.put(DbHelper.ACCOUNT_ID_COLUMN, 1L);
         expected.put(DbHelper.CURRENCY_COLUMN, "NON");
+        expected.put(DbHelper.DECIMALS_COLUMN, 50);
 
         ContentValues actual = repo.contentValues(record);
 
@@ -72,6 +72,7 @@ public class RecordRepoTest extends TestCase {
         Mockito.when(mockCursor.getColumnIndex(DbHelper.PRICE_COLUMN)).thenReturn(6);
         Mockito.when(mockCursor.getColumnIndex(DbHelper.ACCOUNT_ID_COLUMN)).thenReturn(7);
         Mockito.when(mockCursor.getColumnIndex(DbHelper.CURRENCY_COLUMN)).thenReturn(8);
+        Mockito.when(mockCursor.getColumnIndex(DbHelper.DECIMALS_COLUMN)).thenReturn(9);
 
         Mockito.when(mockCursor.getLong(1)).thenReturn(1L);
         Mockito.when(mockCursor.getLong(2)).thenReturn(1L);
@@ -81,9 +82,10 @@ public class RecordRepoTest extends TestCase {
         Mockito.when(mockCursor.getInt(6)).thenReturn(100);
         Mockito.when(mockCursor.getLong(7)).thenReturn(1L);
         Mockito.when(mockCursor.getString(8)).thenReturn("NON");
+        Mockito.when(mockCursor.getInt(9)).thenReturn(50);
 
         List<Record> expected = new ArrayList<>();
-        expected.add(new Record(1, 1, Record.TYPE_EXPENSE, "title", 1, 100, 1, "NON"));
+        expected.add(new Record(1, 1, Record.TYPE_EXPENSE, "title", 1, 100, 1, "NON", 50));
 
         assertEquals(expected, repo.getListFromCursor(mockCursor));
 

@@ -92,11 +92,11 @@ public class RecordReport implements IRecordReport {
         for (Record record : convertedRecordList) {
             switch (record.getType()) {
                 case Record.TYPE_INCOME:
-                    totalIncome += record.getPrice();
+                    totalIncome += record.getFullPrice();
                     break;
 
                 case Record.TYPE_EXPENSE:
-                    totalExpense -= record.getPrice();
+                    totalExpense -= record.getFullPrice();
                     break;
 
                 default:
@@ -128,7 +128,7 @@ public class RecordReport implements IRecordReport {
         List<Record> convertedRecordList = new ArrayList<>();
 
         for (Record record : recordList) {
-            double convertedPrice = record.getPrice();
+            double convertedPrice = record.getFullPrice();
 
             if (!currency.equals(record.getCurrency())) {
                 ExchangeRate exchangeRate = rateProvider.getRate(record);
@@ -136,8 +136,13 @@ public class RecordReport implements IRecordReport {
                 convertedPrice *= exchangeRate.getAmount();
             }
 
+            int intConvertedPrice = (int) convertedPrice;
+            // Strange calculation because of double type precision issue
+            int decConvertedPrice = (int) Math.round(convertedPrice * 100 - intConvertedPrice * 100);
+
             Record convertedRecord = new Record(record.getId(), record.getTime(), record.getType(),
-                    record.getTitle(), record.getCategory(), convertedPrice, record.getAccount(), currency);
+                    record.getTitle(), record.getCategory(), intConvertedPrice, record.getAccount(),
+                    currency, decConvertedPrice);
 
             convertedRecordList.add(convertedRecord);
         }
@@ -204,10 +209,10 @@ public class RecordReport implements IRecordReport {
     private double getAmount(Record record) {
         switch (record.getType()) {
             case Record.TYPE_INCOME:
-                return record.getPrice();
+                return record.getFullPrice();
 
             case Record.TYPE_EXPENSE:
-                return -record.getPrice();
+                return -record.getFullPrice();
 
             default:
                 return 0;

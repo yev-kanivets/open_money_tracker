@@ -5,7 +5,6 @@ import android.database.Cursor;
 
 import com.blogspot.e_kanivets.moneytracker.entity.data.Transfer;
 import com.blogspot.e_kanivets.moneytracker.repo.DbHelper;
-import com.blogspot.e_kanivets.moneytracker.repo.data.TransferRepo;
 
 import junit.framework.TestCase;
 
@@ -41,7 +40,7 @@ public class TransferRepoTest extends TestCase {
     }
 
     public void testContentValues() throws Exception {
-        Transfer transfer = new Transfer(1, 1, 1, 2, 100, 200);
+        Transfer transfer = new Transfer(1, 1, 1, 2, 100, 200, 45, 50);
 
         ContentValues expected = new ContentValues();
         expected.put(DbHelper.TIME_COLUMN, 1L);
@@ -49,6 +48,8 @@ public class TransferRepoTest extends TestCase {
         expected.put(DbHelper.TO_ACCOUNT_ID_COLUMN, 2L);
         expected.put(DbHelper.FROM_AMOUNT_COLUMN, 100);
         expected.put(DbHelper.TO_AMOUNT_COLUMN, 200);
+        expected.put(DbHelper.DECIMALS_FROM_COLUMN, 45);
+        expected.put(DbHelper.DECIMALS_TO_COLUMN, 50);
 
         ContentValues actual = repo.contentValues(transfer);
 
@@ -68,6 +69,8 @@ public class TransferRepoTest extends TestCase {
         Mockito.when(mockCursor.getColumnIndex(DbHelper.TO_ACCOUNT_ID_COLUMN)).thenReturn(4);
         Mockito.when(mockCursor.getColumnIndex(DbHelper.FROM_AMOUNT_COLUMN)).thenReturn(5);
         Mockito.when(mockCursor.getColumnIndex(DbHelper.TO_AMOUNT_COLUMN)).thenReturn(6);
+        Mockito.when(mockCursor.getColumnIndex(DbHelper.DECIMALS_FROM_COLUMN)).thenReturn(7);
+        Mockito.when(mockCursor.getColumnIndex(DbHelper.DECIMALS_TO_COLUMN)).thenReturn(8);
 
         Mockito.when(mockCursor.getLong(1)).thenReturn(1L);
         Mockito.when(mockCursor.getLong(2)).thenReturn(1L);
@@ -75,9 +78,11 @@ public class TransferRepoTest extends TestCase {
         Mockito.when(mockCursor.getLong(4)).thenReturn(2L);
         Mockito.when(mockCursor.getInt(5)).thenReturn(100);
         Mockito.when(mockCursor.getInt(6)).thenReturn(200);
+        Mockito.when(mockCursor.getInt(7)).thenReturn(45);
+        Mockito.when(mockCursor.getInt(8)).thenReturn(50);
 
         List<Transfer> expected = new ArrayList<>();
-        expected.add(new Transfer(1, 1, 1, 2, 100, 200));
+        expected.add(new Transfer(1, 1, 1, 2, 100, 200, 45, 50));
 
         assertEquals(expected, repo.getListFromCursor(mockCursor));
 

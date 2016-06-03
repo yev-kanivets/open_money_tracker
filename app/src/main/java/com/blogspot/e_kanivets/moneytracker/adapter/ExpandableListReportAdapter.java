@@ -7,12 +7,16 @@ import android.view.ViewGroup;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 
+import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
+import com.blogspot.e_kanivets.moneytracker.controller.FormatController;
 import com.blogspot.e_kanivets.moneytracker.report.record.RecordReportConverter;
 
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -23,6 +27,9 @@ import butterknife.ButterKnife;
  * @author Evgenii Kanivets
  */
 public class ExpandableListReportAdapter extends SimpleExpandableListAdapter {
+    @Inject
+    FormatController formatController;
+
     private List<? extends Map<String, String>> groupData;
     private List<? extends List<? extends Map<String, String>>> childData;
 
@@ -44,6 +51,7 @@ public class ExpandableListReportAdapter extends SimpleExpandableListAdapter {
                                        List<? extends List<? extends Map<String, String>>> childData,
                                        int childLayout, String[] childFrom, int[] childTo) {
         super(context, groupData, groupLayout, groupFrom, groupTo, childData, childLayout, childFrom, childTo);
+        MtApp.get().getAppComponent().inject(ExpandableListReportAdapter.this);
 
         this.groupData = groupData;
         this.childData = childData;
@@ -84,11 +92,7 @@ public class ExpandableListReportAdapter extends SimpleExpandableListAdapter {
         viewHolder.tvTotal.setTextColor(price >= 0 ? green : red);
 
         viewHolder.tvCategory.setText(values.get(RecordReportConverter.TITLE_PARAM_NAME));
-        viewHolder.tvTotal.setText(format(price));
-    }
-
-    private String format(double amount) {
-        return (amount >= 0 ? "+ " : "- ") + String.format(Locale.getDefault(), "%.0f", Math.abs(amount));
+        viewHolder.tvTotal.setText(formatController.formatSignedAmount(price));
     }
 
     public static class ViewHolder {

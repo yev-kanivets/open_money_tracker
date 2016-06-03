@@ -175,8 +175,8 @@ public class ReportTest {
         List<Record> recordList = new ArrayList<>();
 
         Category category = new Category(1, "category");
-        Account account1 = new Account(1, "account1", 100, "UAH");
-        Account account2 = new Account(2, "account2", 100, "USD");
+        Account account1 = new Account(1, "account1", 100, "UAH", 0);
+        Account account2 = new Account(2, "account2", 100, "USD", 0);
 
         Record record1 = new Record(1, 0, Record.TYPE_INCOME, "1", category, 10, account2, "USD");
         recordList.add(record1);
@@ -220,8 +220,8 @@ public class ReportTest {
         List<Record> recordList = new ArrayList<>();
 
         Category category = new Category(1, "category");
-        Account account1 = new Account(1, "account1", 100, "UAH");
-        Account account2 = new Account(2, "account2", 100, "USD");
+        Account account1 = new Account(1, "account1", 100, "UAH", 0);
+        Account account2 = new Account(2, "account2", 100, "USD", 0);
 
         Record record1 = new Record(1, 0, Record.TYPE_INCOME, "1", category, 10, account2, "USD");
         recordList.add(record1);
