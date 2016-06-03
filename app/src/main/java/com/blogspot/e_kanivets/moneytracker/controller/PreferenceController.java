@@ -94,6 +94,14 @@ public class PreferenceController {
         return preferences.getString(defaultCurrencyPref, null);
     }
 
+    @NonNull
+    public String readDisplayPrecision() {
+        String displayPrecisionPref = context.getString(R.string.pref_display_precision);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+        return preferences.getString(displayPrecisionPref, FormatController.PRECISION_MATH);
+    }
+
     public long readFirstTs() {
         return getDefaultPrefs().getLong(KEY_FIRST_TS, -1);
     }

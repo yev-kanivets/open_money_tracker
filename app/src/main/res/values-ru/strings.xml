@@ -63,4 +63,5 @@
     <string name="incomes">Доходы</string>
     <string name="expenses">Расходы</string>
 
+    <string name="display_precision">Точность отображения</string>
 </resources>

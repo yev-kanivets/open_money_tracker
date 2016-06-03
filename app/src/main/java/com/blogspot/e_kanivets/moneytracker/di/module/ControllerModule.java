@@ -102,7 +102,7 @@ public class ControllerModule {
     @Provides
     @NonNull
     @Singleton
-    public FormatController providesFormatController() {
-        return new FormatController();
+    public FormatController providesFormatController(PreferenceController preferenceController) {
+        return new FormatController(preferenceController);
     }
 }
