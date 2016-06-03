@@ -49,9 +49,8 @@
 
         <EditText
             android:id="@+id/et_amount"
-            android:layout_width="match_parent"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center"
             android:inputType="numberDecimal"
             android:maxLines="1" />

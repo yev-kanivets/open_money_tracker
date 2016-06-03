@@ -94,16 +94,16 @@ public class TransferActivity extends BaseBackActivity {
         Account fromAccount = accountList.get(spinnerFrom.getSelectedItemPosition());
         Account toAccount = accountList.get(spinnerTo.getSelectedItemPosition());
 
-        int fromAmount = -1;
+        double fromAmount = -1;
         try {
-            fromAmount = Integer.parseInt(etFromAmount.getText().toString());
+            fromAmount = Double.parseDouble(etFromAmount.getText().toString());
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
 
-        int toAmount = -1;
+        double toAmount = -1;
         try {
-            toAmount = Integer.parseInt(etToAmount.getText().toString());
+            toAmount = Double.parseDouble(etToAmount.getText().toString());
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }

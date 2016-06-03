@@ -15,6 +15,7 @@ import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.ReportActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseDrawerActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.RecordAdapter;
+import com.blogspot.e_kanivets.moneytracker.controller.FormatController;
 import com.blogspot.e_kanivets.moneytracker.controller.PeriodController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.ExchangeRateController;
@@ -59,6 +60,8 @@ public class MainActivity extends BaseDrawerActivity {
     PreferenceController preferenceController;
     @Inject
     PeriodController periodController;
+    @Inject
+    FormatController formatController;
 
     private ShortSummaryPresenter summaryPresenter;
 
@@ -228,7 +231,7 @@ public class MainActivity extends BaseDrawerActivity {
         if (defaultAccount == null) return;
 
         tvDefaultAccountTitle.setText(defaultAccount.getTitle());
-        tvDefaultAccountSum.setText(Integer.toString(defaultAccount.getCurSum()));
+        tvDefaultAccountSum.setText(formatController.formatAmount(defaultAccount.getFullSum()));
         tvCurrency.setText(defaultAccount.getCurrency());
     }
 }

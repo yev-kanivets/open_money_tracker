@@ -68,12 +68,12 @@ public class ExchangeRateProviderTest {
         provider = new ExchangeRateProvider("USD", rateController);
 
         assertEquals(new ExchangeRate(1, "UAH", "USD", 4),
-                provider.getRate(new Record(1, 0, 0, "", 1, 0, 0, "UAH")));
+                provider.getRate(new Record(1, 0, 0, "", 1, 0, 0, "UAH", 0)));
 
         assertEquals(new ExchangeRate(0, "AFN", "USD", 3),
-                provider.getRate(new Record(1, 0, 0, "", 1, 0, 0, "AFN")));
+                provider.getRate(new Record(1, 0, 0, "", 1, 0, 0, "AFN", 0)));
 
-        assertNull(provider.getRate(new Record(1, 0, 0, "", 1, 0, 0, "SMTH")));
+        assertNull(provider.getRate(new Record(1, 0, 0, "", 1, 0, 0, "SMTH", 0)));
     }
 
     private static class TestRepo implements IRepo<ExchangeRate> {

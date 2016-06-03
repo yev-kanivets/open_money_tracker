@@ -5,7 +5,6 @@ import android.database.Cursor;
 
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
 import com.blogspot.e_kanivets.moneytracker.repo.DbHelper;
-import com.blogspot.e_kanivets.moneytracker.repo.data.AccountRepo;
 
 import junit.framework.TestCase;
 
@@ -41,12 +40,13 @@ public class AccountRepoTest extends TestCase {
     }
 
     public void testContentValues() throws Exception {
-        Account account = new Account(-1, "title1", 100, "NON");
+        Account account = new Account(-1, "title1", 100, "NON", 30);
 
         ContentValues expected = new ContentValues();
         expected.put(DbHelper.TITLE_COLUMN, "title1");
         expected.put(DbHelper.CUR_SUM_COLUMN, 100);
         expected.put(DbHelper.CURRENCY_COLUMN, "NON");
+        expected.put(DbHelper.DECIMALS_COLUMN, 30);
 
         ContentValues actual = repo.contentValues(account);
 
@@ -71,7 +71,7 @@ public class AccountRepoTest extends TestCase {
         Mockito.when(mockCursor.getString(4)).thenReturn("NON");
 
         List<Account> expected = new ArrayList<>();
-        expected.add(new Account(1, "title", 100, "NON"));
+        expected.add(new Account(1, "title", 100, "NON", 0));
 
         assertEquals(expected, repo.getListFromCursor(mockCursor));
 

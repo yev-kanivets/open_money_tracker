@@ -32,13 +32,3 @@ before_script:
 
 before_deploy:
  - cp app/build/outputs/apk/app-release.apk app-release.apk
-
-deploy:
-  provider: releases
-  api_key: "e3fbd39d0f08c069bc465f3f3b0a8c5018bb09dd"
-  file:
-   - "app-release.apk"
-  skip_cleanup: true
-  on:
-    tags: true
-

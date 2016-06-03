@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.CategoryAutoCompleteAdapter;
+import com.blogspot.e_kanivets.moneytracker.controller.FormatController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.CategoryController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.RecordController;
@@ -62,6 +63,8 @@ public class AddRecordActivity extends BaseBackActivity {
     RecordController recordController;
     @Inject
     AccountController accountController;
+    @Inject
+    FormatController formatController;
 
     @Bind(R.id.et_title)
     EditText etTitle;
@@ -96,11 +99,11 @@ public class AddRecordActivity extends BaseBackActivity {
     protected void initViews() {
         super.initViews();
 
-        //Add texts to dialog if it's edit dialog
+        // Add texts to dialog if it's edit dialog
         if (mode == Mode.MODE_EDIT) {
             etTitle.setText(record.getTitle());
             if (record.getCategory() != null) etCategory.setText(record.getCategory().getName());
-            etPrice.setText(Integer.toString((int) record.getPrice()));
+            etPrice.setText(formatController.formatAmount(record.getFullPrice()));
         }
 
         presentSpinnerAccount();
@@ -221,14 +224,14 @@ public class AddRecordActivity extends BaseBackActivity {
 
         //Check if price is valid
         //noinspection UnusedAssignment
-        int price = -1;
+        double price = -1;
         try {
-            price = Integer.parseInt(etPrice.getText().toString());
+            price = Double.parseDouble(etPrice.getText().toString());
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
 
-        if (price >= 0 && price <= 1000000000 && spinnerAccount.getSelectedItemPosition() >= 0) {
+        if (price >= 0.0 && price <= 1000000000.0 && spinnerAccount.getSelectedItemPosition() >= 0) {
             Account account = null;
             if (spinnerAccount.isEnabled())
                 account = accountList.get(spinnerAccount.getSelectedItemPosition());
@@ -237,7 +240,7 @@ public class AddRecordActivity extends BaseBackActivity {
         } else return false;
     }
 
-    private boolean doRecord(String title, String category, int price, @Nullable Account account) {
+    private boolean doRecord(String title, String category, double price, @Nullable Account account) {
         if (account == null) return false;
 
         if (mode == Mode.MODE_ADD) {

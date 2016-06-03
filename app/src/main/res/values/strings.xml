@@ -69,5 +69,10 @@
     <string name="incomes">Incomes</string>
     <string name="expenses">Expenses</string>
 
+    <string name="pref_display_precision" translatable="false">pref_display_precision</string>
+    <string name="display_precision">Display precision</string>
+    <string name="precision_math">9.99$ = 10$</string>
+    <string name="precision_int">9.99$ = 9$</string>
+    <string name="precision_none">9.99$ = 9.99$</string>
     <!-- Not translated strings -->
 </resources>

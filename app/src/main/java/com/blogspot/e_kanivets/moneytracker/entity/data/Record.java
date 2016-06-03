@@ -19,22 +19,26 @@ public class Record extends BaseEntity implements Parcelable {
     private final int type;
     private final String title;
     private final Category category;
-    private final double price;
+    private final int price;
     private final Account account;
     private final String currency;
+    private final int decimals;
 
-    public Record(long id, long time, int type, String title, long categoryId, double price, long accountId, String currency) {
+    public Record(long id, long time, int type, String title, long categoryId, int price,
+                  long accountId, String currency, int decimals) {
         this.id = id;
         this.time = time;
         this.type = type;
         this.title = title;
         this.category = new Category(categoryId, null);
         this.price = price;
-        this.account = new Account(accountId, null, -1, null);
+        this.account = new Account(accountId, null, -1, null, 0);
         this.currency = currency;
+        this.decimals = decimals;
     }
 
-    public Record(long id, long time, int type, String title, Category category, double price, Account account, String currency) {
+    public Record(long id, long time, int type, String title, Category category, int price,
+                  Account account, String currency, int decimals) {
         this.id = id;
         this.time = time;
         this.type = type;
@@ -43,17 +47,33 @@ public class Record extends BaseEntity implements Parcelable {
         this.price = price;
         this.account = account;
         this.currency = currency;
+        this.decimals = decimals;
     }
 
-    public Record(long time, int type, String title, Category category, double price, Account account, String currency) {
+    public Record(long id, long time, int type, String title, Category category, double price,
+                  Account account, String currency) {
+        this.id = id;
+        this.time = time;
+        this.type = type;
+        this.title = title;
+        this.category = category;
+        this.account = account;
+        this.currency = currency;
+        this.price = getInteger(price);
+        this.decimals = getDecimal(price);
+    }
+
+    public Record(long time, int type, String title, Category category, double price, Account account,
+                  String currency) {
         this.id = -1;
         this.time = time;
         this.type = type;
         this.title = title;
         this.category = category;
-        this.price = price;
         this.account = account;
         this.currency = currency;
+        this.price = getInteger(price);
+        this.decimals = getDecimal(price);
     }
 
     protected Record(Parcel in) {
@@ -62,9 +82,10 @@ public class Record extends BaseEntity implements Parcelable {
         type = in.readInt();
         title = in.readString();
         category = in.readParcelable(Category.class.getClassLoader());
-        price = in.readDouble();
+        price = in.readInt();
         account = in.readParcelable(Account.class.getClassLoader());
         currency = in.readString();
+        decimals = in.readInt();
     }
 
     public static final Creator<Record> CREATOR = new Creator<Record>() {
@@ -97,8 +118,16 @@ public class Record extends BaseEntity implements Parcelable {
         return category;
     }
 
-    public double getPrice() {
+    public int getPrice() {
         return price;
+    }
+
+    public int getDecimals() {
+        return decimals;
+    }
+
+    public double getFullPrice() {
+        return price + decimals / 100.0;
     }
 
     public long getTime() {
@@ -146,7 +175,8 @@ public class Record extends BaseEntity implements Parcelable {
         sb.append("category = ").append(category).append(", ");
         sb.append("price = ").append(price).append(", ");
         sb.append("account = ").append(account).append(", ");
-        sb.append("currency = ").append(currency);
+        sb.append("currency = ").append(currency).append(", ");
+        sb.append("decimals = ").append(decimals);
         sb.append("}");
 
         return sb.toString();
@@ -163,7 +193,8 @@ public class Record extends BaseEntity implements Parcelable {
                     && this.category.equals(record.getCategory())
                     && this.price == record.getPrice()
                     && this.account.equals(record.getAccount())
-                    && equals(this.currency, record.getCurrency());
+                    && equals(this.currency, record.getCurrency())
+                    && this.decimals == record.decimals;
         } else return false;
     }
 
@@ -179,8 +210,9 @@ public class Record extends BaseEntity implements Parcelable {
         dest.writeInt(type);
         dest.writeString(title);
         dest.writeParcelable(category, 0);
-        dest.writeDouble(price);
+        dest.writeInt(price);
         dest.writeParcelable(account, 0);
         dest.writeString(currency);
+        dest.writeInt(decimals);
     }
 }
