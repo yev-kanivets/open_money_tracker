@@ -117,45 +117,6 @@ public class RecordController extends BaseController<Record> {
         return readWithCondition(condition, args);
     }
 
-    public List<String> getRecordsForExport(long fromDate, long toDate) {
-        final String DELIMITER = ";";
-        List<String> result = new ArrayList<>();
-
-        /* First of all add a header */
-        @SuppressWarnings("StringBufferReplaceableByString")
-        StringBuilder sb = new StringBuilder();
-        sb.append(DbHelper.ID_COLUMN).append(DELIMITER);
-        sb.append(DbHelper.TIME_COLUMN).append(DELIMITER);
-        sb.append(DbHelper.TITLE_COLUMN).append(DELIMITER);
-        sb.append(DbHelper.CATEGORY_ID_COLUMN).append(DELIMITER);
-        sb.append(DbHelper.PRICE_COLUMN);
-
-        result.add(sb.toString());
-
-        String condition = DbHelper.TIME_COLUMN + " BETWEEN ? AND ?";
-        String[] args = new String[]{Long.toString(fromDate), Long.toString(toDate)};
-
-        List<Record> recordList = readWithCondition(condition, args);
-
-        for (Record record : recordList) {
-            sb = new StringBuilder();
-            sb.append(record.getId()).append(DELIMITER);
-            sb.append(record.getTime()).append(DELIMITER);
-            sb.append(record.getTitle()).append(DELIMITER);
-
-            Category category = null;
-            if (record.getCategory() != null)
-                category = categoryController.read(record.getCategory().getId());
-
-            sb.append(category == null ? "NONE" : category.getName()).append(DELIMITER);
-            sb.append(record.getType() == 0 ? record.getPrice() : -record.getPrice());
-
-            result.add(sb.toString());
-        }
-
-        return result;
-    }
-
     private Record validateRecord(@NonNull Record record) {
         if (record.getCategory() == null) return record;
 
