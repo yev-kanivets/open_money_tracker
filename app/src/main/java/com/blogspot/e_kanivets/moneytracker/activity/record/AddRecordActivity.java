@@ -162,10 +162,33 @@ public class AddRecordActivity extends BaseBackActivity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        switch (mode) {
+            case MODE_ADD:
+                menu.removeItem(R.id.action_delete);
+                break;
+
+            case MODE_EDIT:
+                break;
+
+            default:
+                break;
+        }
+
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_done:
                 tryRecord();
+                return true;
+
+            case R.id.action_delete:
+                recordController.delete(record);
+                setResult(RESULT_OK);
+                finish();
                 return true;
 
             default:
