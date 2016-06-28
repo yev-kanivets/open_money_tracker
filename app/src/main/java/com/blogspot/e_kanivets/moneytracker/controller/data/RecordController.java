@@ -12,6 +12,8 @@ import com.blogspot.e_kanivets.moneytracker.entity.data.Record;
 import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -90,6 +92,14 @@ public class RecordController extends BaseController<Record> {
     public List<Record> readWithCondition(String condition, String[] args) {
         List<Record> recordList = super.readWithCondition(condition, args);
 
+        // Sort record list by time field from smallest to biggest
+        Collections.sort(recordList, new Comparator<Record>() {
+            @Override
+            public int compare(Record lhs, Record rhs) {
+                return lhs.getTime() < rhs.getTime() ? -1 : (lhs.getTime() == rhs.getTime() ? 0 : 1);
+            }
+        });
+
         // Data read from DB through Repo layer doesn't contain right nested objects, so construct them
         List<Record> completedRecordList = new ArrayList<>();
         for (Record record : recordList) {
@@ -115,45 +125,6 @@ public class RecordController extends BaseController<Record> {
                 Long.toString(period.getLast().getTime())};
 
         return readWithCondition(condition, args);
-    }
-
-    public List<String> getRecordsForExport(long fromDate, long toDate) {
-        final String DELIMITER = ";";
-        List<String> result = new ArrayList<>();
-
-        /* First of all add a header */
-        @SuppressWarnings("StringBufferReplaceableByString")
-        StringBuilder sb = new StringBuilder();
-        sb.append(DbHelper.ID_COLUMN).append(DELIMITER);
-        sb.append(DbHelper.TIME_COLUMN).append(DELIMITER);
-        sb.append(DbHelper.TITLE_COLUMN).append(DELIMITER);
-        sb.append(DbHelper.CATEGORY_ID_COLUMN).append(DELIMITER);
-        sb.append(DbHelper.PRICE_COLUMN);
-
-        result.add(sb.toString());
-
-        String condition = DbHelper.TIME_COLUMN + " BETWEEN ? AND ?";
-        String[] args = new String[]{Long.toString(fromDate), Long.toString(toDate)};
-
-        List<Record> recordList = readWithCondition(condition, args);
-
-        for (Record record : recordList) {
-            sb = new StringBuilder();
-            sb.append(record.getId()).append(DELIMITER);
-            sb.append(record.getTime()).append(DELIMITER);
-            sb.append(record.getTitle()).append(DELIMITER);
-
-            Category category = null;
-            if (record.getCategory() != null)
-                category = categoryController.read(record.getCategory().getId());
-
-            sb.append(category == null ? "NONE" : category.getName()).append(DELIMITER);
-            sb.append(record.getType() == 0 ? record.getPrice() : -record.getPrice());
-
-            result.add(sb.toString());
-        }
-
-        return result;
     }
 
     private Record validateRecord(@NonNull Record record) {

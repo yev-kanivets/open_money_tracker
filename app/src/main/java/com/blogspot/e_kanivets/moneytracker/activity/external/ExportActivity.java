@@ -1,4 +1,4 @@
-package com.blogspot.e_kanivets.moneytracker.activity;
+package com.blogspot.e_kanivets.moneytracker.activity.external;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -7,7 +7,7 @@ import android.support.v4.content.FileProvider;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
-import com.blogspot.e_kanivets.moneytracker.controller.data.RecordController;
+import com.blogspot.e_kanivets.moneytracker.controller.external.ExportController;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -26,7 +26,7 @@ public class ExportActivity extends BaseBackActivity {
     private static final String DEFAULT_EXPORT_FILE_NAME = "money_tracker.csv";
 
     @Inject
-    RecordController recordController;
+    ExportController exportController;
 
     @Override
     protected int getContentViewId() {
@@ -42,7 +42,7 @@ public class ExportActivity extends BaseBackActivity {
 
     @OnClick(R.id.btn_export)
     public void exportRecords() {
-        List<String> records = recordController.getRecordsForExport(0, Long.MAX_VALUE);
+        List<String> records = exportController.getRecordsForExport(0, Long.MAX_VALUE);
 
         File exportDir = new File(getCacheDir(), "export");
         boolean exportDirCreated = exportDir.mkdirs();
