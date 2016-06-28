@@ -10,8 +10,8 @@ import android.view.MenuItem;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.ChartsActivity;
-import com.blogspot.e_kanivets.moneytracker.activity.ExportActivity;
-import com.blogspot.e_kanivets.moneytracker.activity.ImportActivity;
+import com.blogspot.e_kanivets.moneytracker.activity.external.ExportActivity;
+import com.blogspot.e_kanivets.moneytracker.activity.external.ImportActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.SettingsActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.account.AccountsActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.exchange_rate.ExchangeRatesActivity;

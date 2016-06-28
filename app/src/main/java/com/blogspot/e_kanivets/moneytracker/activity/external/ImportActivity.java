@@ -1,5 +1,8 @@
-package com.blogspot.e_kanivets.moneytracker.activity;
+package com.blogspot.e_kanivets.moneytracker.activity.external;
 
+import android.support.v7.app.AlertDialog;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.EditText;
 
 import com.blogspot.e_kanivets.moneytracker.R;
@@ -31,6 +34,28 @@ public class ImportActivity extends BaseBackActivity {
         boolean result = super.initData();
         getAppComponent().inject(ImportActivity.this);
         return result;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_import, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_help:
+                AlertDialog.Builder builder = new AlertDialog.Builder(ImportActivity.this);
+                builder.setTitle(R.string.help)
+                        .setMessage(R.string.import_help)
+                        .setPositiveButton(android.R.string.ok, null)
+                        .show();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @OnClick(R.id.btn_import)

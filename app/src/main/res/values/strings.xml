@@ -77,5 +77,15 @@
 
     <string name="title_import">Import</string>
     <string name="records_imported">%1$s records has been imported</string>
+    <string name="help">Help</string>
+    <string name="import_help">To import records into application:\n
+    1. Create CSV file in format - \n
+    <b>time;title;category;price;currency.</b>\n
+    2. Copy its content to text field.\n
+    3. Press import button. In few seconds you will see how much records has been imported.\n
+    \n
+    <b>Note:</b> time - timestamp value in milliseconds; currency - 3 symbols code of currency.\n
+    <b>Example:</b> 1466948795712;metro;transport;-20.0;UAH</string>
+
     <!-- Not translated strings -->
 </resources>

@@ -1,4 +1,4 @@
-package com.blogspot.e_kanivets.moneytracker.activity;
+package com.blogspot.e_kanivets.moneytracker.activity.external;
 
 import android.content.Intent;
 import android.net.Uri;
