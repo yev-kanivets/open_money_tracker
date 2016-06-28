@@ -74,5 +74,8 @@
     <string name="precision_math">9.99$ = 10$</string>
     <string name="precision_int">9.99$ = 9$</string>
     <string name="precision_none">9.99$ = 9.99$</string>
+
+    <string name="title_import">Import</string>
+    <string name="records_imported">%1$s records has been imported</string>
     <!-- Not translated strings -->
 </resources>

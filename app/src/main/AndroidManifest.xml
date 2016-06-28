@@ -73,6 +73,11 @@
             android:label="@string/title_charts"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Default" />
+        <activity
+            android:name=".activity.ImportActivity"
+            android:label="@string/title_import"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Default" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

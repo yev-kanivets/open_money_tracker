@@ -64,4 +64,7 @@
     <string name="expenses">Расходы</string>
 
     <string name="display_precision">Точность отображения</string>
+
+    <string name="title_import">Импорт</string>
+    <string name="records_imported">%1$s записей было импортировано</string>
 </resources>

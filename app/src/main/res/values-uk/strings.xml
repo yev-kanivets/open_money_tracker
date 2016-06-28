@@ -64,4 +64,7 @@
     <string name="expenses">Витрати</string>
 
     <string name="display_precision">Точність відображення</string>
+
+    <string name="title_import">Iмпорт</string>
+    <string name="records_imported">%1$s записів було імпортовано</string>
 </resources>

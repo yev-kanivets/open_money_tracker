@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.ChartsActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.ExportActivity;
+import com.blogspot.e_kanivets.moneytracker.activity.ImportActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.SettingsActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.account.AccountsActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.exchange_rate.ExchangeRatesActivity;
@@ -29,6 +30,7 @@ public abstract class BaseDrawerActivity extends BaseActivity
     private static final int REQUEST_ACCOUNTS = 1;
     private static final int REQUEST_RATES = 2;
     private static final int REQUEST_SETTINGS = 3;
+    private static final int REQUEST_IMPORT = 4;
 
     @Bind(R.id.drawer_layout)
     DrawerLayout drawer;
@@ -82,6 +84,11 @@ public abstract class BaseDrawerActivity extends BaseActivity
                 startActivity(new Intent(BaseDrawerActivity.this, ChartsActivity.class));
                 break;
 
+            case R.id.nav_import:
+                startActivityForResult(new Intent(BaseDrawerActivity.this, ImportActivity.class),
+                        REQUEST_IMPORT);
+                break;
+
             case R.id.nav_export:
                 startActivity(new Intent(BaseDrawerActivity.this, ExportActivity.class));
                 break;
@@ -114,6 +121,10 @@ public abstract class BaseDrawerActivity extends BaseActivity
                     break;
 
                 case REQUEST_SETTINGS:
+                    update();
+                    break;
+
+                case REQUEST_IMPORT:
                     update();
                     break;
 

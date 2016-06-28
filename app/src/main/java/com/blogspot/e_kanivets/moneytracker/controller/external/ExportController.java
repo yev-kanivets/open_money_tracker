@@ -1,4 +1,4 @@
-package com.blogspot.e_kanivets.moneytracker.controller;
+package com.blogspot.e_kanivets.moneytracker.controller.external;
 
 import com.blogspot.e_kanivets.moneytracker.controller.data.CategoryController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.RecordController;
@@ -16,13 +16,6 @@ import java.util.List;
  * @author Evgenii Kanivets
  */
 public class ExportController {
-    private static final String HEAD_TIME = "time";
-    private static final String HEAD_TITLE = "title";
-    private static final String HEAD_CATEGORY = "category";
-    private static final String HEAD_PRICE = "price";
-    private static final String HEAD_CURRENCY = "currency";
-    private static final String DELIMITER = ";";
-
     private final RecordController recordController;
     private final CategoryController categoryController;
 
@@ -37,11 +30,11 @@ public class ExportController {
         /* First of all add a header */
         @SuppressWarnings("StringBufferReplaceableByString")
         StringBuilder sb = new StringBuilder();
-        sb.append(HEAD_TIME).append(DELIMITER);
-        sb.append(HEAD_TITLE).append(DELIMITER);
-        sb.append(HEAD_CATEGORY).append(DELIMITER);
-        sb.append(HEAD_PRICE).append(DELIMITER);
-        sb.append(HEAD_CURRENCY);
+        sb.append(Head.TIME).append(Head.DELIMITER);
+        sb.append(Head.TITLE).append(Head.DELIMITER);
+        sb.append(Head.CATEGORY).append(Head.DELIMITER);
+        sb.append(Head.PRICE).append(Head.DELIMITER);
+        sb.append(Head.CURRENCY);
 
         result.add(sb.toString());
 
@@ -52,16 +45,16 @@ public class ExportController {
 
         for (Record record : recordList) {
             sb = new StringBuilder();
-            sb.append(record.getTime()).append(DELIMITER);
-            sb.append(record.getTitle()).append(DELIMITER);
+            sb.append(record.getTime()).append(Head.DELIMITER);
+            sb.append(record.getTitle()).append(Head.DELIMITER);
 
             Category category = null;
             if (record.getCategory() != null)
                 category = categoryController.read(record.getCategory().getId());
 
-            sb.append(category == null ? "NONE" : category.getName()).append(DELIMITER);
+            sb.append(category == null ? "NONE" : category.getName()).append(Head.DELIMITER);
             sb.append(record.getType() == 0 ? record.getFullPrice()
-                    : -record.getFullPrice()).append(DELIMITER);
+                    : -record.getFullPrice()).append(Head.DELIMITER);
             sb.append(record.getCurrency() == null ? DbHelper.DEFAULT_ACCOUNT_CURRENCY
                     : record.getCurrency());
 
