@@ -52,7 +52,6 @@ public class ExportController {
 
         for (Record record : recordList) {
             sb = new StringBuilder();
-            sb.append(record.getId()).append(DELIMITER);
             sb.append(record.getTime()).append(DELIMITER);
             sb.append(record.getTitle()).append(DELIMITER);
 

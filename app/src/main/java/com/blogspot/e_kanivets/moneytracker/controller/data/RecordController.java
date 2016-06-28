@@ -12,6 +12,8 @@ import com.blogspot.e_kanivets.moneytracker.entity.data.Record;
 import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -89,6 +91,14 @@ public class RecordController extends BaseController<Record> {
     @Override
     public List<Record> readWithCondition(String condition, String[] args) {
         List<Record> recordList = super.readWithCondition(condition, args);
+
+        // Sort record list by time field from smallest to biggest
+        Collections.sort(recordList, new Comparator<Record>() {
+            @Override
+            public int compare(Record lhs, Record rhs) {
+                return lhs.getTime() < rhs.getTime() ? -1 : (lhs.getTime() == rhs.getTime() ? 0 : 1);
+            }
+        });
 
         // Data read from DB through Repo layer doesn't contain right nested objects, so construct them
         List<Record> completedRecordList = new ArrayList<>();
