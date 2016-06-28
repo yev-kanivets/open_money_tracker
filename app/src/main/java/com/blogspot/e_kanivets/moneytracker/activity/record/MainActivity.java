@@ -3,10 +3,7 @@ package com.blogspot.e_kanivets.moneytracker.activity.record;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
-import android.view.ContextMenu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -38,6 +35,7 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+import butterknife.OnItemClick;
 
 public class MainActivity extends BaseDrawerActivity {
     @SuppressWarnings("unused")
@@ -124,34 +122,13 @@ public class MainActivity extends BaseDrawerActivity {
         spinner.setPeriod(periodController.readLastUsedPeriod());
     }
 
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        getMenuInflater().inflate(R.menu.menu_record, menu);
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-
-        switch (item.getItemId()) {
-            case R.id.edit:
-                // Minus one because of list view's header view
-                Record record = recordList.get(info.position - 1);
-                if (record.isIncome())
-                    startAddIncomeActivity(record, AddRecordActivity.Mode.MODE_EDIT);
-                else startAddExpenseActivity(record, AddRecordActivity.Mode.MODE_EDIT);
-                return true;
-
-            case R.id.delete:
-                // Minus one because of list view's header view
-                recordController.delete(recordList.get(info.position - 1));
-                update();
-                return true;
-
-            default:
-                return super.onContextItemSelected(item);
-        }
+    @OnItemClick(R.id.list_view)
+    public void editRecord(int position) {
+        // Minus one because of list view's header view
+        Record record = recordList.get(position - 1);
+        if (record.isIncome())
+            startAddIncomeActivity(record, AddRecordActivity.Mode.MODE_EDIT);
+        else startAddExpenseActivity(record, AddRecordActivity.Mode.MODE_EDIT);
     }
 
     @OnClick(R.id.btn_add_expense)
