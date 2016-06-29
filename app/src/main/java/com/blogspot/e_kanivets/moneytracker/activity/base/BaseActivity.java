@@ -1,5 +1,6 @@
 package com.blogspot.e_kanivets.moneytracker.activity.base;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
@@ -25,6 +26,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private static final String TAG = "BaseActivity";
 
     private Toolbar toolbar;
+    protected ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,5 +65,20 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void showToast(@StringRes int messageId) {
         Toast.makeText(BaseActivity.this, messageId, Toast.LENGTH_SHORT).show();
+    }
+
+    public void startProgress() {
+        if (getProgressBar() == null) return;
+        getProgressBar().show();
+    }
+
+    public void stopProgress() {
+        if (getProgressBar() == null) return;
+        getProgressBar().dismiss();
+    }
+
+    private ProgressDialog getProgressBar() {
+        if (progressDialog == null) progressDialog = new ProgressDialog(this);
+        return progressDialog;
     }
 }

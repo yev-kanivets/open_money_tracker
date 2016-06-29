@@ -59,7 +59,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Default" />
         <activity
-            android:name=".activity.ExportActivity"
+            android:name=".activity.external.ExportActivity"
             android:label="@string/title_export"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Default" />
@@ -71,6 +71,11 @@
         <activity
             android:name=".activity.ChartsActivity"
             android:label="@string/title_charts"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Default" />
+        <activity
+            android:name=".activity.external.ImportActivity"
+            android:label="@string/title_import"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Default" />
 

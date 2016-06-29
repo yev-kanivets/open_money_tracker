@@ -142,13 +142,6 @@ public class RecordControllerTest {
                 new Period(new Date(), new Date(), Period.TYPE_CUSTOM)));
     }
 
-    @Test
-    public void testGetRecordsForExport() throws Exception {
-        ArrayList<String> expected = new ArrayList<>();
-        expected.add("id;time;title;category_id;price");
-        assertEquals(expected, recordController.getRecordsForExport(0, 1));
-    }
-
     private class TestRepo implements IRepo<Record> {
         private Map<Long, Record> recordHashMap = new HashMap<>();
 

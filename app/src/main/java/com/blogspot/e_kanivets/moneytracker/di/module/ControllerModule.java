@@ -3,6 +3,7 @@ package com.blogspot.e_kanivets.moneytracker.di.module;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.blogspot.e_kanivets.moneytracker.controller.external.ExportController;
 import com.blogspot.e_kanivets.moneytracker.controller.FormatController;
 import com.blogspot.e_kanivets.moneytracker.controller.PeriodController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController;
@@ -12,6 +13,7 @@ import com.blogspot.e_kanivets.moneytracker.controller.data.ExchangeRateControll
 import com.blogspot.e_kanivets.moneytracker.controller.PreferenceController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.RecordController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.TransferController;
+import com.blogspot.e_kanivets.moneytracker.controller.external.ImportController;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Category;
 import com.blogspot.e_kanivets.moneytracker.entity.data.ExchangeRate;
@@ -104,5 +106,20 @@ public class ControllerModule {
     @Singleton
     public FormatController providesFormatController(PreferenceController preferenceController) {
         return new FormatController(preferenceController);
+    }
+
+    @Provides
+    @NonNull
+    @Singleton
+    public ExportController providesExportController(RecordController recordController,
+                                                     CategoryController categoryController) {
+        return new ExportController(recordController, categoryController);
+    }
+
+    @Provides
+    @NonNull
+    @Singleton
+    public ImportController providesImportController(RecordController recordController) {
+        return new ImportController(recordController);
     }
 }

@@ -5,6 +5,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatSpinner;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -153,6 +155,10 @@ public class AddRecordActivity extends BaseBackActivity {
                 return false;
             }
         });
+
+        // Restrict ';' for input, because it's used as delimiter when exporting
+        etTitle.setFilters(new InputFilter[]{new SemicolonInputFilter()});
+        etCategory.setFilters(new InputFilter[]{new SemicolonInputFilter()});
     }
 
     @Override
@@ -162,10 +168,33 @@ public class AddRecordActivity extends BaseBackActivity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        switch (mode) {
+            case MODE_ADD:
+                menu.removeItem(R.id.action_delete);
+                break;
+
+            case MODE_EDIT:
+                break;
+
+            default:
+                break;
+        }
+
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_done:
                 tryRecord();
+                return true;
+
+            case R.id.action_delete:
+                recordController.delete(record);
+                setResult(RESULT_OK);
+                finish();
                 return true;
 
             default:
@@ -270,4 +299,13 @@ public class AddRecordActivity extends BaseBackActivity {
     }
 
     public enum Mode {MODE_ADD, MODE_EDIT}
+
+    private static class SemicolonInputFilter implements InputFilter {
+
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+            if (source != null && ";".equals(source.toString())) return "";
+            else return null;
+        }
+    }
 }
