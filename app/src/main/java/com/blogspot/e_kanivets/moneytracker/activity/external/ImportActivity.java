@@ -1,5 +1,6 @@
 package com.blogspot.e_kanivets.moneytracker.activity.external;
 
+import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -60,11 +61,30 @@ public class ImportActivity extends BaseBackActivity {
 
     @OnClick(R.id.btn_import)
     public void importRecords() {
-        String data = etImportData.getText().toString().trim();
-        List<Record> recordList = importController.importRecordsFromCsv(data);
-        showToast(getString(R.string.records_imported, recordList.size()));
+        final String data = etImportData.getText().toString().trim();
 
-        setResult(RESULT_OK);
-        finish();
+        AsyncTask<Void, Void, Integer> importTask = new AsyncTask<Void, Void, Integer>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                startProgress();
+            }
+
+            @Override
+            protected Integer doInBackground(Void... params) {
+                List<Record> recordList = importController.importRecordsFromCsv(data);
+                return recordList.size();
+            }
+
+            @Override
+            protected void onPostExecute(Integer recordCount) {
+                super.onPostExecute(recordCount);
+                stopProgress();
+                showToast(getString(R.string.records_imported, recordCount));
+                setResult(RESULT_OK);
+                finish();
+            }
+        };
+        importTask.execute();
     }
 }
