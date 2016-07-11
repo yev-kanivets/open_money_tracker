@@ -35,6 +35,7 @@ import com.blogspot.e_kanivets.moneytracker.util.CategoryAutoCompleter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -105,7 +106,7 @@ public class AddRecordActivity extends BaseBackActivity {
         if (mode == Mode.MODE_EDIT) {
             etTitle.setText(record.getTitle());
             if (record.getCategory() != null) etCategory.setText(record.getCategory().getName());
-            etPrice.setText(formatController.formatAmount(record.getFullPrice()));
+            etPrice.setText(formatController.formatPrecisionNone(record.getFullPrice()));
         }
 
         presentSpinnerAccount();
