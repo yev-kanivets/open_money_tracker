@@ -85,6 +85,10 @@
     <b>Example:</b> 1466948795712;metro;transport;-20.0;UAH</string>
 
     <string name="slash" translatable="false">/</string>
+    <string name="bank_sells">Bank sells</string>
+    <string name="convert_to">Convert to</string>
+    <string name="bank_buys">Bank buys</string>
+    <string name="convert_from">Convert from</string>
 
     <!-- Not translated strings -->
 </resources>

@@ -14,7 +14,6 @@ import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.ExchangeRateAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.data.ExchangeRateController;
 import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRatePair;
-import com.blogspot.e_kanivets.moneytracker.entity.data.ExchangeRate;
 import com.blogspot.e_kanivets.moneytracker.util.ExchangeRatesSummarizer;
 
 import java.util.Collections;
@@ -72,7 +71,7 @@ public class ExchangeRatesActivity extends BaseBackActivity {
 
         switch (item.getItemId()) {
             case R.id.delete:
-                //rateController.delete(exchangeRateList.get(info.position));
+                rateController.deleteExchangeRatePair(exchangeRateList.get(info.position));
                 update();
                 setResult(RESULT_OK);
                 return true;
@@ -91,7 +90,7 @@ public class ExchangeRatesActivity extends BaseBackActivity {
     public void addExchangeRateOnBaseOfExisted(int position) {
         if (position < 0 || position >= exchangeRateList.size()) return;
         Intent intent = new Intent(ExchangeRatesActivity.this, AddExchangeRateActivity.class);
-        //intent.putExtra(AddExchangeRateActivity.KEY_EXCHANGE_RATE, exchangeRateList.get(position));
+        intent.putExtra(AddExchangeRateActivity.KEY_EXCHANGE_RATE, exchangeRateList.get(position));
         startActivityForResult(intent, REQUEST_ADD_EXCHANGE_RATE);
     }
 
