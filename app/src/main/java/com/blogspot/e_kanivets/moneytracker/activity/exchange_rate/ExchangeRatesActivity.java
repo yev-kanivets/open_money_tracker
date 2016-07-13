@@ -13,6 +13,7 @@ import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.ExchangeRateAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.data.ExchangeRateController;
+import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRatePair;
 import com.blogspot.e_kanivets.moneytracker.entity.data.ExchangeRate;
 import com.blogspot.e_kanivets.moneytracker.util.ExchangeRatesSummarizer;
 
@@ -34,7 +35,7 @@ public class ExchangeRatesActivity extends BaseBackActivity {
     @Inject
     ExchangeRateController rateController;
 
-    private List<ExchangeRate> exchangeRateList;
+    private List<ExchangeRatePair> exchangeRateList;
 
     @Bind(R.id.list_view)
     ListView listView;
@@ -71,7 +72,7 @@ public class ExchangeRatesActivity extends BaseBackActivity {
 
         switch (item.getItemId()) {
             case R.id.delete:
-                rateController.delete(exchangeRateList.get(info.position));
+                //rateController.delete(exchangeRateList.get(info.position));
                 update();
                 setResult(RESULT_OK);
                 return true;
@@ -90,7 +91,7 @@ public class ExchangeRatesActivity extends BaseBackActivity {
     public void addExchangeRateOnBaseOfExisted(int position) {
         if (position < 0 || position >= exchangeRateList.size()) return;
         Intent intent = new Intent(ExchangeRatesActivity.this, AddExchangeRateActivity.class);
-        intent.putExtra(AddExchangeRateActivity.KEY_EXCHANGE_RATE, exchangeRateList.get(position));
+        //intent.putExtra(AddExchangeRateActivity.KEY_EXCHANGE_RATE, exchangeRateList.get(position));
         startActivityForResult(intent, REQUEST_ADD_EXCHANGE_RATE);
     }
 
@@ -112,7 +113,7 @@ public class ExchangeRatesActivity extends BaseBackActivity {
     }
 
     private void update() {
-        exchangeRateList = new ExchangeRatesSummarizer(rateController.readAll()).getSummaryList();
+        exchangeRateList = new ExchangeRatesSummarizer(rateController.readAll()).getPairedSummaryList();
         Collections.reverse(exchangeRateList);
 
         listView.setAdapter(new ExchangeRateAdapter(ExchangeRatesActivity.this, exchangeRateList));

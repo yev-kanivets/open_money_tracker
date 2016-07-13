@@ -2,6 +2,7 @@ package com.blogspot.e_kanivets.moneytracker.util;
 
 import android.support.annotation.NonNull;
 
+import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRatePair;
 import com.blogspot.e_kanivets.moneytracker.entity.data.ExchangeRate;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class ExchangeRatesSummarizer {
     /**
      * @return summary list in increasing order of createdAt values.
      */
+    @NonNull
     public List<ExchangeRate> getSummaryList() {
         Map<String, ExchangeRate> rateMap = new TreeMap<>();
 
@@ -55,5 +57,45 @@ public class ExchangeRatesSummarizer {
         });
 
         return summaryList;
+    }
+
+    @NonNull
+    public List<ExchangeRatePair> getPairedSummaryList() {
+        List<ExchangeRatePair> exchangeRatePairList = new ArrayList<>();
+        Map<String, ExchangeRatePair> rateMap = new TreeMap<>();
+
+        List<ExchangeRate> exchangeRateList = getSummaryList();
+        for (ExchangeRate rate : exchangeRateList) {
+            String ratePair;
+            if (rate.getAmount() >= 1)
+                ratePair = rate.getFromCurrency() + "-" + rate.getToCurrency();
+            else ratePair = rate.getToCurrency() + "-" + rate.getFromCurrency();
+
+            if (rateMap.containsKey(ratePair)) {
+                ExchangeRatePair pair = rateMap.get(ratePair);
+                if (rate.getAmount() >= 1) pair.setAmountBuy(rate.getAmount());
+                else pair.setAmountSell(1 / rate.getAmount());
+            } else {
+                ExchangeRatePair pair = new ExchangeRatePair();
+                if (rate.getAmount() >= 1) {
+                    pair.setFromCurrency(rate.getFromCurrency());
+                    pair.setToCurrency(rate.getToCurrency());
+                    pair.setAmountBuy(rate.getAmount());
+                    pair.setAmountSell(rate.getAmount());
+                } else {
+                    pair.setFromCurrency(rate.getToCurrency());
+                    pair.setToCurrency(rate.getFromCurrency());
+                    pair.setAmountBuy(1 / rate.getAmount());
+                    pair.setAmountSell(1 / rate.getAmount());
+                }
+                rateMap.put(ratePair, pair);
+            }
+        }
+
+        for (String ratePair : rateMap.keySet()) {
+            exchangeRatePairList.add(rateMap.get(ratePair));
+        }
+
+        return exchangeRatePairList;
     }
 }
