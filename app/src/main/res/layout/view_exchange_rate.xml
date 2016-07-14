@@ -9,30 +9,31 @@
     android:paddingTop="@dimen/half_margin">
 
     <TextView
+        android:id="@+id/tv_from_currency"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/one"
-        android:theme="@style/Text_Body2" />
-
-    <TextView
-        android:id="@+id/tv_from_currency"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:fontFamily="monospace"
         android:gravity="center|end"
         android:theme="@style/Text_Body2" />
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:text="@string/equal"
-        android:theme="@style/Text_Body1" />
+        android:layout_marginLeft="@dimen/quarter_margin"
+        android:layout_marginRight="@dimen/quarter_margin"
+        android:text="@string/slash"
+        android:theme="@style/Text_Body2" />
 
     <TextView
-        android:id="@+id/tv_amount"
+        android:id="@+id/tv_to_currency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="monospace"
+        android:gravity="center|start"
+        android:theme="@style/Text_Body2" />
+
+    <TextView
+        android:id="@+id/tv_amount_buy"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -41,19 +42,12 @@
         android:theme="@style/Text_Body2" />
 
     <TextView
+        android:id="@+id/tv_amount_sell"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="@string/multiply"
-        android:theme="@style/Text_Body1" />
-
-    <TextView
-        android:id="@+id/tv_to_currency"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center|start"
+        android:maxLines="1"
         android:theme="@style/Text_Body2" />
 
 </LinearLayout>

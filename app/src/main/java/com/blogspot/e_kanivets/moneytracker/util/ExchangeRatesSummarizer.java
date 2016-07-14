@@ -2,6 +2,7 @@ package com.blogspot.e_kanivets.moneytracker.util;
 
 import android.support.annotation.NonNull;
 
+import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRatePair;
 import com.blogspot.e_kanivets.moneytracker.entity.data.ExchangeRate;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class ExchangeRatesSummarizer {
     /**
      * @return summary list in increasing order of createdAt values.
      */
+    @NonNull
     public List<ExchangeRate> getSummaryList() {
         Map<String, ExchangeRate> rateMap = new TreeMap<>();
 
@@ -55,5 +57,36 @@ public class ExchangeRatesSummarizer {
         });
 
         return summaryList;
+    }
+
+    @NonNull
+    public List<ExchangeRatePair> getPairedSummaryList() {
+        List<ExchangeRatePair> exchangeRatePairList = new ArrayList<>();
+        Map<String, ExchangeRatePair> rateMap = new TreeMap<>();
+
+        List<ExchangeRate> exchangeRateList = getSummaryList();
+        for (ExchangeRate rate : exchangeRateList) {
+            String ratePair = rate.getFromCurrency() + "-" + rate.getToCurrency();
+            String reverseRatePair = rate.getToCurrency() + "-" + rate.getFromCurrency();
+
+            if (rateMap.containsKey(ratePair)) {
+                ExchangeRatePair pair = rateMap.get(ratePair);
+                pair.setSecondRate(rate);
+            } else if (rateMap.containsKey(reverseRatePair)) {
+                ExchangeRatePair pair = rateMap.get(reverseRatePair);
+                pair.setSecondRate(rate);
+            } else {
+                ExchangeRatePair pair = new ExchangeRatePair();
+                pair.setFirstRate(rate);
+                rateMap.put(ratePair, pair);
+            }
+        }
+
+        for (String ratePair : rateMap.keySet()) {
+            ExchangeRatePair pair = rateMap.get(ratePair);
+            if (pair.make()) exchangeRatePairList.add(pair);
+        }
+
+        return exchangeRatePairList;
     }
 }

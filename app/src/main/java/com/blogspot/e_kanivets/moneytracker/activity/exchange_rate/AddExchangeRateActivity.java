@@ -10,8 +10,9 @@ import android.widget.EditText;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController;
+import com.blogspot.e_kanivets.moneytracker.controller.FormatController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.ExchangeRateController;
-import com.blogspot.e_kanivets.moneytracker.entity.data.ExchangeRate;
+import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRatePair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,17 +31,21 @@ public class AddExchangeRateActivity extends BaseBackActivity {
     ExchangeRateController exchangeRateController;
     @Inject
     CurrencyController currencyController;
+    @Inject
+    FormatController formatController;
 
     // This field passed from Intent and may be used for presetting from/to spinner values
     @Nullable
-    private ExchangeRate exchangeRate;
+    private ExchangeRatePair exchangeRatePair;
 
     @Bind(R.id.spinner_from_currency)
     AppCompatSpinner spinnerFromCurrency;
     @Bind(R.id.spinner_to_currency)
     AppCompatSpinner spinnerToCurrency;
-    @Bind(R.id.et_amount)
-    EditText etAmount;
+    @Bind(R.id.et_buy)
+    EditText etBuy;
+    @Bind(R.id.et_sell)
+    EditText etSell;
 
     @Override
     protected int getContentViewId() {
@@ -52,7 +57,7 @@ public class AddExchangeRateActivity extends BaseBackActivity {
         boolean result = super.initData();
         getAppComponent().inject(AddExchangeRateActivity.this);
 
-        exchangeRate = getIntent().getParcelableExtra(KEY_EXCHANGE_RATE);
+        exchangeRatePair = getIntent().getParcelableExtra(KEY_EXCHANGE_RATE);
 
         return result;
     }
@@ -63,23 +68,26 @@ public class AddExchangeRateActivity extends BaseBackActivity {
         List<String> currencyList = currencyController.readAll();
 
         spinnerFromCurrency.setAdapter(new ArrayAdapter<>(AddExchangeRateActivity.this,
-                android.R.layout.simple_list_item_1,
+                R.layout.view_spinner_item,
                 new ArrayList<>(currencyList)));
 
         spinnerToCurrency.setAdapter(new ArrayAdapter<>(AddExchangeRateActivity.this,
-                android.R.layout.simple_list_item_1,
+                R.layout.view_spinner_item,
                 new ArrayList<>(currencyList)));
 
         // Set selections from passed ExchangeRate
-        if (exchangeRate != null) {
+        if (exchangeRatePair != null) {
             for (int i = 0; i < currencyList.size(); i++) {
-                if (currencyList.get(i).equals(exchangeRate.getFromCurrency())) {
+                if (currencyList.get(i).equals(exchangeRatePair.getFromCurrency())) {
                     spinnerFromCurrency.setSelection(i);
                 }
-                if (currencyList.get(i).equals(exchangeRate.getToCurrency())) {
+                if (currencyList.get(i).equals(exchangeRatePair.getToCurrency())) {
                     spinnerToCurrency.setSelection(i);
                 }
             }
+
+            etBuy.setText(formatController.formatPrecisionNone(exchangeRatePair.getAmountBuy()));
+            etSell.setText(formatController.formatPrecisionNone(exchangeRatePair.getAmountSell()));
         }
     }
 
@@ -107,21 +115,27 @@ public class AddExchangeRateActivity extends BaseBackActivity {
     private boolean addExchangeRate() {
         String fromCurrency = (String) spinnerFromCurrency.getSelectedItem();
         String toCurrency = (String) spinnerToCurrency.getSelectedItem();
-        double amount = -1;
+        double amountBuy = -1;
+        double amountSell = -1;
+
+        if (fromCurrency.equals(toCurrency)) return false;
 
         try {
-            amount = Double.parseDouble(etAmount.getText().toString().trim());
+            amountBuy = Double.parseDouble(etBuy.getText().toString().trim());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            amountSell = Double.parseDouble(etSell.getText().toString().trim());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if (amount == -1) return false;
+        if (amountBuy == -1 || amountSell == -1) return false;
 
-        ExchangeRate exchangeRate = new ExchangeRate(System.currentTimeMillis(),
-                fromCurrency, toCurrency, amount);
+        ExchangeRatePair pair = new ExchangeRatePair(fromCurrency, toCurrency, amountBuy, amountSell);
+        ExchangeRatePair createdPair = exchangeRateController.createExchangeRatePair(pair);
 
-        ExchangeRate createdRate = exchangeRateController.create(exchangeRate);
-
-        return createdRate != null;
+        return createdPair != null;
     }
 }
