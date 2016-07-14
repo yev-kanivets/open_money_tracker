@@ -54,6 +54,10 @@ public class ExchangeRatePair implements Parcelable {
         }
     };
 
+    /**
+     * Initialize String and primitive values from {@link ExchangeRate} instances provided.
+     * @return true if initialized, false otherwise
+     */
     public boolean make() {
         if (firstRate == null) return false;
         if (secondRate == null) {

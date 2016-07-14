@@ -84,8 +84,7 @@ public class ExchangeRatesSummarizer {
 
         for (String ratePair : rateMap.keySet()) {
             ExchangeRatePair pair = rateMap.get(ratePair);
-            pair.make();
-            exchangeRatePairList.add(pair);
+            if (pair.make()) exchangeRatePairList.add(pair);
         }
 
         return exchangeRatePairList;
