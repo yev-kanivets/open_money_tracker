@@ -47,9 +47,6 @@
     <string name="add_exchange_rate">Add exchange rate</string>
     <string name="arrow" translatable="false">" -> "</string>
     <string name="account_was_removed">Account was removed</string>
-    <string name="one" translatable="false">1</string>
-    <string name="equal" translatable="false">=</string>
-    <string name="multiply" translatable="false">*</string>
 
     <string name="short_summary">Short summary</string>
     <string name="custom">Custom</string>
@@ -86,6 +83,12 @@
     \n
     <b>Note:</b> time - timestamp value in milliseconds; currency - 3 symbols code of currency.\n
     <b>Example:</b> 1466948795712;metro;transport;-20.0;UAH</string>
+
+    <string name="slash" translatable="false">/</string>
+    <string name="bank_sells">Bank sells</string>
+    <string name="convert_to">Convert to</string>
+    <string name="bank_buys">Bank buys</string>
+    <string name="convert_from">Convert from</string>
 
     <!-- Not translated strings -->
 </resources>

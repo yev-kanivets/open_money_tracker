@@ -23,17 +23,29 @@ public class FormatController {
     public String formatAmount(double amount) {
         switch (preferenceController.readDisplayPrecision()) {
             case PRECISION_MATH:
-                return String.format(Locale.getDefault(), "%d", Math.round(amount));
+                return formatPrecisionMath(amount);
 
             case PRECISION_INT:
-                return String.format(Locale.getDefault(), "%d", (int) amount);
+                return formatPrecisionInt(amount);
 
             case PRECISION_NONE:
-                return String.format(Locale.getDefault(), "%.2f", amount);
+                return formatPrecisionNone(amount);
 
             default:
-                return String.format(Locale.getDefault(), "%d", Math.round(amount));
+                return formatPrecisionMath(amount);
         }
+    }
+
+    public String formatPrecisionMath(double amount) {
+        return String.format(Locale.getDefault(), "%d", Math.round(amount));
+    }
+
+    public String formatPrecisionInt(double amount) {
+        return String.format(Locale.getDefault(), "%d", (int) amount);
+    }
+
+    public String formatPrecisionNone(double amount) {
+        return String.format(Locale.getDefault(), "%.2f", amount);
     }
 
     public String formatSignedAmount(double amount) {
