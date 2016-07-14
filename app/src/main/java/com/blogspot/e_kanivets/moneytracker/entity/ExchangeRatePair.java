@@ -62,7 +62,7 @@ public class ExchangeRatePair implements Parcelable {
         if (firstRate == null) return false;
         if (secondRate == null) {
             fromCurrency = firstRate.getFromCurrency();
-            toCurrency = firstRate.getFromCurrency();
+            toCurrency = firstRate.getToCurrency();
             amountBuy = firstRate.getAmount();
             amountSell = firstRate.getAmount();
         } else {

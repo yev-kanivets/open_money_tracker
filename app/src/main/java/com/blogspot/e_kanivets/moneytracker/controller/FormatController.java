@@ -3,7 +3,8 @@ package com.blogspot.e_kanivets.moneytracker.controller;
 import java.util.Locale;
 
 /**
- * Controller class to encapsulate string format handling logic.
+ * Controller class to encapsulate string format handling logic. Locale.US is used to prevent
+ * comma/dot problem when display/parse decimals.
  * Not deal with {@link com.blogspot.e_kanivets.moneytracker.repo.base.IRepo} instances as others.
  * Created on 6/1/16.
  *
@@ -37,15 +38,15 @@ public class FormatController {
     }
 
     public String formatPrecisionMath(double amount) {
-        return String.format(Locale.getDefault(), "%d", Math.round(amount));
+        return String.format(Locale.US, "%d", Math.round(amount));
     }
 
     public String formatPrecisionInt(double amount) {
-        return String.format(Locale.getDefault(), "%d", (int) amount);
+        return String.format(Locale.US, "%d", (int) amount);
     }
 
     public String formatPrecisionNone(double amount) {
-        return String.format(Locale.getDefault(), "%.2f", amount);
+        return String.format(Locale.US, "%.2f", amount);
     }
 
     public String formatSignedAmount(double amount) {
