@@ -91,7 +91,7 @@ public class RecordAdapter extends BaseAdapter {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         viewHolder.tvDateAndTime.setText(dateFormat.format(new Date(record.getTime())));
 
-        viewHolder.tvPrice.setText(formatController.formatAmount(
+        viewHolder.tvPrice.setText(formatController.formatSignedAmount(
                 (record.isIncome() ? 1 : -1) * record.getFullPrice()));
         viewHolder.tvTitle.setText(record.getTitle());
         if (record.getCategory() != null)
