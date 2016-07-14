@@ -76,4 +76,9 @@
     \n
     <b>Важно:</b> время - метка времени в миллисекундах; валюта - 3-х символьный код валюты.\n
     <b>Пример:</b> 1466948795712;метро;транспорт;-20.0;UAH</string>
+
+    <string name="bank_sells">Банк продает</string>
+    <string name="convert_to">Конвертировать в</string>
+    <string name="bank_buys">Банк покупает</string>
+    <string name="convert_from">Конвертировать из</string>
 </resources>

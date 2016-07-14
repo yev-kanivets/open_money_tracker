@@ -13,7 +13,6 @@ import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController;
 import com.blogspot.e_kanivets.moneytracker.controller.FormatController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.ExchangeRateController;
 import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRatePair;
-import com.blogspot.e_kanivets.moneytracker.entity.data.ExchangeRate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,6 +118,8 @@ public class AddExchangeRateActivity extends BaseBackActivity {
         double amountBuy = -1;
         double amountSell = -1;
 
+        if (fromCurrency.equals(toCurrency)) return false;
+
         try {
             amountBuy = Double.parseDouble(etBuy.getText().toString().trim());
         } catch (Exception e) {
@@ -132,14 +133,9 @@ public class AddExchangeRateActivity extends BaseBackActivity {
 
         if (amountBuy == -1 || amountSell == -1) return false;
 
-        ExchangeRate exchangeRate = new ExchangeRate(System.currentTimeMillis(),
-                fromCurrency, toCurrency, amountBuy);
-        ExchangeRate exchangeRateReverse = new ExchangeRate(System.currentTimeMillis(),
-                toCurrency, fromCurrency, 1 / amountSell);
+        ExchangeRatePair pair = new ExchangeRatePair(fromCurrency, toCurrency, amountBuy, amountSell);
+        ExchangeRatePair createdPair = exchangeRateController.createExchangeRatePair(pair);
 
-        ExchangeRate createdRate = exchangeRateController.create(exchangeRate);
-        ExchangeRate createdReverseRate = exchangeRateController.create(exchangeRateReverse);
-
-        return createdRate != null || createdReverseRate != null;
+        return createdPair != null;
     }
 }

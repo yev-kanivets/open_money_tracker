@@ -66,34 +66,26 @@ public class ExchangeRatesSummarizer {
 
         List<ExchangeRate> exchangeRateList = getSummaryList();
         for (ExchangeRate rate : exchangeRateList) {
-            String ratePair;
-            if (rate.getAmount() >= 1)
-                ratePair = rate.getFromCurrency() + "-" + rate.getToCurrency();
-            else ratePair = rate.getToCurrency() + "-" + rate.getFromCurrency();
+            String ratePair = rate.getFromCurrency() + "-" + rate.getToCurrency();
+            String reverseRatePair = rate.getToCurrency() + "-" + rate.getFromCurrency();
 
             if (rateMap.containsKey(ratePair)) {
                 ExchangeRatePair pair = rateMap.get(ratePair);
-                if (rate.getAmount() >= 1) pair.setAmountBuy(rate.getAmount());
-                else pair.setAmountSell(1 / rate.getAmount());
+                pair.setSecondRate(rate);
+            } else if (rateMap.containsKey(reverseRatePair)) {
+                ExchangeRatePair pair = rateMap.get(reverseRatePair);
+                pair.setSecondRate(rate);
             } else {
                 ExchangeRatePair pair = new ExchangeRatePair();
-                if (rate.getAmount() >= 1) {
-                    pair.setFromCurrency(rate.getFromCurrency());
-                    pair.setToCurrency(rate.getToCurrency());
-                    pair.setAmountBuy(rate.getAmount());
-                    pair.setAmountSell(rate.getAmount());
-                } else {
-                    pair.setFromCurrency(rate.getToCurrency());
-                    pair.setToCurrency(rate.getFromCurrency());
-                    pair.setAmountBuy(1 / rate.getAmount());
-                    pair.setAmountSell(1 / rate.getAmount());
-                }
+                pair.setFirstRate(rate);
                 rateMap.put(ratePair, pair);
             }
         }
 
         for (String ratePair : rateMap.keySet()) {
-            exchangeRatePairList.add(rateMap.get(ratePair));
+            ExchangeRatePair pair = rateMap.get(ratePair);
+            pair.make();
+            exchangeRatePairList.add(pair);
         }
 
         return exchangeRatePairList;

@@ -12,6 +12,7 @@
         android:id="@+id/tv_from_currency"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="monospace"
         android:gravity="center|end"
         android:theme="@style/Text_Body2" />
 
@@ -27,6 +28,7 @@
         android:id="@+id/tv_to_currency"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="monospace"
         android:gravity="center|start"
         android:theme="@style/Text_Body2" />
 

@@ -38,4 +38,21 @@ public class ExchangeRateController extends BaseController<ExchangeRate> {
             delete(rate);
         }
     }
+
+    @Nullable
+    public ExchangeRatePair createExchangeRatePair(ExchangeRatePair pair) {
+        if (pair == null) return null;
+
+        // DON'T change the order, it may affect the order of exchange rate pair in Exchange Rates screen
+        ExchangeRate exchangeRate = new ExchangeRate(System.currentTimeMillis(),
+                pair.getFromCurrency(), pair.getToCurrency(), pair.getAmountBuy());
+        ExchangeRate exchangeRateReverse = new ExchangeRate(System.currentTimeMillis(),
+                pair.getToCurrency(), pair.getFromCurrency(), 1 / pair.getAmountSell());
+
+        ExchangeRate createdRate = create(exchangeRate);
+        ExchangeRate createdReverseRate = create(exchangeRateReverse);
+
+        if (createdRate == null || createdReverseRate == null) return null;
+        else return pair;
+    }
 }

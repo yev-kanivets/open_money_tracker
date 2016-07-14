@@ -60,7 +60,7 @@
                     android:hint="@string/bank_buys"
                     android:inputType="numberDecimal"
                     android:maxLines="1"
-                    android:nextFocusDown="@+id/et_to_amount"
+                    android:nextFocusDown="@+id/et_sell"
                     android:singleLine="true" />
             </android.support.design.widget.TextInputLayout>
         </LinearLayout>
