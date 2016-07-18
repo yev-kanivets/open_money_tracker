@@ -15,6 +15,12 @@ Following features are available in current version:
 * Charts.
 * Export to CSV.
 
+## Dependencies
+* [Butter Knife] (http://jakewharton.github.io/butterknife/) - View annotation bindings.
+* [Dagger 2] (http://google.github.io/dagger/) - Dependency injection tool.
+* [MPAndroidChart] (https://github.com/PhilJay/MPAndroidChart) - Ready-to-use charts.
+* [Timber] (https://github.com/JakeWharton/timber) - Convenient and small logging tool.
+
 ## Development process
 To start developing your own MT or just compile the project you only need 
 to checkout newest version from this repo from your Android Studio.
