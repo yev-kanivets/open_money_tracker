@@ -91,4 +91,6 @@
     <string name="convert_from">Convert from</string>
 
     <!-- Not translated strings -->
+    <string name="date">Date</string>
+    <string name="time">Time</string>
 </resources>

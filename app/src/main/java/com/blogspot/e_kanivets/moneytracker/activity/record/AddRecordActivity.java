@@ -35,7 +35,6 @@ import com.blogspot.e_kanivets.moneytracker.util.CategoryAutoCompleter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -59,6 +58,7 @@ public class AddRecordActivity extends BaseBackActivity {
     private int type;
 
     private List<Account> accountList;
+    private long timestamp;
 
     @Inject
     CategoryController categoryController;
@@ -69,6 +69,10 @@ public class AddRecordActivity extends BaseBackActivity {
     @Inject
     FormatController formatController;
 
+    @Bind(R.id.tv_date)
+    TextView tvDate;
+    @Bind(R.id.tv_time)
+    TextView tvTime;
     @Bind(R.id.et_title)
     EditText etTitle;
     @Bind(R.id.et_category)
@@ -92,6 +96,7 @@ public class AddRecordActivity extends BaseBackActivity {
         mode = (Mode) getIntent().getSerializableExtra(KEY_MODE);
         type = getIntent().getIntExtra(KEY_TYPE, -1);
         accountList = accountController.readAll();
+        timestamp = new Date().getTime();
 
         return mode != null && type != -1 && (!mode.equals(Mode.MODE_EDIT) || record != null);
     }
@@ -160,6 +165,9 @@ public class AddRecordActivity extends BaseBackActivity {
         // Restrict ';' for input, because it's used as delimiter when exporting
         etTitle.setFilters(new InputFilter[]{new SemicolonInputFilter()});
         etCategory.setFilters(new InputFilter[]{new SemicolonInputFilter()});
+
+        tvDate.setText(formatController.formatDate(timestamp));
+        tvTime.setText(formatController.formatTime(timestamp));
     }
 
     @Override
@@ -266,23 +274,24 @@ public class AddRecordActivity extends BaseBackActivity {
             if (spinnerAccount.isEnabled())
                 account = accountList.get(spinnerAccount.getSelectedItemPosition());
 
-            return doRecord(title, category, price, account);
+            return doRecord(timestamp, title, category, price, account);
         } else return false;
     }
 
-    private boolean doRecord(String title, String category, double price, @Nullable Account account) {
+    private boolean doRecord(long timestamp, String title, String category, double price,
+                             @Nullable Account account) {
         if (account == null) return false;
 
         if (mode == Mode.MODE_ADD) {
             switch (type) {
                 case Record.TYPE_EXPENSE:
-                    recordController.create(new Record(new Date().getTime(), Record.TYPE_EXPENSE,
-                            title, new Category(category), price, account, account.getCurrency()));
+                    recordController.create(new Record(timestamp, Record.TYPE_EXPENSE, title,
+                            new Category(category), price, account, account.getCurrency()));
                     return true;
 
                 case Record.TYPE_INCOME:
-                    recordController.create(new Record(new Date().getTime(), Record.TYPE_INCOME,
-                            title, new Category(category), price, account, account.getCurrency()));
+                    recordController.create(new Record(timestamp, Record.TYPE_INCOME, title,
+                            new Category(category), price, account, account.getCurrency()));
                     return true;
 
                 default:
