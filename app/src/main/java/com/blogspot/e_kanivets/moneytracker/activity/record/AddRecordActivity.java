@@ -106,7 +106,9 @@ public class AddRecordActivity extends BaseBackActivity {
         mode = (Mode) getIntent().getSerializableExtra(KEY_MODE);
         type = getIntent().getIntExtra(KEY_TYPE, -1);
         accountList = accountController.readAll();
-        timestamp = new Date().getTime();
+
+        if (mode == Mode.MODE_EDIT) timestamp = record.getTime();
+        else timestamp = new Date().getTime();
 
         return mode != null && type != -1 && (!mode.equals(Mode.MODE_EDIT) || record != null);
     }
@@ -122,7 +124,6 @@ public class AddRecordActivity extends BaseBackActivity {
             etTitle.setText(record.getTitle());
             if (record.getCategory() != null) etCategory.setText(record.getCategory().getName());
             etPrice.setText(formatController.formatPrecisionNone(record.getFullPrice()));
-            timestamp = record.getTime();
         }
 
         presentSpinnerAccount();
@@ -365,7 +366,7 @@ public class AddRecordActivity extends BaseBackActivity {
                     return false;
             }
         } else if (mode == Mode.MODE_EDIT) {
-            Record updatedRecord = new Record(record.getId(), record.getTime(), record.getType(),
+            Record updatedRecord = new Record(record.getId(), timestamp, record.getType(),
                     title, new Category(category), price, account, account.getCurrency());
             recordController.update(updatedRecord);
 
