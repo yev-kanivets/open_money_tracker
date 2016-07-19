@@ -122,6 +122,7 @@ public class AddRecordActivity extends BaseBackActivity {
             etTitle.setText(record.getTitle());
             if (record.getCategory() != null) etCategory.setText(record.getCategory().getName());
             etPrice.setText(formatController.formatPrecisionNone(record.getFullPrice()));
+            timestamp = record.getTime();
         }
 
         presentSpinnerAccount();
