@@ -13,8 +13,6 @@ import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.controller.FormatController;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -87,10 +85,7 @@ public class RecordAdapter extends BaseAdapter {
         convertView.setBackgroundColor(record.isIncome() ? whiteGreen : whiteRed);
         viewHolder.tvPrice.setTextColor(record.isIncome() ? green : red);
 
-        @SuppressLint("SimpleDateFormat")
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        viewHolder.tvDateAndTime.setText(dateFormat.format(new Date(record.getTime())));
-
+        viewHolder.tvDateAndTime.setText(formatController.formatDateAndTime(record.getTime()));
         viewHolder.tvPrice.setText(formatController.formatSignedAmount(
                 (record.isIncome() ? 1 : -1) * record.getFullPrice()));
         viewHolder.tvTitle.setText(record.getTitle());
