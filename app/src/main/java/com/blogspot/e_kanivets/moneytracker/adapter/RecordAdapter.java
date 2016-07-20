@@ -19,6 +19,7 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 /**
  * Custom adapter class for {@link Record} entity.
@@ -81,8 +82,7 @@ public class RecordAdapter extends BaseAdapter {
         } else viewHolder = (ViewHolder) convertView.getTag();
 
         Record record = getItem(position);
-
-        convertView.setBackgroundColor(record.isIncome() ? whiteGreen : whiteRed);
+        viewHolder.container.setBackgroundColor(record.isIncome() ? whiteGreen : whiteRed);
         viewHolder.tvPrice.setTextColor(record.isIncome() ? green : red);
 
         viewHolder.tvDateAndTime.setText(formatController.formatDateAndTime(record.getTime()));
@@ -97,6 +97,8 @@ public class RecordAdapter extends BaseAdapter {
     }
 
     public static class ViewHolder {
+        @Bind(R.id.container)
+        View container;
         @Bind(R.id.tv_date_and_time)
         TextView tvDateAndTime;
         @Bind(R.id.tv_price)
