@@ -81,4 +81,7 @@
     <string name="convert_to">Конвертувати до</string>
     <string name="bank_buys">Банк купує</string>
     <string name="convert_from">Конвертувати з</string>
+
+    <string name="date">Дата</string>
+    <string name="time">Час</string>
 </resources>

@@ -1,5 +1,9 @@
 package com.blogspot.e_kanivets.moneytracker.controller;
 
+import android.annotation.SuppressLint;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -14,6 +18,13 @@ public class FormatController {
     public static final String PRECISION_MATH = "precision_math";
     public static final String PRECISION_INT = "precision_int";
     public static final String PRECISION_NONE = "precision_none";
+
+    @SuppressLint("SimpleDateFormat")
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    @SuppressLint("SimpleDateFormat")
+    private static final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+    @SuppressLint("SimpleDateFormat")
+    private static final SimpleDateFormat dateAndTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     private PreferenceController preferenceController;
 
@@ -59,5 +70,17 @@ public class FormatController {
 
     public String formatExpense(double amount, String currency) {
         return (amount > 0 ? "+ " : "- ") + formatAmount(Math.abs(amount)) + " " + currency;
+    }
+
+    public String formatDate(long timestamp) {
+        return dateFormat.format(new Date(timestamp));
+    }
+
+    public String formatTime(long timestamp) {
+        return timeFormat.format(new Date(timestamp));
+    }
+
+    public String formatDateAndTime(long timestamp) {
+        return dateAndTimeFormat.format(new Date(timestamp));
     }
 }

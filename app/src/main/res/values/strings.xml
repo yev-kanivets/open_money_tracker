@@ -90,5 +90,8 @@
     <string name="bank_buys">Bank buys</string>
     <string name="convert_from">Convert from</string>
 
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+
     <!-- Not translated strings -->
 </resources>
