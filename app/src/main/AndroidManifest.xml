@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.blogspot.e_kanivets.moneytracker">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".MtApp"
         android:allowBackup="true"
@@ -78,6 +80,24 @@
             android:label="@string/title_import"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Default" />
+        <activity
+            android:name=".activity.external.BackupActivity"
+            android:label="@string/backup_data"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Default" />
+        <activity
+            android:name="com.dropbox.client2.android.AuthActivity"
+            android:configChanges="orientation|keyboard"
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <data android:scheme="db-5lqugcckdy9y6lj" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
