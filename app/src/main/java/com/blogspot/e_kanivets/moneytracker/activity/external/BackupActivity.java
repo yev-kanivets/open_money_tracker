@@ -1,6 +1,8 @@
 package com.blogspot.e_kanivets.moneytracker.activity.external;
 
+import android.support.annotation.NonNull;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.blogspot.e_kanivets.moneytracker.R;
@@ -9,8 +11,9 @@ import com.blogspot.e_kanivets.moneytracker.controller.BackupController;
 import com.blogspot.e_kanivets.moneytracker.controller.PreferenceController;
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
-import com.dropbox.client2.exception.DropboxException;
 import com.dropbox.client2.session.AppKeyPair;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -49,7 +52,10 @@ public class BackupActivity extends BaseBackActivity {
         AndroidAuthSession session = new AndroidAuthSession(appKeys);
         dbApi = new DropboxAPI<>(session);
         if (accessToken == null) dbApi.getSession().startOAuth2Authentication(BackupActivity.this);
-        else dbApi.getSession().setOAuth2AccessToken(accessToken);
+        else {
+            dbApi.getSession().setOAuth2AccessToken(accessToken);
+            fetchBackups();
+        }
 
         return super.initData();
     }
@@ -70,6 +76,7 @@ public class BackupActivity extends BaseBackActivity {
                 dbApi.getSession().finishAuthentication();
                 preferenceController.writeDropboxAccessToken(dbApi.getSession().getOAuth2AccessToken());
                 btnBackupNow.setEnabled(true);
+                fetchBackups();
             } catch (IllegalStateException e) {
                 Timber.e("Error authenticating: %s", e.getMessage());
             }
@@ -84,6 +91,7 @@ public class BackupActivity extends BaseBackActivity {
             public void onBackupSuccess() {
                 Timber.d("Backup success.");
                 stopProgress();
+                fetchBackups();
             }
 
             @Override
@@ -97,6 +105,19 @@ public class BackupActivity extends BaseBackActivity {
                     dbApi.getSession().startOAuth2Authentication(BackupActivity.this);
                     btnBackupNow.setEnabled(false);
                 }
+            }
+        });
+    }
+
+    private void fetchBackups() {
+        startProgress();
+        backupController.fetchBackups(dbApi, new BackupController.OnFetchBackupListListener() {
+            @Override
+            public void onBackupsFetched(@NonNull List<String> backupList) {
+                stopProgress();
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(BackupActivity.this,
+                        android.R.layout.simple_list_item_1, backupList);
+                listView.setAdapter(adapter);
             }
         });
     }

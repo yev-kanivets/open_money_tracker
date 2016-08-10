@@ -13,6 +13,9 @@ import com.dropbox.client2.exception.DropboxUnlinkedException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Controller class to encapsulate backup logic.
@@ -40,6 +43,12 @@ public class BackupController {
         DropboxBackupAsyncTask asyncTask = new DropboxBackupAsyncTask(dbApi,
                 formatController.formatDateAndTime(System.currentTimeMillis()),
                 fileInputStream, fileLength, listener);
+        asyncTask.execute();
+    }
+
+    public void fetchBackups(@NonNull DropboxAPI<AndroidAuthSession> dbApi,
+                             @Nullable OnFetchBackupListListener listener) {
+        DropboxFetchBackupListAsyncTask asyncTask = new DropboxFetchBackupListAsyncTask(dbApi, listener);
         asyncTask.execute();
     }
 
@@ -114,6 +123,47 @@ public class BackupController {
         }
     }
 
+    private class DropboxFetchBackupListAsyncTask extends AsyncTask<Void, List<String>, List<String>> {
+        private DropboxAPI<AndroidAuthSession> dbApi;
+
+        @Nullable
+        private OnFetchBackupListListener listener;
+
+        public DropboxFetchBackupListAsyncTask(DropboxAPI<AndroidAuthSession> dbApi,
+                                               @Nullable OnFetchBackupListListener listener) {
+            this.dbApi = dbApi;
+            this.listener = listener;
+        }
+
+        @Override
+        protected List<String> doInBackground(Void... params) {
+            List<DropboxAPI.Entry> entryList = new ArrayList<>();
+            List<String> backupList = new ArrayList<>();
+
+            try {
+                DropboxAPI.Entry entry = dbApi.metadata("/", -1, null, true, null);
+                entryList = entry.contents;
+            } catch (DropboxException e) {
+                e.printStackTrace();
+            }
+
+            for (DropboxAPI.Entry entry : entryList) {
+                backupList.add(entry.fileName());
+            }
+
+            return backupList;
+        }
+
+        @Override
+        protected void onPostExecute(List<String> backupList) {
+            super.onPostExecute(backupList);
+            if (listener == null) return;
+
+            Collections.reverse(backupList);
+            listener.onBackupsFetched(backupList);
+        }
+    }
+
     public interface OnBackupListener {
         String SUCCESS = "success";
         String ERROR_AUTHENTICATION = "error_authentication";
@@ -121,5 +171,9 @@ public class BackupController {
         void onBackupSuccess();
 
         void onBackupFailure(String reason);
+    }
+
+    public interface OnFetchBackupListListener {
+        void onBackupsFetched(@NonNull List<String> backupList);
     }
 }
