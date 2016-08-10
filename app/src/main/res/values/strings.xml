@@ -95,4 +95,5 @@
 
     <!-- Not translated strings -->
     <string name="backup_data">Backup data</string>
+    <string name="failed_create_backup">Failed to create backup.</string>
 </resources>
