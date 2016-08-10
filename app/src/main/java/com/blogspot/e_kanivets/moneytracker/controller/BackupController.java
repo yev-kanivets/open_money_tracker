@@ -24,8 +24,6 @@ import java.util.List;
  * @author Evgenii Kanivets
  */
 public class BackupController {
-    private static final String PACKAGE_NAME = BuildConfig.APPLICATION_ID;
-
     private FormatController formatController;
     private String filesDir;
 
@@ -75,7 +73,7 @@ public class BackupController {
 
     @NonNull
     private String getAppDbFileName() {
-        return filesDir + PACKAGE_NAME + "/databases/database";
+        return filesDir + "/databases/database";
     }
 
     private class DropboxBackupAsyncTask extends AsyncTask<Void, String, String> {

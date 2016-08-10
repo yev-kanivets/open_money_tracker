@@ -128,6 +128,6 @@ public class ControllerModule {
     @NonNull
     @Singleton
     public BackupController providesBackupController(FormatController formatController) {
-        return new BackupController(formatController, "/data/data/");
+        return new BackupController(formatController, context.getApplicationInfo().dataDir);
     }
 }
