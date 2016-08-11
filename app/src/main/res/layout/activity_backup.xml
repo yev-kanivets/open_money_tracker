@@ -39,7 +39,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/selector_add_income"
             android:padding="@dimen/normal_margin"
-            android:text="Backup now" />
+            android:enabled="false"
+            android:text="@string/backup_now" />
     </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

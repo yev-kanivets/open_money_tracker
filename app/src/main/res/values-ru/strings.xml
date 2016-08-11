@@ -32,7 +32,6 @@
 
     <string name="title_records">Записи</string>
     <string name="title_accounts">Счета</string>
-    <string name="title_export">Экспорт</string>
     <string name="title_add_income">Добавить доход</string>
     <string name="title_add_expense">Добавить расход</string>
     <string name="title_add_account">Добавить счет</string>
@@ -65,7 +64,8 @@
 
     <string name="display_precision">Точность отображения</string>
 
-    <string name="title_import">Импорт</string>
+    <string name="title_import_export">Импорт/Экспорт</string>
+    <string name="text_import">Импорт</string>
     <string name="records_imported">%1$s записей было импортировано</string>
     <string name="help">Справка</string>
     <string name="import_help">Для импорта записей в приложение:\n
@@ -85,11 +85,12 @@
     <string name="date">Дата</string>
     <string name="time">Время</string>
 
-    <string name="backup_data">Бэкап/Восстановление данных</string>
+    <string name="backup_data">Бэкап/Восстановление</string>
     <string name="failed_create_backup">Не удалось создать бэкап.</string>
     <string name="failed_restore_backup">Не удалось восстановить бэкап.</string>
     <string name="backup_restored">Выбранный бэкап %1$s был успешно восстановлен.</string>
     <string name="backup_is_restored">Бэкап восстановлен</string>
     <string name="warning">Предупреждение</string>
     <string name="want_erase_and_restore">Вы действительно хотите удалить все текущие данные и восстановить бэкап %1$s? Пожалуйста, сделайте бэкап текущих данных.</string>
+    <string name="backup_now">Сделать бэкап</string>
 </resources>

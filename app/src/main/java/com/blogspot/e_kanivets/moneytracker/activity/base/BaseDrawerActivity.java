@@ -11,8 +11,7 @@ import android.view.MenuItem;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.ChartsActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.external.BackupActivity;
-import com.blogspot.e_kanivets.moneytracker.activity.external.ExportActivity;
-import com.blogspot.e_kanivets.moneytracker.activity.external.ImportActivity;
+import com.blogspot.e_kanivets.moneytracker.activity.external.ImportExportActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.SettingsActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.account.AccountsActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.exchange_rate.ExchangeRatesActivity;
@@ -31,7 +30,7 @@ public abstract class BaseDrawerActivity extends BaseActivity
     private static final int REQUEST_ACCOUNTS = 1;
     private static final int REQUEST_RATES = 2;
     private static final int REQUEST_SETTINGS = 3;
-    private static final int REQUEST_IMPORT = 4;
+    private static final int REQUEST_IMPORT_EXPORT = 4;
     protected static final int REQUEST_BACKUP = 5;
 
     @Bind(R.id.drawer_layout)
@@ -91,13 +90,9 @@ public abstract class BaseDrawerActivity extends BaseActivity
                         REQUEST_BACKUP);
                 break;
 
-            case R.id.nav_import:
-                startActivityForResult(new Intent(BaseDrawerActivity.this, ImportActivity.class),
-                        REQUEST_IMPORT);
-                break;
-
-            case R.id.nav_export:
-                startActivity(new Intent(BaseDrawerActivity.this, ExportActivity.class));
+            case R.id.nav_import_export:
+                startActivityForResult(new Intent(BaseDrawerActivity.this, ImportExportActivity.class),
+                        REQUEST_IMPORT_EXPORT);
                 break;
 
             case R.id.nav_settings:
@@ -131,7 +126,7 @@ public abstract class BaseDrawerActivity extends BaseActivity
                     update();
                     break;
 
-                case REQUEST_IMPORT:
+                case REQUEST_IMPORT_EXPORT:
                     update();
                     break;
 

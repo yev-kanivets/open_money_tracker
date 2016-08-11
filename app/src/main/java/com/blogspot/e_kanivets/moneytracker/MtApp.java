@@ -16,7 +16,6 @@ import timber.log.Timber;
  * @author Evgenii Kanivets
  */
 public class MtApp extends Application {
-
     private static MtApp mtApp;
 
     public static MtApp get() {
