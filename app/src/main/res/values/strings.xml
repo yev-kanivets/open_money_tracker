@@ -93,5 +93,12 @@
     <string name="date">Date</string>
     <string name="time">Time</string>
 
+    <string name="backup_data">Backup/Restore data</string>
+    <string name="failed_create_backup">Failed to create backup.</string>
+    <string name="failed_restore_backup">Failed to restore backup.</string>
+    <string name="backup_restored">Chosen backup file %1$s has been restored successfully.</string>
+    <string name="backup_is_restored">Backup is restored</string>
+    <string name="warning">Warning</string>
+    <string name="want_erase_and_restore">Do you really want to erase all current data and restore backup file %1$s? Be sure to backup current data.</string>
     <!-- Not translated strings -->
 </resources>

@@ -30,7 +30,7 @@ public class MtApp extends Application {
         super.onCreate();
 
         mtApp = this;
-        component = buildComponent();
+        buildAppComponent();
 
         if (BuildConfig.DEBUG) Timber.plant(new Timber.DebugTree());
         else Timber.plant(new ReleaseTree());
@@ -38,6 +38,10 @@ public class MtApp extends Application {
 
     public AppComponent getAppComponent() {
         return component;
+    }
+
+    public void buildAppComponent() {
+        component = buildComponent();
     }
 
     private AppComponent buildComponent() {

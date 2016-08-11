@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/selector_add_income"
-            android:padding="15dp"
+            android:padding="@dimen/normal_margin"
             android:text="@string/add_exchange_rate" />
     </LinearLayout>
 

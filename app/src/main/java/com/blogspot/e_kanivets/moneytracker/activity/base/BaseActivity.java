@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
@@ -75,6 +76,18 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void stopProgress() {
         if (getProgressBar() == null) return;
         getProgressBar().dismiss();
+    }
+
+    public void showAlert(@Nullable String title, @Nullable String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(BaseActivity.this);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.setPositiveButton(android.R.string.ok, null);
+        builder.setCancelable(false);
+
+        AlertDialog dialog = builder.create();
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
     }
 
     private ProgressDialog getProgressBar() {

@@ -1,6 +1,7 @@
 package com.blogspot.e_kanivets.moneytracker.di;
 
 import com.blogspot.e_kanivets.moneytracker.activity.ChartsActivity;
+import com.blogspot.e_kanivets.moneytracker.activity.external.BackupActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.external.ExportActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.external.ImportActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.ReportActivity;
@@ -57,6 +58,8 @@ public interface AppComponent {
     void inject(ReportActivity reportActivity);
 
     void inject(ChartsActivity chartsActivity);
+
+    void inject(BackupActivity backupActivity);
 
     void inject(SettingsActivity.SettingsFragment settingsFragment);
 
