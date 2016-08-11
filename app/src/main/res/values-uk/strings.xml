@@ -84,4 +84,12 @@
 
     <string name="date">Дата</string>
     <string name="time">Час</string>
+
+    <string name="backup_data">Бекап/Відновлення даних</string>
+    <string name="failed_create_backup">Не вдалося створити бекап.</string>
+    <string name="failed_restore_backup">Не вдалося відновити бекап.</string>
+    <string name="backup_restored">Обраний бекап %1$s було успішно відновлено.</string>
+    <string name="backup_is_restored">Бекап відновлено</string>
+    <string name="warning">Попередження</string>
+    <string name="want_erase_and_restore">Ви дійсно хочете видалити усі поточні дані і відновити бекап %1$s? Будь ласка, зробіть бекап поточних даних.</string>
 </resources>
