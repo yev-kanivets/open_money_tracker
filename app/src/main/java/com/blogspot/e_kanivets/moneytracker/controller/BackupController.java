@@ -4,7 +4,6 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.blogspot.e_kanivets.moneytracker.BuildConfig;
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
 import com.dropbox.client2.exception.DropboxException;
@@ -13,6 +12,8 @@ import com.dropbox.client2.exception.DropboxUnlinkedException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -42,6 +43,49 @@ public class BackupController {
                 formatController.formatDateAndTime(System.currentTimeMillis()),
                 fileInputStream, fileLength, listener);
         asyncTask.execute();
+    }
+
+    public void restoreBackup(@NonNull DropboxAPI<AndroidAuthSession> dbApi, @NonNull String backupName,
+                              @Nullable final OnRestoreBackupListener listener) {
+        final File file = new File(getRestoreFileName());
+        FileOutputStream outputStream = null;
+        try {
+            outputStream = new FileOutputStream(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        if (outputStream == null) {
+            if (listener != null) listener.onRestoreFailure(null);
+        } else {
+            final FileOutputStream finalOutputStream = outputStream;
+            DropboxRestoreBackupAsyncTask asyncTask = new DropboxRestoreBackupAsyncTask(dbApi,
+                    backupName, outputStream, new OnRestoreBackupListener() {
+                @Override
+                public void onRestoreSuccess() {
+                    try {
+                        finalOutputStream.close();
+                    } catch (IOException e) {
+                        if (listener != null) listener.onRestoreFailure(null);
+                        e.printStackTrace();
+                    }
+
+                    if (file.exists() && file.length() != 0) {
+                        boolean renamed = file.renameTo(new File(getAppDbFileName()));
+                        if (listener != null) {
+                            if (renamed) listener.onRestoreSuccess();
+                            else listener.onRestoreFailure(null);
+                        }
+                    }
+                }
+
+                @Override
+                public void onRestoreFailure(String reason) {
+                    if (listener != null) listener.onRestoreFailure(reason);
+                }
+            });
+            asyncTask.execute();
+        }
     }
 
     public void fetchBackups(@NonNull DropboxAPI<AndroidAuthSession> dbApi,
@@ -74,6 +118,11 @@ public class BackupController {
     @NonNull
     private String getAppDbFileName() {
         return filesDir + "/databases/database";
+    }
+
+    @NonNull
+    private String getRestoreFileName() {
+        return getAppDbFileName() + ".restore";
     }
 
     private class DropboxBackupAsyncTask extends AsyncTask<Void, String, String> {
@@ -162,6 +211,49 @@ public class BackupController {
         }
     }
 
+    private class DropboxRestoreBackupAsyncTask extends AsyncTask<Void, String, String> {
+        private DropboxAPI<AndroidAuthSession> dbApi;
+        private String backupName;
+        private FileOutputStream outputStream;
+
+        @Nullable
+        private OnRestoreBackupListener listener;
+
+        public DropboxRestoreBackupAsyncTask(DropboxAPI<AndroidAuthSession> dbApi, String backupName,
+                                             FileOutputStream outputStream,
+                                             @Nullable OnRestoreBackupListener listener) {
+            this.dbApi = dbApi;
+            this.backupName = backupName;
+            this.outputStream = outputStream;
+            this.listener = listener;
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            DropboxAPI.DropboxFileInfo info = null;
+            try {
+                info = dbApi.getFile(backupName, null, outputStream, null);
+            } catch (DropboxUnlinkedException e) {
+                e.printStackTrace();
+                return OnRestoreBackupListener.ERROR_AUTHENTICATION;
+            } catch (DropboxException e) {
+                e.printStackTrace();
+            }
+
+            if (info == null) return null;
+            else return OnBackupListener.SUCCESS;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            if (listener == null) return;
+
+            if (OnBackupListener.SUCCESS.equals(result)) listener.onRestoreSuccess();
+            else listener.onRestoreFailure(result);
+        }
+    }
+
     public interface OnBackupListener {
         String SUCCESS = "success";
         String ERROR_AUTHENTICATION = "error_authentication";
@@ -173,5 +265,13 @@ public class BackupController {
 
     public interface OnFetchBackupListListener {
         void onBackupsFetched(@NonNull List<String> backupList);
+    }
+
+    public interface OnRestoreBackupListener {
+        String ERROR_AUTHENTICATION = "error_authentication";
+
+        void onRestoreSuccess();
+
+        void onRestoreFailure(String reason);
     }
 }

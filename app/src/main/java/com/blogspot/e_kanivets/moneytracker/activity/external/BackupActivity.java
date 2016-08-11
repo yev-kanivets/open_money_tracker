@@ -1,10 +1,13 @@
 package com.blogspot.e_kanivets.moneytracker.activity.external;
 
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.controller.BackupController;
@@ -19,6 +22,7 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+import butterknife.OnItemClick;
 import timber.log.Timber;
 
 public class BackupActivity extends BaseBackActivity {
@@ -100,11 +104,59 @@ public class BackupActivity extends BaseBackActivity {
                 stopProgress();
                 showToast(R.string.failed_create_backup);
 
-                if (BackupController.OnBackupListener.ERROR_AUTHENTICATION.equals(reason)) {
-                    preferenceController.writeDropboxAccessToken(null);
-                    dbApi.getSession().startOAuth2Authentication(BackupActivity.this);
-                    btnBackupNow.setEnabled(false);
-                }
+                if (BackupController.OnBackupListener.ERROR_AUTHENTICATION.equals(reason)) logout();
+            }
+        });
+    }
+
+    @OnItemClick(R.id.list_view)
+    public void restoreBackupClicked(int position) {
+        final String backupName = listView.getAdapter().getItem(position).toString();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(BackupActivity.this);
+        builder.setTitle(getString(R.string.warning));
+        builder.setMessage(getString(R.string.want_erase_and_restore, backupName));
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                restoreBackup(backupName);
+            }
+        });
+        builder.setNegativeButton(android.R.string.cancel, null);
+        builder.show();
+    }
+
+    private void restoreBackup(final String backupName) {
+        startProgress();
+        backupController.restoreBackup(dbApi, backupName, new BackupController.OnRestoreBackupListener() {
+            @Override
+            public void onRestoreSuccess() {
+                Timber.d("Restore success.");
+                stopProgress();
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(BackupActivity.this);
+                builder.setTitle(getString(R.string.backup_is_restored));
+                builder.setMessage(getString(R.string.backup_restored, backupName));
+                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        MtApp.get().buildAppComponent();
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+                });
+                builder.setPositiveButton(android.R.string.ok, null);
+                builder.show();
+            }
+
+            @Override
+            public void onRestoreFailure(String reason) {
+                Timber.d("Restore failure.");
+                stopProgress();
+                showToast(R.string.failed_restore_backup);
+
+                if (BackupController.OnRestoreBackupListener.ERROR_AUTHENTICATION.equals(reason))
+                    logout();
             }
         });
     }
@@ -120,5 +172,11 @@ public class BackupActivity extends BaseBackActivity {
                 listView.setAdapter(adapter);
             }
         });
+    }
+
+    private void logout() {
+        preferenceController.writeDropboxAccessToken(null);
+        dbApi.getSession().startOAuth2Authentication(BackupActivity.this);
+        btnBackupNow.setEnabled(false);
     }
 }

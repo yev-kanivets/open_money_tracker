@@ -41,7 +41,7 @@ public class MainActivity extends BaseDrawerActivity {
     @SuppressWarnings("unused")
     private static final String TAG = "MainActivity";
 
-    private static final int REQUEST_ACTION_RECORD = 1;
+    private static final int REQUEST_ACTION_RECORD = 6;
 
     private List<Record> recordList;
     private Period period;
@@ -155,6 +155,11 @@ public class MainActivity extends BaseDrawerActivity {
         if (resultCode == AppCompatActivity.RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_ACTION_RECORD:
+                    update();
+                    break;
+
+                case REQUEST_BACKUP:
+                    getAppComponent().inject(MainActivity.this);
                     update();
                     break;
 

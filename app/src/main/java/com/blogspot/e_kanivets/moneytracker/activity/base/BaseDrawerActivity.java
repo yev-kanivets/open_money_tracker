@@ -32,6 +32,7 @@ public abstract class BaseDrawerActivity extends BaseActivity
     private static final int REQUEST_RATES = 2;
     private static final int REQUEST_SETTINGS = 3;
     private static final int REQUEST_IMPORT = 4;
+    protected static final int REQUEST_BACKUP = 5;
 
     @Bind(R.id.drawer_layout)
     DrawerLayout drawer;
@@ -86,7 +87,8 @@ public abstract class BaseDrawerActivity extends BaseActivity
                 break;
 
             case R.id.nav_backup:
-                startActivity(new Intent(BaseDrawerActivity.this, BackupActivity.class));
+                startActivityForResult(new Intent(BaseDrawerActivity.this, BackupActivity.class),
+                        REQUEST_BACKUP);
                 break;
 
             case R.id.nav_import:
