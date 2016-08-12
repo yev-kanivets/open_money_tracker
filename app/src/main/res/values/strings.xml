@@ -28,7 +28,6 @@
 
     <string name="title_records">Records</string>
     <string name="title_accounts">Accounts</string>
-    <string name="title_export">Export</string>
     <string name="title_add_income">Add income</string>
     <string name="title_add_expense">Add expense</string>
     <string name="title_add_account">Add account</string>
@@ -72,7 +71,8 @@
     <string name="precision_int">9.99$ = 9$</string>
     <string name="precision_none">9.99$ = 9.99$</string>
 
-    <string name="title_import">Import</string>
+    <string name="title_import_export">Import/Export</string>
+    <string name="text_import">Import</string>
     <string name="records_imported">%1$s records has been imported</string>
     <string name="help">Help</string>
     <string name="import_help">To import records into application:\n
@@ -93,5 +93,13 @@
     <string name="date">Date</string>
     <string name="time">Time</string>
 
+    <string name="backup_data">Backup/Restore</string>
+    <string name="failed_create_backup">Failed to create backup.</string>
+    <string name="failed_restore_backup">Failed to restore backup.</string>
+    <string name="backup_restored">Chosen backup file %1$s has been restored successfully.</string>
+    <string name="backup_is_restored">Backup is restored</string>
+    <string name="warning">Warning</string>
+    <string name="want_erase_and_restore">Do you really want to erase all current data and restore backup file %1$s? Be sure to backup current data.</string>
+    <string name="backup_now">Backup now</string>
     <!-- Not translated strings -->
 </resources>

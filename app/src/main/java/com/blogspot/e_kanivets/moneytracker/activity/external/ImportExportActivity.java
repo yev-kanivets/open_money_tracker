@@ -1,6 +1,10 @@
 package com.blogspot.e_kanivets.moneytracker.activity.external;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -8,32 +12,41 @@ import android.widget.EditText;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
+import com.blogspot.e_kanivets.moneytracker.controller.external.ExportController;
 import com.blogspot.e_kanivets.moneytracker.controller.external.ImportController;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+import timber.log.Timber;
 
-public class ImportActivity extends BaseBackActivity {
+public class ImportExportActivity extends BaseBackActivity {
+    private static final String DEFAULT_EXPORT_FILE_NAME = "money_tracker.csv";
+
     @Inject
     ImportController importController;
+    @Inject
+    ExportController exportController;
 
     @Bind(R.id.et_import_data)
     EditText etImportData;
 
     @Override
     protected int getContentViewId() {
-        return R.layout.activity_import;
+        return R.layout.activity_import_export;
     }
 
     @Override
     protected boolean initData() {
         boolean result = super.initData();
-        getAppComponent().inject(ImportActivity.this);
+        getAppComponent().inject(ImportExportActivity.this);
         return result;
     }
 
@@ -47,7 +60,7 @@ public class ImportActivity extends BaseBackActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_help:
-                AlertDialog.Builder builder = new AlertDialog.Builder(ImportActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(ImportExportActivity.this);
                 builder.setTitle(R.string.help)
                         .setMessage(R.string.import_help)
                         .setPositiveButton(android.R.string.ok, null)
@@ -82,9 +95,50 @@ public class ImportActivity extends BaseBackActivity {
                 stopProgress();
                 showToast(getString(R.string.records_imported, recordCount));
                 setResult(RESULT_OK);
-                finish();
             }
         };
         importTask.execute();
+    }
+
+    @OnClick(R.id.btn_export)
+    public void exportRecords() {
+        List<String> records = exportController.getRecordsForExport(0, Long.MAX_VALUE);
+
+        File exportDir = new File(getCacheDir(), "export");
+        boolean exportDirCreated = exportDir.mkdirs();
+        Timber.d("ExportDirCreated: %b", exportDirCreated);
+
+        File outFile;
+        if (exportDir.exists()) outFile = new File(exportDir, DEFAULT_EXPORT_FILE_NAME);
+        else return;
+
+        PrintWriter pw = null;
+        try {
+            pw = new PrintWriter(outFile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        if (pw != null) {
+            for (String record : records) {
+                pw.println(record);
+                pw.flush();
+            }
+
+            pw.flush();
+            pw.close();
+
+            shareExportedRecords(outFile);
+        }
+    }
+
+    private void shareExportedRecords(@NonNull File exportFile) {
+        Uri fileUri = FileProvider.getUriForFile(ImportExportActivity.this, getPackageName(), exportFile);
+
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+        sendIntent.setType("text/plain");
+        startActivity(Intent.createChooser(sendIntent, "Share exported records"));
     }
 }

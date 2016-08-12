@@ -21,6 +21,7 @@ public class PreferenceController {
     private static final String KEY_FIRST_TS = "key_first_ts";
     private static final String KEY_LAST_TS = "key_last_ts";
     private static final String KEY_PERIOD_TYPE = "key_period_type";
+    private static final String KEY_DROPBOX_ACCESS_TOKEN = "key_dropbox_access_token";
 
     private static final int RATE_PERIOD = 5;
 
@@ -79,6 +80,14 @@ public class PreferenceController {
         editor.apply();
     }
 
+    public void writeDropboxAccessToken(String accessToken) {
+        SharedPreferences preferences = getDefaultPrefs();
+        SharedPreferences.Editor editor = preferences.edit();
+
+        editor.putString(KEY_DROPBOX_ACCESS_TOKEN, accessToken);
+        editor.apply();
+    }
+
     public long readDefaultAccountId() {
         String defaultAccountPref = context.getString(R.string.pref_default_account);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -113,6 +122,11 @@ public class PreferenceController {
     @Nullable
     public String readPeriodType() {
         return getDefaultPrefs().getString(KEY_PERIOD_TYPE, null);
+    }
+
+    @Nullable
+    public String readDropboxAccessToken() {
+        return getDefaultPrefs().getString(KEY_DROPBOX_ACCESS_TOKEN, null);
     }
 
     private SharedPreferences getDefaultPrefs() {

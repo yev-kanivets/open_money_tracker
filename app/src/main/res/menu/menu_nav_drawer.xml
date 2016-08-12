@@ -17,13 +17,13 @@
 
     <group android:id="@+id/group_2">
         <item
-            android:id="@+id/nav_import"
-            android:icon="@drawable/ic_import"
-            android:title="@string/title_import" />
+            android:id="@+id/nav_backup"
+            android:icon="@drawable/ic_backup"
+            android:title="@string/backup_data" />
         <item
-            android:id="@+id/nav_export"
-            android:icon="@drawable/ic_export"
-            android:title="@string/title_export" />
+            android:id="@+id/nav_import_export"
+            android:icon="@drawable/ic_import_export"
+            android:title="@string/title_import_export" />
     </group>
 
     <group android:id="@+id/group_3">

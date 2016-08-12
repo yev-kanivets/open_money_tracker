@@ -43,19 +43,18 @@ android {
     }
 }
 
+apply plugin: 'com.getkeepsafe.dexcount'
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:support-v4:23.2.1'
     compile 'com.android.support:appcompat-v7:23.2.1'
     compile 'com.android.support:design:23.2.1'
-    // View annotation bindings
-    compile 'com.jakewharton:butterknife:7.0.1'
-    // Dependency injection tool
-    compile 'com.google.dagger:dagger:2.0.1'
-    // Charts
-    compile 'com.github.PhilJay:MPAndroidChart:v2.2.4'
-    // Advanced logging tool
-    compile 'com.jakewharton.timber:timber:4.1.2'
+
+    compile 'com.jakewharton:butterknife:7.0.1' // View annotation bindings
+    compile 'com.google.dagger:dagger:2.0.1' // Dependency injection tool
+    compile 'com.github.PhilJay:MPAndroidChart:v2.2.4' // Charts
+    compile 'com.jakewharton.timber:timber:4.1.2' // Advanced logging tool
 
     apt 'com.google.dagger:dagger-compiler:2.0.1'
     provided 'org.glassfish:javax.annotation:10.0-b28'

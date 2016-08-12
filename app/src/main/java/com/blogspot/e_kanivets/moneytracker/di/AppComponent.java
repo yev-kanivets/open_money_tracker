@@ -1,8 +1,8 @@
 package com.blogspot.e_kanivets.moneytracker.di;
 
 import com.blogspot.e_kanivets.moneytracker.activity.ChartsActivity;
-import com.blogspot.e_kanivets.moneytracker.activity.external.ExportActivity;
-import com.blogspot.e_kanivets.moneytracker.activity.external.ImportActivity;
+import com.blogspot.e_kanivets.moneytracker.activity.external.BackupActivity;
+import com.blogspot.e_kanivets.moneytracker.activity.external.ImportExportActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.ReportActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.SettingsActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.account.AccountsActivity;
@@ -50,13 +50,13 @@ public interface AppComponent {
 
     void inject(TransferActivity transferActivity);
 
-    void inject(ImportActivity importActivity);
-
-    void inject(ExportActivity exportActivity);
+    void inject(ImportExportActivity importExportActivity);
 
     void inject(ReportActivity reportActivity);
 
     void inject(ChartsActivity chartsActivity);
+
+    void inject(BackupActivity backupActivity);
 
     void inject(SettingsActivity.SettingsFragment settingsFragment);
 
