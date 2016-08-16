@@ -94,6 +94,8 @@ public class BackupActivity extends BaseBackActivity {
             @Override
             public void onBackupSuccess() {
                 Timber.d("Backup success.");
+                if (isFinishing()) return;
+
                 stopProgress();
                 fetchBackups();
             }
@@ -101,6 +103,8 @@ public class BackupActivity extends BaseBackActivity {
             @Override
             public void onBackupFailure(String reason) {
                 Timber.d("Backup failure.");
+                if (isFinishing()) return;
+
                 stopProgress();
                 showToast(R.string.failed_create_backup);
 
@@ -132,6 +136,8 @@ public class BackupActivity extends BaseBackActivity {
             @Override
             public void onRestoreSuccess() {
                 Timber.d("Restore success.");
+                if (isFinishing()) return;
+
                 stopProgress();
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(BackupActivity.this);
@@ -152,6 +158,8 @@ public class BackupActivity extends BaseBackActivity {
             @Override
             public void onRestoreFailure(String reason) {
                 Timber.d("Restore failure.");
+                if (isFinishing()) return;
+
                 stopProgress();
                 showToast(R.string.failed_restore_backup);
 
@@ -166,6 +174,8 @@ public class BackupActivity extends BaseBackActivity {
         backupController.fetchBackups(dbApi, new BackupController.OnFetchBackupListListener() {
             @Override
             public void onBackupsFetched(@NonNull List<String> backupList) {
+                if (isFinishing()) return;
+
                 stopProgress();
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(BackupActivity.this,
                         android.R.layout.simple_list_item_1, backupList);
