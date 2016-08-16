@@ -4,9 +4,7 @@ import com.blogspot.e_kanivets.moneytracker.controller.data.CategoryController;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Category;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Util class to encapsulate category autocomplete logic.
@@ -16,13 +14,13 @@ import java.util.Set;
  */
 public class CategoryAutoCompleter {
     private List<String> categoryList;
-    private Set<String> filterSet;
+    private CategoryController categoryController;
 
     public CategoryAutoCompleter(CategoryController categoryController) {
+        this.categoryController = categoryController;
         categoryList = new ArrayList<>();
-        filterSet = new HashSet<>();
 
-        for (Category category : categoryController.readAll()) {
+        for (Category category : categoryController.readFiltered()) {
             categoryList.add(category.getName());
         }
     }
@@ -38,7 +36,7 @@ public class CategoryAutoCompleter {
     }
 
     public void removeFromAutoComplete(String category) {
-        filterSet.add(category);
         categoryList.remove(category);
+        categoryController.disableCategory(category);
     }
 }

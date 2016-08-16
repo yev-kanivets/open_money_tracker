@@ -8,6 +8,9 @@ import android.support.annotation.Nullable;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Controller class to encapsulate Shared Preferences handling logic.
  * Not deal with {@link com.blogspot.e_kanivets.moneytracker.repo.base.IRepo} instances as others.
@@ -22,6 +25,7 @@ public class PreferenceController {
     private static final String KEY_LAST_TS = "key_last_ts";
     private static final String KEY_PERIOD_TYPE = "key_period_type";
     private static final String KEY_DROPBOX_ACCESS_TOKEN = "key_dropbox_access_token";
+    private static final String KEY_FILTERED_CATEGORIES = "key_filtered_categories";
 
     private static final int RATE_PERIOD = 5;
 
@@ -34,7 +38,7 @@ public class PreferenceController {
 
     public void addLaunchCount() {
         SharedPreferences preferences = getDefaultPrefs();
-        SharedPreferences.Editor editor = preferences.edit();
+        SharedPreferences.Editor editor = getEditor();
         editor.putInt(LAUNCH_COUNT, preferences.getInt(LAUNCH_COUNT, 0) + 1);
         editor.apply();
     }
@@ -50,16 +54,13 @@ public class PreferenceController {
     }
 
     public void appRated() {
-        SharedPreferences preferences = getDefaultPrefs();
-        SharedPreferences.Editor editor = preferences.edit();
+        SharedPreferences.Editor editor = getEditor();
         editor.putBoolean(APP_RATED, true);
         editor.apply();
     }
 
     public void writeFirstTs(long firstTs) {
-        SharedPreferences preferences = getDefaultPrefs();
-        SharedPreferences.Editor editor = preferences.edit();
-
+        SharedPreferences.Editor editor = getEditor();
         editor.putLong(KEY_FIRST_TS, firstTs);
         editor.apply();
     }
@@ -73,18 +74,20 @@ public class PreferenceController {
     }
 
     public void writePeriodType(String periodType) {
-        SharedPreferences preferences = getDefaultPrefs();
-        SharedPreferences.Editor editor = preferences.edit();
-
+        SharedPreferences.Editor editor = getEditor();
         editor.putString(KEY_PERIOD_TYPE, periodType);
         editor.apply();
     }
 
     public void writeDropboxAccessToken(String accessToken) {
-        SharedPreferences preferences = getDefaultPrefs();
-        SharedPreferences.Editor editor = preferences.edit();
-
+        SharedPreferences.Editor editor = getEditor();
         editor.putString(KEY_DROPBOX_ACCESS_TOKEN, accessToken);
+        editor.apply();
+    }
+
+    public void writeFilteredCategories(@Nullable Set<String> categorySet) {
+        SharedPreferences.Editor editor = getEditor();
+        editor.putStringSet(KEY_FILTERED_CATEGORIES, categorySet);
         editor.apply();
     }
 
@@ -129,7 +132,18 @@ public class PreferenceController {
         return getDefaultPrefs().getString(KEY_DROPBOX_ACCESS_TOKEN, null);
     }
 
+    @NonNull
+    public Set<String> readFilteredCategories() {
+        return getDefaultPrefs().getStringSet(KEY_FILTERED_CATEGORIES, new HashSet<String>());
+    }
+
+    @NonNull
     private SharedPreferences getDefaultPrefs() {
         return context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
+    }
+
+    @NonNull
+    private SharedPreferences.Editor getEditor() {
+        return getDefaultPrefs().edit();
     }
 }

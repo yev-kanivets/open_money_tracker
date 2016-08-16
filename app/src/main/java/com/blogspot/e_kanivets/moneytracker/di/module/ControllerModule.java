@@ -52,8 +52,9 @@ public class ControllerModule {
     @Provides
     @NonNull
     @Singleton
-    public CategoryController providesCategoryController(IRepo<Category> categoryRepo) {
-        return new CategoryController(categoryRepo);
+    public CategoryController providesCategoryController(IRepo<Category> categoryRepo,
+                                                         PreferenceController preferenceController) {
+        return new CategoryController(categoryRepo, preferenceController);
     }
 
     @Provides
