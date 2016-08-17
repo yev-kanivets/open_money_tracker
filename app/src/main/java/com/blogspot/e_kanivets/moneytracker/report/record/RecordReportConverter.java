@@ -65,7 +65,7 @@ public class RecordReportConverter {
             List<Map<String, String>> childDataItem = new ArrayList<>();
             for (SummaryRecord summaryRecord : categoryRecord.getSummaryRecordList()) {
                 Map<String, String> m = new HashMap<>();
-                m.put(TITLE_PARAM_NAME, summaryRecord.getTitle());
+                m.put(TITLE_PARAM_NAME, getTitle(summaryRecord));
                 m.put(PRICE_PARAM_NAME, Double.toString(summaryRecord.getAmount()));
 
                 childDataItem.add(m);
@@ -90,5 +90,11 @@ public class RecordReportConverter {
     @NonNull
     public int[] getChildTo() {
         return new int[]{R.id.tv_category, R.id.tv_total};
+    }
+
+    private String getTitle(@NonNull SummaryRecord record) {
+        int count = record.getRecordList().size();
+        if (count <= 1) return record.getTitle();
+        else return record.getTitle() + " (" + count + ")";
     }
 }
