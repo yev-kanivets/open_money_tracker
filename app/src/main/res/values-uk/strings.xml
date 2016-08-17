@@ -93,4 +93,7 @@
     <string name="warning">Попередження</string>
     <string name="want_erase_and_restore">Ви дійсно хочете видалити усі поточні дані і відновити бекап %1$s? Будь ласка, зробіть бекап поточних даних.</string>
     <string name="backup_now">Зробити бекап</string>
+
+    <string name="title_edit_income">Редагувати дохід</string>
+    <string name="title_edit_expense">Редагувати витрату</string>
 </resources>

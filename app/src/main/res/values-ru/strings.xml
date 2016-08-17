@@ -93,4 +93,7 @@
     <string name="warning">Предупреждение</string>
     <string name="want_erase_and_restore">Вы действительно хотите удалить все текущие данные и восстановить бэкап %1$s? Пожалуйста, сделайте бэкап текущих данных.</string>
     <string name="backup_now">Сделать бэкап</string>
+
+    <string name="title_edit_income">Редактировать доход</string>
+    <string name="title_edit_expense">Редактировать расход</string>
 </resources>

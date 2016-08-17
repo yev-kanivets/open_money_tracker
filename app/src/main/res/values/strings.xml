@@ -101,5 +101,8 @@
     <string name="warning">Warning</string>
     <string name="want_erase_and_restore">Do you really want to erase all current data and restore backup file %1$s? Be sure to backup current data.</string>
     <string name="backup_now">Backup now</string>
+
+    <string name="title_edit_income">Edit income</string>
+    <string name="title_edit_expense">Edit expense</string>
     <!-- Not translated strings -->
 </resources>
