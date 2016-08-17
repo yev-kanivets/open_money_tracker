@@ -96,4 +96,9 @@
 
     <string name="title_edit_income">Редактировать доход</string>
     <string name="title_edit_expense">Редактировать расход</string>
+
+    <string name="importing_records">Импортирование записей…</string>
+    <string name="making_backup">Создание бэкапа…</string>
+    <string name="restoring_backup">Восстановление бэкапа…</string>
+    <string name="fetching_backups">Загрузка бэкапов…</string>
 </resources>

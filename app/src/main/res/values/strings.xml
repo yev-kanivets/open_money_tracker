@@ -104,5 +104,10 @@
 
     <string name="title_edit_income">Edit income</string>
     <string name="title_edit_expense">Edit expense</string>
+
+    <string name="importing_records">Importing records…</string>
+    <string name="making_backup">Making backup…</string>
+    <string name="restoring_backup">Restoring backup…</string>
+    <string name="fetching_backups">Fetching backups…</string>
     <!-- Not translated strings -->
 </resources>
