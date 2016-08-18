@@ -14,4 +14,13 @@
         android:key="@string/pref_display_precision"
         android:summary="%s"
         android:title="@string/display_precision" />
+
+    <Preference
+        android:key="@string/pref_about"
+        android:title="About">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.blogspot.e_kanivets.moneytracker.activity.AboutActivity"
+            android:targetPackage="com.blogspot.e_kanivets.moneytracker" />
+    </Preference>
 </PreferenceScreen>

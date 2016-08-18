@@ -101,4 +101,7 @@
     <string name="making_backup">Створення бекапу…</string>
     <string name="restoring_backup">Відновлення бекапу…</string>
     <string name="fetching_backups">Завантаження бекапів…</string>
+
+    <string name="about_summary">Версія %1$s (Android %2$s)</string>
+    <string name="title_activity_about">Про додаток</string>
 </resources>

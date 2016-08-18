@@ -109,5 +109,9 @@
     <string name="making_backup">Making backup…</string>
     <string name="restoring_backup">Restoring backup…</string>
     <string name="fetching_backups">Fetching backups…</string>
+
+    <string name="pref_about" translatable="false">pref_about</string>
+    <string name="about_summary">Version %1$s (Android %2$s)</string>
+    <string name="title_activity_about">About</string>
     <!-- Not translated strings -->
 </resources>
