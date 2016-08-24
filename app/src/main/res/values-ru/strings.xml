@@ -93,4 +93,16 @@
     <string name="warning">Предупреждение</string>
     <string name="want_erase_and_restore">Вы действительно хотите удалить все текущие данные и восстановить бэкап %1$s? Пожалуйста, сделайте бэкап текущих данных.</string>
     <string name="backup_now">Сделать бэкап</string>
+
+    <string name="title_edit_income">Редактировать доход</string>
+    <string name="title_edit_expense">Редактировать расход</string>
+
+    <string name="importing_records">Импортирование записей…</string>
+    <string name="making_backup">Создание бэкапа…</string>
+    <string name="restoring_backup">Восстановление бэкапа…</string>
+    <string name="fetching_backups">Загрузка бэкапов…</string>
+
+    <string name="about_summary">Версия %1$s (Android %2$s)</string>
+    <string name="title_activity_about">О приложении</string>
+    <string name="about">Open Money Tracker (OMT) это приложения для ведения личных финансов. Вы легко можете управлять доходами и расходами. Также доступны счета и курсы обмена.\n\nДля того чтобы помочь сделать OMT лучше, пишите о багах на <a href="http://4pda.ru/forum/index.php?showtopic=755203">форуме 4PDA</a>; идеи новых функций также приветствуются. Ищите ответы или начинайте обсуждение на <a href="http://4pda.ru/forum/index.php?showtopic=755203">форуме</a>.\n\nOMT это <a href="https://en.wikipedia.org/wiki/Open-source_software">проект с открытым исходным кодом</a>, так что каждый может помочь с его разработкой. Не-разработчики также могут помочь. Например, вы можете помочь с переводом, предоставить скриншоты или написать статью в блоге о OMT.\n\nOMT выпущен под <a href="https://ru.wikipedia.org/wiki/GNU_General_Public_License#GPL_v3">GNU-GPL v3 лицензией</a> и исходный код доступен <a href="https://github.com/evgenii-kanivets/Money-Tracker">на GitHub</a>.\n\n<a href="https://ua.linkedin.com/in/evgeniikanivets">Профиль разработчика на LinkedIn.</a></string>
 </resources>

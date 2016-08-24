@@ -80,7 +80,7 @@ public class ImportExportActivity extends BaseBackActivity {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                startProgress();
+                startProgress(getString(R.string.importing_records));
             }
 
             @Override

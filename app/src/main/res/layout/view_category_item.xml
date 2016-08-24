@@ -1,7 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="@dimen/half_margin"
-    android:paddingTop="@dimen/half_margin"
-    android:theme="@style/Text_Body1" />
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingEnd="@dimen/half_margin"
+    android:paddingStart="@dimen/normal_margin"
+    tools:ignore="UseCompoundDrawables">
+
+    <TextView
+        android:id="@+id/tv_category"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:paddingBottom="@dimen/half_margin"
+        android:paddingTop="@dimen/half_margin"
+        android:theme="@style/Text_Body1" />
+
+    <ImageView
+        android:id="@+id/iv_cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@android:string/cancel"
+        android:src="@drawable/ic_cancel" />
+
+</LinearLayout>

@@ -82,12 +82,19 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Default" />
         <activity
+            android:name=".activity.AboutActivity"
+            android:label="@string/title_activity_about"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Default" />
+
+        <activity
             android:name="com.dropbox.client2.android.AuthActivity"
             android:configChanges="orientation|keyboard"
             android:launchMode="singleTask"
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
             <intent-filter>
                 <data android:scheme="db-5lqugcckdy9y6lj" />
+
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.BROWSABLE" />

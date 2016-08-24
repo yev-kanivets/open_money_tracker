@@ -3,10 +3,13 @@ package com.blogspot.e_kanivets.moneytracker.controller.data;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.blogspot.e_kanivets.moneytracker.controller.PreferenceController;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Category;
 import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +23,16 @@ import static org.junit.Assert.*;
  * @author Evgenii Kanivets
  */
 public class CategoryControllerTest {
+    private PreferenceController mockPrefs;
+
+    @Before
+    public void setUp() throws Exception {
+        mockPrefs = Mockito.mock(PreferenceController.class);
+    }
 
     @Test
     public void testReadOrCreate() throws Exception {
-        CategoryController categoryController = new CategoryController(emptyRepo);
+        CategoryController categoryController = new CategoryController(emptyRepo, mockPrefs);
 
         assertNull(categoryController.readOrCreate(null));
         assertNull(categoryController.readOrCreate(""));
@@ -34,7 +43,7 @@ public class CategoryControllerTest {
         result = categoryController.readOrCreate("category 1");
         assertEquals("category 1", result.getName());
 
-        categoryController = new CategoryController(repo);
+        categoryController = new CategoryController(repo, mockPrefs);
 
         result = categoryController.readOrCreate("category 1");
         assertEquals("category 1", result.getName());

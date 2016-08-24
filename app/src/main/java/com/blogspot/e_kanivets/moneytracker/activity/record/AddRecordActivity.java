@@ -132,7 +132,8 @@ public class AddRecordActivity extends BaseBackActivity {
         if (getSupportActionBar() != null) {
             switch (type) {
                 case Record.TYPE_EXPENSE:
-                    getSupportActionBar().setTitle(R.string.title_add_expense);
+                    if (mode == Mode.MODE_ADD) getSupportActionBar().setTitle(R.string.title_add_expense);
+                    else getSupportActionBar().setTitle(R.string.title_edit_expense);
                     getSupportActionBar().setBackgroundDrawable(
                             new ColorDrawable(getResources().getColor(R.color.red_light)));
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -144,7 +145,8 @@ public class AddRecordActivity extends BaseBackActivity {
                     break;
 
                 case Record.TYPE_INCOME:
-                    getSupportActionBar().setTitle(R.string.title_add_income);
+                    if (mode == Mode.MODE_ADD) getSupportActionBar().setTitle(R.string.title_add_income);
+                    else getSupportActionBar().setTitle(R.string.title_edit_income);
                     getSupportActionBar().setBackgroundDrawable(
                             new ColorDrawable(getResources().getColor(R.color.green_light)));
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
