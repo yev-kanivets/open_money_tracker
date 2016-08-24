@@ -134,7 +134,8 @@ public class PreferenceController {
 
     @NonNull
     public Set<String> readFilteredCategories() {
-        return getDefaultPrefs().getStringSet(KEY_FILTERED_CATEGORIES, new HashSet<String>());
+        // http://stackoverflow.com/questions/14034803/misbehavior-when-trying-to-store-a-string-set-using-sharedpreferences/14034804#14034804
+        return new HashSet<>(getDefaultPrefs().getStringSet(KEY_FILTERED_CATEGORIES, new HashSet<String>()));
     }
 
     @NonNull
