@@ -89,7 +89,7 @@ public class BackupActivity extends BaseBackActivity {
 
     @OnClick(R.id.btn_backup_now)
     public void backupNow() {
-        startProgress();
+        startProgress(getString(R.string.making_backup));
         backupController.makeBackup(dbApi, new BackupController.OnBackupListener() {
             @Override
             public void onBackupSuccess() {
@@ -131,7 +131,7 @@ public class BackupActivity extends BaseBackActivity {
     }
 
     private void restoreBackup(final String backupName) {
-        startProgress();
+        startProgress(getString(R.string.restoring_backup));
         backupController.restoreBackup(dbApi, backupName, new BackupController.OnRestoreBackupListener() {
             @Override
             public void onRestoreSuccess() {
@@ -170,7 +170,7 @@ public class BackupActivity extends BaseBackActivity {
     }
 
     private void fetchBackups() {
-        startProgress();
+        startProgress(getString(R.string.fetching_backups));
         backupController.fetchBackups(dbApi, new BackupController.OnFetchBackupListListener() {
             @Override
             public void onBackupsFetched(@NonNull List<String> backupList) {

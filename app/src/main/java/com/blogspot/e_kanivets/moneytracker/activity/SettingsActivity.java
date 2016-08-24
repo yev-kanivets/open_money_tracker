@@ -1,10 +1,12 @@
 package com.blogspot.e_kanivets.moneytracker.activity;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
+import com.blogspot.e_kanivets.moneytracker.BuildConfig;
 import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
@@ -58,6 +60,13 @@ public class SettingsActivity extends BaseBackActivity {
             setupDefaultAccountPref();
             setupDefaultCurrencyPref();
             setupDisplayPrecision();
+            setupAboutPref();
+        }
+
+        private void setupAboutPref() {
+            Preference preference = findPreference(getString(R.string.pref_about));
+            preference.setSummary(getString(R.string.about_summary, BuildConfig.VERSION_NAME,
+                    Build.VERSION.RELEASE));
         }
 
         private void setupDefaultAccountPref() {

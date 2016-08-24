@@ -68,14 +68,16 @@ public abstract class BaseActivity extends AppCompatActivity {
         Toast.makeText(BaseActivity.this, messageId, Toast.LENGTH_SHORT).show();
     }
 
-    public void startProgress() {
-        if (getProgressBar() == null) return;
-        getProgressBar().show();
+    public void startProgress(@Nullable String message) {
+        ProgressDialog progressDialog = getProgressDialog();
+        if (progressDialog == null) return;
+        if (message != null) progressDialog.setMessage(message);
+        progressDialog.show();
     }
 
     public void stopProgress() {
-        if (getProgressBar() == null) return;
-        getProgressBar().dismiss();
+        if (getProgressDialog() == null) return;
+        getProgressDialog().dismiss();
     }
 
     public void showAlert(@Nullable String title, @Nullable String message) {
@@ -90,7 +92,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         dialog.show();
     }
 
-    private ProgressDialog getProgressBar() {
+    private ProgressDialog getProgressDialog() {
         if (progressDialog == null) progressDialog = new ProgressDialog(this);
         return progressDialog;
     }

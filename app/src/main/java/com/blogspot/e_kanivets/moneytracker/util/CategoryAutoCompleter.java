@@ -14,11 +14,13 @@ import java.util.List;
  */
 public class CategoryAutoCompleter {
     private List<String> categoryList;
+    private CategoryController categoryController;
 
     public CategoryAutoCompleter(CategoryController categoryController) {
+        this.categoryController = categoryController;
         categoryList = new ArrayList<>();
 
-        for (Category category : categoryController.readAll()) {
+        for (Category category : categoryController.readFiltered()) {
             categoryList.add(category.getName());
         }
     }
@@ -31,5 +33,10 @@ public class CategoryAutoCompleter {
         }
 
         return resultList;
+    }
+
+    public void removeFromAutoComplete(String category) {
+        categoryList.remove(category);
+        categoryController.disableCategory(category);
     }
 }
