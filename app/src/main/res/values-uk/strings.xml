@@ -101,4 +101,8 @@
     <string name="making_backup">Створення бекапу…</string>
     <string name="restoring_backup">Відновлення бекапу…</string>
     <string name="fetching_backups">Завантаження бекапів…</string>
+
+    <string name="about_summary">Версія %1$s (Android %2$s)</string>
+    <string name="title_activity_about">Про додаток</string>
+    <string name="about">Open Money Tracker (OMT) це додаток для обліку персональних фінансів. Ви можете з легкістю керувати доходами та витратами. Також доступні рахунки та курси обміну.\n\nДля того щоб допомогти нам зробити OMT краще, пишіть про баги на <a href="http://4pda.ru/forum/index.php?showtopic=755203">форумі 4PDA</a>; ідеї нових функцій також підтримуються. Знайдіть відповіді або розпочніть бесіду на <a href="http://4pda.ru/forum/index.php?showtopic=755203">форумі</a>.\n\nOMT це <a href="https://en.wikipedia.org/wiki/Open-source_software">додаток з відкритим сирцевим кодом</a>, тож будь-хто може стати учасником. Не-розробники також можуть допомогти. Наприклад, Ви можете допомогти з перекладом OMT, надати знімки екранів або написати у блозі про OMT.\n\nOMT випущено під <a href="https://ru.wikipedia.org/wiki/GNU_General_Public_License#GPL_v3">GNU-GPL v3 ліцензією</a> і сирцевий код доступний <a href="https://github.com/evgenii-kanivets/Money-Tracker">на GitHub</a>.\n\n<a href="https://ua.linkedin.com/in/evgeniikanivets">Профiль розробника на LinkedIn.</a></string>
 </resources>
