@@ -65,10 +65,10 @@ public class AddAccountActivity extends BaseBackActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_done:
-                addAccount();
-
-                setResult(RESULT_OK);
-                finish();
+                if (addAccount()) {
+                    setResult(RESULT_OK);
+                    finish();
+                } else showToast(R.string.wrong_number_text);
                 return true;
 
             default:
@@ -76,12 +76,20 @@ public class AddAccountActivity extends BaseBackActivity {
         }
     }
 
-    private void addAccount() {
+    private boolean addAccount() {
         String title = etTitle.getText().toString().trim();
-        double initSum = Double.parseDouble(etInitSum.getText().toString().trim());
+
+        double initSum;
+        try {
+            initSum = Double.parseDouble(etInitSum.getText().toString().trim());
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return false;
+        }
+
         String currency = (String) spinner.getSelectedItem();
 
         Account account = new Account(title, initSum, currency);
-        accountController.create(account);
+        return accountController.create(account) != null;
     }
 }
