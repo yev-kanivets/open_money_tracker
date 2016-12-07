@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:baselineAligned="false"
@@ -31,6 +32,7 @@
             tools:listitem="@layout/view_spinner_item" />
 
         <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_from_amount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -40,10 +42,10 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="@string/amount"
+                android:inputType="numberDecimal"
                 android:maxLines="1"
                 android:nextFocusDown="@+id/et_to_amount"
-                android:singleLine="true"
-                android:inputType="numberDecimal" />
+                android:singleLine="true" />
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 
@@ -68,6 +70,7 @@
             tools:listitem="@layout/view_spinner_item" />
 
         <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_to_amount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -77,9 +80,9 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="@string/amount"
+                android:inputType="numberDecimal"
                 android:maxLines="1"
-                android:singleLine="true"
-                android:inputType="numberDecimal" />
+                android:singleLine="true" />
         </android.support.design.widget.TextInputLayout>
     </LinearLayout>
 
