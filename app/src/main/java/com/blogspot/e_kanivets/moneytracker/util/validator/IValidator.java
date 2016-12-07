@@ -10,6 +10,8 @@ import android.support.annotation.Nullable;
  */
 
 public interface IValidator<T> {
+    long MAX_ABS_VALUE = Integer.MAX_VALUE * 1024L;
+
     /**
      * @return instance of class T if validation passed or null otherwise
      */

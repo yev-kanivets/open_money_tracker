@@ -15,13 +15,13 @@ public class Transfer extends BaseEntity implements Parcelable {
     private final long time;
     private final long fromAccountId;
     private final long toAccountId;
-    private final int fromAmount;
-    private final int toAmount;
-    private final int fromDecimals;
-    private final int toDecimals;
+    private final long fromAmount;
+    private final long toAmount;
+    private final long fromDecimals;
+    private final long toDecimals;
 
-    public Transfer(long id, long time, long fromAccountId, long toAccountId, int fromAmount,
-                    int toAmount, int fromDecimals, int toDecimals) {
+    public Transfer(long id, long time, long fromAccountId, long toAccountId, long fromAmount,
+                    long toAmount, long fromDecimals, long toDecimals) {
         this.fromDecimals = fromDecimals;
         this.toDecimals = toDecimals;
         this.id = id;
@@ -36,9 +36,9 @@ public class Transfer extends BaseEntity implements Parcelable {
         this.time = time;
         this.fromAccountId = fromAccountId;
         this.toAccountId = toAccountId;
-        this.fromAmount = getInteger(fromAmount);
+        this.fromAmount = getLong(fromAmount);
         this.fromDecimals = getDecimal(fromAmount);
-        this.toAmount = getInteger(toAmount);
+        this.toAmount = getLong(toAmount);
         this.toDecimals = getDecimal(toAmount);
     }
 
@@ -46,10 +46,10 @@ public class Transfer extends BaseEntity implements Parcelable {
         time = in.readLong();
         fromAccountId = in.readLong();
         toAccountId = in.readLong();
-        fromAmount = in.readInt();
-        toAmount = in.readInt();
-        fromDecimals = in.readInt();
-        toDecimals = in.readInt();
+        fromAmount = in.readLong();
+        toAmount = in.readLong();
+        fromDecimals = in.readLong();
+        toDecimals = in.readLong();
     }
 
     public static final Creator<Transfer> CREATOR = new Creator<Transfer>() {
@@ -81,19 +81,19 @@ public class Transfer extends BaseEntity implements Parcelable {
         return toAccountId;
     }
 
-    public int getFromAmount() {
+    public long getFromAmount() {
         return fromAmount;
     }
 
-    public int getToAmount() {
+    public long getToAmount() {
         return toAmount;
     }
 
-    public int getFromDecimals() {
+    public long getFromDecimals() {
         return fromDecimals;
     }
 
-    public int getToDecimals() {
+    public long getToDecimals() {
         return toDecimals;
     }
 
@@ -148,9 +148,9 @@ public class Transfer extends BaseEntity implements Parcelable {
         dest.writeLong(time);
         dest.writeLong(fromAccountId);
         dest.writeLong(toAccountId);
-        dest.writeInt(fromAmount);
-        dest.writeInt(toAmount);
-        dest.writeInt(fromDecimals);
-        dest.writeInt(toDecimals);
+        dest.writeLong(fromAmount);
+        dest.writeLong(toAmount);
+        dest.writeLong(fromDecimals);
+        dest.writeLong(toDecimals);
     }
 }

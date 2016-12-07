@@ -73,10 +73,10 @@ public class TransferRepo extends BaseRepo<Transfer> {
                         cursor.getLong(idColTime),
                         cursor.getLong(idColFromAccountId),
                         cursor.getLong(idColToAccountId),
-                        cursor.getInt(idColFromAmount),
-                        cursor.getInt(idColToAmount),
-                        cursor.getInt(idColDecimalsFrom),
-                        cursor.getInt(idColDecimalsTo));
+                        cursor.getLong(idColFromAmount),
+                        cursor.getLong(idColToAmount),
+                        cursor.getLong(idColDecimalsFrom),
+                        cursor.getLong(idColDecimalsTo));
 
                 accountList.add(account);
             } while (cursor.moveToNext());

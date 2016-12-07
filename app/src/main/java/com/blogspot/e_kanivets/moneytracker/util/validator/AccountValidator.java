@@ -65,7 +65,13 @@ public class AccountValidator implements IValidator<Account> {
             valid = false;
         }
 
-        if (Math.abs(initSum) > Integer.MAX_VALUE) {
+        if (initSum == Double.MAX_VALUE) {
+            tilInitSum.setError(context.getString(R.string.field_cant_be_empty));
+            initSum = 0;
+            valid = false;
+        }
+
+        if (Math.abs(initSum) > MAX_ABS_VALUE) {
             tilInitSum.setError(context.getString(R.string.too_rich));
             valid = false;
         }
