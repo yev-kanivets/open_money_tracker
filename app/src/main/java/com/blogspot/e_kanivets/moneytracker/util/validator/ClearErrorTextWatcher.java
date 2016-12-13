@@ -32,6 +32,7 @@ public class ClearErrorTextWatcher implements TextWatcher {
 
     @Override
     public void afterTextChanged(Editable s) {
+        til.setErrorEnabled(false);
         til.setError(null);
     }
 }
