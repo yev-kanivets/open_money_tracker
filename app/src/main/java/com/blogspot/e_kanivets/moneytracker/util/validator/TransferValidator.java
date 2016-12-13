@@ -7,6 +7,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.AppCompatSpinner;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
@@ -70,6 +71,7 @@ public class TransferValidator implements IValidator<Transfer> {
         if (spinnerTo.isEnabled()) {
             toAccount = accountList.get(spinnerTo.getSelectedItemPosition());
         } else {
+            Toast.makeText(context, R.string.one_account_needed, Toast.LENGTH_SHORT).show();
             valid = false;
         }
 

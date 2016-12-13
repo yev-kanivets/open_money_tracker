@@ -117,9 +117,12 @@
 
     <!-- Not translated strings -->
     <string name="field_cant_be_empty">Field can\'t be empty.</string>
-    <string name="too_rich">You can\'t be so rich or so poor.</string>
+    <string name="too_rich_or_poor">You can\'t be so rich or so poor.</string>
+    <string name="too_rich">You can\'t be so rich.</string>
     <string name="none">None</string>
     <string name="too_much_for_transfer">It\'s too much for transfer.</string>
     <string name="too_much_for_exchange">It\'s too much for exchange.</string>
     <string name="same_currencies">Can\'t convert between same currencies.</string>
+    <string name="record_in_future">Can\'t create a record in future.</string>
+    <string name="one_account_needed">At least one account is needed.</string>
 </resources>
