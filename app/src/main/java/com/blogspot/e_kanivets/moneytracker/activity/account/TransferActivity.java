@@ -14,6 +14,8 @@ import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Transfer;
 import com.blogspot.e_kanivets.moneytracker.util.validator.IValidator;
 import com.blogspot.e_kanivets.moneytracker.util.validator.TransferValidator;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,14 +91,28 @@ public class TransferActivity extends BaseBackActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_done:
-                if (doTransfer()) {
-                    setResult(RESULT_OK);
-                    finish();
-                }
+                tryTransfer();
                 return true;
 
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void tryTransfer() {
+        // Answers event
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("Done Transfer")
+                .putContentType("Button"));
+
+        if (doTransfer()) {
+            // Answers event
+            Answers.getInstance().logContentView(new ContentViewEvent()
+                    .putContentName("Done Transfer")
+                    .putContentType("Event"));
+
+            setResult(RESULT_OK);
+            finish();
         }
     }
 

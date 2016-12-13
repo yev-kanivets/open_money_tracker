@@ -12,6 +12,8 @@ import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.controller.BackupController;
 import com.blogspot.e_kanivets.moneytracker.controller.PreferenceController;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
 import com.dropbox.client2.session.AppKeyPair;
@@ -89,10 +91,20 @@ public class BackupActivity extends BaseBackActivity {
 
     @OnClick(R.id.btn_backup_now)
     public void backupNow() {
+        // Answers event
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("Make Backup")
+                .putContentType("Button"));
+
         startProgress(getString(R.string.making_backup));
         backupController.makeBackup(dbApi, new BackupController.OnBackupListener() {
             @Override
             public void onBackupSuccess() {
+                // Answers event
+                Answers.getInstance().logContentView(new ContentViewEvent()
+                        .putContentName("Backup success")
+                        .putContentType("Event"));
+
                 Timber.d("Backup success.");
                 if (isFinishing()) return;
 
@@ -102,6 +114,11 @@ public class BackupActivity extends BaseBackActivity {
 
             @Override
             public void onBackupFailure(String reason) {
+                // Answers event
+                Answers.getInstance().logContentView(new ContentViewEvent()
+                        .putContentName("Backup failure")
+                        .putContentType("Event"));
+
                 Timber.d("Backup failure.");
                 if (isFinishing()) return;
 
@@ -115,6 +132,11 @@ public class BackupActivity extends BaseBackActivity {
 
     @OnItemClick(R.id.list_view)
     public void restoreBackupClicked(int position) {
+        // Answers event
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("Restore backup")
+                .putContentType("Button"));
+
         final String backupName = listView.getAdapter().getItem(position).toString();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(BackupActivity.this);
@@ -135,6 +157,11 @@ public class BackupActivity extends BaseBackActivity {
         backupController.restoreBackup(dbApi, backupName, new BackupController.OnRestoreBackupListener() {
             @Override
             public void onRestoreSuccess() {
+                // Answers event
+                Answers.getInstance().logContentView(new ContentViewEvent()
+                        .putContentName("Restore Success")
+                        .putContentType("Event"));
+
                 Timber.d("Restore success.");
                 if (isFinishing()) return;
 
@@ -157,6 +184,11 @@ public class BackupActivity extends BaseBackActivity {
 
             @Override
             public void onRestoreFailure(String reason) {
+                // Answers event
+                Answers.getInstance().logContentView(new ContentViewEvent()
+                        .putContentName("Restore Failure")
+                        .putContentType("Event"));
+
                 Timber.d("Restore failure.");
                 if (isFinishing()) return;
 
