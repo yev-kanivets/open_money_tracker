@@ -133,9 +133,7 @@ public class MainActivity extends BaseDrawerActivity {
 
         // Minus one because of list view's header view
         Record record = recordList.get(position - 1);
-        if (record.isIncome())
-            startAddIncomeActivity(record, AddRecordActivity.Mode.MODE_EDIT);
-        else startAddExpenseActivity(record, AddRecordActivity.Mode.MODE_EDIT);
+        startAddRecordActivity(record, AddRecordActivity.Mode.MODE_EDIT, record.getType());
     }
 
     @OnClick(R.id.btn_add_expense)
@@ -145,7 +143,7 @@ public class MainActivity extends BaseDrawerActivity {
                 .putContentName("Add Expense")
                 .putContentType("Button"));
 
-        startAddExpenseActivity(null, AddRecordActivity.Mode.MODE_ADD);
+        startAddRecordActivity(null, AddRecordActivity.Mode.MODE_ADD, Record.TYPE_EXPENSE);
     }
 
     @OnClick(R.id.btn_add_income)
@@ -155,7 +153,7 @@ public class MainActivity extends BaseDrawerActivity {
                 .putContentName("Add Income")
                 .putContentType("Button"));
 
-        startAddIncomeActivity(null, AddRecordActivity.Mode.MODE_ADD);
+        startAddRecordActivity(null, AddRecordActivity.Mode.MODE_ADD, Record.TYPE_INCOME);
     }
 
     public void showReport() {
@@ -218,19 +216,11 @@ public class MainActivity extends BaseDrawerActivity {
         dialog.show();
     }
 
-    private void startAddIncomeActivity(Record record, AddRecordActivity.Mode mode) {
+    private void startAddRecordActivity(Record record, AddRecordActivity.Mode mode, int type) {
         Intent intent = new Intent(MainActivity.this, AddRecordActivity.class);
         intent.putExtra(AddRecordActivity.KEY_RECORD, record);
         intent.putExtra(AddRecordActivity.KEY_MODE, mode);
-        intent.putExtra(AddRecordActivity.KEY_TYPE, Record.TYPE_INCOME);
-        startActivityForResult(intent, REQUEST_ACTION_RECORD);
-    }
-
-    private void startAddExpenseActivity(Record record, AddRecordActivity.Mode mode) {
-        Intent intent = new Intent(MainActivity.this, AddRecordActivity.class);
-        intent.putExtra(AddRecordActivity.KEY_RECORD, record);
-        intent.putExtra(AddRecordActivity.KEY_MODE, mode);
-        intent.putExtra(AddRecordActivity.KEY_TYPE, Record.TYPE_EXPENSE);
+        intent.putExtra(AddRecordActivity.KEY_TYPE, type);
         startActivityForResult(intent, REQUEST_ACTION_RECORD);
     }
 

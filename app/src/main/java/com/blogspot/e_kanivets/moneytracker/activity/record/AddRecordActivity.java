@@ -3,10 +3,7 @@ package com.blogspot.e_kanivets.moneytracker.activity.record;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.support.annotation.Nullable;
-import android.support.annotation.StyleRes;
 import android.support.v7.widget.AppCompatSpinner;
 import android.text.InputFilter;
 import android.text.Spanned;
@@ -15,8 +12,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -25,7 +20,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
@@ -36,6 +30,7 @@ import com.blogspot.e_kanivets.moneytracker.controller.data.CategoryController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.RecordController;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record;
+import com.blogspot.e_kanivets.moneytracker.ui.AddRecordUiDecorator;
 import com.blogspot.e_kanivets.moneytracker.util.CategoryAutoCompleter;
 import com.blogspot.e_kanivets.moneytracker.util.validator.IValidator;
 import com.blogspot.e_kanivets.moneytracker.util.validator.RecordValidator;
@@ -72,8 +67,6 @@ public class AddRecordActivity extends BaseBackActivity {
 
     private List<Account> accountList;
     private long timestamp;
-    @StyleRes
-    private int dialogTheme;
 
     @Inject
     CategoryController categoryController;
@@ -85,6 +78,7 @@ public class AddRecordActivity extends BaseBackActivity {
     FormatController formatController;
 
     private IValidator<Record> recordValidator;
+    private AddRecordUiDecorator uiDecorator;
 
     @Bind(R.id.content)
     View contentView;
@@ -110,6 +104,8 @@ public class AddRecordActivity extends BaseBackActivity {
     protected boolean initData() {
         super.initData();
         getAppComponent().inject(AddRecordActivity.this);
+
+        uiDecorator = new AddRecordUiDecorator(AddRecordActivity.this);
 
         record = getIntent().getParcelableExtra(KEY_RECORD);
         mode = (Mode) getIntent().getSerializableExtra(KEY_MODE);
@@ -140,43 +136,8 @@ public class AddRecordActivity extends BaseBackActivity {
             etPrice.setText(formatController.formatPrecisionNone(record.getFullPrice()));
         }
 
+        uiDecorator.decorateActionBar(getSupportActionBar(), mode, type);
         presentSpinnerAccount();
-
-        dialogTheme = 0;
-        if (getSupportActionBar() != null) {
-            switch (type) {
-                case Record.TYPE_EXPENSE:
-                    if (mode == Mode.MODE_ADD)
-                        getSupportActionBar().setTitle(R.string.title_add_expense);
-                    else getSupportActionBar().setTitle(R.string.title_edit_expense);
-                    getSupportActionBar().setBackgroundDrawable(
-                            new ColorDrawable(getResources().getColor(R.color.red_light)));
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        Window window = getWindow();
-                        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                        window.setStatusBarColor(getResources().getColor(R.color.red_dark));
-                        dialogTheme = R.style.RedDialogTheme;
-                    }
-                    break;
-
-                case Record.TYPE_INCOME:
-                    if (mode == Mode.MODE_ADD)
-                        getSupportActionBar().setTitle(R.string.title_add_income);
-                    else getSupportActionBar().setTitle(R.string.title_edit_income);
-                    getSupportActionBar().setBackgroundDrawable(
-                            new ColorDrawable(getResources().getColor(R.color.green_light)));
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        Window window = getWindow();
-                        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                        window.setStatusBarColor(getResources().getColor(R.color.green_dark));
-                        dialogTheme = R.style.GreenDialogTheme;
-                    }
-                    break;
-
-                default:
-                    break;
-            }
-        }
 
         etCategory.setAdapter(new CategoryAutoCompleteAdapter(AddRecordActivity.this,
                 R.layout.view_category_item, new CategoryAutoCompleter(categoryController)));
@@ -215,9 +176,6 @@ public class AddRecordActivity extends BaseBackActivity {
                 menu.removeItem(R.id.action_delete);
                 break;
 
-            case MODE_EDIT:
-                break;
-
             default:
                 break;
         }
@@ -253,7 +211,7 @@ public class AddRecordActivity extends BaseBackActivity {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(timestamp);
-        DatePickerDialog dialog = new DatePickerDialog(AddRecordActivity.this, dialogTheme,
+        DatePickerDialog dialog = new DatePickerDialog(AddRecordActivity.this, uiDecorator.getTheme(type),
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -284,7 +242,7 @@ public class AddRecordActivity extends BaseBackActivity {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(timestamp);
-        TimePickerDialog dialog = new TimePickerDialog(AddRecordActivity.this, dialogTheme,
+        TimePickerDialog dialog = new TimePickerDialog(AddRecordActivity.this, uiDecorator.getTheme(type),
                 new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
