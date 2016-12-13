@@ -19,12 +19,12 @@ public abstract class BaseEntity implements IEntity {
         else return str1.equals(str2);
     }
 
-    protected int getInteger(double value) {
-        return (int) value;
+    protected long getLong(double value) {
+        return (long) value;
     }
 
-    protected int getDecimal(double value) {
+    protected long getDecimal(double value) {
         // Strange calculation because of double type precision issue
-        return  (int) Math.round(value * 100 - getInteger(value) * 100);
+        return  (long) Math.round(value * 100 - getLong(value) * 100);
     }
 }

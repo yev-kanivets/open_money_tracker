@@ -25,6 +25,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
@@ -34,9 +35,10 @@ import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.CategoryController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.RecordController;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
-import com.blogspot.e_kanivets.moneytracker.entity.data.Category;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record;
 import com.blogspot.e_kanivets.moneytracker.util.CategoryAutoCompleter;
+import com.blogspot.e_kanivets.moneytracker.util.validator.IValidator;
+import com.blogspot.e_kanivets.moneytracker.util.validator.RecordValidator;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -61,6 +63,7 @@ public class AddRecordActivity extends BaseBackActivity {
     public static final String KEY_MODE = "key_mode";
     public static final String KEY_TYPE = "key_type";
 
+    @Nullable
     private Record record;
     private Mode mode;
     private int type;
@@ -79,6 +82,10 @@ public class AddRecordActivity extends BaseBackActivity {
     @Inject
     FormatController formatController;
 
+    private IValidator<Record> recordValidator;
+
+    @Bind(R.id.content)
+    View contentView;
     @Bind(R.id.tv_date)
     TextView tvDate;
     @Bind(R.id.tv_time)
@@ -107,10 +114,11 @@ public class AddRecordActivity extends BaseBackActivity {
         type = getIntent().getIntExtra(KEY_TYPE, -1);
         accountList = accountController.readAll();
 
-        if (mode == Mode.MODE_EDIT) timestamp = record.getTime();
+        if (mode == Mode.MODE_EDIT && record != null) timestamp = record.getTime();
         else timestamp = new Date().getTime();
 
-        return mode != null && type != -1 && (!mode.equals(Mode.MODE_EDIT) || record != null);
+        return mode != null && (type == Record.TYPE_INCOME || type == Record.TYPE_EXPENSE)
+                && (!mode.equals(Mode.MODE_EDIT) || record != null);
     }
 
     @SuppressWarnings("deprecation")
@@ -118,6 +126,10 @@ public class AddRecordActivity extends BaseBackActivity {
     @Override
     protected void initViews() {
         super.initViews();
+
+        long recordId = record == null ? -1 : record.getId();
+        recordValidator = new RecordValidator(AddRecordActivity.this, contentView, mode,
+                accountList, timestamp, type, recordId);
 
         // Add texts to dialog if it's edit dialog
         if (mode == Mode.MODE_EDIT) {
@@ -132,7 +144,8 @@ public class AddRecordActivity extends BaseBackActivity {
         if (getSupportActionBar() != null) {
             switch (type) {
                 case Record.TYPE_EXPENSE:
-                    if (mode == Mode.MODE_ADD) getSupportActionBar().setTitle(R.string.title_add_expense);
+                    if (mode == Mode.MODE_ADD)
+                        getSupportActionBar().setTitle(R.string.title_add_expense);
                     else getSupportActionBar().setTitle(R.string.title_edit_expense);
                     getSupportActionBar().setBackgroundDrawable(
                             new ColorDrawable(getResources().getColor(R.color.red_light)));
@@ -145,7 +158,8 @@ public class AddRecordActivity extends BaseBackActivity {
                     break;
 
                 case Record.TYPE_INCOME:
-                    if (mode == Mode.MODE_ADD) getSupportActionBar().setTitle(R.string.title_add_income);
+                    if (mode == Mode.MODE_ADD)
+                        getSupportActionBar().setTitle(R.string.title_add_income);
                     else getSupportActionBar().setTitle(R.string.title_edit_income);
                     getSupportActionBar().setBackgroundDrawable(
                             new ColorDrawable(getResources().getColor(R.color.green_light)));
@@ -217,9 +231,10 @@ public class AddRecordActivity extends BaseBackActivity {
                 return true;
 
             case R.id.action_delete:
-                recordController.delete(record);
-                setResult(RESULT_OK);
-                finish();
+                if (recordController.delete(record)) {
+                    setResult(RESULT_OK);
+                    finish();
+                }
                 return true;
 
             default:
@@ -244,6 +259,8 @@ public class AddRecordActivity extends BaseBackActivity {
                         if (calendar.getTimeInMillis() < new Date().getTime()) {
                             timestamp = calendar.getTimeInMillis();
                             updateDateAndTime();
+                        } else {
+                            showToast(R.string.record_in_future);
                         }
                     }
                 }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
@@ -267,18 +284,13 @@ public class AddRecordActivity extends BaseBackActivity {
                         if (calendar.getTimeInMillis() < new Date().getTime()) {
                             timestamp = calendar.getTimeInMillis();
                             updateDateAndTime();
+                        } else {
+                            showToast(R.string.record_in_future);
                         }
                     }
                 }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE),
                 DateFormat.is24HourFormat(AddRecordActivity.this));
         dialog.show();
-    }
-
-    private void tryRecord() {
-        if (prepareRecord()) {
-            setResult(RESULT_OK);
-            finish();
-        } else showToast(R.string.wrong_number_text);
     }
 
     private void presentSpinnerAccount() {
@@ -290,7 +302,7 @@ public class AddRecordActivity extends BaseBackActivity {
         int selectedAccountIndex = -1;
 
         if (mode == Mode.MODE_EDIT) {
-            if (record.getAccount() != null) {
+            if (record != null && record.getAccount() != null) {
                 for (int i = 0; i < accountList.size(); i++) {
                     Account account = accountList.get(i);
                     if (account.getId() == record.getAccount().getId()) selectedAccountIndex = i;
@@ -310,8 +322,11 @@ public class AddRecordActivity extends BaseBackActivity {
             selectedAccountIndex = 0;
             spinnerAccount.setEnabled(false);
 
-            accounts = new ArrayList<>();
-            accounts.add(getString(R.string.account_was_removed));
+            if (accounts.size() == 0) {
+                accounts.add(getString(R.string.none));
+            } else {
+                accounts.add(getString(R.string.account_was_removed));
+            }
         }
 
         spinnerAccount.setAdapter(new ArrayAdapter<>(AddRecordActivity.this,
@@ -319,63 +334,24 @@ public class AddRecordActivity extends BaseBackActivity {
         spinnerAccount.setSelection(selectedAccountIndex);
     }
 
-    private boolean prepareRecord() {
-        String title = etTitle.getText().toString().trim();
-        String category = etCategory.getText().toString().trim();
-
-        if (title.isEmpty()) return false;
-        if (category.isEmpty()) return false;
-
-        //Check if price is valid
-        double price = -1;
-        try {
-            price = Double.parseDouble(etPrice.getText().toString());
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
+    private void tryRecord() {
+        if (addRecord()) {
+            setResult(RESULT_OK);
+            finish();
         }
-
-        long now = new Date().getTime();
-        if (timestamp > now) return false;
-
-        if (price < 0.0 || price > 1000000000.0) return false;
-
-        if (spinnerAccount.getSelectedItemPosition() < 0) return false;
-
-        Account account = null;
-        if (spinnerAccount.isEnabled())
-            account = accountList.get(spinnerAccount.getSelectedItemPosition());
-
-        return doRecord(timestamp, title, category, price, account);
     }
 
-    private boolean doRecord(long timestamp, String title, String category, double price,
-                             @Nullable Account account) {
-        if (account == null) return false;
-
-        if (mode == Mode.MODE_ADD) {
-            switch (type) {
-                case Record.TYPE_EXPENSE:
-                    recordController.create(new Record(timestamp, Record.TYPE_EXPENSE, title,
-                            new Category(category), price, account, account.getCurrency()));
-                    return true;
-
-                case Record.TYPE_INCOME:
-                    recordController.create(new Record(timestamp, Record.TYPE_INCOME, title,
-                            new Category(category), price, account, account.getCurrency()));
-                    return true;
-
-                default:
-                    return false;
-            }
-        } else if (mode == Mode.MODE_EDIT) {
-            Record updatedRecord = new Record(record.getId(), timestamp, record.getType(),
-                    title, new Category(category), price, account, account.getCurrency());
-            recordController.update(updatedRecord);
-
-            return true;
+    @SuppressWarnings("SimplifiableIfStatement")
+    private boolean addRecord() {
+        Record newRecord = recordValidator.validate();
+        if (newRecord == null) return false;
+        else {
+            if (mode == Mode.MODE_ADD) {
+                return recordController.create(newRecord) != null;
+            } else if (mode == Mode.MODE_EDIT) {
+                return recordController.update(newRecord) != null;
+            } else return false;
         }
-
-        return false;
     }
 
     private void updateDateAndTime() {
