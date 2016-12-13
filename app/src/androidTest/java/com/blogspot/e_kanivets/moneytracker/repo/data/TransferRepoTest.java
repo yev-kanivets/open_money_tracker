@@ -46,10 +46,10 @@ public class TransferRepoTest extends TestCase {
         expected.put(DbHelper.TIME_COLUMN, 1L);
         expected.put(DbHelper.FROM_ACCOUNT_ID_COLUMN, 1L);
         expected.put(DbHelper.TO_ACCOUNT_ID_COLUMN, 2L);
-        expected.put(DbHelper.FROM_AMOUNT_COLUMN, 100);
-        expected.put(DbHelper.TO_AMOUNT_COLUMN, 200);
-        expected.put(DbHelper.DECIMALS_FROM_COLUMN, 45);
-        expected.put(DbHelper.DECIMALS_TO_COLUMN, 50);
+        expected.put(DbHelper.FROM_AMOUNT_COLUMN, 100L);
+        expected.put(DbHelper.TO_AMOUNT_COLUMN, 200L);
+        expected.put(DbHelper.DECIMALS_FROM_COLUMN, 45L);
+        expected.put(DbHelper.DECIMALS_TO_COLUMN, 50L);
 
         ContentValues actual = repo.contentValues(transfer);
 
@@ -76,10 +76,10 @@ public class TransferRepoTest extends TestCase {
         Mockito.when(mockCursor.getLong(2)).thenReturn(1L);
         Mockito.when(mockCursor.getLong(3)).thenReturn(1L);
         Mockito.when(mockCursor.getLong(4)).thenReturn(2L);
-        Mockito.when(mockCursor.getInt(5)).thenReturn(100);
-        Mockito.when(mockCursor.getInt(6)).thenReturn(200);
-        Mockito.when(mockCursor.getInt(7)).thenReturn(45);
-        Mockito.when(mockCursor.getInt(8)).thenReturn(50);
+        Mockito.when(mockCursor.getLong(5)).thenReturn(100L);
+        Mockito.when(mockCursor.getLong(6)).thenReturn(200L);
+        Mockito.when(mockCursor.getLong(7)).thenReturn(45L);
+        Mockito.when(mockCursor.getLong(8)).thenReturn(50L);
 
         List<Transfer> expected = new ArrayList<>();
         expected.add(new Transfer(1, 1, 1, 2, 100, 200, 45, 50));
