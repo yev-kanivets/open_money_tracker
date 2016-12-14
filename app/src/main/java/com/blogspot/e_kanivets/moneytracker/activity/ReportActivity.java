@@ -51,6 +51,7 @@ public class ReportActivity extends BaseBackActivity {
         return R.layout.activity_report;
     }
 
+    @SuppressWarnings("RedundantIfStatement")
     @Override
     protected boolean initData() {
         super.initData();

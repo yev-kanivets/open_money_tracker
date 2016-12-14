@@ -19,7 +19,6 @@ import com.blogspot.e_kanivets.moneytracker.report.account.IAccountsReport;
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.base.BaseSummaryPresenter;
 
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 

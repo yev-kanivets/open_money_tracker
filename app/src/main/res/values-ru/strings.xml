@@ -10,13 +10,11 @@
     <string name="add_expense">Добавить расход</string>
     <string name="add">Добавить</string>
 
-    <string name="wrong_number_text">Извините, но введенные данные не верны!</string>
     <string name="report">Отчет</string>
     <string name="change_date">ИЗМЕНИТЬ ДАТУ</string>
     <string name="total">СУММА</string>
     <string name="total_incomes">Суммарный доход</string>
     <string name="total_expenses">Суммарный расход</string>
-    <string name="edit">Редактировать</string>
     <string name="delete">Удалить</string>
 
     <string name="day">День</string>
@@ -105,4 +103,14 @@
     <string name="about_summary">Версия %1$s (Android %2$s)</string>
     <string name="title_activity_about">О приложении</string>
     <string name="about">Open Money Tracker (OMT) это приложения для ведения личных финансов. Вы легко можете управлять доходами и расходами. Также доступны счета и курсы обмена.\n\nДля того чтобы помочь сделать OMT лучше, пишите о багах на <a href="http://4pda.ru/forum/index.php?showtopic=755203">форуме 4PDA</a>; идеи новых функций также приветствуются. Ищите ответы или начинайте обсуждение на <a href="http://4pda.ru/forum/index.php?showtopic=755203">форуме</a>.\n\nOMT это <a href="https://en.wikipedia.org/wiki/Open-source_software">проект с открытым исходным кодом</a>, так что каждый может помочь с его разработкой. Не-разработчики также могут помочь. Например, вы можете помочь с переводом, предоставить скриншоты или написать статью в блоге о OMT.\n\nOMT выпущен под <a href="https://ru.wikipedia.org/wiki/GNU_General_Public_License#GPL_v3">GNU-GPL v3 лицензией</a> и исходный код доступен <a href="https://github.com/evgenii-kanivets/Money-Tracker">на GitHub</a>.\n\n<a href="https://ua.linkedin.com/in/evgeniikanivets">Профиль разработчика на LinkedIn.</a></string>
+
+    <string name="field_cant_be_empty">Поле не может быть пустым.</string>
+    <string name="too_rich_or_poor">Вы не можете быть настолько богаты или бедны.</string>
+    <string name="too_rich">Вы не можете быть настолько богаты.</string>
+    <string name="none">Нет</string>
+    <string name="too_much_for_transfer">Слишком много для перевода.</string>
+    <string name="too_much_for_exchange">Слишком много для обмена.</string>
+    <string name="same_currencies">Нельзя конвертировать валюту в саму себя.</string>
+    <string name="record_in_future">Нельзя создать запись в будущем.</string>
+    <string name="one_account_needed">Необходим, по крайней мере, один счет.</string>
 </resources>

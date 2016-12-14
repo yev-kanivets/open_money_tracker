@@ -8,13 +8,11 @@
     <string name="add_income">Add income</string>
     <string name="add_expense">Add expense</string>
     <string name="add">Add</string>
-    <string name="wrong_number_text">Sorry, but entered data is wrong!</string>
     <string name="report">Report</string>
     <string name="change_date">CHANGE THE DATE</string>
     <string name="total">TOTAL</string>
     <string name="total_incomes">Total income</string>
     <string name="total_expenses">Total expense</string>
-    <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="day">Day</string>
     <string name="week">Week</string>
@@ -67,9 +65,9 @@
 
     <string name="pref_display_precision" translatable="false">pref_display_precision</string>
     <string name="display_precision">Display precision</string>
-    <string name="precision_math">9.99$ = 10$</string>
-    <string name="precision_int">9.99$ = 9$</string>
-    <string name="precision_none">9.99$ = 9.99$</string>
+    <string name="precision_math" translatable="false">9.99$ = 10$</string>
+    <string name="precision_int" translatable="false">9.99$ = 9$</string>
+    <string name="precision_none" translatable="false">9.99$ = 9.99$</string>
 
     <string name="title_import_export">Import/Export</string>
     <string name="text_import">Import</string>
@@ -115,7 +113,6 @@
     <string name="title_activity_about">About</string>
     <string name="about">Open Money Tracker (OMT) is an accounting application. You can manage your incomes and expenses in easy way. Accounts and currency exchange rates are also available.\n\nTo help us make OMT better, please report bugs to <a href="http://4pda.ru/forum/index.php?showtopic=755203">the 4PDA forum</a>; new feature ideas are very welcome too. Find answers or start a discussion on <a href="http://4pda.ru/forum/index.php?showtopic=755203">forum</a>.\n\nOMT is <a href="https://en.wikipedia.org/wiki/Open-source_software">open source software</a>, so everyone is encouraged to become a contributor. Non-developers can also help. For instance, you can help translate OMT, provide screenshots or blog about OMT.\n\nOMT is released under the <a href="https://ru.wikipedia.org/wiki/GNU_General_Public_License#GPL_v3">GNU-GPL v3 license</a> and source code is available <a href="https://github.com/evgenii-kanivets/Money-Tracker">on GitHub</a>.\n\n<a href="https://ua.linkedin.com/in/evgeniikanivets">Developer profile on LinkedIn.</a></string>
 
-    <!-- Not translated strings -->
     <string name="field_cant_be_empty">Field can\'t be empty.</string>
     <string name="too_rich_or_poor">You can\'t be so rich or so poor.</string>
     <string name="too_rich">You can\'t be so rich.</string>
@@ -125,4 +122,5 @@
     <string name="same_currencies">Can\'t convert between same currencies.</string>
     <string name="record_in_future">Can\'t create a record in future.</string>
     <string name="one_account_needed">At least one account is needed.</string>
+    <!-- Not translated strings -->
 </resources>
