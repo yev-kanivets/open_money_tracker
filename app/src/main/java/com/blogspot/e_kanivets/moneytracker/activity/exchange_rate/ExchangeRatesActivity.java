@@ -15,6 +15,8 @@ import com.blogspot.e_kanivets.moneytracker.adapter.ExchangeRateAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.data.ExchangeRateController;
 import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRatePair;
 import com.blogspot.e_kanivets.moneytracker.util.ExchangeRatesSummarizer;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
 
 import java.util.Collections;
 import java.util.List;
@@ -71,23 +73,42 @@ public class ExchangeRatesActivity extends BaseBackActivity {
 
         switch (item.getItemId()) {
             case R.id.delete:
-                rateController.deleteExchangeRatePair(exchangeRateList.get(info.position));
-                update();
-                setResult(RESULT_OK);
+                deleteExchangeRate(info.position);
                 return true;
             default:
                 return super.onContextItemSelected(item);
         }
     }
 
+    public void deleteExchangeRate(int position) {
+        // Answers event
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("Delete Exchange Rate")
+                .putContentType("Button"));
+
+        rateController.deleteExchangeRatePair(exchangeRateList.get(position));
+        update();
+        setResult(RESULT_OK);
+    }
+
     @OnClick(R.id.btn_add_exchange_rate)
     public void addExchangeRate() {
+        // Answers event
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("Add Exchange Rate")
+                .putContentType("Button"));
+
         Intent intent = new Intent(ExchangeRatesActivity.this, AddExchangeRateActivity.class);
         startActivityForResult(intent, REQUEST_ADD_EXCHANGE_RATE);
     }
 
     @OnItemClick(R.id.list_view)
     public void addExchangeRateOnBaseOfExisted(int position) {
+        // Answers event
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("Edit Exchange Rate")
+                .putContentType("Button"));
+
         if (position < 0 || position >= exchangeRateList.size()) return;
         Intent intent = new Intent(ExchangeRatesActivity.this, AddExchangeRateActivity.class);
         intent.putExtra(AddExchangeRateActivity.KEY_EXCHANGE_RATE, exchangeRateList.get(position));

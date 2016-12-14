@@ -3,8 +3,8 @@ package com.blogspot.e_kanivets.moneytracker.activity.account;
 import android.support.v7.widget.AppCompatSpinner;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
@@ -12,6 +12,10 @@ import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.TransferController;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Transfer;
+import com.blogspot.e_kanivets.moneytracker.util.validator.IValidator;
+import com.blogspot.e_kanivets.moneytracker.util.validator.TransferValidator;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,16 +33,16 @@ public class TransferActivity extends BaseBackActivity {
     @Inject
     AccountController accountController;
 
+    private IValidator<Transfer> transferValidator;
+
     private List<Account> accountList;
 
+    @Bind(R.id.content)
+    View contentView;
     @Bind(R.id.spinner_from)
     AppCompatSpinner spinnerFrom;
     @Bind(R.id.spinner_to)
     AppCompatSpinner spinnerTo;
-    @Bind(R.id.et_from_amount)
-    EditText etFromAmount;
-    @Bind(R.id.et_to_amount)
-    EditText etToAmount;
 
     @Override
     protected int getContentViewId() {
@@ -62,6 +66,14 @@ public class TransferActivity extends BaseBackActivity {
             accounts.add(account.getTitle());
         }
 
+        transferValidator = new TransferValidator(TransferActivity.this, contentView, accountList);
+
+        if (accounts.size() == 0) {
+            accounts.add(getString(R.string.none));
+            spinnerFrom.setEnabled(false);
+            spinnerTo.setEnabled(false);
+        }
+
         spinnerFrom.setAdapter(new ArrayAdapter<>(TransferActivity.this,
                 R.layout.view_spinner_item, accounts));
 
@@ -79,10 +91,7 @@ public class TransferActivity extends BaseBackActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_done:
-                doTransfer();
-
-                setResult(RESULT_OK);
-                finish();
+                tryTransfer();
                 return true;
 
             default:
@@ -90,26 +99,27 @@ public class TransferActivity extends BaseBackActivity {
         }
     }
 
-    private void doTransfer() {
-        Account fromAccount = accountList.get(spinnerFrom.getSelectedItemPosition());
-        Account toAccount = accountList.get(spinnerTo.getSelectedItemPosition());
+    private void tryTransfer() {
+        // Answers event
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("Done Transfer")
+                .putContentType("Button"));
 
-        double fromAmount = -1;
-        try {
-            fromAmount = Double.parseDouble(etFromAmount.getText().toString());
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
+        if (doTransfer()) {
+            // Answers event
+            Answers.getInstance().logContentView(new ContentViewEvent()
+                    .putContentName("Done Transfer")
+                    .putContentType("Event"));
+
+            setResult(RESULT_OK);
+            finish();
         }
+    }
 
-        double toAmount = -1;
-        try {
-            toAmount = Double.parseDouble(etToAmount.getText().toString());
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
-
-        Transfer transfer = new Transfer(System.currentTimeMillis(), fromAccount.getId(),
-                toAccount.getId(), fromAmount, toAmount);
-        transferController.create(transfer);
+    @SuppressWarnings("SimplifiableIfStatement")
+    private boolean doTransfer() {
+        Transfer transfer = transferValidator.validate();
+        if (transfer == null) return false;
+        else return transferController.create(transfer) != null;
     }
 }

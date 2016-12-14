@@ -75,10 +75,10 @@ public class RecordRepo extends BaseRepo<Record> {
                         cursor.getInt(typeColIndex),
                         cursor.getString(titleColIndex),
                         cursor.getLong(categoryColIndex),
-                        cursor.getInt(priceColIndex),
+                        cursor.getLong(priceColIndex),
                         cursor.getLong(accountIdColIndex),
                         cursor.getString(currencyColIndex),
-                        cursor.getInt(decimalsColIndex));
+                        cursor.getLong(decimalsColIndex));
 
                 recordList.add(record);
             } while (cursor.moveToNext());

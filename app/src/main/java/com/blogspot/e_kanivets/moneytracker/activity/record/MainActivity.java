@@ -26,6 +26,8 @@ import com.blogspot.e_kanivets.moneytracker.report.record.IRecordReport;
 import com.blogspot.e_kanivets.moneytracker.ui.AppRateDialog;
 import com.blogspot.e_kanivets.moneytracker.ui.PeriodSpinner;
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.ShortSummaryPresenter;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -124,6 +126,11 @@ public class MainActivity extends BaseDrawerActivity {
 
     @OnItemClick(R.id.list_view)
     public void editRecord(int position) {
+        // Answers event
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("Edit Record")
+                .putContentType("Button"));
+
         // Minus one because of list view's header view
         Record record = recordList.get(position - 1);
         startAddRecordActivity(record, AddRecordActivity.Mode.MODE_EDIT, record.getType());
@@ -131,15 +138,30 @@ public class MainActivity extends BaseDrawerActivity {
 
     @OnClick(R.id.btn_add_expense)
     public void addExpense() {
+        // Answers event
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("Add Expense")
+                .putContentType("Button"));
+
         startAddRecordActivity(null, AddRecordActivity.Mode.MODE_ADD, Record.TYPE_EXPENSE);
     }
 
     @OnClick(R.id.btn_add_income)
     public void addIncome() {
+        // Answers event
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("Add Income")
+                .putContentType("Button"));
+
         startAddRecordActivity(null, AddRecordActivity.Mode.MODE_ADD, Record.TYPE_INCOME);
     }
 
     public void showReport() {
+        // Answers event
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("Show Report")
+                .putContentType("Button"));
+
         Intent intent = new Intent(MainActivity.this, ReportActivity.class);
         intent.putExtra(ReportActivity.KEY_PERIOD, period);
         intent.putExtra(ReportActivity.KEY_RECORD_LIST, (ArrayList<Record>) recordList);
@@ -184,6 +206,11 @@ public class MainActivity extends BaseDrawerActivity {
     }
 
     private void showAppRateDialog() {
+        // Answers event
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("Show App Rate Dialog")
+                .putContentType("Button"));
+
         AppRateDialog dialog = new AppRateDialog(MainActivity.this);
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();

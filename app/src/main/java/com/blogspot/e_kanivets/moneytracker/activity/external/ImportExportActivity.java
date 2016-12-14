@@ -15,6 +15,8 @@ import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.controller.external.ExportController;
 import com.blogspot.e_kanivets.moneytracker.controller.external.ImportController;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -60,11 +62,7 @@ public class ImportExportActivity extends BaseBackActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_help:
-                AlertDialog.Builder builder = new AlertDialog.Builder(ImportExportActivity.this);
-                builder.setTitle(R.string.help)
-                        .setMessage(R.string.import_help)
-                        .setPositiveButton(android.R.string.ok, null)
-                        .show();
+                showHelp();
                 return true;
 
             default:
@@ -72,8 +70,26 @@ public class ImportExportActivity extends BaseBackActivity {
         }
     }
 
+    public void showHelp() {
+        // Answers event
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("Show Help")
+                .putContentType("Button"));
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(ImportExportActivity.this);
+        builder.setTitle(R.string.help)
+                .setMessage(R.string.import_help)
+                .setPositiveButton(android.R.string.ok, null)
+                .show();
+    }
+
     @OnClick(R.id.btn_import)
     public void importRecords() {
+        // Answers event
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("Import Records")
+                .putContentType("Button"));
+
         final String data = etImportData.getText().toString().trim();
 
         AsyncTask<Void, Void, Integer> importTask = new AsyncTask<Void, Void, Integer>() {
@@ -93,7 +109,7 @@ public class ImportExportActivity extends BaseBackActivity {
             protected void onPostExecute(Integer recordCount) {
                 super.onPostExecute(recordCount);
                 stopProgress();
-                showToast(getString(R.string.records_imported, recordCount));
+                showToast(getString(R.string.records_imported, recordCount.toString()));
                 setResult(RESULT_OK);
             }
         };
@@ -102,6 +118,11 @@ public class ImportExportActivity extends BaseBackActivity {
 
     @OnClick(R.id.btn_export)
     public void exportRecords() {
+        // Answers event
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("Export Records")
+                .putContentType("Button"));
+
         List<String> records = exportController.getRecordsForExport(0, Long.MAX_VALUE);
 
         File exportDir = new File(getCacheDir(), "export");
@@ -133,6 +154,11 @@ public class ImportExportActivity extends BaseBackActivity {
     }
 
     private void shareExportedRecords(@NonNull File exportFile) {
+        // Answers event
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("Share Records")
+                .putContentType("Event"));
+
         Uri fileUri = FileProvider.getUriForFile(ImportExportActivity.this, getPackageName(), exportFile);
 
         Intent sendIntent = new Intent();

@@ -47,10 +47,10 @@ public class RecordRepoTest extends TestCase {
         expected.put(DbHelper.TYPE_COLUMN, Record.TYPE_EXPENSE);
         expected.put(DbHelper.TITLE_COLUMN, "title");
         expected.put(DbHelper.CATEGORY_ID_COLUMN, 1L);
-        expected.put(DbHelper.PRICE_COLUMN, 100);
+        expected.put(DbHelper.PRICE_COLUMN, 100L);
         expected.put(DbHelper.ACCOUNT_ID_COLUMN, 1L);
         expected.put(DbHelper.CURRENCY_COLUMN, "NON");
-        expected.put(DbHelper.DECIMALS_COLUMN, 50);
+        expected.put(DbHelper.DECIMALS_COLUMN, 50L);
 
         ContentValues actual = repo.contentValues(record);
 
@@ -79,10 +79,10 @@ public class RecordRepoTest extends TestCase {
         Mockito.when(mockCursor.getInt(3)).thenReturn(Record.TYPE_EXPENSE);
         Mockito.when(mockCursor.getString(4)).thenReturn("title");
         Mockito.when(mockCursor.getLong(5)).thenReturn(1L);
-        Mockito.when(mockCursor.getInt(6)).thenReturn(100);
+        Mockito.when(mockCursor.getLong(6)).thenReturn(100L);
         Mockito.when(mockCursor.getLong(7)).thenReturn(1L);
         Mockito.when(mockCursor.getString(8)).thenReturn("NON");
-        Mockito.when(mockCursor.getInt(9)).thenReturn(50);
+        Mockito.when(mockCursor.getLong(9)).thenReturn(50L);
 
         List<Record> expected = new ArrayList<>();
         expected.add(new Record(1, 1, Record.TYPE_EXPENSE, "title", 1, 100, 1, "NON", 50));

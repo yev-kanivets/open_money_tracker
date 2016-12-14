@@ -13,11 +13,11 @@ import com.blogspot.e_kanivets.moneytracker.entity.base.BaseEntity;
  */
 public class Account extends BaseEntity implements Parcelable {
     private final String title;
-    private int curSum;
+    private long curSum;
     private final String currency;
-    private int decimals;
+    private long decimals;
 
-    public Account(long id, String title, int curSum, String currency, int decimals) {
+    public Account(long id, String title, long curSum, String currency, long decimals) {
         this.id = id;
         this.title = title;
         this.curSum = curSum;
@@ -29,16 +29,16 @@ public class Account extends BaseEntity implements Parcelable {
         this.id = -1;
         this.title = title;
         this.currency = currency;
-        this.curSum = getInteger(curSum);
+        this.curSum = getLong(curSum);
         this.decimals = getDecimal(curSum);
     }
 
     protected Account(Parcel in) {
         id = in.readLong();
         title = in.readString();
-        curSum = in.readInt();
+        curSum = in.readLong();
         currency = in.readString();
-        decimals = in.readInt();
+        decimals = in.readLong();
     }
 
     public static final Creator<Account> CREATOR = new Creator<Account>() {
@@ -57,11 +57,11 @@ public class Account extends BaseEntity implements Parcelable {
         return title;
     }
 
-    public int getCurSum() {
+    public long getCurSum() {
         return curSum;
     }
 
-    public int getDecimals() {
+    public long getDecimals() {
         return decimals;
     }
 
@@ -76,14 +76,14 @@ public class Account extends BaseEntity implements Parcelable {
     public void put(double amount) {
         double sum = curSum + decimals / 100.0;
         sum += amount;
-        curSum = getInteger(sum);
+        curSum = getLong(sum);
         decimals = getDecimal(sum);
     }
 
     public void take(double amount) {
         double sum = curSum + decimals / 100.0;
         sum -= amount;
-        curSum = getInteger(sum);
+        curSum = getLong(sum);
         decimals = getDecimal(sum);
     }
 
@@ -124,8 +124,8 @@ public class Account extends BaseEntity implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(id);
         dest.writeString(title);
-        dest.writeInt(curSum);
+        dest.writeLong(curSum);
         dest.writeString(currency);
-        dest.writeInt(decimals);
+        dest.writeLong(decimals);
     }
 }

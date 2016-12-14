@@ -44,9 +44,9 @@ public class AccountRepoTest extends TestCase {
 
         ContentValues expected = new ContentValues();
         expected.put(DbHelper.TITLE_COLUMN, "title1");
-        expected.put(DbHelper.CUR_SUM_COLUMN, 100);
+        expected.put(DbHelper.CUR_SUM_COLUMN, 100L);
         expected.put(DbHelper.CURRENCY_COLUMN, "NON");
-        expected.put(DbHelper.DECIMALS_COLUMN, 30);
+        expected.put(DbHelper.DECIMALS_COLUMN, 30L);
 
         ContentValues actual = repo.contentValues(account);
 
@@ -67,7 +67,7 @@ public class AccountRepoTest extends TestCase {
 
         Mockito.when(mockCursor.getLong(1)).thenReturn(1L);
         Mockito.when(mockCursor.getString(2)).thenReturn("title");
-        Mockito.when(mockCursor.getInt(3)).thenReturn(100);
+        Mockito.when(mockCursor.getLong(3)).thenReturn(100L);
         Mockito.when(mockCursor.getString(4)).thenReturn("NON");
 
         List<Account> expected = new ArrayList<>();

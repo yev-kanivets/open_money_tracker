@@ -65,9 +65,9 @@ public class AccountRepo extends BaseRepo<Account> {
                 // Read a account from DB
                 Account account = new Account(cursor.getLong(idColIndex),
                         cursor.getString(titleColIndex),
-                        cursor.getInt(curSumColIndex),
+                        cursor.getLong(curSumColIndex),
                         cursor.getString(currencyColIndex),
-                        cursor.getInt(decimalsColIndex));
+                        cursor.getLong(decimalsColIndex));
 
                 accountList.add(account);
             } while (cursor.moveToNext());

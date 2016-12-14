@@ -21,6 +21,7 @@
     </android.support.design.widget.AppBarLayout>
 
     <LinearLayout
+        android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:baselineAligned="false"
@@ -49,6 +50,7 @@
                 tools:listitem="@layout/view_spinner_item" />
 
             <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_buy"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -86,6 +88,7 @@
                 tools:listitem="@layout/view_spinner_item" />
 
             <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_sell"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 

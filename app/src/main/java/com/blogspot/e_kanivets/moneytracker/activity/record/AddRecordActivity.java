@@ -3,6 +3,7 @@ package com.blogspot.e_kanivets.moneytracker.activity.record;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatSpinner;
 import android.text.InputFilter;
 import android.text.Spanned;
@@ -28,10 +29,13 @@ import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.CategoryController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.RecordController;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
-import com.blogspot.e_kanivets.moneytracker.entity.data.Category;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record;
 import com.blogspot.e_kanivets.moneytracker.ui.AddRecordUiDecorator;
 import com.blogspot.e_kanivets.moneytracker.util.CategoryAutoCompleter;
+import com.blogspot.e_kanivets.moneytracker.util.validator.IValidator;
+import com.blogspot.e_kanivets.moneytracker.util.validator.RecordValidator;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -56,6 +60,7 @@ public class AddRecordActivity extends BaseBackActivity {
     public static final String KEY_MODE = "key_mode";
     public static final String KEY_TYPE = "key_type";
 
+    @Nullable
     private Record record;
     private Mode mode;
     private int type;
@@ -72,8 +77,11 @@ public class AddRecordActivity extends BaseBackActivity {
     @Inject
     FormatController formatController;
 
-    AddRecordUiDecorator uiDecorator;
+    private IValidator<Record> recordValidator;
+    private AddRecordUiDecorator uiDecorator;
 
+    @Bind(R.id.content)
+    View contentView;
     @Bind(R.id.tv_date)
     TextView tvDate;
     @Bind(R.id.tv_time)
@@ -104,10 +112,11 @@ public class AddRecordActivity extends BaseBackActivity {
         type = getIntent().getIntExtra(KEY_TYPE, -1);
         accountList = accountController.readAll();
 
-        if (mode == Mode.MODE_EDIT) timestamp = record.getTime();
+        if (mode == Mode.MODE_EDIT && record != null) timestamp = record.getTime();
         else timestamp = new Date().getTime();
 
-        return mode != null && type != -1 && (!mode.equals(Mode.MODE_EDIT) || record != null);
+        return mode != null && (type == Record.TYPE_INCOME || type == Record.TYPE_EXPENSE)
+                && (!mode.equals(Mode.MODE_EDIT) || record != null);
     }
 
     @SuppressWarnings("deprecation")
@@ -115,6 +124,10 @@ public class AddRecordActivity extends BaseBackActivity {
     @Override
     protected void initViews() {
         super.initViews();
+
+        long recordId = record == null ? -1 : record.getId();
+        recordValidator = new RecordValidator(AddRecordActivity.this, contentView, mode,
+                accountList, timestamp, type, recordId);
 
         // Add texts to dialog if it's edit dialog
         if (mode == Mode.MODE_EDIT) {
@@ -178,9 +191,10 @@ public class AddRecordActivity extends BaseBackActivity {
                 return true;
 
             case R.id.action_delete:
-                recordController.delete(record);
-                setResult(RESULT_OK);
-                finish();
+                if (recordController.delete(record)) {
+                    setResult(RESULT_OK);
+                    finish();
+                }
                 return true;
 
             default:
@@ -190,56 +204,63 @@ public class AddRecordActivity extends BaseBackActivity {
 
     @OnClick(R.id.tv_date)
     public void selectDate() {
+        // Answers event
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("Select Date")
+                .putContentType("Button"));
+
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(timestamp);
-        DatePickerDialog dialog = new DatePickerDialog(AddRecordActivity.this,
-                uiDecorator.getTheme(type), new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(timestamp);
-                calendar.set(Calendar.YEAR, year);
-                calendar.set(Calendar.MONTH, monthOfYear);
-                calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        DatePickerDialog dialog = new DatePickerDialog(AddRecordActivity.this, uiDecorator.getTheme(type),
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTimeInMillis(timestamp);
+                        calendar.set(Calendar.YEAR, year);
+                        calendar.set(Calendar.MONTH, monthOfYear);
+                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                if (calendar.getTimeInMillis() < new Date().getTime()) {
-                    timestamp = calendar.getTimeInMillis();
-                    updateDateAndTime();
-                }
-            }
-        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                        if (calendar.getTimeInMillis() < new Date().getTime()) {
+                            timestamp = calendar.getTimeInMillis();
+                            updateDateAndTime();
+                        } else {
+                            showToast(R.string.record_in_future);
+                        }
+                    }
+                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH));
         dialog.show();
     }
 
     @OnClick(R.id.tv_time)
     public void selectTime() {
+        // Answers event
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("Show Time")
+                .putContentType("Button"));
+
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(timestamp);
-        TimePickerDialog dialog = new TimePickerDialog(AddRecordActivity.this,
-                uiDecorator.getTheme(type), new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(timestamp);
-                calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                calendar.set(Calendar.MINUTE, minute);
+        TimePickerDialog dialog = new TimePickerDialog(AddRecordActivity.this, uiDecorator.getTheme(type),
+                new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTimeInMillis(timestamp);
+                        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        calendar.set(Calendar.MINUTE, minute);
 
-                if (calendar.getTimeInMillis() < new Date().getTime()) {
-                    timestamp = calendar.getTimeInMillis();
-                    updateDateAndTime();
-                }
-            }
-        }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE),
+                        if (calendar.getTimeInMillis() < new Date().getTime()) {
+                            timestamp = calendar.getTimeInMillis();
+                            updateDateAndTime();
+                        } else {
+                            showToast(R.string.record_in_future);
+                        }
+                    }
+                }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE),
                 DateFormat.is24HourFormat(AddRecordActivity.this));
         dialog.show();
-    }
-
-    private void tryRecord() {
-        if (prepareRecord()) {
-            setResult(RESULT_OK);
-            finish();
-        } else showToast(R.string.wrong_number_text);
     }
 
     private void presentSpinnerAccount() {
@@ -251,7 +272,7 @@ public class AddRecordActivity extends BaseBackActivity {
         int selectedAccountIndex = -1;
 
         if (mode == Mode.MODE_EDIT) {
-            if (record.getAccount() != null) {
+            if (record != null && record.getAccount() != null) {
                 for (int i = 0; i < accountList.size(); i++) {
                     Account account = accountList.get(i);
                     if (account.getId() == record.getAccount().getId()) selectedAccountIndex = i;
@@ -271,8 +292,11 @@ public class AddRecordActivity extends BaseBackActivity {
             selectedAccountIndex = 0;
             spinnerAccount.setEnabled(false);
 
-            accounts = new ArrayList<>();
-            accounts.add(getString(R.string.account_was_removed));
+            if (accounts.size() == 0) {
+                accounts.add(getString(R.string.none));
+            } else {
+                accounts.add(getString(R.string.account_was_removed));
+            }
         }
 
         spinnerAccount.setAdapter(new ArrayAdapter<>(AddRecordActivity.this,
@@ -280,50 +304,34 @@ public class AddRecordActivity extends BaseBackActivity {
         spinnerAccount.setSelection(selectedAccountIndex);
     }
 
-    private boolean prepareRecord() {
-        String title = etTitle.getText().toString().trim();
-        String category = etCategory.getText().toString().trim();
+    private void tryRecord() {
+        // Answers event
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("Done Record")
+                .putContentType("Button"));
 
-        if (title.isEmpty()) return false;
-        if (category.isEmpty()) return false;
+        if (addRecord()) {
+            // Answers event
+            Answers.getInstance().logContentView(new ContentViewEvent()
+                    .putContentName("Done Record")
+                    .putContentType("Event"));
 
-        //Check if price is valid
-        double price = -1;
-        try {
-            price = Double.parseDouble(etPrice.getText().toString());
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
+            setResult(RESULT_OK);
+            finish();
         }
-
-        long now = new Date().getTime();
-        if (timestamp > now) return false;
-
-        if (price < 0.0 || price > 1000000000.0) return false;
-
-        if (spinnerAccount.getSelectedItemPosition() < 0) return false;
-
-        Account account = null;
-        if (spinnerAccount.isEnabled())
-            account = accountList.get(spinnerAccount.getSelectedItemPosition());
-        //noinspection SimplifiableIfStatement
-        if (account == null) return false;
-
-        return makeRecord(timestamp, title, category, price, account);
     }
 
-    /**
-     * All data must be valid here.
-     */
-    private boolean makeRecord(long timestamp, String title, String category, double price, Account account) {
-        long recordId = (record == null ? -1 : record.getId());
-        Record record = new Record(recordId, timestamp, type, title, new Category(category),
-                price, account, account.getCurrency());
-
-        Record resultedRecord = null;
-        if (mode == Mode.MODE_ADD) resultedRecord = recordController.create(record);
-        else if (mode == Mode.MODE_EDIT) resultedRecord = recordController.update(record);
-
-        return resultedRecord != null;
+    @SuppressWarnings("SimplifiableIfStatement")
+    private boolean addRecord() {
+        Record newRecord = recordValidator.validate();
+        if (newRecord == null) return false;
+        else {
+            if (mode == Mode.MODE_ADD) {
+                return recordController.create(newRecord) != null;
+            } else if (mode == Mode.MODE_EDIT) {
+                return recordController.update(newRecord) != null;
+            } else return false;
+        }
     }
 
     private void updateDateAndTime() {

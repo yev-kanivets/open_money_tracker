@@ -1,4 +1,19 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
 apply plugin: 'com.neenbedankt.android-apt'
 
 android {
@@ -64,4 +79,7 @@ dependencies {
     androidTestCompile 'com.crittercism.dexmaker:dexmaker:1.4'
     androidTestCompile 'com.crittercism.dexmaker:dexmaker-dx:1.4'
     androidTestCompile 'com.crittercism.dexmaker:dexmaker-mockito:1.4'
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
+        transitive = true;
+    }
 }

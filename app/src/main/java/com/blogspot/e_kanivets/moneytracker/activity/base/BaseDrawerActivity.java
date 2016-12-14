@@ -15,6 +15,8 @@ import com.blogspot.e_kanivets.moneytracker.activity.external.ImportExportActivi
 import com.blogspot.e_kanivets.moneytracker.activity.SettingsActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.account.AccountsActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.exchange_rate.ExchangeRatesActivity;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.ContentViewEvent;
 
 import butterknife.Bind;
 
@@ -72,32 +74,27 @@ public abstract class BaseDrawerActivity extends BaseActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_accounts:
-                startActivityForResult(new Intent(BaseDrawerActivity.this, AccountsActivity.class),
-                        REQUEST_ACCOUNTS);
+                showAccounts();
                 break;
 
             case R.id.nav_rates:
-                startActivityForResult(new Intent(BaseDrawerActivity.this, ExchangeRatesActivity.class),
-                        REQUEST_RATES);
+                showRates();
                 break;
 
             case R.id.nav_charts:
-                startActivity(new Intent(BaseDrawerActivity.this, ChartsActivity.class));
+                showCharts();
                 break;
 
             case R.id.nav_backup:
-                startActivityForResult(new Intent(BaseDrawerActivity.this, BackupActivity.class),
-                        REQUEST_BACKUP);
+                showBackup();
                 break;
 
             case R.id.nav_import_export:
-                startActivityForResult(new Intent(BaseDrawerActivity.this, ImportExportActivity.class),
-                        REQUEST_IMPORT_EXPORT);
+                showImportExport();
                 break;
 
             case R.id.nav_settings:
-                startActivityForResult(new Intent(BaseDrawerActivity.this, SettingsActivity.class),
-                        REQUEST_SETTINGS);
+                showSettings();
                 break;
 
             default:
@@ -134,5 +131,64 @@ public abstract class BaseDrawerActivity extends BaseActivity
                     break;
             }
         }
+    }
+
+    private void showAccounts() {
+        // Answers event
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("Show Accounts")
+                .putContentType("Button"));
+
+        startActivityForResult(new Intent(BaseDrawerActivity.this, AccountsActivity.class),
+                REQUEST_ACCOUNTS);
+    }
+
+    private void showRates() {
+        // Answers event
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("Show Rates")
+                .putContentType("Button"));
+
+        startActivityForResult(new Intent(BaseDrawerActivity.this, ExchangeRatesActivity.class),
+                REQUEST_RATES);
+    }
+
+    private void showCharts() {
+        // Answers event
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("Show Charts")
+                .putContentType("Button"));
+
+        startActivity(new Intent(BaseDrawerActivity.this, ChartsActivity.class));
+    }
+
+    private void showBackup() {
+        // Answers event
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("Show Backup")
+                .putContentType("Button"));
+
+        startActivityForResult(new Intent(BaseDrawerActivity.this, BackupActivity.class),
+                REQUEST_BACKUP);
+    }
+
+    private void showImportExport() {
+        // Answers event
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("Show Import Export")
+                .putContentType("Button"));
+
+        startActivityForResult(new Intent(BaseDrawerActivity.this, ImportExportActivity.class),
+                REQUEST_IMPORT_EXPORT);
+    }
+
+    private void showSettings() {
+        // Answers event
+        Answers.getInstance().logContentView(new ContentViewEvent()
+                .putContentName("Show Settings")
+                .putContentType("Button"));
+
+        startActivityForResult(new Intent(BaseDrawerActivity.this, SettingsActivity.class),
+                REQUEST_SETTINGS);
     }
 }
