@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">资产流向</string>
+    <string name="title">标题</string>
+    <string name="category">类别</string>
+    <string name="price">价格</string>
+    <string name="add_income">添加收入</string>
+    <string name="add_expense">添加支出</string>
+    <string name="add">添加</string>
+    <string name="report">报告</string>
+    <string name="change_date">修改日期</string>
+    <string name="total">总计</string>
+    <string name="total_incomes">总收入</string>
+    <string name="total_expenses">总支出</string>
+    <string name="delete">删除</string>
+    <string name="day">天</string>
+    <string name="week">周</string>
+    <string name="month">月</string>
+    <string name="year">年</string>
+    <string name="like_money_tracker">你喜欢我们这个软件吗？</string>
+    <string name="rate_it_on_gp">在Google Play上评价吧！</string>
+    <string name="maybe_later">稍后</string>
+    <string name="no_thank_you">不，谢谢</string>
+    <string name="yes_very">是的！</string>
+
+    <string name="title_records">记录</string>
+    <string name="title_accounts">账户</string>
+    <string name="title_add_income">添加收入</string>
+    <string name="title_add_expense">添加支出</string>
+    <string name="title_add_account">添加账户</string>
+
+    <string name="export">导出</string>
+    <string name="add_account">添加账户</string>
+    <string name="initial_sum">初始额度</string>
+    <string name="account">账户</string>
+    <string name="transfer">转换</string>
+    <string name="from">来自</string>
+    <string name="to">至</string>
+    <string name="title_exchange_rates">转换汇率</string>
+    <string name="add_exchange_rate">添加汇率</string>
+    <string name="account_was_removed">账户已清空</string>
+
+    <string name="short_summary">简要汇总</string>
+    <string name="custom">个性化</string>
+    <string name="summary">汇总</string>
+    <string name="currency">货币</string>
+    <string name="error_exchange_rates">错误！请确认汇率。</string>
+    <string name="amount">金额</string>
+    <string name="title_settings">设置</string>
+    <string name="settings">设置</string>
+    <string name="default_account">默认账户</string>
+    <string name="default_currency">默认货币</string>
+
+    <string name="title_charts">表格</string>
+    <string name="incomes">收入</string>
+    <string name="expenses">支出</string>
+
+    <string name="display_precision">精度</string>
+
+    <string name="title_import_export">导入/导入</string>
+    <string name="text_import">导入</string>
+    <string name="records_imported">%1$s 条记录已完成导入</string>
+    <string name="help">帮助</string>
+    <string name="import_help">导入记录： 1. 按如下格式创建CSV文件：时间、标题、类别、价格、货币；2. 将内容复制到文本框；3. 按下导入键，几秒之后你就能看到有多少记录被导入了。注意：时间——时间节点以毫秒计；货币——使用3位符号代码。例如：1466948795712、地铁、交通、-20.0、UAH。</string>
+
+    <string name="bank_sells">银行卖出</string>
+    <string name="convert_to">换成</string>
+    <string name="bank_buys">银行买入</string>
+    <string name="convert_from">转换</string>
+
+    <string name="date">日期</string>
+    <string name="time">时间</string>
+
+    <string name="backup_data">备份/恢复</string>
+    <string name="failed_create_backup">无法创建备份。</string>
+    <string name="failed_restore_backup">无法恢复备份。</string>
+    <string name="backup_restored">您选择的备份 %1$s 已成功恢复。</string>
+    <string name="backup_is_restored">备份已恢复</string>
+    <string name="warning">警告</string>
+    <string name="want_erase_and_restore">你真的要清除当前所有数据和备份文件 %1$s吗？确认已备份当前数据。</string>
+    <string name="backup_now">现在备份</string>
+
+    <string name="title_edit_income">编辑收入</string>
+    <string name="title_edit_expense">编辑支出</string>
+
+    <string name="importing_records">导入记录……</string>
+    <string name="making_backup">生成备份……</string>
+    <string name="restoring_backup">恢复备份中……</string>
+    <string name="fetching_backups">正在获得备份……</string>
+
+    <string name="about_summary">版本 %1$s (安卓 %2$s)</string>
+    <string name="title_activity_about">关于</string>
+    <string name="about">我的钱哪去了是一款财务软件，可以使您方便地管理收入与支出，同时也可查看账目与汇率。为了更好的使用体验，请将bug上报至4PDA论坛。当然，我们也欢迎您宝贵的建议！您也可以在论坛上寻找答案或组织讨论。我的钱哪去了是款开放型软件，每个人都可以作为开发者参与其中，甚至没有开发经验的人也可以！例如您可以帮助翻译我的钱哪去了，提供关于我的钱哪去了的截图或是文章，我的钱哪去了基于GNU-GPL v3许可，源代码可在GitHub查找。LinkedIn（领英）上有开发者介绍。</string>
+
+    <string name="field_cant_be_empty">不能为空。</string>
+    <string name="too_rich_or_poor">你不可能这么富有或是贫穷的。</string>
+    <string name="too_rich">你不可能这么富有的。</string>
+    <string name="none">无</string>
+    <string name="too_much_for_transfer">转换太多了。</string>
+    <string name="too_much_for_exchange">兑换太多了。</string>
+    <string name="same_currencies">无法在同种货币之间转换。</string>
+    <string name="record_in_future">以后无法创建记录。</string>
+    <string name="one_account_needed">至少需要一个账目。</string>
+</resources>
