@@ -14,10 +14,9 @@ import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController;
 import com.blogspot.e_kanivets.moneytracker.controller.FormatController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.ExchangeRateController;
 import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRatePair;
+import com.blogspot.e_kanivets.moneytracker.util.AnswersProxy;
 import com.blogspot.e_kanivets.moneytracker.util.validator.ExchangeRatePairValidator;
 import com.blogspot.e_kanivets.moneytracker.util.validator.IValidator;
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.ContentViewEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -127,17 +126,9 @@ public class AddExchangeRateActivity extends BaseBackActivity {
     }
 
     private void tryAddExchangeRate() {
-        // Answers event
-        Answers.getInstance().logContentView(new ContentViewEvent()
-                .putContentName("Done Exchange Rate")
-                .putContentType("Button"));
-
+        AnswersProxy.get().logButton("Done Exchange Rate");
         if (addExchangeRate()) {
-            // Answers event
-            Answers.getInstance().logContentView(new ContentViewEvent()
-                    .putContentName("Done Exchange Rate")
-                    .putContentType("Event"));
-
+            AnswersProxy.get().logEvent("Done Exchange Rate");
             setResult(RESULT_OK);
             finish();
         }

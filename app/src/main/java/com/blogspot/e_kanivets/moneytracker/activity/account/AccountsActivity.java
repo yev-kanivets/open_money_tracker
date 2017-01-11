@@ -14,8 +14,7 @@ import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.AccountAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController;
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.AccountsSummaryPresenter;
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.ContentViewEvent;
+import com.blogspot.e_kanivets.moneytracker.util.AnswersProxy;
 
 import javax.inject.Inject;
 
@@ -101,22 +100,14 @@ public class AccountsActivity extends BaseBackActivity {
     }
 
     public void makeTransfer() {
-        // Answers event
-        Answers.getInstance().logContentView(new ContentViewEvent()
-                .putContentName("Add Transfer")
-                .putContentType("Button"));
-
+        AnswersProxy.get().logButton("Add Transfer");
         startActivityForResult(new Intent(AccountsActivity.this, TransferActivity.class),
                 REQUEST_TRANSFER);
     }
 
     @OnClick(R.id.btn_add_account)
     public void addAccount() {
-        // Answers event
-        Answers.getInstance().logContentView(new ContentViewEvent()
-                .putContentName("Add Account")
-                .putContentType("Button"));
-
+        AnswersProxy.get().logButton("Add Account");
         Intent intent = new Intent(AccountsActivity.this, AddAccountActivity.class);
         startActivityForResult(intent, REQUEST_ADD_ACCOUNT);
     }

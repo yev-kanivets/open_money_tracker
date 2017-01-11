@@ -7,7 +7,9 @@ import com.blogspot.e_kanivets.moneytracker.di.DaggerAppComponent;
 import com.blogspot.e_kanivets.moneytracker.di.module.ControllerModule;
 import com.blogspot.e_kanivets.moneytracker.di.module.repo.CachedRepoModule;
 
+import com.blogspot.e_kanivets.moneytracker.util.AnswersProxy;
 import com.crashlytics.android.Crashlytics;
+
 import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
@@ -29,15 +31,18 @@ public class MtApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        if (!BuildConfig.DEBUG) {
-            Fabric.with(this, new Crashlytics());
-        }
 
         mtApp = this;
         buildAppComponent();
 
-        if (BuildConfig.DEBUG) Timber.plant(new Timber.DebugTree());
-        else Timber.plant(new ReleaseTree());
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+            AnswersProxy.get().setEnabled(false);
+        } else {
+            Timber.plant(new ReleaseTree());
+            Fabric.with(this, new Crashlytics());
+            AnswersProxy.get().setEnabled(true);
+        }
     }
 
     public AppComponent getAppComponent() {
