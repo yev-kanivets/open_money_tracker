@@ -10,7 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.activity.ChartsActivity;
+import com.blogspot.e_kanivets.moneytracker.activity.charts.ChartsActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.external.BackupActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.external.ImportExportActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.SettingsActivity;

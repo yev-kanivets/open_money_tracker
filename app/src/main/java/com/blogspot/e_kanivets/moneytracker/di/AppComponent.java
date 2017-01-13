@@ -1,6 +1,6 @@
 package com.blogspot.e_kanivets.moneytracker.di;
 
-import com.blogspot.e_kanivets.moneytracker.activity.ChartsActivity;
+import com.blogspot.e_kanivets.moneytracker.activity.charts.ChartsActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.external.BackupActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.external.ImportExportActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.ReportActivity;
@@ -15,6 +15,7 @@ import com.blogspot.e_kanivets.moneytracker.activity.record.MainActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.AccountAdapter;
 import com.blogspot.e_kanivets.moneytracker.adapter.ExchangeRateAdapter;
 import com.blogspot.e_kanivets.moneytracker.adapter.ExpandableListReportAdapter;
+import com.blogspot.e_kanivets.moneytracker.adapter.MonthSummaryAdapter;
 import com.blogspot.e_kanivets.moneytracker.adapter.RecordAdapter;
 import com.blogspot.e_kanivets.moneytracker.di.module.repo.CachedRepoModule;
 import com.blogspot.e_kanivets.moneytracker.di.module.ControllerModule;
@@ -75,4 +76,6 @@ public interface AppComponent {
     void inject(ShortSummaryPresenter shortSummaryPresenter);
 
     void inject(ExchangeRateAdapter exchangeRateAdapter);
+
+    void inject(MonthSummaryAdapter monthSummaryAdapter);
 }

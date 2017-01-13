@@ -1,5 +1,7 @@
 package com.blogspot.e_kanivets.moneytracker.report.chart;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import com.blogspot.e_kanivets.moneytracker.entity.data.ExchangeRate;
@@ -21,7 +23,6 @@ import java.util.TreeMap;
  */
 public class MonthReport implements IMonthReport {
     private final String currency;
-    private final IExchangeRateProvider rateProvider;
 
     private final List<MonthNode> monthList;
 
@@ -30,9 +31,13 @@ public class MonthReport implements IMonthReport {
             throw new NullPointerException("Params can't be null");
 
         this.currency = currency;
-        this.rateProvider = rateProvider;
 
-        monthList = generateReport(recordList);
+        monthList = generateReport(recordList, rateProvider);
+    }
+
+    protected MonthReport(Parcel in) {
+        currency = in.readString();
+        monthList = in.createTypedArrayList(MonthNode.CREATOR);
     }
 
     @NonNull
@@ -82,7 +87,7 @@ public class MonthReport implements IMonthReport {
      * @return sorted by timestamp list of {@link MonthNode}
      */
     @NonNull
-    private List<MonthNode> generateReport(List<Record> recordList) {
+    private List<MonthNode> generateReport(List<Record> recordList, IExchangeRateProvider rateProvider) {
         SortedMap<Long, MonthNode> monthMap = new TreeMap<>();
 
         for (Record record : recordList) {
@@ -133,35 +138,76 @@ public class MonthReport implements IMonthReport {
         return calendar.getTimeInMillis();
     }
 
-    private static class MonthNode {
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(currency);
+        dest.writeTypedList(monthList);
+    }
+
+    private static class MonthNode implements Parcelable {
         private long timestamp;
         private double totalIncome;
         private double totalExpense;
 
         public MonthNode(long timestamp) {
             this.timestamp = timestamp;
-            totalExpense = 0;
-            totalIncome = 0;
+            this.totalExpense = 0;
+            this.totalIncome = 0;
         }
 
-        public void addIncome(double income) {
+        protected MonthNode(Parcel in) {
+            timestamp = in.readLong();
+            totalIncome = in.readDouble();
+            totalExpense = in.readDouble();
+        }
+
+        public static final Creator<MonthNode> CREATOR = new Creator<MonthNode>() {
+            @Override
+            public MonthNode createFromParcel(Parcel in) {
+                return new MonthNode(in);
+            }
+
+            @Override
+            public MonthNode[] newArray(int size) {
+                return new MonthNode[size];
+            }
+        };
+
+        void addIncome(double income) {
             totalIncome += income;
         }
 
-        public void addExpense(double expense) {
+        void addExpense(double expense) {
             totalExpense += expense;
         }
 
-        public long getTimestamp() {
+        long getTimestamp() {
             return timestamp;
         }
 
-        public double getTotalIncome() {
+        double getTotalIncome() {
             return totalIncome;
         }
 
-        public double getTotalExpense() {
+        double getTotalExpense() {
             return totalExpense;
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeLong(timestamp);
+            dest.writeDouble(totalIncome);
+            dest.writeDouble(totalExpense);
         }
     }
 }

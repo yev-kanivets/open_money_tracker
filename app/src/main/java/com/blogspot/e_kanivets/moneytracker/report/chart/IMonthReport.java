@@ -1,5 +1,6 @@
 package com.blogspot.e_kanivets.moneytracker.report.chart;
 
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  *
  * @author Evgenii Kanivets
  */
-public interface IMonthReport {
+public interface IMonthReport extends Parcelable {
     /**
      * @return code of report currency
      */
