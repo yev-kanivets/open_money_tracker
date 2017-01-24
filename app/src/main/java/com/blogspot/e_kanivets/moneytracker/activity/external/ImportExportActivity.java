@@ -15,8 +15,7 @@ import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.controller.external.ExportController;
 import com.blogspot.e_kanivets.moneytracker.controller.external.ImportController;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record;
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.ContentViewEvent;
+import com.blogspot.e_kanivets.moneytracker.util.AnswersProxy;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -71,11 +70,7 @@ public class ImportExportActivity extends BaseBackActivity {
     }
 
     public void showHelp() {
-        // Answers event
-        Answers.getInstance().logContentView(new ContentViewEvent()
-                .putContentName("Show Help")
-                .putContentType("Button"));
-
+        AnswersProxy.get().logButton("Show Help");
         AlertDialog.Builder builder = new AlertDialog.Builder(ImportExportActivity.this);
         builder.setTitle(R.string.help)
                 .setMessage(R.string.import_help)
@@ -85,11 +80,7 @@ public class ImportExportActivity extends BaseBackActivity {
 
     @OnClick(R.id.btn_import)
     public void importRecords() {
-        // Answers event
-        Answers.getInstance().logContentView(new ContentViewEvent()
-                .putContentName("Import Records")
-                .putContentType("Button"));
-
+        AnswersProxy.get().logButton("Import Records");
         final String data = etImportData.getText().toString().trim();
 
         AsyncTask<Void, Void, Integer> importTask = new AsyncTask<Void, Void, Integer>() {
@@ -118,11 +109,7 @@ public class ImportExportActivity extends BaseBackActivity {
 
     @OnClick(R.id.btn_export)
     public void exportRecords() {
-        // Answers event
-        Answers.getInstance().logContentView(new ContentViewEvent()
-                .putContentName("Export Records")
-                .putContentType("Button"));
-
+        AnswersProxy.get().logButton("Export Records");
         List<String> records = exportController.getRecordsForExport(0, Long.MAX_VALUE);
 
         File exportDir = new File(getCacheDir(), "export");
@@ -154,11 +141,7 @@ public class ImportExportActivity extends BaseBackActivity {
     }
 
     private void shareExportedRecords(@NonNull File exportFile) {
-        // Answers event
-        Answers.getInstance().logContentView(new ContentViewEvent()
-                .putContentName("Share Records")
-                .putContentType("Event"));
-
+        AnswersProxy.get().logEvent("Share Records");
         Uri fileUri = FileProvider.getUriForFile(ImportExportActivity.this, getPackageName(), exportFile);
 
         Intent sendIntent = new Intent();

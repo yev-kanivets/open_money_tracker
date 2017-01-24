@@ -67,7 +67,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Default" />
         <activity
-            android:name=".activity.ChartsActivity"
+            android:name=".activity.charts.ChartsActivity"
             android:label="@string/title_charts"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Default" />

@@ -59,7 +59,7 @@
     <string name="period_from_to" translatable="false">%1$s - %2$s</string>
     <string name="default_currency">Default currency</string>
 
-    <string name="title_charts">Charts</string>
+    <string name="title_charts">Results</string>
     <string name="incomes">Incomes</string>
     <string name="expenses">Expenses</string>
 
@@ -122,5 +122,8 @@
     <string name="same_currencies">Can\'t convert between same currencies.</string>
     <string name="record_in_future">Can\'t create a record in future.</string>
     <string name="one_account_needed">At least one account is needed.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
     <!-- Not translated strings -->
 </resources>

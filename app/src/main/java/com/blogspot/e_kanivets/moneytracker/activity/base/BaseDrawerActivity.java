@@ -1,6 +1,7 @@
 package com.blogspot.e_kanivets.moneytracker.activity.base;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -9,14 +10,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.activity.ChartsActivity;
+import com.blogspot.e_kanivets.moneytracker.activity.charts.ChartsActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.external.BackupActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.external.ImportExportActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.SettingsActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.account.AccountsActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.exchange_rate.ExchangeRatesActivity;
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.ContentViewEvent;
+import com.blogspot.e_kanivets.moneytracker.util.AnswersProxy;
 
 import butterknife.Bind;
 
@@ -71,7 +71,7 @@ public abstract class BaseDrawerActivity extends BaseActivity
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_accounts:
                 showAccounts();
@@ -134,60 +134,36 @@ public abstract class BaseDrawerActivity extends BaseActivity
     }
 
     private void showAccounts() {
-        // Answers event
-        Answers.getInstance().logContentView(new ContentViewEvent()
-                .putContentName("Show Accounts")
-                .putContentType("Button"));
-
+        AnswersProxy.get().logButton("Show Accounts");
         startActivityForResult(new Intent(BaseDrawerActivity.this, AccountsActivity.class),
                 REQUEST_ACCOUNTS);
     }
 
     private void showRates() {
-        // Answers event
-        Answers.getInstance().logContentView(new ContentViewEvent()
-                .putContentName("Show Rates")
-                .putContentType("Button"));
-
+        AnswersProxy.get().logButton("Show Rates");
         startActivityForResult(new Intent(BaseDrawerActivity.this, ExchangeRatesActivity.class),
                 REQUEST_RATES);
     }
 
     private void showCharts() {
-        // Answers event
-        Answers.getInstance().logContentView(new ContentViewEvent()
-                .putContentName("Show Charts")
-                .putContentType("Button"));
-
+        AnswersProxy.get().logButton("Show Charts");
         startActivity(new Intent(BaseDrawerActivity.this, ChartsActivity.class));
     }
 
     private void showBackup() {
-        // Answers event
-        Answers.getInstance().logContentView(new ContentViewEvent()
-                .putContentName("Show Backup")
-                .putContentType("Button"));
-
+        AnswersProxy.get().logButton("Show Backup");
         startActivityForResult(new Intent(BaseDrawerActivity.this, BackupActivity.class),
                 REQUEST_BACKUP);
     }
 
     private void showImportExport() {
-        // Answers event
-        Answers.getInstance().logContentView(new ContentViewEvent()
-                .putContentName("Show Import Export")
-                .putContentType("Button"));
-
+        AnswersProxy.get().logButton("Show Import Export");
         startActivityForResult(new Intent(BaseDrawerActivity.this, ImportExportActivity.class),
                 REQUEST_IMPORT_EXPORT);
     }
 
     private void showSettings() {
-        // Answers event
-        Answers.getInstance().logContentView(new ContentViewEvent()
-                .putContentName("Show Settings")
-                .putContentType("Button"));
-
+        AnswersProxy.get().logButton("Show Settings");
         startActivityForResult(new Intent(BaseDrawerActivity.this, SettingsActivity.class),
                 REQUEST_SETTINGS);
     }

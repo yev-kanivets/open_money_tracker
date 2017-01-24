@@ -11,10 +11,9 @@ import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
+import com.blogspot.e_kanivets.moneytracker.util.AnswersProxy;
 import com.blogspot.e_kanivets.moneytracker.util.validator.AccountValidator;
 import com.blogspot.e_kanivets.moneytracker.util.validator.IValidator;
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.ContentViewEvent;
 
 import java.util.ArrayList;
 
@@ -79,17 +78,9 @@ public class AddAccountActivity extends BaseBackActivity {
     }
 
     private void tryAddAccount() {
-        // Answers event
-        Answers.getInstance().logContentView(new ContentViewEvent()
-                .putContentName("Done Account")
-                .putContentType("Button"));
-
+        AnswersProxy.get().logButton("Done Account");
         if (addAccount()) {
-            // Answers event
-            Answers.getInstance().logContentView(new ContentViewEvent()
-                    .putContentName("Done Account")
-                    .putContentType("Event"));
-
+            AnswersProxy.get().logEvent("Done Account");
             setResult(RESULT_OK);
             finish();
         }

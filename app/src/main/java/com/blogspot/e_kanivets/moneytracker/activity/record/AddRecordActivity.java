@@ -31,11 +31,10 @@ import com.blogspot.e_kanivets.moneytracker.controller.data.RecordController;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record;
 import com.blogspot.e_kanivets.moneytracker.ui.AddRecordUiDecorator;
+import com.blogspot.e_kanivets.moneytracker.util.AnswersProxy;
 import com.blogspot.e_kanivets.moneytracker.util.CategoryAutoCompleter;
 import com.blogspot.e_kanivets.moneytracker.util.validator.IValidator;
 import com.blogspot.e_kanivets.moneytracker.util.validator.RecordValidator;
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.ContentViewEvent;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -204,11 +203,7 @@ public class AddRecordActivity extends BaseBackActivity {
 
     @OnClick(R.id.tv_date)
     public void selectDate() {
-        // Answers event
-        Answers.getInstance().logContentView(new ContentViewEvent()
-                .putContentName("Select Date")
-                .putContentType("Button"));
-
+        AnswersProxy.get().logButton("Select Date");
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(timestamp);
         DatePickerDialog dialog = new DatePickerDialog(AddRecordActivity.this, uiDecorator.getTheme(type),
@@ -235,11 +230,7 @@ public class AddRecordActivity extends BaseBackActivity {
 
     @OnClick(R.id.tv_time)
     public void selectTime() {
-        // Answers event
-        Answers.getInstance().logContentView(new ContentViewEvent()
-                .putContentName("Show Time")
-                .putContentType("Button"));
-
+        AnswersProxy.get().logButton("Show Time");
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(timestamp);
         TimePickerDialog dialog = new TimePickerDialog(AddRecordActivity.this, uiDecorator.getTheme(type),
@@ -305,17 +296,9 @@ public class AddRecordActivity extends BaseBackActivity {
     }
 
     private void tryRecord() {
-        // Answers event
-        Answers.getInstance().logContentView(new ContentViewEvent()
-                .putContentName("Done Record")
-                .putContentType("Button"));
-
+        AnswersProxy.get().logButton("Done Record");
         if (addRecord()) {
-            // Answers event
-            Answers.getInstance().logContentView(new ContentViewEvent()
-                    .putContentName("Done Record")
-                    .putContentType("Event"));
-
+            AnswersProxy.get().logEvent("Done Record");
             setResult(RESULT_OK);
             finish();
         }

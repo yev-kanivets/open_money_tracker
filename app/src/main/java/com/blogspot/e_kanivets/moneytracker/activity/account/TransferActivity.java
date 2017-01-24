@@ -12,10 +12,9 @@ import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.TransferController;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Transfer;
+import com.blogspot.e_kanivets.moneytracker.util.AnswersProxy;
 import com.blogspot.e_kanivets.moneytracker.util.validator.IValidator;
 import com.blogspot.e_kanivets.moneytracker.util.validator.TransferValidator;
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.ContentViewEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,17 +99,9 @@ public class TransferActivity extends BaseBackActivity {
     }
 
     private void tryTransfer() {
-        // Answers event
-        Answers.getInstance().logContentView(new ContentViewEvent()
-                .putContentName("Done Transfer")
-                .putContentType("Button"));
-
+        AnswersProxy.get().logButton("Done Transfer");
         if (doTransfer()) {
-            // Answers event
-            Answers.getInstance().logContentView(new ContentViewEvent()
-                    .putContentName("Done Transfer")
-                    .putContentType("Event"));
-
+            AnswersProxy.get().logEvent("Done Transfer");
             setResult(RESULT_OK);
             finish();
         }
