@@ -73,6 +73,7 @@ public class CurrencyController {
         }
 
         currencyList.add(DbHelper.DEFAULT_ACCOUNT_CURRENCY);
+        currencyList.add("BYN"); // New belorussian ruble
 
         Collections.sort(currencyList);
 
