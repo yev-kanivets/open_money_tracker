@@ -5,6 +5,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
@@ -34,6 +35,10 @@ public class AddAccountActivity extends BaseBackActivity {
 
     @Bind(R.id.content)
     View contentView;
+    @Bind(R.id.et_title)
+    EditText etTitle;
+    @Bind(R.id.et_init_sum)
+    EditText etInitSum;
     @Bind(R.id.spinner)
     AppCompatSpinner spinner;
 
@@ -88,8 +93,13 @@ public class AddAccountActivity extends BaseBackActivity {
 
     @SuppressWarnings("SimplifiableIfStatement")
     private boolean addAccount() {
-        Account account = accountValidator.validate();
-        if (account == null) return false;
-        else return accountController.create(account) != null;
+        if (accountValidator.validate()) {
+            String title = etTitle.getText().toString().trim();
+            double initSum = Double.parseDouble(etInitSum.getText().toString().trim());
+            String currency = (String) spinner.getSelectedItem();
+            return accountController.create(new Account(title, initSum, currency)) != null;
+        } else {
+            return false;
+        }
     }
 }

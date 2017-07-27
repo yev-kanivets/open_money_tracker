@@ -2,7 +2,6 @@ package com.blogspot.e_kanivets.moneytracker.util.validator;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.AppCompatSpinner;
 import android.view.View;
@@ -10,10 +9,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Transfer;
-
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -31,9 +27,6 @@ public class TransferValidator implements IValidator<Transfer> {
     @NonNull
     private final Context context;
 
-    @NonNull
-    private List<Account> accountList;
-
     @Bind(R.id.spinner_from)
     AppCompatSpinner spinnerFrom;
     @Bind(R.id.spinner_to)
@@ -47,30 +40,21 @@ public class TransferValidator implements IValidator<Transfer> {
     @Bind(R.id.et_to_amount)
     EditText etToAmount;
 
-    public TransferValidator(@NonNull Context context, @NonNull View view,
-                             @NonNull List<Account> accountList) {
+    public TransferValidator(@NonNull Context context, @NonNull View view) {
         this.context = context;
-        this.accountList = accountList;
         ButterKnife.bind(this, view);
         initTextWatchers();
     }
 
-    @Nullable
     @Override
-    public Transfer validate() {
+    public boolean validate() {
         boolean valid = true;
 
-        Account fromAccount = null;
-        if (spinnerFrom.isEnabled()) {
-            fromAccount = accountList.get(spinnerFrom.getSelectedItemPosition());
-        } else {
+        if (!spinnerFrom.isEnabled()) {
             valid = false;
         }
 
-        Account toAccount = null;
-        if (spinnerTo.isEnabled()) {
-            toAccount = accountList.get(spinnerTo.getSelectedItemPosition());
-        } else {
+        if (!spinnerTo.isEnabled()) {
             Toast.makeText(context, R.string.one_account_needed, Toast.LENGTH_SHORT).show();
             valid = false;
         }
@@ -111,8 +95,7 @@ public class TransferValidator implements IValidator<Transfer> {
             valid = false;
         }
 
-        return valid ? new Transfer(System.currentTimeMillis(), fromAccount.getId(),
-                toAccount.getId(), fromAmount, toAmount) : null;
+        return valid;
     }
 
     private void initTextWatchers() {

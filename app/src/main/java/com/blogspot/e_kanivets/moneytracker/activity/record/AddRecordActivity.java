@@ -29,6 +29,7 @@ import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.CategoryController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.RecordController;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
+import com.blogspot.e_kanivets.moneytracker.entity.data.Category;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record;
 import com.blogspot.e_kanivets.moneytracker.ui.AddRecordUiDecorator;
 import com.blogspot.e_kanivets.moneytracker.util.AnswersProxy;
@@ -124,9 +125,7 @@ public class AddRecordActivity extends BaseBackActivity {
     protected void initViews() {
         super.initViews();
 
-        long recordId = record == null ? -1 : record.getId();
-        recordValidator = new RecordValidator(AddRecordActivity.this, contentView, mode,
-                accountList, timestamp, type, recordId);
+        recordValidator = new RecordValidator(AddRecordActivity.this, contentView);
 
         // Add texts to dialog if it's edit dialog
         if (mode == Mode.MODE_EDIT) {
@@ -306,14 +305,32 @@ public class AddRecordActivity extends BaseBackActivity {
 
     @SuppressWarnings("SimplifiableIfStatement")
     private boolean addRecord() {
-        Record newRecord = recordValidator.validate();
-        if (newRecord == null) return false;
-        else {
+        if (recordValidator.validate()) {
+            long now = new Date().getTime();
+            if (timestamp > now) {
+                showToast(R.string.record_in_future);
+                return false;
+            }
+
+            String title = etTitle.getText().toString().trim();
+            String category = etCategory.getText().toString().trim();
+            double price = Double.parseDouble(etPrice.getText().toString());
+            Account account = accountList.get(spinnerAccount.getSelectedItemPosition());
+
+            if (title.isEmpty()) {
+                title = category;
+            }
+
             if (mode == Mode.MODE_ADD) {
-                return recordController.create(newRecord) != null;
+                return recordController.create(new Record(timestamp, type, title,
+                        new Category(category), price, account, account.getCurrency())) != null;
             } else if (mode == Mode.MODE_EDIT) {
-                return recordController.update(newRecord) != null;
+                long recordId = record == null ? -1 : record.getId();
+                return recordController.update(new Record(recordId, timestamp, type, title,
+                        new Category(category), price, account, account.getCurrency())) != null;
             } else return false;
+        } else {
+            return false;
         }
     }
 
