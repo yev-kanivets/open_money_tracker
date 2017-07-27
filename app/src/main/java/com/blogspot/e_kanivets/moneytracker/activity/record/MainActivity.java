@@ -147,7 +147,6 @@ public class MainActivity extends BaseDrawerActivity {
         AnswersProxy.get().logButton("Show Report");
         Intent intent = new Intent(MainActivity.this, ReportActivity.class);
         intent.putExtra(ReportActivity.KEY_PERIOD, period);
-        intent.putExtra(ReportActivity.KEY_RECORD_LIST, (ArrayList<Record>) recordList);
         startActivity(intent);
     }
 

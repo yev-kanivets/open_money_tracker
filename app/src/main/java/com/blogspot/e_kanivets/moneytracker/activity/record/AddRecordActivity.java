@@ -25,6 +25,7 @@ import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.CategoryAutoCompleteAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.FormatController;
+import com.blogspot.e_kanivets.moneytracker.controller.PreferenceController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.CategoryController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.RecordController;
@@ -76,9 +77,12 @@ public class AddRecordActivity extends BaseBackActivity {
     AccountController accountController;
     @Inject
     FormatController formatController;
+    @Inject
+    PreferenceController preferenceController;
 
     private IValidator<Record> recordValidator;
     private AddRecordUiDecorator uiDecorator;
+    private CategoryAutoCompleter autoCompleter;
 
     @Bind(R.id.content)
     View contentView;
@@ -126,6 +130,7 @@ public class AddRecordActivity extends BaseBackActivity {
         super.initViews();
 
         recordValidator = new RecordValidator(AddRecordActivity.this, contentView);
+        autoCompleter = new CategoryAutoCompleter(categoryController, preferenceController);
 
         // Add texts to dialog if it's edit dialog
         if (mode == Mode.MODE_EDIT) {
@@ -137,8 +142,10 @@ public class AddRecordActivity extends BaseBackActivity {
         uiDecorator.decorateActionBar(getSupportActionBar(), mode, type);
         presentSpinnerAccount();
 
-        etCategory.setAdapter(new CategoryAutoCompleteAdapter(AddRecordActivity.this,
-                R.layout.view_category_item, new CategoryAutoCompleter(categoryController)));
+
+        final CategoryAutoCompleteAdapter categoryAutoCompleteAdapter = new CategoryAutoCompleteAdapter(
+                AddRecordActivity.this, R.layout.view_category_item, autoCompleter);
+        etCategory.setAdapter(categoryAutoCompleteAdapter);
         etCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -151,6 +158,21 @@ public class AddRecordActivity extends BaseBackActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) tryRecord();
                 return false;
+            }
+        });
+        etCategory.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (hasFocus && etCategory.getText().toString().trim().isEmpty()) {
+                    String title = etTitle.getText().toString().trim();
+                    String prediction = autoCompleter.completeByRecordTitle(title);
+                    if (prediction != null) {
+                        etCategory.setAdapter(null);
+                        etCategory.setText(prediction);
+                        etCategory.selectAll();
+                        etCategory.setAdapter(categoryAutoCompleteAdapter);
+                    }
+                }
             }
         });
 
@@ -321,14 +343,23 @@ public class AddRecordActivity extends BaseBackActivity {
                 title = category;
             }
 
+            Record newRecord = null;
+
             if (mode == Mode.MODE_ADD) {
-                return recordController.create(new Record(timestamp, type, title,
-                        new Category(category), price, account, account.getCurrency())) != null;
+                newRecord = recordController.create(new Record(timestamp, type, title,
+                        new Category(category), price, account, account.getCurrency()));
             } else if (mode == Mode.MODE_EDIT) {
                 long recordId = record == null ? -1 : record.getId();
-                return recordController.update(new Record(recordId, timestamp, type, title,
-                        new Category(category), price, account, account.getCurrency())) != null;
-            } else return false;
+                newRecord = recordController.update(new Record(recordId, timestamp, type, title,
+                        new Category(category), price, account, account.getCurrency()));
+            }
+
+            if (newRecord == null) {
+                return false;
+            } else {
+                autoCompleter.addRecordTitleCategoryPair(title, category);
+                return true;
+            }
         } else {
             return false;
         }
