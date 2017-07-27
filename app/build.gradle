@@ -23,8 +23,8 @@ android {
         applicationId 'com.blogspot.e_kanivets.moneytracker'
         minSdkVersion 17
         targetSdkVersion 25
-        versionCode 19
-        versionName '1.8.2'
+        versionCode 20
+        versionName '1.8.3'
     }
     signingConfigs {
         releaseConfig {
