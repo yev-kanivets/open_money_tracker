@@ -2,7 +2,6 @@ package com.blogspot.e_kanivets.moneytracker.util.validator;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.AppCompatSpinner;
 import android.view.View;
@@ -43,12 +42,10 @@ public class AccountValidator implements IValidator<Account> {
         initTextWatchers();
     }
 
-    @Nullable
     @Override
-    public Account validate() {
+    public boolean validate() {
         String title = etTitle.getText().toString().trim();
         double initSum = Double.MAX_VALUE;
-        String currency = (String) spinner.getSelectedItem();
 
         try {
             initSum = Double.parseDouble(etInitSum.getText().toString().trim());
@@ -74,7 +71,7 @@ public class AccountValidator implements IValidator<Account> {
             valid = false;
         }
 
-        return valid ? new Account(title, initSum, currency) : null;
+        return valid;
     }
 
     private void initTextWatchers() {

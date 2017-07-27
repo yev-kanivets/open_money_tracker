@@ -24,9 +24,8 @@
 
         <Button
             android:id="@+id/btn_add_income"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
             android:layout_weight="1"
             android:background="@drawable/selector_add_income"
             android:padding="@dimen/normal_margin"
@@ -34,7 +33,7 @@
 
         <Button
             android:id="@+id/btn_add_expense"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/selector_add_expense"

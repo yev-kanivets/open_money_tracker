@@ -5,6 +5,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
@@ -42,6 +43,10 @@ public class TransferActivity extends BaseBackActivity {
     AppCompatSpinner spinnerFrom;
     @Bind(R.id.spinner_to)
     AppCompatSpinner spinnerTo;
+    @Bind(R.id.et_from_amount)
+    EditText etFromAmount;
+    @Bind(R.id.et_to_amount)
+    EditText etToAmount;
 
     @Override
     protected int getContentViewId() {
@@ -65,7 +70,7 @@ public class TransferActivity extends BaseBackActivity {
             accounts.add(account.getTitle());
         }
 
-        transferValidator = new TransferValidator(TransferActivity.this, contentView, accountList);
+        transferValidator = new TransferValidator(TransferActivity.this, contentView);
 
         if (accounts.size() == 0) {
             accounts.add(getString(R.string.none));
@@ -109,8 +114,16 @@ public class TransferActivity extends BaseBackActivity {
 
     @SuppressWarnings("SimplifiableIfStatement")
     private boolean doTransfer() {
-        Transfer transfer = transferValidator.validate();
-        if (transfer == null) return false;
-        else return transferController.create(transfer) != null;
+        if (transferValidator.validate()) {
+            Account fromAccount = accountList.get(spinnerFrom.getSelectedItemPosition());
+            Account toAccount = accountList.get(spinnerTo.getSelectedItemPosition());
+            double fromAmount = Double.parseDouble(etFromAmount.getText().toString());
+            double toAmount = Double.parseDouble(etToAmount.getText().toString());
+
+            return transferController.create(new Transfer(System.currentTimeMillis(),
+                    fromAccount.getId(), toAccount.getId(), fromAmount, toAmount)) != null;
+        } else {
+            return false;
+        }
     }
 }

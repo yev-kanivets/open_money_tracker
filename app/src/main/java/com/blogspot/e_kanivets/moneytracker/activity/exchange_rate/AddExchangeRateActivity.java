@@ -136,8 +136,16 @@ public class AddExchangeRateActivity extends BaseBackActivity {
 
     @SuppressWarnings("SimplifiableIfStatement")
     private boolean addExchangeRate() {
-        ExchangeRatePair pair = exchangeRatePairValidator.validate();
-        if (pair == null) return false;
-        else return exchangeRateController.createExchangeRatePair(pair) != null;
+        if (exchangeRatePairValidator.validate()) {
+            String fromCurrency = (String) spinnerFromCurrency.getSelectedItem();
+            String toCurrency = (String) spinnerToCurrency.getSelectedItem();
+            double amountBuy = Double.parseDouble(etBuy.getText().toString().trim());
+            double amountSell = Double.parseDouble(etSell.getText().toString().trim());
+
+            return exchangeRateController.createExchangeRatePair(
+                    new ExchangeRatePair(fromCurrency, toCurrency, amountBuy, amountSell)) != null;
+        } else {
+            return false;
+        }
     }
 }

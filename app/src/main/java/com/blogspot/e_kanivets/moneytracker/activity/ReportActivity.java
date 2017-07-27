@@ -11,6 +11,7 @@ import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.ExpandableListReportAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.ExchangeRateController;
+import com.blogspot.e_kanivets.moneytracker.controller.data.RecordController;
 import com.blogspot.e_kanivets.moneytracker.entity.Period;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record;
 import com.blogspot.e_kanivets.moneytracker.report.record.RecordReportConverter;
@@ -29,8 +30,9 @@ public class ReportActivity extends BaseBackActivity {
     private static final String TAG = "ReportActivity";
 
     public static final String KEY_PERIOD = "key_period";
-    public static final String KEY_RECORD_LIST = "key_record_list";
 
+    @Inject
+    RecordController recordController;
     @Inject
     ExchangeRateController rateController;
     @Inject
@@ -57,11 +59,10 @@ public class ReportActivity extends BaseBackActivity {
         super.initData();
         getAppComponent().inject(ReportActivity.this);
 
-        recordList = getIntent().getParcelableArrayListExtra(KEY_RECORD_LIST);
-        if (recordList == null) return false;
-
         period = getIntent().getParcelableExtra(KEY_PERIOD);
         if (period == null) return false;
+
+        recordList = recordController.getRecordsForPeriod(period);
 
         return true;
     }

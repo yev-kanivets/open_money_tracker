@@ -2,7 +2,6 @@ package com.blogspot.e_kanivets.moneytracker.util.validator;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.widget.AppCompatSpinner;
 import android.view.View;
@@ -47,9 +46,8 @@ public class ExchangeRatePairValidator implements IValidator<ExchangeRatePair> {
         initTextWatchers();
     }
 
-    @Nullable
     @Override
-    public ExchangeRatePair validate() {
+    public boolean validate() {
         boolean valid = true;
 
         String fromCurrency = null;
@@ -107,7 +105,7 @@ public class ExchangeRatePairValidator implements IValidator<ExchangeRatePair> {
             valid = false;
         }
 
-        return valid ? new ExchangeRatePair(fromCurrency, toCurrency, amountBuy, amountSell) : null;
+        return valid;
     }
 
     private void initTextWatchers() {
