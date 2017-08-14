@@ -55,7 +55,7 @@ public class ImportController {
                 else type = Record.TYPE_INCOME;
 
                 Category category = new Category(categoryName);
-                Account account = new Account(-1, "MOCK", -1, currency, 0);
+                Account account = new Account(-1, "MOCK", -1, currency, 0, -1, false, 0);
 
                 Record record = new Record(time, type, title, category, Math.abs(price), account, currency);
                 Record createdRecord = recordController.create(record);

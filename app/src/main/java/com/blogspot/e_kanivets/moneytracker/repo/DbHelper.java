@@ -15,7 +15,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     /* DB_VERSION = 1 */
     public static final String DB_NAME = "database";
-    public static final int DB_VERSION = 4;
+    public static final int DB_VERSION = 5;
     public static final String TABLE_RECORDS = "records";
     public static final String TABLE_CATEGORIES = "categories";
 
@@ -54,6 +54,11 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String DECIMALS_FROM_COLUMN = "decimals_from";
     public static final String DECIMALS_TO_COLUMN = "decimals_to";
 
+    /* DB_VERSION = 5 */
+    public static final String GOAL_COLUMN = "goal";
+    public static final String ARCHIVED_COLUMN = "archived";
+    public static final String COLOR_COLUMN = "color";
+
     public DbHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
@@ -63,7 +68,8 @@ public class DbHelper extends SQLiteOpenHelper {
         //createDbVersion1(db);
         //createDbVersion2(db);
         //createDbVersion3(db);
-        createDbVersion4(db);
+        //createDbVersion4(db);
+        createDbVersion5(db);
     }
 
     @Override
@@ -129,6 +135,25 @@ public class DbHelper extends SQLiteOpenHelper {
                     + DECIMALS_FROM_COLUMN + " INTEGER;");
             db.execSQL("ALTER TABLE " + TABLE_TRANSFERS + " ADD COLUMN "
                     + DECIMALS_TO_COLUMN + " INTEGER;");
+
+            db.setTransactionSuccessful();
+            db.endTransaction();
+        }
+
+        if (oldVersion < 5) {
+            db.beginTransaction();
+
+            /* Add goal column to the accounts table */
+            db.execSQL("ALTER TABLE " + TABLE_ACCOUNTS + " ADD COLUMN "
+                    + GOAL_COLUMN + " REAL;");
+
+            /* Add archived flag column to the accounts table */
+            db.execSQL("ALTER TABLE " + TABLE_ACCOUNTS + " ADD COLUMN "
+                    + ARCHIVED_COLUMN + " INTEGER;");
+
+            /* Add color column to the accounts table */
+            db.execSQL("ALTER TABLE " + TABLE_ACCOUNTS + " ADD COLUMN "
+                    + COLOR_COLUMN + " INTEGER;");
 
             db.setTransactionSuccessful();
             db.endTransaction();
@@ -242,6 +267,48 @@ public class DbHelper extends SQLiteOpenHelper {
                 + CUR_SUM_COLUMN + " INTEGER,"
                 + CURRENCY_COLUMN + " TEXT,"
                 + DECIMALS_COLUMN + " INTEGER);");
+
+        db.execSQL("CREATE TABLE " + TABLE_TRANSFERS + "("
+                + ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + TIME_COLUMN + " INTEGER,"
+                + FROM_ACCOUNT_ID_COLUMN + " INTEGER,"
+                + TO_ACCOUNT_ID_COLUMN + " INTEGER,"
+                + FROM_AMOUNT_COLUMN + " INTEGER,"
+                + TO_AMOUNT_COLUMN + " INTEGER,"
+                + DECIMALS_FROM_COLUMN + " INTEGER,"
+                + DECIMALS_TO_COLUMN + " INTEGER);");
+
+        createRatesTable(db);
+
+        insertDefaultAccount(db);
+    }
+
+    private void createDbVersion5(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE " + TABLE_RECORDS + "("
+                + ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + TIME_COLUMN + " INTEGER,"
+                + TYPE_COLUMN + " INTEGER,"
+                + TITLE_COLUMN + " TEXT,"
+                + CATEGORY_ID_COLUMN + " INTEGER,"
+                + PRICE_COLUMN + " INTEGER,"
+                + ACCOUNT_ID_COLUMN + " INTEGER,"
+                + CURRENCY_COLUMN + " TEXT,"
+                + DECIMALS_COLUMN + " INTEGER);");
+
+        db.execSQL("CREATE TABLE " + TABLE_CATEGORIES + "("
+                + ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + NAME_COLUMN + " TEXT" + ");");
+
+        db.execSQL("CREATE TABLE " + TABLE_ACCOUNTS + "("
+                + ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + CREATED_AT_COLUMN + " INTEGER,"
+                + TITLE_COLUMN + " TEXT,"
+                + CUR_SUM_COLUMN + " INTEGER,"
+                + CURRENCY_COLUMN + " TEXT,"
+                + DECIMALS_COLUMN + " INTEGER,"
+                + GOAL_COLUMN + " REAL,"
+                + ARCHIVED_COLUMN + " INTEGER,"
+                + COLOR_COLUMN + " INTEGER);");
 
         db.execSQL("CREATE TABLE " + TABLE_TRANSFERS + "("
                 + ID_COLUMN + " INTEGER PRIMARY KEY AUTOINCREMENT,"

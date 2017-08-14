@@ -60,6 +60,9 @@ public class AccountRepo extends BaseRepo<Account> {
             int curSumColIndex = cursor.getColumnIndex(DbHelper.CUR_SUM_COLUMN);
             int currencyColIndex = cursor.getColumnIndex(DbHelper.CURRENCY_COLUMN);
             int decimalsColIndex = cursor.getColumnIndex(DbHelper.DECIMALS_COLUMN);
+            int goalColIndex = cursor.getColumnIndex(DbHelper.GOAL_COLUMN);
+            int archivedIndex = cursor.getColumnIndex(DbHelper.ARCHIVED_COLUMN);
+            int colorIndex = cursor.getColumnIndex(DbHelper.COLOR_COLUMN);
 
             do {
                 // Read a account from DB
@@ -67,7 +70,10 @@ public class AccountRepo extends BaseRepo<Account> {
                         cursor.getString(titleColIndex),
                         cursor.getLong(curSumColIndex),
                         cursor.getString(currencyColIndex),
-                        cursor.getLong(decimalsColIndex));
+                        cursor.getLong(decimalsColIndex),
+                        cursor.getDouble(goalColIndex),
+                        cursor.getInt(archivedIndex) != 0,
+                        cursor.getInt(colorIndex));
 
                 accountList.add(account);
             } while (cursor.moveToNext());

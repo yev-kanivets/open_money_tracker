@@ -97,7 +97,11 @@ public class AddAccountActivity extends BaseBackActivity {
             String title = etTitle.getText().toString().trim();
             double initSum = Double.parseDouble(etInitSum.getText().toString().trim());
             String currency = (String) spinner.getSelectedItem();
-            return accountController.create(new Account(title, initSum, currency)) != null;
+            double goal = 0;
+            int color = 0;
+
+            Account account = new Account(title, initSum, currency, goal, false, color);
+            return accountController.create(account) != null;
         } else {
             return false;
         }
