@@ -87,6 +87,18 @@ public class Account extends BaseEntity implements Parcelable {
         return currency;
     }
 
+    public double getGoal() {
+        return goal;
+    }
+
+    public boolean isArchived() {
+        return archived;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
     public void put(double amount) {
         double sum = curSum + decimals / 100.0;
         sum += amount;

@@ -70,11 +70,12 @@ dependencies {
     compile 'com.android.support:support-v4:25.1.0'
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'com.android.support:design:25.1.0'
-
     compile 'com.jakewharton:butterknife:7.0.1' // View annotation bindings
     compile 'com.google.dagger:dagger:2.0.1' // Dependency injection tool
     compile 'com.github.PhilJay:MPAndroidChart:v2.2.4' // Charts
     compile 'com.jakewharton.timber:timber:4.1.2' // Advanced logging tool
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.thebluealliance:spectrum:0.7.1' // Color picker
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:2.0.43-beta'

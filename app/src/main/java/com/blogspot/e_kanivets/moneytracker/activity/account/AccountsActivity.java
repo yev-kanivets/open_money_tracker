@@ -2,11 +2,8 @@ package com.blogspot.e_kanivets.moneytracker.activity.account;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
-import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.blogspot.e_kanivets.moneytracker.R;
@@ -20,6 +17,7 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+import butterknife.OnItemClick;
 
 public class AccountsActivity extends BaseBackActivity {
     @SuppressWarnings("unused")
@@ -27,6 +25,7 @@ public class AccountsActivity extends BaseBackActivity {
 
     private static final int REQUEST_ADD_ACCOUNT = 1;
     private static final int REQUEST_TRANSFER = 2;
+    private static final int REQUEST_EDIT_ACCOUNT = 3;
 
     @Inject
     AccountController accountController;
@@ -77,26 +76,11 @@ public class AccountsActivity extends BaseBackActivity {
         }
     }
 
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        getMenuInflater().inflate(R.menu.menu_account, menu);
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-
-        switch (item.getItemId()) {
-            case R.id.delete:
-                // Minus one because of list view's header view
-                accountController.delete(accountController.readAll().get(info.position - 1));
-                update();
-                setResult(RESULT_OK);
-                return true;
-            default:
-                return super.onContextItemSelected(item);
-        }
+    @OnItemClick(R.id.list_view)
+    public void onAccountClick(int position) {
+        Intent intent = new Intent(this, EditAccountActivity.class);
+        intent.putExtra(EditAccountActivity.KEY_ACCOUNT, accountController.readAll().get(position - 1));
+        startActivityForResult(intent, REQUEST_EDIT_ACCOUNT);
     }
 
     public void makeTransfer() {
@@ -123,6 +107,11 @@ public class AccountsActivity extends BaseBackActivity {
                     break;
 
                 case REQUEST_TRANSFER:
+                    update();
+                    setResult(RESULT_OK);
+                    break;
+
+                case REQUEST_EDIT_ACCOUNT:
                     update();
                     setResult(RESULT_OK);
                     break;
