@@ -1,5 +1,7 @@
 package com.blogspot.e_kanivets.moneytracker.activity.account;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -89,7 +91,7 @@ public class EditAccountActivity extends BaseBackActivity {
 
     private void archive() {
         if (account.equals(accountController.readDefaultAccount())) {
-            showToast("You can't archive a default account.");
+            showToast(R.string.cant_archive_default_account);
         } else {
             accountController.archive(account);
             setResult(RESULT_OK);
@@ -104,9 +106,19 @@ public class EditAccountActivity extends BaseBackActivity {
     }
 
     private void delete() {
-        accountController.delete(account);
-        setResult(RESULT_OK);
-        finish();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.delete_account_title);
+        builder.setMessage(R.string.delete_account_message);
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                accountController.delete(account);
+                setResult(RESULT_OK);
+                finish();
+            }
+        });
+        builder.setNegativeButton(android.R.string.cancel, null);
+        builder.show();
     }
 
 }

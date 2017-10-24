@@ -129,4 +129,7 @@
     <string name="goal">Goal</string>
     <string name="restore">Restore</string>
     <string name="archive">Archive</string>
+    <string name="cant_archive_default_account">You can\'t archive a default account.</string>
+    <string name="delete_account_title">Delete account</string>
+    <string name="delete_account_message">Are you sure about deleting this account? It can\'t be restored after.</string>
 </resources>
