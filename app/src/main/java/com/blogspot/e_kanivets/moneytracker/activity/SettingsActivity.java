@@ -73,7 +73,7 @@ public class SettingsActivity extends BaseBackActivity {
             ListPreference defaultAccountPref = (ListPreference) findPreference(getString(R.string.pref_default_account));
             defaultAccountPref.setOnPreferenceChangeListener(preferenceChangeListener);
 
-            List<Account> accountList = accountController.readAll();
+            List<Account> accountList = accountController.readActiveAccounts();
             defaultAccountPref.setEntries(getEntries(accountList));
             defaultAccountPref.setEntryValues(getEntryValues(accountList));
 

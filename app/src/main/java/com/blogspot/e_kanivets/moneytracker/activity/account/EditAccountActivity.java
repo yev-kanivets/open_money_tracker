@@ -88,9 +88,13 @@ public class EditAccountActivity extends BaseBackActivity {
     }
 
     private void archive() {
-        accountController.archive(account);
-        setResult(RESULT_OK);
-        finish();
+        if (account.equals(accountController.readDefaultAccount())) {
+            showToast("You can't archive a default account.");
+        } else {
+            accountController.archive(account);
+            setResult(RESULT_OK);
+            finish();
+        }
     }
 
     private void restore() {

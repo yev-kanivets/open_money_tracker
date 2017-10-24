@@ -114,7 +114,7 @@ public class AddRecordActivity extends BaseBackActivity {
         record = getIntent().getParcelableExtra(KEY_RECORD);
         mode = (Mode) getIntent().getSerializableExtra(KEY_MODE);
         type = getIntent().getIntExtra(KEY_TYPE, -1);
-        accountList = accountController.readAll();
+        accountList = accountController.readActiveAccounts();
 
         if (mode == Mode.MODE_EDIT && record != null) timestamp = record.getTime();
         else timestamp = new Date().getTime();

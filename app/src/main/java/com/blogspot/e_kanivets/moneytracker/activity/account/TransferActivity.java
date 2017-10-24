@@ -57,7 +57,7 @@ public class TransferActivity extends BaseBackActivity {
     protected boolean initData() {
         boolean result = super.initData();
         getAppComponent().inject(TransferActivity.this);
-        accountList = accountController.readAll();
+        accountList = accountController.readActiveAccounts();
         return result;
     }
 
