@@ -127,4 +127,6 @@
     <string name="title_activity_edit_account">Edit Account</string>
     <string name="color">Color</string>
     <string name="goal">Goal</string>
+    <string name="restore">Restore</string>
+    <string name="archive">Archive</string>
 </resources>

@@ -94,6 +94,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:src="@drawable/ic_done"
-        app:layout_anchorGravity="bottom|end" />
+        app:layout_anchorGravity="bottom|end"
+        android:id="@+id/fabDone"/>
 
 </android.support.design.widget.CoordinatorLayout>

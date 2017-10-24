@@ -13,6 +13,7 @@ import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
 import javax.inject.Inject;
 
 import butterknife.Bind;
+import butterknife.OnClick;
 
 public class EditAccountActivity extends BaseBackActivity {
 
@@ -53,22 +54,55 @@ public class EditAccountActivity extends BaseBackActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_account, menu);
+        if (account.isArchived()) {
+            getMenuInflater().inflate(R.menu.menu_archived_account, menu);
+        } else {
+            getMenuInflater().inflate(R.menu.menu_account, menu);
+        }
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.delete:
-                accountController.delete(account);
-                setResult(RESULT_OK);
-                finish();
+            case R.id.action_archive:
+                archive();
+                return true;
+
+            case R.id.action_restore:
+                restore();
+                return true;
+
+            case R.id.action_delete:
+                delete();
                 return true;
 
             default:
-                return super.onContextItemSelected(item);
+                return super.onOptionsItemSelected(item);
         }
+    }
+
+    @OnClick(R.id.fabDone)
+    void done() {
+
+    }
+
+    private void archive() {
+        accountController.archive(account);
+        setResult(RESULT_OK);
+        finish();
+    }
+
+    private void restore() {
+        accountController.restore(account);
+        setResult(RESULT_OK);
+        finish();
+    }
+
+    private void delete() {
+        accountController.delete(account);
+        setResult(RESULT_OK);
+        finish();
     }
 
 }

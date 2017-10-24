@@ -43,6 +43,9 @@ public class AccountRepo extends BaseRepo<Account> {
         contentValues.put(DbHelper.CUR_SUM_COLUMN, account.getCurSum());
         contentValues.put(DbHelper.CURRENCY_COLUMN, account.getCurrency());
         contentValues.put(DbHelper.DECIMALS_COLUMN, account.getDecimals());
+        contentValues.put(DbHelper.GOAL_COLUMN, account.getGoal());
+        contentValues.put(DbHelper.ARCHIVED_COLUMN, account.isArchived());
+        contentValues.put(DbHelper.COLOR_COLUMN, account.getColor());
 
         return contentValues;
     }

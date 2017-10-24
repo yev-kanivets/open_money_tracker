@@ -112,6 +112,26 @@ public class AccountController extends BaseController<Account> {
         }
     }
 
+    public boolean archive(@Nullable Account account) {
+        if (account == null) {
+            return false;
+        } else {
+            account.archive();
+            update(account);
+            return true;
+        }
+    }
+
+    public boolean restore(@Nullable Account account) {
+        if (account == null) {
+            return false;
+        } else {
+            account.restore();
+            update(account);
+            return true;
+        }
+    }
+
     private Account getFirstAccount() {
         List<Account> accountList = readAll();
         if (accountList.size() == 0) return null;

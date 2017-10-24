@@ -113,6 +113,14 @@ public class Account extends BaseEntity implements Parcelable {
         decimals = getDecimal(sum);
     }
 
+    public void archive() {
+        archived = true;
+    }
+
+    public void restore() {
+        archived = false;
+    }
+
     @SuppressWarnings("SimplifiableIfStatement")
     @Override
     public boolean equals(Object o) {
