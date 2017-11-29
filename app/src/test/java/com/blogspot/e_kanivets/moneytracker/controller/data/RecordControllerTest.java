@@ -60,7 +60,7 @@ public class RecordControllerTest {
         Mockito.verify(accountMock, Mockito.times(0)).recordAdded(null);
 
         Category category = new Category(1, "c1");
-        Account account = new Account(1, "a1", 100, "NON", 0);
+        Account account = new Account(1, "a1", 100, "NON", 0, 0, false, 0);
         Record record = new Record(1, 1, Record.TYPE_INCOME, "r1", category, 10, account, "NON");
         Mockito.when(categoryMock.readOrCreate(category.getName())).thenReturn(category);
 
@@ -78,7 +78,7 @@ public class RecordControllerTest {
         Mockito.verify(accountMock, Mockito.times(0)).recordAdded(null);
 
         Category category = new Category(1, "c1");
-        Account account = new Account(1, "a1", 100, "NON", 0);
+        Account account = new Account(1, "a1", 100, "NON", 0, 0, false, 0);
         Record record = new Record(1, 1, Record.TYPE_INCOME, "r1", category, 10, account, "NON");
         Mockito.when(categoryMock.readOrCreate(category.getName())).thenReturn(category);
 
@@ -95,7 +95,7 @@ public class RecordControllerTest {
         Mockito.verify(accountMock, Mockito.times(0)).recordDeleted(null);
 
         Category category = new Category(1, "c1");
-        Account account = new Account(1, "a1", 100, "NON", 0);
+        Account account = new Account(1, "a1", 100, "NON", 0, 0, false, 0);
         Record record = new Record(1, 1, Record.TYPE_INCOME, "r1", category, 10, account, "NON");
 
         assertFalse(recordController.delete(record));
@@ -112,7 +112,7 @@ public class RecordControllerTest {
         assertNull(recordController.read(-1));
 
         Category category = new Category(1, "c1");
-        Account account = new Account(1, "a1", 100, "NON", 0);
+        Account account = new Account(1, "a1", 100, "NON", 0, 0, false, 0);
         Record recordNotFull = new Record(1, 1, Record.TYPE_INCOME, "r1", category.getId(), 10,
                 account.getId(), "NON", 0);
         Record record = new Record(1, 1, Record.TYPE_INCOME, "r1", category, 10, account, "NON");

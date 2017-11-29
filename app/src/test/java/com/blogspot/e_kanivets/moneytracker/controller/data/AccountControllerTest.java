@@ -52,7 +52,7 @@ public class AccountControllerTest {
     @Test
     public void testRecordAdded() throws Exception {
         Category category = new Category(1, "c1");
-        Account account = new Account(1, "a1", 100, "NON", 0);
+        Account account = new Account(1, "a1", 100, "NON", 0, 0, false, 0);
         repo.create(account);
 
         Record income = new Record(1, 1, Record.TYPE_INCOME, "income", category, 10, account,
@@ -78,7 +78,7 @@ public class AccountControllerTest {
     @Test
     public void testRecordDeleted() throws Exception {
         Category category = new Category(1, "c1");
-        Account account = new Account(1, "a1", 100, "NON", 0);
+        Account account = new Account(1, "a1", 100, "NON", 0, 0, false, 0);
         repo.create(account);
 
         Record income = new Record(1, 1, Record.TYPE_INCOME, "income", category, 10, account,
@@ -104,7 +104,7 @@ public class AccountControllerTest {
     @Test
     public void testRecordUpdated() throws Exception {
         Category category = new Category(1, "c1");
-        Account account = new Account(1, "a1", 100, "NON", 0);
+        Account account = new Account(1, "a1", 100, "NON", 0, 0, false, 0);
         repo.create(account);
 
         Record incomeOld = new Record(1, 1, Record.TYPE_INCOME, "income", category, 10, account,
@@ -139,8 +139,8 @@ public class AccountControllerTest {
 
     @Test
     public void testTransferDone() throws Exception {
-        Account account1 = new Account(1, "a1", 100, "NON", 0);
-        Account account2 = new Account(2, "a2", 0, "NON", 0);
+        Account account1 = new Account(1, "a1", 100, "NON", 0, 0, false, 0);
+        Account account2 = new Account(2, "a2", 0, "NON", 0, 0, false, 0);
 
         repo.create(account1);
         repo.create(account2);
@@ -174,11 +174,11 @@ public class AccountControllerTest {
     public void testReadDefaultAccount() throws Exception {
         assertNull(accountController.readDefaultAccount());
 
-        Account account1 = new Account(1, "a1", 100, "NON", 0);
+        Account account1 = new Account(1, "a1", 100, "NON", 0, 0, false, 0);
         repo.create(account1);
         assertEquals(account1, accountController.readDefaultAccount());
 
-        Account account2 = new Account(2, "a2", 0, "NON", 0);
+        Account account2 = new Account(2, "a2", 0, "NON", 0, 0, false, 0);
         repo.create(account2);
         assertEquals(account1, accountController.readDefaultAccount());
 

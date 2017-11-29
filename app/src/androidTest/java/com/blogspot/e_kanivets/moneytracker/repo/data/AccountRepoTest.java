@@ -40,7 +40,7 @@ public class AccountRepoTest extends TestCase {
     }
 
     public void testContentValues() throws Exception {
-        Account account = new Account(-1, "title1", 100, "NON", 30);
+        Account account = new Account(-1, "title1", 100, "NON", 30, 0, false, 0);
 
         ContentValues expected = new ContentValues();
         expected.put(DbHelper.TITLE_COLUMN, "title1");
@@ -71,7 +71,7 @@ public class AccountRepoTest extends TestCase {
         Mockito.when(mockCursor.getString(4)).thenReturn("NON");
 
         List<Account> expected = new ArrayList<>();
-        expected.add(new Account(1, "title", 100, "NON", 0));
+        expected.add(new Account(1, "title", 100, "NON", 0, 0, false, 0));
 
         assertEquals(expected, repo.getListFromCursor(mockCursor));
 
