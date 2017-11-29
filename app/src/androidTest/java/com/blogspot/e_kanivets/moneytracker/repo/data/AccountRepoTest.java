@@ -47,6 +47,9 @@ public class AccountRepoTest extends TestCase {
         expected.put(DbHelper.CUR_SUM_COLUMN, 100L);
         expected.put(DbHelper.CURRENCY_COLUMN, "NON");
         expected.put(DbHelper.DECIMALS_COLUMN, 30L);
+        expected.put(DbHelper.GOAL_COLUMN, 0.0);
+        expected.put(DbHelper.ARCHIVED_COLUMN, false);
+        expected.put(DbHelper.COLOR_COLUMN, 0);
 
         ContentValues actual = repo.contentValues(account);
 
