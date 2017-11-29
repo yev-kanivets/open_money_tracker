@@ -23,7 +23,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 
 public class ChartsActivity extends BaseBackActivity {
 
@@ -34,9 +34,9 @@ public class ChartsActivity extends BaseBackActivity {
     @Inject
     CurrencyController currencyController;
 
-    @Bind(R.id.tabs)
+    @BindView(R.id.tabs)
     TabLayout tabLayout;
-    @Bind(R.id.view_pager)
+    @BindView(R.id.view_pager)
     ViewPager viewPager;
 
     @Override

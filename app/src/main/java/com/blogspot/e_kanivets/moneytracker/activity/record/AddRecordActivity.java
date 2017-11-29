@@ -45,7 +45,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
@@ -84,19 +84,19 @@ public class AddRecordActivity extends BaseBackActivity {
     private AddRecordUiDecorator uiDecorator;
     private CategoryAutoCompleter autoCompleter;
 
-    @Bind(R.id.content)
+    @BindView(R.id.content)
     View contentView;
-    @Bind(R.id.tv_date)
+    @BindView(R.id.tv_date)
     TextView tvDate;
-    @Bind(R.id.tv_time)
+    @BindView(R.id.tv_time)
     TextView tvTime;
-    @Bind(R.id.et_title)
+    @BindView(R.id.et_title)
     EditText etTitle;
-    @Bind(R.id.et_category)
+    @BindView(R.id.et_category)
     AutoCompleteTextView etCategory;
-    @Bind(R.id.et_price)
+    @BindView(R.id.et_price)
     EditText etPrice;
-    @Bind(R.id.spinner_account)
+    @BindView(R.id.spinner_account)
     AppCompatSpinner spinnerAccount;
 
     @Override

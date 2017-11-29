@@ -10,7 +10,7 @@ import com.blogspot.e_kanivets.moneytracker.R;
 import java.util.Calendar;
 import java.util.Date;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -24,7 +24,7 @@ public class ChangeDateDialog extends AlertDialog{
     private Date date;
     private OnDateChangedListener listener;
 
-    @Bind(R.id.datePicker)
+    @BindView(R.id.datePicker)
     DatePicker datePicker;
 
     public ChangeDateDialog(Context context, Date date, OnDateChangedListener listener) {

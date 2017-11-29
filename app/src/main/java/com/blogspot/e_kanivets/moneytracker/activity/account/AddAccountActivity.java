@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 
 public class AddAccountActivity extends BaseBackActivity {
     @SuppressWarnings("unused")
@@ -33,13 +33,13 @@ public class AddAccountActivity extends BaseBackActivity {
 
     private IValidator<Account> accountValidator;
 
-    @Bind(R.id.content)
+    @BindView(R.id.content)
     View contentView;
-    @Bind(R.id.et_title)
+    @BindView(R.id.et_title)
     EditText etTitle;
-    @Bind(R.id.et_init_sum)
+    @BindView(R.id.et_init_sum)
     EditText etInitSum;
-    @Bind(R.id.spinner)
+    @BindView(R.id.spinner)
     AppCompatSpinner spinner;
 
     @Override

@@ -23,7 +23,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 
 public class ReportActivity extends BaseBackActivity {
     @SuppressWarnings("unused")
@@ -43,9 +43,9 @@ public class ReportActivity extends BaseBackActivity {
 
     private ShortSummaryPresenter shortSummaryPresenter;
 
-    @Bind(R.id.spinner_currency)
+    @BindView(R.id.spinner_currency)
     AppCompatSpinner spinnerCurrency;
-    @Bind(R.id.exp_list_view)
+    @BindView(R.id.exp_list_view)
     ExpandableListView expandableListView;
 
     @Override

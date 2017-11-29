@@ -14,7 +14,7 @@ import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.OnClick;
 
 public class EditAccountActivity extends BaseBackActivity {
@@ -26,11 +26,11 @@ public class EditAccountActivity extends BaseBackActivity {
 
     private Account account;
 
-    @Bind(R.id.et_title)
+    @BindView(R.id.et_title)
     EditText etTitle;
-    @Bind(R.id.et_goal)
+    @BindView(R.id.et_goal)
     EditText etGoal;
-    @Bind(R.id.view_color)
+    @BindView(R.id.view_color)
     View viewColor;
 
     @Override

@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -99,11 +99,11 @@ public class MonthSummaryAdapter extends BaseAdapter {
     }
 
     public static class ViewHolder {
-        @Bind(R.id.tv_month)
+        @BindView(R.id.tv_month)
         TextView tvMonth;
-        @Bind(R.id.tv_total_income)
+        @BindView(R.id.tv_total_income)
         TextView tvTotalIncome;
-        @Bind(R.id.tv_total_expense)
+        @BindView(R.id.tv_total_expense)
         TextView tvTotalExpense;
 
         public ViewHolder(View view) {

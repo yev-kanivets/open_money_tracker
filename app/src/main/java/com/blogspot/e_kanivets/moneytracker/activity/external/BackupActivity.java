@@ -21,7 +21,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import timber.log.Timber;
@@ -37,9 +37,9 @@ public class BackupActivity extends BaseBackActivity {
 
     private DropboxAPI<AndroidAuthSession> dbApi;
 
-    @Bind(R.id.btn_backup_now)
+    @BindView(R.id.btn_backup_now)
     View btnBackupNow;
-    @Bind(R.id.list_view)
+    @BindView(R.id.list_view)
     ListView listView;
 
     @Override

@@ -18,7 +18,7 @@ import com.blogspot.e_kanivets.moneytracker.activity.account.AccountsActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.exchange_rate.ExchangeRatesActivity;
 import com.blogspot.e_kanivets.moneytracker.util.AnswersProxy;
 
-import butterknife.Bind;
+import butterknife.BindView;
 
 /**
  * Base implementation of {@link android.support.v7.app.AppCompatActivity} to encapsulate Navigation
@@ -35,9 +35,9 @@ public abstract class BaseDrawerActivity extends BaseActivity
     private static final int REQUEST_IMPORT_EXPORT = 4;
     protected static final int REQUEST_BACKUP = 5;
 
-    @Bind(R.id.drawer_layout)
+    @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
-    @Bind(R.id.nav_view)
+    @BindView(R.id.nav_view)
     protected NavigationView navigationView;
 
     protected abstract void update();

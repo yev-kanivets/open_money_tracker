@@ -15,7 +15,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -81,13 +81,13 @@ public class ShortSummaryPresenter extends BaseSummaryPresenter {
     }
 
     public static class ViewHolder {
-        @Bind(R.id.tv_period)
+        @BindView(R.id.tv_period)
         TextView tvPeriod;
-        @Bind(R.id.tv_total_income)
+        @BindView(R.id.tv_total_income)
         TextView tvTotalIncome;
-        @Bind(R.id.tv_total_expense)
+        @BindView(R.id.tv_total_expense)
         TextView tvTotalExpense;
-        @Bind(R.id.tv_total)
+        @BindView(R.id.tv_total)
         TextView tvTotal;
 
         public ViewHolder(View view) {

@@ -11,7 +11,7 @@ import android.widget.Toast;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRatePair;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -27,17 +27,17 @@ public class ExchangeRatePairValidator implements IValidator<ExchangeRatePair> {
     @NonNull
     private final Context context;
 
-    @Bind(R.id.spinner_from_currency)
+    @BindView(R.id.spinner_from_currency)
     AppCompatSpinner spinnerFromCurrency;
-    @Bind(R.id.spinner_to_currency)
+    @BindView(R.id.spinner_to_currency)
     AppCompatSpinner spinnerToCurrency;
-    @Bind(R.id.til_buy)
+    @BindView(R.id.til_buy)
     TextInputLayout tilBuy;
-    @Bind(R.id.et_buy)
+    @BindView(R.id.et_buy)
     EditText etBuy;
-    @Bind(R.id.til_sell)
+    @BindView(R.id.til_sell)
     TextInputLayout tilSell;
-    @Bind(R.id.et_sell)
+    @BindView(R.id.et_sell)
     EditText etSell;
 
     public ExchangeRatePairValidator(@NonNull Context context, @NonNull View view) {
