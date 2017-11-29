@@ -17,7 +17,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -101,11 +101,11 @@ public class AccountAdapter extends BaseAdapter {
     }
 
     public static class ViewHolder {
-        @Bind(R.id.tv_title)
+        @BindView(R.id.tv_title)
         TextView tvTitle;
-        @Bind(R.id.tv_cur_sum)
+        @BindView(R.id.tv_cur_sum)
         TextView tvCurSum;
-        @Bind(R.id.tv_currency)
+        @BindView(R.id.tv_currency)
         TextView tvCurrency;
 
         public ViewHolder(View view) {

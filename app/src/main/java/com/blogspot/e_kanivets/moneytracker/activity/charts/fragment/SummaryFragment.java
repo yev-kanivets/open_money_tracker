@@ -12,7 +12,7 @@ import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.adapter.MonthSummaryAdapter;
 import com.blogspot.e_kanivets.moneytracker.report.chart.IMonthReport;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -26,7 +26,7 @@ public class SummaryFragment extends Fragment {
     @Nullable
     private IMonthReport monthReport;
 
-    @Bind(R.id.list_view)
+    @BindView(R.id.list_view)
     ListView listView;
 
     public SummaryFragment() {

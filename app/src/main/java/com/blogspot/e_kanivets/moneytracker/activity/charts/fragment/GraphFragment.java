@@ -14,7 +14,7 @@ import com.blogspot.e_kanivets.moneytracker.report.chart.IMonthReport;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -31,7 +31,7 @@ public class GraphFragment extends Fragment {
     @Nullable
     private String noDataText;
 
-    @Bind(R.id.bar_chart)
+    @BindView(R.id.bar_chart)
     BarChart barChart;
 
     public GraphFragment() {

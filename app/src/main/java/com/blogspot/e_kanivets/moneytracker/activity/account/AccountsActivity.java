@@ -15,7 +15,7 @@ import com.blogspot.e_kanivets.moneytracker.util.AnswersProxy;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 
@@ -32,7 +32,7 @@ public class AccountsActivity extends BaseBackActivity {
 
     private AccountsSummaryPresenter summaryPresenter;
 
-    @Bind(R.id.list_view)
+    @BindView(R.id.list_view)
     ListView listView;
 
     @Override

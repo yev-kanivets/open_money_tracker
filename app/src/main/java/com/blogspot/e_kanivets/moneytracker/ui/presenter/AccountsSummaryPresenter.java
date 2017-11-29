@@ -22,7 +22,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -116,11 +116,11 @@ public class AccountsSummaryPresenter extends BaseSummaryPresenter {
     }
 
     public static class ViewHolder {
-        @Bind(R.id.spinner_currency)
+        @BindView(R.id.spinner_currency)
         AppCompatSpinner spinnerCurrency;
-        @Bind(R.id.tv_total)
+        @BindView(R.id.tv_total)
         TextView tvTotal;
-        @Bind(R.id.tv_currency)
+        @BindView(R.id.tv_currency)
         TextView tvCurrency;
 
         public ViewHolder(View view) {

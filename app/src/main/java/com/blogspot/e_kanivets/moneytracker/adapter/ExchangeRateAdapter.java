@@ -17,7 +17,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -79,13 +79,13 @@ public class ExchangeRateAdapter extends BaseAdapter {
     }
 
     public static class ViewHolder {
-        @Bind(R.id.tv_from_currency)
+        @BindView(R.id.tv_from_currency)
         TextView tvFromCurrency;
-        @Bind(R.id.tv_to_currency)
+        @BindView(R.id.tv_to_currency)
         TextView tvToCurrency;
-        @Bind(R.id.tv_amount_buy)
+        @BindView(R.id.tv_amount_buy)
         TextView tvAmountBuy;
-        @Bind(R.id.tv_amount_sell)
+        @BindView(R.id.tv_amount_sell)
         TextView tvAmountSell;
 
         public ViewHolder(View view) {

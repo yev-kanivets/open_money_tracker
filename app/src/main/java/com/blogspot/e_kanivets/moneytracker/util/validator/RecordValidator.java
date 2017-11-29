@@ -11,7 +11,7 @@ import android.widget.Toast;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -26,19 +26,19 @@ public class RecordValidator implements IValidator<Record> {
     @NonNull
     private final Context context;
 
-    @Bind(R.id.til_title)
+    @BindView(R.id.til_title)
     TextInputLayout tilTitle;
-    @Bind(R.id.et_title)
+    @BindView(R.id.et_title)
     EditText etTitle;
-    @Bind(R.id.til_category)
+    @BindView(R.id.til_category)
     TextInputLayout tilCategory;
-    @Bind(R.id.et_category)
+    @BindView(R.id.et_category)
     EditText etCategory;
-    @Bind(R.id.til_price)
+    @BindView(R.id.til_price)
     TextInputLayout tilPrice;
-    @Bind(R.id.et_price)
+    @BindView(R.id.et_price)
     EditText etPrice;
-    @Bind(R.id.spinner_account)
+    @BindView(R.id.spinner_account)
     AppCompatSpinner spinnerAccount;
 
     public RecordValidator(@NonNull Context context, @NonNull View view) {
