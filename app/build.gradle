@@ -14,24 +14,22 @@ repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
 
-apply plugin: 'com.neenbedankt.android-apt'
-
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.2'
+    compileSdkVersion 26
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId 'com.blogspot.e_kanivets.moneytracker'
         minSdkVersion 17
-        targetSdkVersion 25
-        versionCode 20
-        versionName '1.8.3'
+        targetSdkVersion 26
+        versionCode 21
+        versionName '1.8.5'
     }
     signingConfigs {
         releaseConfig {
-            storeFile file('mt_keystore.jks');
-            storePassword('moneytracker');
+            storeFile file('mt_keystore.jks')
+            storePassword('moneytracker')
             keyAlias 'moneytracker'
-            keyPassword 'moneytracker';
+            keyPassword 'moneytracker'
         }
     }
     buildTypes {
@@ -64,23 +62,25 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
     compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
-        transitive = true;
+        transitive = true
     }
 
-    compile 'com.android.support:support-v4:25.1.0'
-    compile 'com.android.support:appcompat-v7:25.1.0'
-    compile 'com.android.support:design:25.1.0'
-
-    compile 'com.jakewharton:butterknife:7.0.1' // View annotation bindings
+    compile 'com.android.support:support-v4:26.1.0'
+    compile 'com.android.support:appcompat-v7:26.1.0'
+    compile 'com.android.support:design:26.1.0'
+    compile 'com.jakewharton:butterknife:8.5.1' // View annotation bindings
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1' // ButterKnife compiler
     compile 'com.google.dagger:dagger:2.0.1' // Dependency injection tool
     compile 'com.github.PhilJay:MPAndroidChart:v2.2.4' // Charts
     compile 'com.jakewharton.timber:timber:4.1.2' // Advanced logging tool
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.dropbox.core:dropbox-core-sdk:3.0.5' // Dropbox Core API
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:2.0.43-beta'
     androidTestCompile 'com.crittercism.dexmaker:dexmaker:1.4'
     androidTestCompile 'com.crittercism.dexmaker:dexmaker-dx:1.4'
     androidTestCompile 'com.crittercism.dexmaker:dexmaker-mockito:1.4'
-    apt 'com.google.dagger:dagger-compiler:2.0.1'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.0.1'
     provided 'org.glassfish:javax.annotation:10.0-b28'
 }

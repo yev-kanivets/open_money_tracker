@@ -17,7 +17,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -37,6 +37,7 @@ public class AccountAdapter extends BaseAdapter {
     private int whiteGreen;
     private int red;
     private int green;
+    private int grey;
 
     @SuppressWarnings("deprecation")
     public AccountAdapter(Context context, List<Account> accounts) {
@@ -49,6 +50,7 @@ public class AccountAdapter extends BaseAdapter {
         whiteGreen = context.getResources().getColor(R.color.white_green);
         red = context.getResources().getColor(R.color.red);
         green = context.getResources().getColor(R.color.green);
+        grey = context.getResources().getColor(R.color.grey_inactive);
     }
 
     @Override
@@ -82,7 +84,11 @@ public class AccountAdapter extends BaseAdapter {
 
         Account account = accounts.get(position);
 
-        convertView.setBackgroundColor(account.getFullSum() >= 0.0 ? whiteGreen : whiteRed);
+        if (account.isArchived()) {
+            convertView.setBackgroundColor(grey);
+        } else {
+            convertView.setBackgroundColor(account.getFullSum() >= 0.0 ? whiteGreen : whiteRed);
+        }
 
         viewHolder.tvCurSum.setTextColor(account.getFullSum() >= 0.0 ? green : red);
         viewHolder.tvCurrency.setTextColor(account.getFullSum() >= 0.0 ? green : red);
@@ -95,11 +101,11 @@ public class AccountAdapter extends BaseAdapter {
     }
 
     public static class ViewHolder {
-        @Bind(R.id.tv_title)
+        @BindView(R.id.tv_title)
         TextView tvTitle;
-        @Bind(R.id.tv_cur_sum)
+        @BindView(R.id.tv_cur_sum)
         TextView tvCurSum;
-        @Bind(R.id.tv_currency)
+        @BindView(R.id.tv_currency)
         TextView tvCurrency;
 
         public ViewHolder(View view) {

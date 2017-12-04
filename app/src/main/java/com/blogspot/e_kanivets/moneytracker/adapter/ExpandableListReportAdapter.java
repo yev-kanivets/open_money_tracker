@@ -17,7 +17,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -95,9 +95,9 @@ public class ExpandableListReportAdapter extends SimpleExpandableListAdapter {
     }
 
     public static class ViewHolder {
-        @Bind(R.id.tv_category)
+        @BindView(R.id.tv_category)
         TextView tvCategory;
-        @Bind(R.id.tv_total)
+        @BindView(R.id.tv_total)
         TextView tvTotal;
 
         public ViewHolder(View view) {

@@ -32,7 +32,7 @@ public class Record extends BaseEntity implements Parcelable {
         this.title = title;
         this.category = new Category(categoryId, null);
         this.price = price;
-        this.account = new Account(accountId, null, -1, null, 0);
+        this.account = new Account(accountId, null, -1, null, 0, -1, false, -1);
         this.currency = currency;
         this.decimals = decimals;
     }

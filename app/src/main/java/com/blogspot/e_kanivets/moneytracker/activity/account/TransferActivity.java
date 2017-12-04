@@ -22,7 +22,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 
 public class TransferActivity extends BaseBackActivity {
     @SuppressWarnings("unused")
@@ -37,15 +37,15 @@ public class TransferActivity extends BaseBackActivity {
 
     private List<Account> accountList;
 
-    @Bind(R.id.content)
+    @BindView(R.id.content)
     View contentView;
-    @Bind(R.id.spinner_from)
+    @BindView(R.id.spinner_from)
     AppCompatSpinner spinnerFrom;
-    @Bind(R.id.spinner_to)
+    @BindView(R.id.spinner_to)
     AppCompatSpinner spinnerTo;
-    @Bind(R.id.et_from_amount)
+    @BindView(R.id.et_from_amount)
     EditText etFromAmount;
-    @Bind(R.id.et_to_amount)
+    @BindView(R.id.et_to_amount)
     EditText etToAmount;
 
     @Override
@@ -57,7 +57,7 @@ public class TransferActivity extends BaseBackActivity {
     protected boolean initData() {
         boolean result = super.initData();
         getAppComponent().inject(TransferActivity.this);
-        accountList = accountController.readAll();
+        accountList = accountController.readActiveAccounts();
         return result;
     }
 

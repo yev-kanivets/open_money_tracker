@@ -16,21 +16,32 @@ public class Account extends BaseEntity implements Parcelable {
     private long curSum;
     private final String currency;
     private long decimals;
+    private double goal;
+    private boolean archived;
+    private int color;
 
-    public Account(long id, String title, long curSum, String currency, long decimals) {
+    public Account(long id, String title, long curSum, String currency, long decimals, double goal,
+                   boolean archived, int color) {
         this.id = id;
         this.title = title;
         this.curSum = curSum;
         this.currency = currency;
         this.decimals = decimals;
+        this.goal = goal;
+        this.archived = archived;
+        this.color = color;
     }
 
-    public Account(String title, double curSum, String currency) {
-        this.id = -1;
+    public Account(long id, String title, double curSum, String currency, double goal,
+                   boolean archived, int color) {
+        this.id = id;
         this.title = title;
         this.currency = currency;
         this.curSum = getLong(curSum);
         this.decimals = getDecimal(curSum);
+        this.goal = goal;
+        this.archived = archived;
+        this.color = color;
     }
 
     protected Account(Parcel in) {
@@ -39,6 +50,9 @@ public class Account extends BaseEntity implements Parcelable {
         curSum = in.readLong();
         currency = in.readString();
         decimals = in.readLong();
+        goal = in.readDouble();
+        archived = in.readByte() != 0;
+        color = in.readInt();
     }
 
     public static final Creator<Account> CREATOR = new Creator<Account>() {
@@ -73,6 +87,18 @@ public class Account extends BaseEntity implements Parcelable {
         return currency;
     }
 
+    public double getGoal() {
+        return goal;
+    }
+
+    public boolean isArchived() {
+        return archived;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
     public void put(double amount) {
         double sum = curSum + decimals / 100.0;
         sum += amount;
@@ -87,6 +113,14 @@ public class Account extends BaseEntity implements Parcelable {
         decimals = getDecimal(sum);
     }
 
+    public void archive() {
+        archived = true;
+    }
+
+    public void restore() {
+        archived = false;
+    }
+
     @SuppressWarnings("SimplifiableIfStatement")
     @Override
     public boolean equals(Object o) {
@@ -96,7 +130,10 @@ public class Account extends BaseEntity implements Parcelable {
                     && equals(this.title, account.getTitle())
                     && this.curSum == account.getCurSum()
                     && equals(this.currency, account.getCurrency())
-                    && this.decimals == account.decimals;
+                    && this.decimals == account.decimals
+                    && this.goal == account.goal
+                    && this.archived == account.archived
+                    && this.color == account.color;
         } else return false;
     }
 
@@ -109,7 +146,10 @@ public class Account extends BaseEntity implements Parcelable {
         sb.append("title = ").append(title).append(", ");
         sb.append("curSum = ").append(curSum).append(", ");
         sb.append("currency = ").append(currency).append(", ");
-        sb.append("decimals = ").append(decimals);
+        sb.append("decimals = ").append(decimals).append(", ");
+        sb.append("goal = ").append(goal).append(", ");
+        sb.append("archived = ").append(archived).append(", ");
+        sb.append("color = ").append(color);
         sb.append("}");
 
         return sb.toString();
@@ -127,5 +167,8 @@ public class Account extends BaseEntity implements Parcelable {
         dest.writeLong(curSum);
         dest.writeString(currency);
         dest.writeLong(decimals);
+        dest.writeDouble(goal);
+        dest.writeByte((byte) (archived ? 1 : 0));
+        dest.writeInt(color);
     }
 }

@@ -6,10 +6,10 @@ import android.widget.TextView;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 
-import butterknife.Bind;
+import butterknife.BindView;
 
 public class AboutActivity extends BaseBackActivity {
-    @Bind(R.id.tv_about)
+    @BindView(R.id.tv_about)
     TextView tvAbout;
 
     @Override

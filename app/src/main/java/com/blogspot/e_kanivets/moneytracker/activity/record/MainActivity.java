@@ -28,13 +28,12 @@ import com.blogspot.e_kanivets.moneytracker.ui.PeriodSpinner;
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.ShortSummaryPresenter;
 import com.blogspot.e_kanivets.moneytracker.util.AnswersProxy;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 
@@ -64,9 +63,9 @@ public class MainActivity extends BaseDrawerActivity {
 
     private ShortSummaryPresenter summaryPresenter;
 
-    @Bind(R.id.list_view)
+    @BindView(R.id.list_view)
     ListView listView;
-    @Bind(R.id.spinner_period)
+    @BindView(R.id.spinner_period)
     PeriodSpinner spinner;
 
     TextView tvDefaultAccountTitle;
@@ -101,7 +100,7 @@ public class MainActivity extends BaseDrawerActivity {
 
         if (preferenceController.checkRateDialog()) showAppRateDialog();
 
-        registerForContextMenu(listView);
+        //registerForContextMenu(listView);
 
         View summaryView = summaryPresenter.create(true);
         listView.addHeaderView(summaryView);

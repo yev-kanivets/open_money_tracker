@@ -23,7 +23,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 
 public class AddExchangeRateActivity extends BaseBackActivity {
     @SuppressWarnings("unused")
@@ -44,15 +44,15 @@ public class AddExchangeRateActivity extends BaseBackActivity {
     @Nullable
     private ExchangeRatePair exchangeRatePair;
 
-    @Bind(R.id.content)
+    @BindView(R.id.content)
     View contentView;
-    @Bind(R.id.spinner_from_currency)
+    @BindView(R.id.spinner_from_currency)
     AppCompatSpinner spinnerFromCurrency;
-    @Bind(R.id.spinner_to_currency)
+    @BindView(R.id.spinner_to_currency)
     AppCompatSpinner spinnerToCurrency;
-    @Bind(R.id.et_buy)
+    @BindView(R.id.et_buy)
     EditText etBuy;
-    @Bind(R.id.et_sell)
+    @BindView(R.id.et_sell)
     EditText etSell;
 
     @Override

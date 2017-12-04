@@ -24,7 +24,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.OnClick;
 import timber.log.Timber;
 
@@ -36,7 +36,7 @@ public class ImportExportActivity extends BaseBackActivity {
     @Inject
     ExportController exportController;
 
-    @Bind(R.id.et_import_data)
+    @BindView(R.id.et_import_data)
     EditText etImportData;
 
     @Override

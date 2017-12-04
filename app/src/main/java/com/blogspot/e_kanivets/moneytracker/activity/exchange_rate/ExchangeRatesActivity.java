@@ -22,7 +22,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 
@@ -37,7 +37,7 @@ public class ExchangeRatesActivity extends BaseBackActivity {
 
     private List<ExchangeRatePair> exchangeRateList;
 
-    @Bind(R.id.list_view)
+    @BindView(R.id.list_view)
     ListView listView;
 
     @Override

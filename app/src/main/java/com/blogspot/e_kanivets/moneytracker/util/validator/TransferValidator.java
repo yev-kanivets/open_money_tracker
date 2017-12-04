@@ -11,7 +11,7 @@ import android.widget.Toast;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Transfer;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -27,17 +27,17 @@ public class TransferValidator implements IValidator<Transfer> {
     @NonNull
     private final Context context;
 
-    @Bind(R.id.spinner_from)
+    @BindView(R.id.spinner_from)
     AppCompatSpinner spinnerFrom;
-    @Bind(R.id.spinner_to)
+    @BindView(R.id.spinner_to)
     AppCompatSpinner spinnerTo;
-    @Bind(R.id.til_from_amount)
+    @BindView(R.id.til_from_amount)
     TextInputLayout tilFromAmount;
-    @Bind(R.id.et_from_amount)
+    @BindView(R.id.et_from_amount)
     EditText etFromAmount;
-    @Bind(R.id.til_to_amount)
+    @BindView(R.id.til_to_amount)
     TextInputLayout tilToAmount;
-    @Bind(R.id.et_to_amount)
+    @BindView(R.id.et_to_amount)
     EditText etToAmount;
 
     public TransferValidator(@NonNull Context context, @NonNull View view) {

@@ -10,7 +10,7 @@ import android.widget.EditText;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -25,15 +25,15 @@ public class AccountValidator implements IValidator<Account> {
     @NonNull
     private final Context context;
 
-    @Bind(R.id.til_title)
+    @BindView(R.id.til_title)
     TextInputLayout tilTitle;
-    @Bind(R.id.et_title)
+    @BindView(R.id.et_title)
     EditText etTitle;
-    @Bind(R.id.til_init_sum)
+    @BindView(R.id.til_init_sum)
     TextInputLayout tilInitSum;
-    @Bind(R.id.et_init_sum)
+    @BindView(R.id.et_init_sum)
     EditText etInitSum;
-    @Bind(R.id.spinner)
+    @BindView(R.id.spinner)
     AppCompatSpinner spinner;
 
     public AccountValidator(@NonNull Context context, @NonNull View view) {

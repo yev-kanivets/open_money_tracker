@@ -1,5 +1,6 @@
 package com.blogspot.e_kanivets.moneytracker.controller.data;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.blogspot.e_kanivets.moneytracker.controller.PreferenceController;
@@ -9,6 +10,7 @@ import com.blogspot.e_kanivets.moneytracker.entity.data.Record;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Transfer;
 import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,6 +28,32 @@ public class AccountController extends BaseController<Account> {
     public AccountController(IRepo<Account> accountRepo, PreferenceController preferenceController) {
         super(accountRepo);
         this.preferenceController = preferenceController;
+    }
+
+    @NonNull
+    public List<Account> readActiveAccounts() {
+        List<Account> result = new ArrayList<>();
+
+        for (Account account : readAll()) {
+            if (!account.isArchived()) {
+                result.add(account);
+            }
+        }
+
+        return result;
+    }
+
+    @NonNull
+    public List<Account> readArchivedAccounts() {
+        List<Account> result = new ArrayList<>();
+
+        for (Account account : readAll()) {
+            if (!account.isArchived()) {
+                result.add(account);
+            }
+        }
+
+        return result;
     }
 
     public boolean recordAdded(@Nullable Record record) {
@@ -109,6 +137,26 @@ public class AccountController extends BaseController<Account> {
             Account account = read(defaultAccountId);
             if (account == null) return getFirstAccount();
             else return account;
+        }
+    }
+
+    public boolean archive(@Nullable Account account) {
+        if (account == null) {
+            return false;
+        } else {
+            account.archive();
+            update(account);
+            return true;
+        }
+    }
+
+    public boolean restore(@Nullable Account account) {
+        if (account == null) {
+            return false;
+        } else {
+            account.restore();
+            update(account);
+            return true;
         }
     }
 

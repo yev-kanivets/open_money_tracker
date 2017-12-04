@@ -15,7 +15,7 @@ import com.blogspot.e_kanivets.moneytracker.util.CategoryAutoCompleter;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -98,9 +98,9 @@ public class CategoryAutoCompleteAdapter extends ArrayAdapter<String> implements
     }
 
     public static class ViewHolder {
-        @Bind(R.id.tv_category)
+        @BindView(R.id.tv_category)
         TextView tvCategory;
-        @Bind(R.id.iv_cancel)
+        @BindView(R.id.iv_cancel)
         View ivCancel;
 
         public ViewHolder(View view) {

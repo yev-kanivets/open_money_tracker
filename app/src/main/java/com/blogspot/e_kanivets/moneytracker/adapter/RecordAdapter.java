@@ -17,7 +17,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -96,17 +96,17 @@ public class RecordAdapter extends BaseAdapter {
     }
 
     public static class ViewHolder {
-        @Bind(R.id.container)
+        @BindView(R.id.container)
         View container;
-        @Bind(R.id.tv_date_and_time)
+        @BindView(R.id.tv_date_and_time)
         TextView tvDateAndTime;
-        @Bind(R.id.tv_price)
+        @BindView(R.id.tv_price)
         TextView tvPrice;
-        @Bind(R.id.tv_title)
+        @BindView(R.id.tv_title)
         TextView tvTitle;
-        @Bind(R.id.tv_category)
+        @BindView(R.id.tv_category)
         TextView tvCategory;
-        @Bind(R.id.tv_currency)
+        @BindView(R.id.tv_currency)
         TextView tvCurrency;
 
         public ViewHolder(View view) {

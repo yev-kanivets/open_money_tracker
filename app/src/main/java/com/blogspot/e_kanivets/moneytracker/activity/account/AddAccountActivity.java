@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 
 public class AddAccountActivity extends BaseBackActivity {
     @SuppressWarnings("unused")
@@ -33,13 +33,13 @@ public class AddAccountActivity extends BaseBackActivity {
 
     private IValidator<Account> accountValidator;
 
-    @Bind(R.id.content)
+    @BindView(R.id.content)
     View contentView;
-    @Bind(R.id.et_title)
+    @BindView(R.id.et_title)
     EditText etTitle;
-    @Bind(R.id.et_init_sum)
+    @BindView(R.id.et_init_sum)
     EditText etInitSum;
-    @Bind(R.id.spinner)
+    @BindView(R.id.spinner)
     AppCompatSpinner spinner;
 
     @Override
@@ -97,7 +97,11 @@ public class AddAccountActivity extends BaseBackActivity {
             String title = etTitle.getText().toString().trim();
             double initSum = Double.parseDouble(etInitSum.getText().toString().trim());
             String currency = (String) spinner.getSelectedItem();
-            return accountController.create(new Account(title, initSum, currency)) != null;
+            double goal = 0;
+            int color = 0;
+
+            Account account = new Account(-1, title, initSum, currency, goal, false, color);
+            return accountController.create(account) != null;
         } else {
             return false;
         }
