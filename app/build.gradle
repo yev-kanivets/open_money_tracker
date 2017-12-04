@@ -74,6 +74,7 @@ dependencies {
     compile 'com.github.PhilJay:MPAndroidChart:v2.2.4' // Charts
     compile 'com.jakewharton.timber:timber:4.1.2' // Advanced logging tool
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.dropbox.core:dropbox-core-sdk:3.0.5' // Dropbox Core API
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:2.0.43-beta'

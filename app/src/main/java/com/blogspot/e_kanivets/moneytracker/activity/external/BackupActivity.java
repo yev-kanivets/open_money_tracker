@@ -13,9 +13,9 @@ import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.controller.BackupController;
 import com.blogspot.e_kanivets.moneytracker.controller.PreferenceController;
 import com.blogspot.e_kanivets.moneytracker.util.AnswersProxy;
-import com.dropbox.client2.DropboxAPI;
-import com.dropbox.client2.android.AndroidAuthSession;
-import com.dropbox.client2.session.AppKeyPair;
+import com.dropbox.core.DbxRequestConfig;
+import com.dropbox.core.android.Auth;
+import com.dropbox.core.v2.DbxClientV2;
 
 import java.util.List;
 
@@ -28,14 +28,13 @@ import timber.log.Timber;
 
 public class BackupActivity extends BaseBackActivity {
     private static final String APP_KEY = "5lqugcckdy9y6lj";
-    private static final String APP_SECRET = "psbu50k9713u68j";
 
     @Inject
     PreferenceController preferenceController;
     @Inject
     BackupController backupController;
 
-    private DropboxAPI<AndroidAuthSession> dbApi;
+    private DbxClientV2 dbClient;
 
     @BindView(R.id.btn_backup_now)
     View btnBackupNow;
@@ -51,14 +50,11 @@ public class BackupActivity extends BaseBackActivity {
     protected boolean initData() {
         getAppComponent().inject(BackupActivity.this);
 
-        AppKeyPair appKeys = new AppKeyPair(APP_KEY, APP_SECRET);
         String accessToken = preferenceController.readDropboxAccessToken();
-
-        AndroidAuthSession session = new AndroidAuthSession(appKeys);
-        dbApi = new DropboxAPI<>(session);
-        if (accessToken == null) dbApi.getSession().startOAuth2Authentication(BackupActivity.this);
+        if (accessToken == null) Auth.startOAuth2Authentication(BackupActivity.this, APP_KEY);
         else {
-            dbApi.getSession().setOAuth2AccessToken(accessToken);
+            DbxRequestConfig config = new DbxRequestConfig("open_money_tracker");
+            dbClient = new DbxClientV2(config, accessToken);
             fetchBackups();
         }
 
@@ -75,11 +71,9 @@ public class BackupActivity extends BaseBackActivity {
     protected void onResume() {
         super.onResume();
 
-        if (dbApi.getSession().authenticationSuccessful()) {
+        if (Auth.getOAuth2Token() != null) {
             try {
-                // Required to complete auth, sets the access token on the session
-                dbApi.getSession().finishAuthentication();
-                preferenceController.writeDropboxAccessToken(dbApi.getSession().getOAuth2AccessToken());
+                preferenceController.writeDropboxAccessToken(Auth.getOAuth2Token());
                 btnBackupNow.setEnabled(true);
                 fetchBackups();
             } catch (IllegalStateException e) {
@@ -92,7 +86,7 @@ public class BackupActivity extends BaseBackActivity {
     public void backupNow() {
         AnswersProxy.get().logButton("Make Backup");
         startProgress(getString(R.string.making_backup));
-        backupController.makeBackup(dbApi, new BackupController.OnBackupListener() {
+        backupController.makeBackup(dbClient, new BackupController.OnBackupListener() {
             @Override
             public void onBackupSuccess() {
                 AnswersProxy.get().logEvent("Backup success");
@@ -137,7 +131,7 @@ public class BackupActivity extends BaseBackActivity {
 
     private void restoreBackup(final String backupName) {
         startProgress(getString(R.string.restoring_backup));
-        backupController.restoreBackup(dbApi, backupName, new BackupController.OnRestoreBackupListener() {
+        backupController.restoreBackup(dbClient, backupName, new BackupController.OnRestoreBackupListener() {
             @Override
             public void onRestoreSuccess() {
                 AnswersProxy.get().logEvent("Restore Success");
@@ -178,7 +172,7 @@ public class BackupActivity extends BaseBackActivity {
 
     private void fetchBackups() {
         startProgress(getString(R.string.fetching_backups));
-        backupController.fetchBackups(dbApi, new BackupController.OnFetchBackupListListener() {
+        backupController.fetchBackups(dbClient, new BackupController.OnFetchBackupListListener() {
             @Override
             public void onBackupsFetched(@NonNull List<String> backupList) {
                 if (isFinishing()) return;
@@ -193,7 +187,7 @@ public class BackupActivity extends BaseBackActivity {
 
     private void logout() {
         preferenceController.writeDropboxAccessToken(null);
-        dbApi.getSession().startOAuth2Authentication(BackupActivity.this);
+        Auth.startOAuth2Authentication(BackupActivity.this, APP_KEY);
         btnBackupNow.setEnabled(false);
     }
 }
