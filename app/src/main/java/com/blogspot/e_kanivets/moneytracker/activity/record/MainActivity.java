@@ -100,7 +100,7 @@ public class MainActivity extends BaseDrawerActivity {
 
         if (preferenceController.checkRateDialog()) showAppRateDialog();
 
-        registerForContextMenu(listView);
+        //registerForContextMenu(listView);
 
         View summaryView = summaryPresenter.create(true);
         listView.addHeaderView(summaryView);

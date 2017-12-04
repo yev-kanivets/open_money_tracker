@@ -69,11 +69,11 @@ dependencies {
     compile 'com.android.support:appcompat-v7:26.1.0'
     compile 'com.android.support:design:26.1.0'
     compile 'com.jakewharton:butterknife:8.5.1' // View annotation bindings
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1' // ButterKnife compiler
     compile 'com.google.dagger:dagger:2.0.1' // Dependency injection tool
     compile 'com.github.PhilJay:MPAndroidChart:v2.2.4' // Charts
     compile 'com.jakewharton.timber:timber:4.1.2' // Advanced logging tool
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.thebluealliance:spectrum:0.7.1' // Color picker
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:2.0.43-beta'
