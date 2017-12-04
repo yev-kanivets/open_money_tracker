@@ -32,9 +32,9 @@ public class Account extends BaseEntity implements Parcelable {
         this.color = color;
     }
 
-    public Account(String title, double curSum, String currency, double goal,
+    public Account(long id, String title, double curSum, String currency, double goal,
                    boolean archived, int color) {
-        this.id = -1;
+        this.id = id;
         this.title = title;
         this.currency = currency;
         this.curSum = getLong(curSum);

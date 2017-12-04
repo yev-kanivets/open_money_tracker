@@ -100,7 +100,7 @@ public class AddAccountActivity extends BaseBackActivity {
             double goal = 0;
             int color = 0;
 
-            Account account = new Account(title, initSum, currency, goal, false, color);
+            Account account = new Account(-1, title, initSum, currency, goal, false, color);
             return accountController.create(account) != null;
         } else {
             return false;

@@ -2,6 +2,7 @@ package com.blogspot.e_kanivets.moneytracker.activity.account;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.support.design.widget.TextInputLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +27,8 @@ public class EditAccountActivity extends BaseBackActivity {
 
     private Account account;
 
+    @BindView(R.id.til_title)
+    TextInputLayout tilTitle;
     @BindView(R.id.et_title)
     EditText etTitle;
     @BindView(R.id.et_goal)
@@ -86,7 +89,19 @@ public class EditAccountActivity extends BaseBackActivity {
 
     @OnClick(R.id.fabDone)
     void done() {
+        String title = etTitle.getText().toString().trim();
 
+        if (title.isEmpty()) {
+            tilTitle.setError(getString(R.string.field_cant_be_empty));
+        } else {
+            Account newAccount = new Account(account.getId(), title, account.getCurSum(),
+                    account.getCurrency(), account.getGoal(), account.isArchived(), account.getColor());
+            boolean updated = accountController.update(newAccount) != null;
+            if (updated) {
+                setResult(RESULT_OK);
+                finish();
+            }
+        }
     }
 
     private void archive() {
