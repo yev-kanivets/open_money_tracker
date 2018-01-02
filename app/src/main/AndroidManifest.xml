@@ -93,7 +93,7 @@
             android:theme="@style/Theme.Default"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.dropbox.client2.android.AuthActivity"
+            android:name="com.dropbox.core.android.AuthActivity"
             android:configChanges="orientation|keyboard"
             android:launchMode="singleTask"
             android:theme="@android:style/Theme.Translucent.NoTitleBar">

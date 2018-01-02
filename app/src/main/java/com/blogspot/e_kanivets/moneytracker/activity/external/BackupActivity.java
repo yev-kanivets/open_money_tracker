@@ -75,6 +75,8 @@ public class BackupActivity extends BaseBackActivity {
             try {
                 preferenceController.writeDropboxAccessToken(Auth.getOAuth2Token());
                 btnBackupNow.setEnabled(true);
+                DbxRequestConfig config = new DbxRequestConfig("open_money_tracker");
+                dbClient = new DbxClientV2(config, Auth.getOAuth2Token());
                 fetchBackups();
             } catch (IllegalStateException e) {
                 Timber.e("Error authenticating: %s", e.getMessage());
