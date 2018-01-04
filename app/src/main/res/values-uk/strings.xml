@@ -114,4 +114,13 @@
     <string name="same_currencies">Не можна конвертувати валюту у саму себе.</string>
     <string name="record_in_future">Не можна створити запис у майбутньому.</string>
     <string name="one_account_needed">Необхідний, принаймні, один рахунок.</string>
+
+    <string name="title_activity_edit_account">Редагувати рахунок</string>
+    <string name="color">Колір</string>
+    <string name="goal">Ціль</string>
+    <string name="restore">Відновити</string>
+    <string name="archive">Архівувати</string>
+    <string name="cant_archive_default_account">Неможливо архівувати рахунок за замовчанням.</string>
+    <string name="delete_account_title">Видалити рахунок</string>
+    <string name="delete_account_message">Ви впевнені, що хочете видалити цей рахунок? Ви не зможете відновити його після видалення.</string>
 </resources>
