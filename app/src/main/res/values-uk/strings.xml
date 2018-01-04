@@ -21,6 +21,7 @@
     <string name="week">Тиждень</string>
     <string name="month">Місяць</string>
     <string name="year">Рік</string>
+    <string name="all_time">За увесь час</string>
 
     <string name="like_money_tracker">Вам подобається MoneyTracker?</string>
     <string name="rate_it_on_gp">Оцініть його на Google Play!</string>

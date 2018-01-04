@@ -5,6 +5,7 @@
         <item>@string/week</item>
         <item>@string/month</item>
         <item>@string/year</item>
+        <item>@string/all_time</item>
         <item>@string/custom</item>
     </string-array>
 </resources>

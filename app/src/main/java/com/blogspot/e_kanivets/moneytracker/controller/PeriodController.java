@@ -39,6 +39,9 @@ public class PeriodController {
                 case Period.TYPE_YEAR:
                     return yearPeriod();
 
+                case Period.TYPE_ALL_TIME:
+                    return allTimePeriod();
+
                 case Period.TYPE_CUSTOM:
                     return weekPeriod();
 
@@ -125,6 +128,28 @@ public class PeriodController {
         Date last = cal.getTime();
 
         return new Period(first, last, Period.TYPE_YEAR);
+    }
+
+    public Period allTimePeriod() {
+        Calendar cal = Calendar.getInstance();
+
+        // set start of time by Jesus
+        cal.set(Calendar.YEAR, 2000);
+        cal.set(Calendar.MONTH, Calendar.JANUARY);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        setDayStart(cal);
+
+        Date first = cal.getTime();
+
+        // set possible end of time
+        cal.set(Calendar.YEAR, 3000);
+        cal.set(Calendar.MONTH, Calendar.DECEMBER);
+        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+        setDayEnd(cal);
+
+        Date last = cal.getTime();
+
+        return new Period(first, last, Period.TYPE_ALL_TIME);
     }
 
     private void setDayStart(Calendar cal) {

@@ -21,6 +21,7 @@
     <string name="week">Неделя</string>
     <string name="month">Месяц</string>
     <string name="year">Год</string>
+    <string name="all_time">За все время</string>
 
     <string name="like_money_tracker">Вам нравится MoneyTracker?</string>
     <string name="rate_it_on_gp">Оцените его на Google Play!</string>

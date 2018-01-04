@@ -119,6 +119,10 @@ public class PeriodSpinner extends AppCompatSpinner {
                         break;
 
                     case 4:
+                        setPeriod(periodController.allTimePeriod());
+                        break;
+
+                    case 5:
                         // Custom period selection
                         showFromDateDialog();
                         break;

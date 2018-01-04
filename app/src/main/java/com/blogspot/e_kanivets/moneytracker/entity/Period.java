@@ -19,6 +19,7 @@ public class Period implements Parcelable {
     public static final String TYPE_WEEK = "week";
     public static final String TYPE_MONTH = "month";
     public static final String TYPE_YEAR = "year";
+    public static final String TYPE_ALL_TIME = "all_time";
     public static final String TYPE_CUSTOM = "custom";
 
     @SuppressLint("SimpleDateFormat")
