@@ -124,7 +124,6 @@
     <string name="record_in_future">Can\'t create a record in future.</string>
     <string name="one_account_needed">At least one account is needed.</string>
 
-    <!-- Not translated strings -->
     <string name="title_activity_edit_account">Edit Account</string>
     <string name="color">Color</string>
     <string name="goal">Goal</string>
@@ -133,4 +132,6 @@
     <string name="cant_archive_default_account">You can\'t archive a default account.</string>
     <string name="delete_account_title">Delete account</string>
     <string name="delete_account_message">Are you sure about deleting this account? It can\'t be restored after.</string>
+
+    <!-- Not translated strings -->
 </resources>

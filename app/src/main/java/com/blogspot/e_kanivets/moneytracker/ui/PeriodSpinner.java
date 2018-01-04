@@ -70,6 +70,10 @@ public class PeriodSpinner extends AppCompatSpinner {
             case Period.TYPE_YEAR:
                 setSelection(3);
                 break;
+
+            case Period.TYPE_ALL_TIME:
+                setSelection(4);
+                break;
         }
     }
 
