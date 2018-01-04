@@ -21,6 +21,7 @@
     <string name="week">Неделя</string>
     <string name="month">Месяц</string>
     <string name="year">Год</string>
+    <string name="all_time">За все время</string>
 
     <string name="like_money_tracker">Вам нравится MoneyTracker?</string>
     <string name="rate_it_on_gp">Оцените его на Google Play!</string>
@@ -113,4 +114,13 @@
     <string name="same_currencies">Нельзя конвертировать валюту в саму себя.</string>
     <string name="record_in_future">Нельзя создать запись в будущем.</string>
     <string name="one_account_needed">Необходим, по крайней мере, один счет.</string>
+
+    <string name="title_activity_edit_account">Редактировать счет</string>
+    <string name="color">Цвет</string>
+    <string name="goal">Цель</string>
+    <string name="restore">Восстановить</string>
+    <string name="archive">Архивировать</string>
+    <string name="cant_archive_default_account">Нельзя архивировать счет по умолчанию.</string>
+    <string name="delete_account_title">Удалить счет</string>
+    <string name="delete_account_message">Вы уверены, что хотите удалить этот счет ? Вы не сможете восстановить его после удаления.</string>
 </resources>

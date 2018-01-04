@@ -18,6 +18,7 @@
     <string name="week">周</string>
     <string name="month">月</string>
     <string name="year">年</string>
+    <string name="all_time">整天</string>
     <string name="like_money_tracker">你喜欢我们这个软件吗？</string>
     <string name="rate_it_on_gp">在Google Play上评价吧！</string>
     <string name="maybe_later">稍后</string>
@@ -102,4 +103,13 @@
     <string name="same_currencies">无法在同种货币之间转换。</string>
     <string name="record_in_future">以后无法创建记录。</string>
     <string name="one_account_needed">至少需要一个账目。</string>
+
+    <string name="title_activity_edit_account">编辑帐户</string>
+    <string name="color">颜色</string>
+    <string name="goal">目标</string>
+    <string name="restore">恢复</string>
+    <string name="archive">档案</string>
+    <string name="cant_archive_default_account">您无法获得默认帐户。</string>
+    <string name="delete_account_title">删除帐户</string>
+    <string name="delete_account_message">你确定要删除这个帐户吗？ 以后不能恢复。</string>
 </resources>

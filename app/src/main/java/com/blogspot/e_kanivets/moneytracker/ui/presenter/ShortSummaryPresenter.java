@@ -8,9 +8,11 @@ import android.widget.TextView;
 import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.controller.FormatController;
+import com.blogspot.e_kanivets.moneytracker.entity.Period;
 import com.blogspot.e_kanivets.moneytracker.report.record.IRecordReport;
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.base.BaseSummaryPresenter;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -63,8 +65,7 @@ public class ShortSummaryPresenter extends BaseSummaryPresenter {
             viewHolder.tvTotal.setTextColor(red);
             viewHolder.tvTotal.setText(createRatesNeededList(currency, ratesNeeded));
         } else {
-            viewHolder.tvPeriod.setText(context.getString(R.string.period_from_to,
-                    report.getPeriod().getFirstDay(), report.getPeriod().getLastDay()));
+            viewHolder.tvPeriod.setText(formatPeriod(report.getPeriod()));
 
             viewHolder.tvTotalIncome.setTextColor(report.getTotalIncome() >= 0 ? green : red);
             viewHolder.tvTotalIncome.setText(formatController.formatIncome(report.getTotalIncome(),
@@ -77,6 +78,26 @@ public class ShortSummaryPresenter extends BaseSummaryPresenter {
             viewHolder.tvTotal.setTextColor(report.getTotal() >= 0 ? green : red);
             viewHolder.tvTotal.setText(formatController.formatIncome(report.getTotal(),
                     report.getCurrency()));
+        }
+    }
+
+    private String formatPeriod(Period period) {
+        switch (period.getType()) {
+            case Period.TYPE_DAY:
+                return period.getFirstDay();
+
+            case Period.TYPE_MONTH:
+                return new SimpleDateFormat("MMMM, yyyy").format(period.getFirst());
+
+            case Period.TYPE_YEAR:
+                return new SimpleDateFormat("yyyy").format(period.getFirst());
+
+            case Period.TYPE_ALL_TIME:
+                return context.getString(R.string.all_time);
+
+            default:
+                return context.getString(R.string.period_from_to, period.getFirstDay(),
+                        period.getLastDay());
         }
     }
 
