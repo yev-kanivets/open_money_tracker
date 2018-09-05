@@ -38,11 +38,7 @@ class EditAccountActivity : BaseBackActivity() {
     override fun initViews() {
         super.initViews()
 
-        etTitle.setText(account.title)
-        etGoal.setText(account.goal.toString())
-        viewColor.setBackgroundColor(account.color)
-
-        fabDone.setOnClickListener { done() }
+        fabDone.setOnClickListener { /*done()*/ }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -63,21 +59,15 @@ class EditAccountActivity : BaseBackActivity() {
         }
     }
 
-    private fun done() {
-        val title = etTitle.text.toString().trim { it <= ' ' }
-
-        if (title.isEmpty()) {
-            tilTitle.error = getString(R.string.field_cant_be_empty)
-        } else {
-            val newAccount = Account(
-                account.id, title, account.curSum.toDouble(),
-                account.currency, account.goal, account.isArchived, account.color
-            )
-            val updated = accountController.update(newAccount) != null
-            if (updated) {
-                setResult(Activity.RESULT_OK)
-                finish()
-            }
+    private fun done(title: String) {
+        val newAccount = Account(
+            account.id, title, account.curSum.toDouble(),
+            account.currency, account.goal, account.isArchived, account.color
+        )
+        val updated = accountController.update(newAccount) != null
+        if (updated) {
+            setResult(Activity.RESULT_OK)
+            finish()
         }
     }
 
@@ -118,7 +108,7 @@ class EditAccountActivity : BaseBackActivity() {
 
     companion object {
 
-        const val KEY_ACCOUNT = "key_account"
+        private const val KEY_ACCOUNT = "key_account"
 
         fun newIntent(context: Context, account: Account): Intent {
             val intent = Intent(context, EditAccountActivity::class.java)
