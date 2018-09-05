@@ -1,4 +1,4 @@
-package com.blogspot.e_kanivets.moneytracker.activity.account
+package com.blogspot.e_kanivets.moneytracker.activity.account.edit
 
 import android.app.Activity
 import android.app.AlertDialog
@@ -22,9 +22,7 @@ class EditAccountActivity : BaseBackActivity() {
 
     private lateinit var account: Account
 
-    override fun getContentViewId(): Int {
-        return R.layout.activity_edit_account
-    }
+    override fun getContentViewId(): Int = R.layout.activity_edit_account
 
     override fun initData(): Boolean {
         appComponent.inject(this@EditAccountActivity)
