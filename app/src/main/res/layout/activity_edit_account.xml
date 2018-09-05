@@ -30,12 +30,12 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <android.support.design.widget.TextInputLayout
-            android:id="@+id/til_title"
+            android:id="@+id/tilTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <EditText
-                android:id="@+id/et_title"
+                android:id="@+id/etTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/title"
@@ -51,7 +51,7 @@
             android:visibility="invisible">
 
             <EditText
-                android:id="@+id/et_goal"
+                android:id="@+id/etGoal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/goal"
@@ -79,7 +79,7 @@
                 android:background="@color/divider_grey">
 
                 <View
-                    android:id="@+id/view_color"
+                    android:id="@+id/viewColor"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="1dp"
