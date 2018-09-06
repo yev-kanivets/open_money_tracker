@@ -7,21 +7,21 @@ import com.blogspot.e_kanivets.moneytracker.activity.base.BaseFragment
 import com.blogspot.e_kanivets.moneytracker.adapter.RecordAdapter
 import com.blogspot.e_kanivets.moneytracker.controller.data.RecordController
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account
-import kotlinx.android.synthetic.main.fragment_account_records.*
+import kotlinx.android.synthetic.main.fragment_account_operations.*
 import javax.inject.Inject
 
-class AccountRecordsFragment : BaseFragment() {
+class AccountOperationsFragment : BaseFragment() {
 
     @Inject
     internal lateinit var recordController: RecordController
 
     private lateinit var account: Account
 
-    override val contentViewId: Int = R.layout.fragment_account_records
+    override val contentViewId: Int = R.layout.fragment_account_operations
 
     override fun initData() {
-        appComponent.inject(this@AccountRecordsFragment)
-        arguments?.let { arguments -> account = arguments.getParcelable(AccountRecordsFragment.KEY_ACCOUNT) }
+        appComponent.inject(this@AccountOperationsFragment)
+        arguments?.let { arguments -> account = arguments.getParcelable(AccountOperationsFragment.KEY_ACCOUNT) }
     }
 
     override fun initViews(view: View) {
@@ -32,8 +32,8 @@ class AccountRecordsFragment : BaseFragment() {
 
         private const val KEY_ACCOUNT = "key_account"
 
-        fun newInstance(account: Account): AccountRecordsFragment {
-            val fragment = AccountRecordsFragment()
+        fun newInstance(account: Account): AccountOperationsFragment {
+            val fragment = AccountOperationsFragment()
             val arguments = Bundle()
             arguments.putParcelable(KEY_ACCOUNT, account)
             fragment.arguments = arguments

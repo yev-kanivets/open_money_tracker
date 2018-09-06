@@ -3,7 +3,7 @@ package com.blogspot.e_kanivets.moneytracker.activity.account.edit.adapter
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import com.blogspot.e_kanivets.moneytracker.activity.account.edit.fragment.AccountRecordsFragment
+import com.blogspot.e_kanivets.moneytracker.activity.account.edit.fragment.AccountOperationsFragment
 import com.blogspot.e_kanivets.moneytracker.activity.account.edit.fragment.EditAccountFragment
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account
 
@@ -13,7 +13,7 @@ class EditAccountFragmentPagerAdapter(fragmentManager: FragmentManager, private 
     override fun getItem(position: Int): Fragment {
         return when (position) {
             0 -> EditAccountFragment.newInstance(account)
-            1 -> AccountRecordsFragment.newInstance(account)
+            1 -> AccountOperationsFragment.newInstance(account)
             else -> Fragment()
         }
     }
