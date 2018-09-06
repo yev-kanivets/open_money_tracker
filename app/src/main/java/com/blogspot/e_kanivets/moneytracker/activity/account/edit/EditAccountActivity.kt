@@ -8,6 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 
 import com.blogspot.e_kanivets.moneytracker.R
+import com.blogspot.e_kanivets.moneytracker.activity.account.edit.adapter.EditAccountFragmentPagerAdapter
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity
 import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account
@@ -38,15 +39,11 @@ class EditAccountActivity : BaseBackActivity() {
     override fun initViews() {
         super.initViews()
 
-        fabDone.setOnClickListener { /*done()*/ }
+        viewPager.adapter = EditAccountFragmentPagerAdapter(supportFragmentManager, account)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        if (account.isArchived) {
-            menuInflater.inflate(R.menu.menu_archived_account, menu)
-        } else {
-            menuInflater.inflate(R.menu.menu_account, menu)
-        }
+        menuInflater.inflate(if (account.isArchived) R.menu.menu_archived_account else R.menu.menu_account, menu)
         return true
     }
 
@@ -56,18 +53,6 @@ class EditAccountActivity : BaseBackActivity() {
             R.id.action_restore -> restore()
             R.id.action_delete -> delete()
             else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    private fun done(title: String) {
-        val newAccount = Account(
-            account.id, title, account.curSum.toDouble(),
-            account.currency, account.goal, account.isArchived, account.color
-        )
-        val updated = accountController.update(newAccount) != null
-        if (updated) {
-            setResult(Activity.RESULT_OK)
-            finish()
         }
     }
 

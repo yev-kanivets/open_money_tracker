@@ -1,33 +1,38 @@
 package com.blogspot.e_kanivets.moneytracker.activity.account.edit.fragment
 
+import android.app.Activity
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.view.LayoutInflater
+import android.support.design.widget.FloatingActionButton
 import android.view.View
-import android.view.ViewGroup
 import com.blogspot.e_kanivets.moneytracker.R
+import com.blogspot.e_kanivets.moneytracker.R.layout
+import com.blogspot.e_kanivets.moneytracker.activity.base.BaseFragment
+import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account
 import kotlinx.android.synthetic.main.fragment_edit_account.*
+import javax.inject.Inject
 
-class EditAccountFragment() : Fragment() {
+class EditAccountFragment : BaseFragment() {
+
+    @Inject
+    internal lateinit var accountController: AccountController
 
     private lateinit var account: Account
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override val contentViewId: Int = layout.fragment_edit_account
+
+    override fun initData() {
+        appComponent.inject(this@EditAccountFragment)
         arguments?.let { arguments -> account = arguments.getParcelable(KEY_ACCOUNT) }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val rootView = inflater.inflate(R.layout.fragment_edit_account, container, false)
-        initViews()
-        return rootView
-    }
-
-    fun initViews() {
+    override fun initViews(view: View) {
         etTitle.setText(account.title)
         etGoal.setText(account.goal.toString())
         viewColor.setBackgroundColor(account.color)
+
+        val fabDone = view.rootView.findViewById<FloatingActionButton>(R.id.fabDone)
+        fabDone.setOnClickListener { done() }
     }
 
     private fun done() {
@@ -40,6 +45,11 @@ class EditAccountFragment() : Fragment() {
                 account.id, title, account.curSum.toDouble(),
                 account.currency, account.goal, account.isArchived, account.color
             )
+            val updated = accountController.update(newAccount) != null
+            if (updated) {
+                activity?.setResult(Activity.RESULT_OK)
+                activity?.finish()
+            }
         }
     }
 
