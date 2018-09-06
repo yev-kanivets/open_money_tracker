@@ -5,7 +5,7 @@ import android.view.View
 import com.blogspot.e_kanivets.moneytracker.R
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseFragment
 import com.blogspot.e_kanivets.moneytracker.adapter.RecordAdapter
-import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController
+import com.blogspot.e_kanivets.moneytracker.controller.data.RecordController
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account
 import kotlinx.android.synthetic.main.fragment_account_records.*
 import javax.inject.Inject
@@ -13,7 +13,7 @@ import javax.inject.Inject
 class AccountRecordsFragment : BaseFragment() {
 
     @Inject
-    internal lateinit var accountController: AccountController
+    internal lateinit var recordController: RecordController
 
     private lateinit var account: Account
 
@@ -25,7 +25,7 @@ class AccountRecordsFragment : BaseFragment() {
     }
 
     override fun initViews(view: View) {
-        listView.adapter = RecordAdapter(activity, listOf())
+        listView.adapter = RecordAdapter(activity, recordController.getRecordsForAccount(account))
     }
 
     companion object {
