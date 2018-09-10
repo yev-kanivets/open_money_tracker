@@ -5,6 +5,7 @@ import android.view.View
 import com.blogspot.e_kanivets.moneytracker.R
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseFragment
 import com.blogspot.e_kanivets.moneytracker.adapter.RecordAdapter
+import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController
 import com.blogspot.e_kanivets.moneytracker.controller.data.RecordController
 import com.blogspot.e_kanivets.moneytracker.controller.data.TransferController
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account
@@ -16,6 +17,8 @@ import javax.inject.Inject
 
 class AccountOperationsFragment : BaseFragment() {
 
+    @Inject
+    internal lateinit var accountController: AccountController
     @Inject
     internal lateinit var recordController: RecordController
     @Inject
@@ -38,19 +41,19 @@ class AccountOperationsFragment : BaseFragment() {
         val accountRecords = recordController.getRecordsForAccount(account)
         val accountTransfers = transferController.getTransfersForAccount(account)
 
-        accountRecords += calculateRecordsFromTransfers(accountTransfers)
+        accountRecords += obtainRecordsFromTransfers(accountTransfers)
         accountRecords.sortByDescending { it.time }
 
         return accountRecords
     }
 
-    private fun calculateRecordsFromTransfers(transfers: List<Transfer>): List<Record> {
+    private fun obtainRecordsFromTransfers(transfers: List<Transfer>): List<Record> {
         val records = mutableListOf<Record>()
 
         transfers.forEach {
             val type = if (it.fromAccountId == account.id) Record.TYPE_EXPENSE else Record.TYPE_INCOME
-            val title = "Transfer ${if (type == Record.TYPE_EXPENSE) "to" else "from"}"
-            val category = Category("transfer")
+            val title = constructRecordTitle(type, it)
+            val category = Category(getString(R.string.transfer).toLowerCase())
             val price = if (type == Record.TYPE_EXPENSE) it.fromAmount else it.toAmount
             val decimals = if (type == Record.TYPE_EXPENSE) it.fromDecimals else it.toDecimals
 
@@ -58,6 +61,13 @@ class AccountOperationsFragment : BaseFragment() {
         }
 
         return records.toList()
+    }
+
+    private fun constructRecordTitle(type: Int, transfer: Transfer): String {
+        val titlePrefix = getString(if (type == Record.TYPE_EXPENSE) R.string.to else R.string.from)
+        val oppositeAccountId = if (type == Record.TYPE_EXPENSE) transfer.toAccountId else transfer.fromAccountId
+        val oppositeAccountTitle = "$titlePrefix ${accountController.read(oppositeAccountId)?.title}"
+        return "${getString(R.string.transfer)} $oppositeAccountTitle".toLowerCase()
     }
 
     companion object {
