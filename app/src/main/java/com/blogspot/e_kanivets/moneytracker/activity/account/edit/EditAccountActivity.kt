@@ -39,6 +39,7 @@ class EditAccountActivity : BaseBackActivity() {
     override fun initViews() {
         super.initViews()
 
+        tabLayout.setupWithViewPager(viewPager)
         viewPager.adapter = EditAccountFragmentPagerAdapter(supportFragmentManager, account)
     }
 

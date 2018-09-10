@@ -18,6 +18,14 @@ class EditAccountFragmentPagerAdapter(fragmentManager: FragmentManager, private 
         }
     }
 
+    override fun getPageTitle(position: Int): CharSequence? {
+        return when (position) {
+            0 -> "Information"
+            1 -> "Operations"
+            else -> ""
+        }
+    }
+
     override fun getCount(): Int = 2
 
 }
