@@ -133,5 +133,9 @@
     <string name="delete_account_title">Delete account</string>
     <string name="delete_account_message">Are you sure about deleting this account? It can\'t be restored after.</string>
 
+    <string name="graph">Graph</string>
+    <string name="information">Information</string>
+    <string name="operations">Operations</string>
+
     <!-- Not translated strings -->
 </resources>

@@ -123,4 +123,8 @@
     <string name="cant_archive_default_account">Нельзя архивировать счет по умолчанию.</string>
     <string name="delete_account_title">Удалить счет</string>
     <string name="delete_account_message">Вы уверены, что хотите удалить этот счет ? Вы не сможете восстановить его после удаления.</string>
+
+    <string name="graph">График</string>
+    <string name="information">Информация</string>
+    <string name="operations">Операции</string>
 </resources>

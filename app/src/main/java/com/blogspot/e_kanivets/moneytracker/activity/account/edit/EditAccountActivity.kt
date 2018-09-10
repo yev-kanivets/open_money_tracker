@@ -8,8 +8,10 @@ import android.view.Menu
 import android.view.MenuItem
 
 import com.blogspot.e_kanivets.moneytracker.R
-import com.blogspot.e_kanivets.moneytracker.activity.account.edit.adapter.EditAccountFragmentPagerAdapter
+import com.blogspot.e_kanivets.moneytracker.activity.account.edit.fragment.AccountOperationsFragment
+import com.blogspot.e_kanivets.moneytracker.activity.account.edit.fragment.EditAccountFragment
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity
+import com.blogspot.e_kanivets.moneytracker.adapter.GeneralViewPagerAdapter
 import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account
 import kotlinx.android.synthetic.main.activity_edit_account.*
@@ -40,7 +42,11 @@ class EditAccountActivity : BaseBackActivity() {
         super.initViews()
 
         tabLayout.setupWithViewPager(viewPager)
-        viewPager.adapter = EditAccountFragmentPagerAdapter(supportFragmentManager, account)
+
+        val adapter = GeneralViewPagerAdapter(supportFragmentManager)
+        adapter.addFragment(EditAccountFragment.newInstance(account), getString(R.string.information))
+        adapter.addFragment(AccountOperationsFragment.newInstance(account), getString(R.string.operations))
+        viewPager.adapter = adapter
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
