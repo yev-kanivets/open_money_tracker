@@ -4,12 +4,12 @@ import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
+import com.blogspot.e_kanivets.moneytracker.adapter.BackupAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.BackupController;
 import com.blogspot.e_kanivets.moneytracker.controller.PreferenceController;
 import com.blogspot.e_kanivets.moneytracker.util.AnswersProxy;
@@ -29,30 +29,25 @@ import timber.log.Timber;
 public class BackupActivity extends BaseBackActivity {
     private static final String APP_KEY = "5lqugcckdy9y6lj";
 
-    @Inject
-    PreferenceController preferenceController;
-    @Inject
-    BackupController backupController;
+    @Inject PreferenceController preferenceController;
+    @Inject BackupController backupController;
 
     private DbxClientV2 dbClient;
 
-    @BindView(R.id.btn_backup_now)
-    View btnBackupNow;
-    @BindView(R.id.list_view)
-    ListView listView;
+    @BindView(R.id.btn_backup_now) View btnBackupNow;
+    @BindView(R.id.list_view) ListView listView;
 
-    @Override
-    protected int getContentViewId() {
+    @Override protected int getContentViewId() {
         return R.layout.activity_backup;
     }
 
-    @Override
-    protected boolean initData() {
+    @Override protected boolean initData() {
         getAppComponent().inject(BackupActivity.this);
 
         String accessToken = preferenceController.readDropboxAccessToken();
-        if (accessToken == null) Auth.startOAuth2Authentication(BackupActivity.this, APP_KEY);
-        else {
+        if (accessToken == null) {
+            Auth.startOAuth2Authentication(BackupActivity.this, APP_KEY);
+        } else {
             DbxRequestConfig config = new DbxRequestConfig("open_money_tracker");
             dbClient = new DbxClientV2(config, accessToken);
             fetchBackups();
@@ -61,14 +56,12 @@ public class BackupActivity extends BaseBackActivity {
         return super.initData();
     }
 
-    @Override
-    protected void initViews() {
+    @Override protected void initViews() {
         super.initViews();
         btnBackupNow.setEnabled(preferenceController.readDropboxAccessToken() != null);
     }
 
-    @Override
-    protected void onResume() {
+    @Override protected void onResume() {
         super.onResume();
 
         if (Auth.getOAuth2Token() != null) {
@@ -84,13 +77,11 @@ public class BackupActivity extends BaseBackActivity {
         }
     }
 
-    @OnClick(R.id.btn_backup_now)
-    public void backupNow() {
+    @OnClick(R.id.btn_backup_now) public void backupNow() {
         AnswersProxy.get().logButton("Make Backup");
         startProgress(getString(R.string.making_backup));
         backupController.makeBackup(dbClient, new BackupController.OnBackupListener() {
-            @Override
-            public void onBackupSuccess() {
+            @Override public void onBackupSuccess() {
                 AnswersProxy.get().logEvent("Backup success");
                 Timber.d("Backup success.");
                 if (isFinishing()) return;
@@ -99,8 +90,7 @@ public class BackupActivity extends BaseBackActivity {
                 fetchBackups();
             }
 
-            @Override
-            public void onBackupFailure(String reason) {
+            @Override public void onBackupFailure(String reason) {
                 AnswersProxy.get().logEvent("Backup failure");
                 Timber.d("Backup failure.");
                 if (isFinishing()) return;
@@ -113,8 +103,7 @@ public class BackupActivity extends BaseBackActivity {
         });
     }
 
-    @OnItemClick(R.id.list_view)
-    public void restoreBackupClicked(int position) {
+    @OnItemClick(R.id.list_view) public void restoreBackupClicked(int position) {
         AnswersProxy.get().logButton("Restore backup");
         final String backupName = listView.getAdapter().getItem(position).toString();
 
@@ -122,8 +111,7 @@ public class BackupActivity extends BaseBackActivity {
         builder.setTitle(getString(R.string.warning));
         builder.setMessage(getString(R.string.want_erase_and_restore, backupName));
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+            @Override public void onClick(DialogInterface dialog, int which) {
                 restoreBackup(backupName);
             }
         });
@@ -134,8 +122,7 @@ public class BackupActivity extends BaseBackActivity {
     private void restoreBackup(final String backupName) {
         startProgress(getString(R.string.restoring_backup));
         backupController.restoreBackup(dbClient, backupName, new BackupController.OnRestoreBackupListener() {
-            @Override
-            public void onRestoreSuccess() {
+            @Override public void onRestoreSuccess() {
                 AnswersProxy.get().logEvent("Restore Success");
                 Timber.d("Restore success.");
                 if (isFinishing()) return;
@@ -146,8 +133,7 @@ public class BackupActivity extends BaseBackActivity {
                 builder.setTitle(getString(R.string.backup_is_restored));
                 builder.setMessage(getString(R.string.backup_restored, backupName));
                 builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
+                    @Override public void onDismiss(DialogInterface dialog) {
                         MtApp.get().buildAppComponent();
                         setResult(RESULT_OK);
                         finish();
@@ -157,8 +143,7 @@ public class BackupActivity extends BaseBackActivity {
                 builder.show();
             }
 
-            @Override
-            public void onRestoreFailure(String reason) {
+            @Override public void onRestoreFailure(String reason) {
                 AnswersProxy.get().logEvent("Restore Failure");
                 Timber.d("Restore failure.");
                 if (isFinishing()) return;
@@ -166,8 +151,7 @@ public class BackupActivity extends BaseBackActivity {
                 stopProgress();
                 showToast(R.string.failed_restore_backup);
 
-                if (BackupController.OnRestoreBackupListener.ERROR_AUTHENTICATION.equals(reason))
-                    logout();
+                if (BackupController.OnRestoreBackupListener.ERROR_AUTHENTICATION.equals(reason)) logout();
             }
         });
     }
@@ -175,14 +159,11 @@ public class BackupActivity extends BaseBackActivity {
     private void fetchBackups() {
         startProgress(getString(R.string.fetching_backups));
         backupController.fetchBackups(dbClient, new BackupController.OnFetchBackupListListener() {
-            @Override
-            public void onBackupsFetched(@NonNull List<String> backupList) {
+            @Override public void onBackupsFetched(@NonNull List<String> backupList) {
                 if (isFinishing()) return;
 
                 stopProgress();
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(BackupActivity.this,
-                        android.R.layout.simple_list_item_1, backupList);
-                listView.setAdapter(adapter);
+                listView.setAdapter(new BackupAdapter(BackupActivity.this, backupList));
             }
         });
     }
