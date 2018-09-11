@@ -112,4 +112,8 @@
     <string name="cant_archive_default_account">您无法获得默认帐户。</string>
     <string name="delete_account_title">删除帐户</string>
     <string name="delete_account_message">你确定要删除这个帐户吗？ 以后不能恢复。</string>
+
+    <string name="graph">圖形</string>
+    <string name="information">信息</string>
+    <string name="operations">操作</string>
 </resources>

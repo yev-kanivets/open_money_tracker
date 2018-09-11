@@ -123,4 +123,8 @@
     <string name="cant_archive_default_account">Неможливо архівувати рахунок за замовчанням.</string>
     <string name="delete_account_title">Видалити рахунок</string>
     <string name="delete_account_message">Ви впевнені, що хочете видалити цей рахунок? Ви не зможете відновити його після видалення.</string>
+
+    <string name="graph">Графік</string>
+    <string name="information">Інформація</string>
+    <string name="operations">Операції</string>
 </resources>

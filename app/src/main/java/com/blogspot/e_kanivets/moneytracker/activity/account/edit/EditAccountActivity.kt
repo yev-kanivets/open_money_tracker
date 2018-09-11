@@ -1,18 +1,22 @@
-package com.blogspot.e_kanivets.moneytracker.activity.account
+package com.blogspot.e_kanivets.moneytracker.activity.account.edit
 
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.support.v4.view.ViewPager.OnPageChangeListener
 import android.view.Menu
 import android.view.MenuItem
-
 import com.blogspot.e_kanivets.moneytracker.R
+import com.blogspot.e_kanivets.moneytracker.activity.account.edit.fragment.AccountOperationsFragment
+import com.blogspot.e_kanivets.moneytracker.activity.account.edit.fragment.EditAccountFragment
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity
+import com.blogspot.e_kanivets.moneytracker.adapter.GeneralViewPagerAdapter
 import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account
-import kotlinx.android.synthetic.main.activity_edit_account.*
-
+import kotlinx.android.synthetic.main.activity_edit_account.fabDone
+import kotlinx.android.synthetic.main.activity_edit_account.tabLayout
+import kotlinx.android.synthetic.main.activity_edit_account.viewPager
 import javax.inject.Inject
 
 class EditAccountActivity : BaseBackActivity() {
@@ -22,9 +26,7 @@ class EditAccountActivity : BaseBackActivity() {
 
     private lateinit var account: Account
 
-    override fun getContentViewId(): Int {
-        return R.layout.activity_edit_account
-    }
+    override fun getContentViewId(): Int = R.layout.activity_edit_account
 
     override fun initData(): Boolean {
         appComponent.inject(this@EditAccountActivity)
@@ -40,19 +42,27 @@ class EditAccountActivity : BaseBackActivity() {
     override fun initViews() {
         super.initViews()
 
-        etTitle.setText(account.title)
-        etGoal.setText(account.goal.toString())
-        viewColor.setBackgroundColor(account.color)
+        tabLayout.setupWithViewPager(viewPager)
 
-        fabDone.setOnClickListener { done() }
+        val adapter = GeneralViewPagerAdapter(supportFragmentManager)
+        adapter.addFragment(EditAccountFragment.newInstance(account), getString(R.string.information))
+        adapter.addFragment(AccountOperationsFragment.newInstance(account), getString(R.string.operations))
+        viewPager.adapter = adapter
+
+        viewPager.addOnPageChangeListener(object : OnPageChangeListener {
+            override fun onPageScrollStateChanged(state: Int) {}
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+
+            override fun onPageSelected(position: Int) {
+                if (position == 0) fabDone.show() else fabDone.hide()
+            }
+
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        if (account.isArchived) {
-            menuInflater.inflate(R.menu.menu_archived_account, menu)
-        } else {
-            menuInflater.inflate(R.menu.menu_account, menu)
-        }
+        menuInflater.inflate(if (account.isArchived) R.menu.menu_archived_account else R.menu.menu_account, menu)
         return true
     }
 
@@ -62,24 +72,6 @@ class EditAccountActivity : BaseBackActivity() {
             R.id.action_restore -> restore()
             R.id.action_delete -> delete()
             else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    private fun done() {
-        val title = etTitle.text.toString().trim { it <= ' ' }
-
-        if (title.isEmpty()) {
-            tilTitle.error = getString(R.string.field_cant_be_empty)
-        } else {
-            val newAccount = Account(
-                account.id, title, account.curSum.toDouble(),
-                account.currency, account.goal, account.isArchived, account.color
-            )
-            val updated = accountController.update(newAccount) != null
-            if (updated) {
-                setResult(Activity.RESULT_OK)
-                finish()
-            }
         }
     }
 
@@ -120,7 +112,7 @@ class EditAccountActivity : BaseBackActivity() {
 
     companion object {
 
-        const val KEY_ACCOUNT = "key_account"
+        private const val KEY_ACCOUNT = "key_account"
 
         fun newIntent(context: Context, account: Account): Intent {
             val intent = Intent(context, EditAccountActivity::class.java)
