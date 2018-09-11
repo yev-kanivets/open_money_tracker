@@ -4,9 +4,9 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.support.v4.view.ViewPager.OnPageChangeListener
 import android.view.Menu
 import android.view.MenuItem
-
 import com.blogspot.e_kanivets.moneytracker.R
 import com.blogspot.e_kanivets.moneytracker.activity.account.edit.fragment.AccountOperationsFragment
 import com.blogspot.e_kanivets.moneytracker.activity.account.edit.fragment.EditAccountFragment
@@ -14,8 +14,9 @@ import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity
 import com.blogspot.e_kanivets.moneytracker.adapter.GeneralViewPagerAdapter
 import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account
-import kotlinx.android.synthetic.main.activity_edit_account.*
-
+import kotlinx.android.synthetic.main.activity_edit_account.fabDone
+import kotlinx.android.synthetic.main.activity_edit_account.tabLayout
+import kotlinx.android.synthetic.main.activity_edit_account.viewPager
 import javax.inject.Inject
 
 class EditAccountActivity : BaseBackActivity() {
@@ -47,6 +48,17 @@ class EditAccountActivity : BaseBackActivity() {
         adapter.addFragment(EditAccountFragment.newInstance(account), getString(R.string.information))
         adapter.addFragment(AccountOperationsFragment.newInstance(account), getString(R.string.operations))
         viewPager.adapter = adapter
+
+        viewPager.addOnPageChangeListener(object : OnPageChangeListener {
+            override fun onPageScrollStateChanged(state: Int) {}
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+
+            override fun onPageSelected(position: Int) {
+                if (position == 0) fabDone.show() else fabDone.hide()
+            }
+
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
