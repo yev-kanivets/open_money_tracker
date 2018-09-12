@@ -24,9 +24,10 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
-public class BackupActivity extends BaseBackActivity {
+public class BackupActivity extends BaseBackActivity implements BackupAdapter.OnBackupListener {
     private static final String APP_KEY = "5lqugcckdy9y6lj";
 
     @Inject PreferenceController preferenceController;
@@ -75,6 +76,19 @@ public class BackupActivity extends BaseBackActivity {
                 Timber.e("Error authenticating: %s", e.getMessage());
             }
         }
+    }
+
+    @Override public void onBackupDelete(@NotNull final String backupName) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(BackupActivity.this);
+        builder.setTitle(getString(R.string.delete_backup_title));
+        builder.setMessage(getString(R.string.delete_backup_message, backupName));
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override public void onClick(DialogInterface dialog, int which) {
+                deleteBackup(backupName);
+            }
+        });
+        builder.setNegativeButton(android.R.string.cancel, null);
+        builder.show();
     }
 
     @OnClick(R.id.btn_backup_now) public void backupNow() {
@@ -163,9 +177,16 @@ public class BackupActivity extends BaseBackActivity {
                 if (isFinishing()) return;
 
                 stopProgress();
-                listView.setAdapter(new BackupAdapter(BackupActivity.this, backupList));
+
+                BackupAdapter backupAdapter = new BackupAdapter(BackupActivity.this, backupList);
+                backupAdapter.setOnBackupListener(BackupActivity.this);
+                listView.setAdapter(backupAdapter);
             }
         });
+    }
+
+    private void deleteBackup(String backupName) {
+
     }
 
     private void logout() {

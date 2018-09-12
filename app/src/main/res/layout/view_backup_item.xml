@@ -17,10 +17,12 @@
       />
 
   <ImageView
+      android:id="@+id/ivDelete"
       android:layout_width="24dp"
       android:layout_height="24dp"
+      android:contentDescription="@string/delete"
       android:src="@drawable/ic_delete"
-      android:tint="@color/text_grey"
+      android:tint="@color/dark_grey"
       />
 
 </LinearLayout>
