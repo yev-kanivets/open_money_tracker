@@ -14,10 +14,10 @@ public class DropboxFetchBackupListAsyncTask extends AsyncTask<Void, List<String
     private DbxClientV2 dbClient;
 
     @Nullable
-    private BackupController.OnFetchBackupListListener listener;
+    private BackupController.OnBackupListener listener;
 
     public DropboxFetchBackupListAsyncTask(DbxClientV2 dbClient,
-            @Nullable BackupController.OnFetchBackupListListener listener) {
+            @Nullable BackupController.OnBackupListener listener) {
         this.dbClient = dbClient;
         this.listener = listener;
     }

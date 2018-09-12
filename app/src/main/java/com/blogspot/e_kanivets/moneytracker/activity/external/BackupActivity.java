@@ -27,7 +27,8 @@ import butterknife.OnItemClick;
 import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
-public class BackupActivity extends BaseBackActivity implements BackupAdapter.OnBackupListener {
+public class BackupActivity extends BaseBackActivity
+        implements BackupAdapter.OnBackupListener, BackupController.OnBackupListener {
     private static final String APP_KEY = "5lqugcckdy9y6lj";
 
     @Inject PreferenceController preferenceController;
@@ -51,6 +52,7 @@ public class BackupActivity extends BaseBackActivity implements BackupAdapter.On
         } else {
             DbxRequestConfig config = new DbxRequestConfig("open_money_tracker");
             dbClient = new DbxClientV2(config, accessToken);
+            backupController.setOnBackupListener(this);
             fetchBackups();
         }
 
@@ -91,30 +93,72 @@ public class BackupActivity extends BaseBackActivity implements BackupAdapter.On
         builder.show();
     }
 
+    @Override public void onBackupsFetched(@NonNull List<String> backupList) {
+        if (isFinishing()) return;
+
+        stopProgress();
+
+        BackupAdapter backupAdapter = new BackupAdapter(BackupActivity.this, backupList);
+        backupAdapter.setOnBackupListener(BackupActivity.this);
+        listView.setAdapter(backupAdapter);
+    }
+
+    @Override public void onBackupSuccess() {
+        AnswersProxy.get().logEvent("Backup success");
+        Timber.d("Backup success.");
+        if (isFinishing()) return;
+
+        stopProgress();
+        fetchBackups();
+    }
+
+    @Override public void onBackupFailure(String reason) {
+        AnswersProxy.get().logEvent("Backup failure");
+        Timber.d("Backup failure.");
+        if (isFinishing()) return;
+
+        stopProgress();
+        showToast(R.string.failed_create_backup);
+
+        if (BackupController.OnBackupListener.ERROR_AUTHENTICATION.equals(reason)) logout();
+    }
+
+    @Override public void onRestoreSuccess(@NonNull String backupName) {
+        AnswersProxy.get().logEvent("Restore Success");
+        Timber.d("Restore success.");
+        if (isFinishing()) return;
+
+        stopProgress();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(BackupActivity.this);
+        builder.setTitle(getString(R.string.backup_is_restored));
+        builder.setMessage(getString(R.string.backup_restored, backupName));
+        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override public void onDismiss(DialogInterface dialog) {
+                MtApp.get().buildAppComponent();
+                setResult(RESULT_OK);
+                finish();
+            }
+        });
+        builder.setPositiveButton(android.R.string.ok, null);
+        builder.show();
+    }
+
+    @Override public void onRestoreFailure(String reason) {
+        AnswersProxy.get().logEvent("Restore Failure");
+        Timber.d("Restore failure.");
+        if (isFinishing()) return;
+
+        stopProgress();
+        showToast(R.string.failed_restore_backup);
+
+        if (BackupController.OnBackupListener.ERROR_AUTHENTICATION.equals(reason)) logout();
+    }
+
     @OnClick(R.id.btn_backup_now) public void backupNow() {
         AnswersProxy.get().logButton("Make Backup");
         startProgress(getString(R.string.making_backup));
-        backupController.makeBackup(dbClient, new BackupController.OnBackupListener() {
-            @Override public void onBackupSuccess() {
-                AnswersProxy.get().logEvent("Backup success");
-                Timber.d("Backup success.");
-                if (isFinishing()) return;
-
-                stopProgress();
-                fetchBackups();
-            }
-
-            @Override public void onBackupFailure(String reason) {
-                AnswersProxy.get().logEvent("Backup failure");
-                Timber.d("Backup failure.");
-                if (isFinishing()) return;
-
-                stopProgress();
-                showToast(R.string.failed_create_backup);
-
-                if (BackupController.OnBackupListener.ERROR_AUTHENTICATION.equals(reason)) logout();
-            }
-        });
+        backupController.makeBackup(dbClient);
     }
 
     @OnItemClick(R.id.list_view) public void restoreBackupClicked(int position) {
@@ -135,54 +179,12 @@ public class BackupActivity extends BaseBackActivity implements BackupAdapter.On
 
     private void restoreBackup(final String backupName) {
         startProgress(getString(R.string.restoring_backup));
-        backupController.restoreBackup(dbClient, backupName, new BackupController.OnRestoreBackupListener() {
-            @Override public void onRestoreSuccess() {
-                AnswersProxy.get().logEvent("Restore Success");
-                Timber.d("Restore success.");
-                if (isFinishing()) return;
-
-                stopProgress();
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(BackupActivity.this);
-                builder.setTitle(getString(R.string.backup_is_restored));
-                builder.setMessage(getString(R.string.backup_restored, backupName));
-                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override public void onDismiss(DialogInterface dialog) {
-                        MtApp.get().buildAppComponent();
-                        setResult(RESULT_OK);
-                        finish();
-                    }
-                });
-                builder.setPositiveButton(android.R.string.ok, null);
-                builder.show();
-            }
-
-            @Override public void onRestoreFailure(String reason) {
-                AnswersProxy.get().logEvent("Restore Failure");
-                Timber.d("Restore failure.");
-                if (isFinishing()) return;
-
-                stopProgress();
-                showToast(R.string.failed_restore_backup);
-
-                if (BackupController.OnRestoreBackupListener.ERROR_AUTHENTICATION.equals(reason)) logout();
-            }
-        });
+        backupController.restoreBackup(dbClient, backupName);
     }
 
     private void fetchBackups() {
         startProgress(getString(R.string.fetching_backups));
-        backupController.fetchBackups(dbClient, new BackupController.OnFetchBackupListListener() {
-            @Override public void onBackupsFetched(@NonNull List<String> backupList) {
-                if (isFinishing()) return;
-
-                stopProgress();
-
-                BackupAdapter backupAdapter = new BackupAdapter(BackupActivity.this, backupList);
-                backupAdapter.setOnBackupListener(BackupActivity.this);
-                listView.setAdapter(backupAdapter);
-            }
-        });
+        backupController.fetchBackups(dbClient);
     }
 
     private void deleteBackup(String backupName) {

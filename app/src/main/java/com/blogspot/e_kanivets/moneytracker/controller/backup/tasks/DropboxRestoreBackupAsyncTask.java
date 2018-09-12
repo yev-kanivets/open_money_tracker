@@ -18,10 +18,10 @@ public class DropboxRestoreBackupAsyncTask extends AsyncTask<Void, String, Strin
     private String appDbFileName;
     private String backupName;
 
-    @Nullable private BackupController.OnRestoreBackupListener listener;
+    @Nullable private BackupController.OnBackupListener listener;
 
     public DropboxRestoreBackupAsyncTask(DbxClientV2 dbClient, String appDbFileName, String backupName,
-            @Nullable BackupController.OnRestoreBackupListener listener) {
+            @Nullable BackupController.OnBackupListener listener) {
         this.dbClient = dbClient;
         this.appDbFileName = appDbFileName;
         this.backupName = backupName;
@@ -72,7 +72,7 @@ public class DropboxRestoreBackupAsyncTask extends AsyncTask<Void, String, Strin
         if (listener == null) return;
 
         if (BackupController.OnBackupListener.SUCCESS.equals(result)) {
-            listener.onRestoreSuccess();
+            listener.onRestoreSuccess(backupName);
         } else {
             listener.onRestoreFailure(result);
         }
