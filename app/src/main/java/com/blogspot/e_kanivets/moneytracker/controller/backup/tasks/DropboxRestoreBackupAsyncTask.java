@@ -1,41 +1,69 @@
 package com.blogspot.e_kanivets.moneytracker.controller.backup.tasks;
 
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import com.blogspot.e_kanivets.moneytracker.controller.backup.BackupController;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FileMetadata;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class DropboxRestoreBackupAsyncTask extends AsyncTask<Void, String, String> {
+
     private DbxClientV2 dbClient;
+    private String appDbFileName;
     private String backupName;
-    private FileOutputStream outputStream;
 
     @Nullable private BackupController.OnRestoreBackupListener listener;
 
-    public DropboxRestoreBackupAsyncTask(DbxClientV2 dbClient, String backupName, FileOutputStream outputStream,
+    public DropboxRestoreBackupAsyncTask(DbxClientV2 dbClient, String appDbFileName, String backupName,
             @Nullable BackupController.OnRestoreBackupListener listener) {
         this.dbClient = dbClient;
+        this.appDbFileName = appDbFileName;
         this.backupName = backupName;
-        this.outputStream = outputStream;
         this.listener = listener;
     }
 
     @Override protected String doInBackground(Void... params) {
-        FileMetadata info = null;
+        final File file = new File(getRestoreFileName());
+        FileOutputStream outputStream = null;
         try {
-            info = dbClient.files().download("/" + backupName).download(outputStream);
-        } catch (DbxException | IOException e) {
+            outputStream = new FileOutputStream(file);
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
-        if (info == null) {
+        if (outputStream == null) {
             return null;
         } else {
-            return BackupController.OnBackupListener.SUCCESS;
+            FileMetadata info = null;
+            try {
+                info = dbClient.files().download("/" + backupName).download(outputStream);
+            } catch (DbxException | IOException e) {
+                e.printStackTrace();
+            }
+
+            if (info == null) {
+                return null;
+            } else {
+                try {
+                    outputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+
+                if (file.exists() && file.length() != 0) {
+                    boolean renamed = file.renameTo(new File(appDbFileName));
+                    return renamed ? BackupController.OnBackupListener.SUCCESS : null;
+                } else {
+                    return null;
+                }
+            }
         }
     }
 
@@ -48,5 +76,9 @@ public class DropboxRestoreBackupAsyncTask extends AsyncTask<Void, String, Strin
         } else {
             listener.onRestoreFailure(result);
         }
+    }
+
+    @NonNull private String getRestoreFileName() {
+        return appDbFileName + ".restore";
     }
 }

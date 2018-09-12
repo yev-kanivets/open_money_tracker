@@ -7,30 +7,31 @@ import com.blogspot.e_kanivets.moneytracker.controller.backup.BackupController;
 import com.dropbox.core.DbxException;
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FileMetadata;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class DropboxBackupAsyncTask extends AsyncTask<Void, String, String> {
+
     private DbxClientV2 dbClient;
+    private String appDbFileName;
     private String fileName;
-    private FileInputStream fileInputStream;
-    private long fileLength;
 
-    @Nullable
-    private BackupController.OnBackupListener listener;
+    @Nullable private BackupController.OnBackupListener listener;
 
-    public DropboxBackupAsyncTask(@NonNull DbxClientV2 dbClient, String fileName,
-            FileInputStream fileInputStream, long fileLength,
+    public DropboxBackupAsyncTask(@NonNull DbxClientV2 dbClient, String fileName, String appDbFileName,
             @Nullable BackupController.OnBackupListener listener) {
         this.dbClient = dbClient;
         this.fileName = fileName;
-        this.fileInputStream = fileInputStream;
-        this.fileLength = fileLength;
+        this.appDbFileName = appDbFileName;
         this.listener = listener;
     }
 
-    @Override
-    protected String doInBackground(Void... params) {
+    @Override protected String doInBackground(Void... params) {
+        FileInputStream fileInputStream = readAppDb();
+        if (fileInputStream == null) return null;
+
         FileMetadata info = null;
 
         try {
@@ -41,16 +42,34 @@ public class DropboxBackupAsyncTask extends AsyncTask<Void, String, String> {
             e.printStackTrace();
         }
 
-        if (info == null) return null;
-        else return BackupController.OnBackupListener.SUCCESS;
+        if (info == null) {
+            return null;
+        } else {
+            return BackupController.OnBackupListener.SUCCESS;
+        }
     }
 
-    @Override
-    protected void onPostExecute(String result) {
+    @Override protected void onPostExecute(String result) {
         super.onPostExecute(result);
         if (listener == null) return;
 
-        if (BackupController.OnBackupListener.SUCCESS.equals(result)) listener.onBackupSuccess();
-        else listener.onBackupFailure(result);
+        if (BackupController.OnBackupListener.SUCCESS.equals(result)) {
+            listener.onBackupSuccess();
+        } else {
+            listener.onBackupFailure(result);
+        }
+    }
+
+    @Nullable private FileInputStream readAppDb() {
+        File dbFile = new File(appDbFileName);
+        FileInputStream fis = null;
+
+        try {
+            fis = new FileInputStream(dbFile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return fis;
     }
 }
