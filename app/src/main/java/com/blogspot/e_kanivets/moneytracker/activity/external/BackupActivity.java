@@ -207,7 +207,7 @@ public class BackupActivity extends BaseBackActivity
     }
 
     private void removeBackup(String backupName) {
-        startProgress("");
+        startProgress(getString(R.string.removing_backup));
         backupController.removeBackup(dbClient, backupName);
     }
 

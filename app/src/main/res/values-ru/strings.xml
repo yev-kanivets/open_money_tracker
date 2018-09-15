@@ -1,73 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Money Tracker</string>
+  <string name="app_name">Money Tracker</string>
 
-    <string name="title">Название</string>
-    <string name="category">Категория</string>
-    <string name="price">Цена</string>
-    <string name="add_income">Добавить доход</string>
-    <string name="add_expense">Добавить расход</string>
-    <string name="add">Добавить</string>
+  <string name="title">Название</string>
+  <string name="category">Категория</string>
+  <string name="price">Цена</string>
+  <string name="add_income">Добавить доход</string>
+  <string name="add_expense">Добавить расход</string>
+  <string name="add">Добавить</string>
 
-    <string name="report">Отчет</string>
-    <string name="change_date">ИЗМЕНИТЬ ДАТУ</string>
-    <string name="total">СУММА</string>
-    <string name="total_incomes">Суммарный доход</string>
-    <string name="total_expenses">Суммарный расход</string>
-    <string name="delete">Удалить</string>
+  <string name="report">Отчет</string>
+  <string name="change_date">ИЗМЕНИТЬ ДАТУ</string>
+  <string name="total">СУММА</string>
+  <string name="total_incomes">Суммарный доход</string>
+  <string name="total_expenses">Суммарный расход</string>
+  <string name="delete">Удалить</string>
 
-    <string name="day">День</string>
-    <string name="week">Неделя</string>
-    <string name="month">Месяц</string>
-    <string name="year">Год</string>
-    <string name="all_time">За все время</string>
+  <string name="day">День</string>
+  <string name="week">Неделя</string>
+  <string name="month">Месяц</string>
+  <string name="year">Год</string>
+  <string name="all_time">За все время</string>
 
-    <string name="like_money_tracker">Вам нравится MoneyTracker?</string>
-    <string name="rate_it_on_gp">Оцените его на Google Play!</string>
-    <string name="maybe_later">Может быть позже</string>
-    <string name="no_thank_you">Нет, спасибо</string>
-    <string name="yes_very">Да!</string>
+  <string name="like_money_tracker">Вам нравится MoneyTracker?</string>
+  <string name="rate_it_on_gp">Оцените его на Google Play!</string>
+  <string name="maybe_later">Может быть позже</string>
+  <string name="no_thank_you">Нет, спасибо</string>
+  <string name="yes_very">Да!</string>
 
-    <string name="title_records">Записи</string>
-    <string name="title_accounts">Счета</string>
-    <string name="title_add_income">Добавить доход</string>
-    <string name="title_add_expense">Добавить расход</string>
-    <string name="title_add_account">Добавить счет</string>
+  <string name="title_records">Записи</string>
+  <string name="title_accounts">Счета</string>
+  <string name="title_add_income">Добавить доход</string>
+  <string name="title_add_expense">Добавить расход</string>
+  <string name="title_add_account">Добавить счет</string>
 
-    <string name="export">Экспорт</string>
-    <string name="add_account">Добавить счет</string>
-    <string name="initial_sum">Начальная сумма</string>
-    <string name="account">Счет</string>
-    <string name="transfer">Перевод</string>
-    <string name="from">Со счета</string>
-    <string name="to">На счет</string>
-    <string name="title_exchange_rates">Курсы обмена</string>
-    <string name="add_exchange_rate">Добавить курс обмена</string>
-    <string name="account_was_removed">Счет был удален</string>
+  <string name="export">Экспорт</string>
+  <string name="add_account">Добавить счет</string>
+  <string name="initial_sum">Начальная сумма</string>
+  <string name="account">Счет</string>
+  <string name="transfer">Перевод</string>
+  <string name="from">Со счета</string>
+  <string name="to">На счет</string>
+  <string name="title_exchange_rates">Курсы обмена</string>
+  <string name="add_exchange_rate">Добавить курс обмена</string>
+  <string name="account_was_removed">Счет был удален</string>
 
-    <string name="short_summary">Краткий отчет</string>
-    <string name="custom">Другой</string>
-    <string name="summary">Сводка</string>
-    <string name="currency">Валюта</string>
-    <string name="error_exchange_rates">Ошибка! Укажите курсы обмена.</string>
-    <string name="amount">Количество</string>
-    <string name="title_settings">Настройки</string>
-    <string name="settings">Настройки</string>
-    <string name="default_account">Счет по умолчанию</string>
-    <string name="default_currency">Валюта по умолчанию</string>
+  <string name="short_summary">Краткий отчет</string>
+  <string name="custom">Другой</string>
+  <string name="summary">Сводка</string>
+  <string name="currency">Валюта</string>
+  <string name="error_exchange_rates">Ошибка! Укажите курсы обмена.</string>
+  <string name="amount">Количество</string>
+  <string name="title_settings">Настройки</string>
+  <string name="settings">Настройки</string>
+  <string name="default_account">Счет по умолчанию</string>
+  <string name="default_currency">Валюта по умолчанию</string>
 
-    <string name="title_charts">Итоги</string>
-    <string name="incomes">Доходы</string>
-    <string name="expenses">Расходы</string>
+  <string name="title_charts">Итоги</string>
+  <string name="incomes">Доходы</string>
+  <string name="expenses">Расходы</string>
 
-    <string name="display_precision">Точность отображения</string>
+  <string name="display_precision">Точность отображения</string>
 
-    <string name="title_import_export">Импорт/Экспорт</string>
-    <string name="text_import">Импорт</string>
-    <string name="records_imported">%1$s записей было импортировано</string>
-    <string name="help">Справка</string>
-    <string name="import_help">Для импорта записей в приложение:\n
+  <string name="title_import_export">Импорт/Экспорт</string>
+  <string name="text_import">Импорт</string>
+  <string name="records_imported">%1$s записей было импортировано</string>
+  <string name="help">Справка</string>
+  <string name="import_help">Для импорта записей в приложение:\n
     1. Создайте CSV файл в формате - \n
     <b>время;заголовок;категория;цена;валюта.</b>\n
     2. Скопируйте его контент в текстовое поле.\n
@@ -76,55 +76,56 @@
     <b>Важно:</b> время - метка времени в миллисекундах; валюта - 3-х символьный код валюты.\n
     <b>Пример:</b> 1466948795712;метро;транспорт;-20.0;UAH</string>
 
-    <string name="bank_sells">Банк продает</string>
-    <string name="convert_to">Конвертировать в</string>
-    <string name="bank_buys">Банк покупает</string>
-    <string name="convert_from">Конвертировать из</string>
+  <string name="bank_sells">Банк продает</string>
+  <string name="convert_to">Конвертировать в</string>
+  <string name="bank_buys">Банк покупает</string>
+  <string name="convert_from">Конвертировать из</string>
 
-    <string name="date">Дата</string>
-    <string name="time">Время</string>
+  <string name="date">Дата</string>
+  <string name="time">Время</string>
 
-    <string name="backup_data">Бэкап/Восстановление</string>
-    <string name="failed_create_backup">Не удалось создать бэкап.</string>
-    <string name="failed_restore_backup">Не удалось восстановить бэкап.</string>
-    <string name="backup_restored">Выбранный бэкап %1$s был успешно восстановлен.</string>
-    <string name="backup_is_restored">Бэкап восстановлен</string>
-    <string name="warning">Предупреждение</string>
-    <string name="want_erase_and_restore">Вы действительно хотите удалить все текущие данные и восстановить бэкап %1$s? Пожалуйста, сделайте бэкап текущих данных.</string>
-    <string name="backup_now">Сделать бэкап</string>
+  <string name="backup_data">Бэкап/Восстановление</string>
+  <string name="failed_create_backup">Не удалось создать бэкап.</string>
+  <string name="failed_restore_backup">Не удалось восстановить бэкап.</string>
+  <string name="backup_restored">Выбранный бэкап %1$s был успешно восстановлен.</string>
+  <string name="backup_is_restored">Бэкап восстановлен</string>
+  <string name="warning">Предупреждение</string>
+  <string name="want_erase_and_restore">Вы действительно хотите удалить все текущие данные и восстановить бэкап %1$s? Пожалуйста, сделайте бэкап текущих данных.</string>
+  <string name="backup_now">Сделать бэкап</string>
 
-    <string name="title_edit_income">Редактировать доход</string>
-    <string name="title_edit_expense">Редактировать расход</string>
+  <string name="title_edit_income">Редактировать доход</string>
+  <string name="title_edit_expense">Редактировать расход</string>
 
-    <string name="importing_records">Импортирование записей…</string>
-    <string name="making_backup">Создание бэкапа…</string>
-    <string name="restoring_backup">Восстановление бэкапа…</string>
-    <string name="fetching_backups">Загрузка бэкапов…</string>
+  <string name="importing_records">Импортирование записей…</string>
+  <string name="making_backup">Создание бэкапа…</string>
+  <string name="restoring_backup">Восстановление бэкапа…</string>
+  <string name="fetching_backups">Загрузка бэкапов…</string>
+  <string name="removing_backup">Удаление бэкапа…</string>
 
-    <string name="about_summary">Версия %1$s (Android %2$s)</string>
-    <string name="title_activity_about">О приложении</string>
-    <string name="about">Open Money Tracker (OMT) это приложения для ведения личных финансов. Вы легко можете управлять доходами и расходами. Также доступны счета и курсы обмена.\n\nДля того чтобы помочь сделать OMT лучше, пишите о багах на <a href="http://4pda.ru/forum/index.php?showtopic=755203">форуме 4PDA</a>; идеи новых функций также приветствуются. Ищите ответы или начинайте обсуждение на <a href="http://4pda.ru/forum/index.php?showtopic=755203">форуме</a>.\n\nOMT это <a href="https://en.wikipedia.org/wiki/Open-source_software">проект с открытым исходным кодом</a>, так что каждый может помочь с его разработкой. Не-разработчики также могут помочь. Например, вы можете помочь с переводом, предоставить скриншоты или написать статью в блоге о OMT.\n\nOMT выпущен под <a href="https://ru.wikipedia.org/wiki/GNU_General_Public_License#GPL_v3">GNU-GPL v3 лицензией</a> и исходный код доступен <a href="https://github.com/evgenii-kanivets/Money-Tracker">на GitHub</a>.\n\n<a href="https://ua.linkedin.com/in/evgeniikanivets">Профиль разработчика на LinkedIn.</a></string>
+  <string name="about_summary">Версия %1$s (Android %2$s)</string>
+  <string name="title_activity_about">О приложении</string>
+  <string name="about">Open Money Tracker (OMT) это приложения для ведения личных финансов. Вы легко можете управлять доходами и расходами. Также доступны счета и курсы обмена.\n\nДля того чтобы помочь сделать OMT лучше, пишите о багах на <a href="http://4pda.ru/forum/index.php?showtopic=755203">форуме 4PDA</a>; идеи новых функций также приветствуются. Ищите ответы или начинайте обсуждение на <a href="http://4pda.ru/forum/index.php?showtopic=755203">форуме</a>.\n\nOMT это <a href="https://en.wikipedia.org/wiki/Open-source_software">проект с открытым исходным кодом</a>, так что каждый может помочь с его разработкой. Не-разработчики также могут помочь. Например, вы можете помочь с переводом, предоставить скриншоты или написать статью в блоге о OMT.\n\nOMT выпущен под <a href="https://ru.wikipedia.org/wiki/GNU_General_Public_License#GPL_v3">GNU-GPL v3 лицензией</a> и исходный код доступен <a href="https://github.com/evgenii-kanivets/Money-Tracker">на GitHub</a>.\n\n<a href="https://ua.linkedin.com/in/evgeniikanivets">Профиль разработчика на LinkedIn.</a></string>
 
-    <string name="field_cant_be_empty">Поле не может быть пустым.</string>
-    <string name="too_rich_or_poor">Вы не можете быть настолько богаты или бедны.</string>
-    <string name="too_rich">Вы не можете быть настолько богаты.</string>
-    <string name="none">Нет</string>
-    <string name="too_much_for_transfer">Слишком много для перевода.</string>
-    <string name="too_much_for_exchange">Слишком много для обмена.</string>
-    <string name="same_currencies">Нельзя конвертировать валюту в саму себя.</string>
-    <string name="record_in_future">Нельзя создать запись в будущем.</string>
-    <string name="one_account_needed">Необходим, по крайней мере, один счет.</string>
+  <string name="field_cant_be_empty">Поле не может быть пустым.</string>
+  <string name="too_rich_or_poor">Вы не можете быть настолько богаты или бедны.</string>
+  <string name="too_rich">Вы не можете быть настолько богаты.</string>
+  <string name="none">Нет</string>
+  <string name="too_much_for_transfer">Слишком много для перевода.</string>
+  <string name="too_much_for_exchange">Слишком много для обмена.</string>
+  <string name="same_currencies">Нельзя конвертировать валюту в саму себя.</string>
+  <string name="record_in_future">Нельзя создать запись в будущем.</string>
+  <string name="one_account_needed">Необходим, по крайней мере, один счет.</string>
 
-    <string name="title_activity_edit_account">Редактировать счет</string>
-    <string name="color">Цвет</string>
-    <string name="goal">Цель</string>
-    <string name="restore">Восстановить</string>
-    <string name="archive">Архивировать</string>
-    <string name="cant_archive_default_account">Нельзя архивировать счет по умолчанию.</string>
-    <string name="delete_account_title">Удалить счет</string>
-    <string name="delete_account_message">Вы уверены, что хотите удалить этот счет ? Вы не сможете восстановить его после удаления.</string>
+  <string name="title_activity_edit_account">Редактировать счет</string>
+  <string name="color">Цвет</string>
+  <string name="goal">Цель</string>
+  <string name="restore">Восстановить</string>
+  <string name="archive">Архивировать</string>
+  <string name="cant_archive_default_account">Нельзя архивировать счет по умолчанию.</string>
+  <string name="delete_account_title">Удалить счет</string>
+  <string name="delete_account_message">Вы уверены, что хотите удалить этот счет ? Вы не сможете восстановить его после удаления.</string>
 
-    <string name="graph">График</string>
-    <string name="information">Информация</string>
-    <string name="operations">Операции</string>
+  <string name="graph">График</string>
+  <string name="information">Информация</string>
+  <string name="operations">Операции</string>
 </resources>

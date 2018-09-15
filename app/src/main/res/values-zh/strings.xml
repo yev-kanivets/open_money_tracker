@@ -89,6 +89,7 @@
     <string name="making_backup">生成备份……</string>
     <string name="restoring_backup">恢复备份中……</string>
     <string name="fetching_backups">正在获得备份……</string>
+    <string name="removing_backup">刪除備份……</string>
 
     <string name="about_summary">版本 %1$s (安卓 %2$s)</string>
     <string name="title_activity_about">关于</string>
