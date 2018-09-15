@@ -4,13 +4,13 @@ import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
-import com.blogspot.e_kanivets.moneytracker.controller.BackupController;
+import com.blogspot.e_kanivets.moneytracker.adapter.BackupAdapter;
+import com.blogspot.e_kanivets.moneytracker.controller.backup.BackupController;
 import com.blogspot.e_kanivets.moneytracker.controller.PreferenceController;
 import com.blogspot.e_kanivets.moneytracker.util.AnswersProxy;
 import com.dropbox.core.DbxRequestConfig;
@@ -24,51 +24,48 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import timber.log.Timber;
 
-public class BackupActivity extends BaseBackActivity {
+public class BackupActivity extends BaseBackActivity
+        implements BackupAdapter.OnBackupListener, BackupController.OnBackupListener {
     private static final String APP_KEY = "5lqugcckdy9y6lj";
 
-    @Inject
-    PreferenceController preferenceController;
-    @Inject
-    BackupController backupController;
+    @Inject PreferenceController preferenceController;
+    @Inject BackupController backupController;
 
     private DbxClientV2 dbClient;
 
-    @BindView(R.id.btn_backup_now)
-    View btnBackupNow;
-    @BindView(R.id.list_view)
-    ListView listView;
+    @BindView(R.id.btn_backup_now) View btnBackupNow;
+    @BindView(R.id.list_view) ListView listView;
 
-    @Override
-    protected int getContentViewId() {
+    @Override protected int getContentViewId() {
         return R.layout.activity_backup;
     }
 
-    @Override
-    protected boolean initData() {
+    @Override protected boolean initData() {
         getAppComponent().inject(BackupActivity.this);
 
         String accessToken = preferenceController.readDropboxAccessToken();
-        if (accessToken == null) Auth.startOAuth2Authentication(BackupActivity.this, APP_KEY);
-        else {
+        if (accessToken == null) {
+            Auth.startOAuth2Authentication(BackupActivity.this, APP_KEY);
+        } else {
             DbxRequestConfig config = new DbxRequestConfig("open_money_tracker");
             dbClient = new DbxClientV2(config, accessToken);
+            backupController.setOnBackupListener(this);
             fetchBackups();
         }
 
         return super.initData();
     }
 
-    @Override
-    protected void initViews() {
+    @Override protected void initViews() {
         super.initViews();
         btnBackupNow.setEnabled(preferenceController.readDropboxAccessToken() != null);
     }
 
-    @Override
-    protected void onResume() {
+    @Override protected void onResume() {
         super.onResume();
 
         if (Auth.getOAuth2Token() != null) {
@@ -84,37 +81,106 @@ public class BackupActivity extends BaseBackActivity {
         }
     }
 
-    @OnClick(R.id.btn_backup_now)
-    public void backupNow() {
-        AnswersProxy.get().logButton("Make Backup");
-        startProgress(getString(R.string.making_backup));
-        backupController.makeBackup(dbClient, new BackupController.OnBackupListener() {
-            @Override
-            public void onBackupSuccess() {
-                AnswersProxy.get().logEvent("Backup success");
-                Timber.d("Backup success.");
-                if (isFinishing()) return;
-
-                stopProgress();
-                fetchBackups();
-            }
-
-            @Override
-            public void onBackupFailure(String reason) {
-                AnswersProxy.get().logEvent("Backup failure");
-                Timber.d("Backup failure.");
-                if (isFinishing()) return;
-
-                stopProgress();
-                showToast(R.string.failed_create_backup);
-
-                if (BackupController.OnBackupListener.ERROR_AUTHENTICATION.equals(reason)) logout();
+    @Override public void onBackupDelete(@NotNull final String backupName) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(BackupActivity.this);
+        builder.setTitle(getString(R.string.delete_backup_title));
+        builder.setMessage(getString(R.string.delete_backup_message, backupName));
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override public void onClick(DialogInterface dialog, int which) {
+                removeBackup(backupName);
             }
         });
+        builder.setNegativeButton(android.R.string.cancel, null);
+        builder.show();
     }
 
-    @OnItemClick(R.id.list_view)
-    public void restoreBackupClicked(int position) {
+    @Override public void onBackupsFetched(@NonNull List<String> backupList) {
+        if (isFinishing()) return;
+
+        stopProgress();
+
+        BackupAdapter backupAdapter = new BackupAdapter(BackupActivity.this, backupList);
+        backupAdapter.setOnBackupListener(BackupActivity.this);
+        listView.setAdapter(backupAdapter);
+    }
+
+    @Override public void onBackupSuccess() {
+        AnswersProxy.get().logEvent("Backup success");
+        Timber.d("Backup success.");
+        if (isFinishing()) return;
+
+        stopProgress();
+        fetchBackups();
+    }
+
+    @Override public void onBackupFailure(String reason) {
+        AnswersProxy.get().logEvent("Backup failure");
+        Timber.d("Backup failure.");
+        if (isFinishing()) return;
+
+        stopProgress();
+        showToast(R.string.failed_create_backup);
+
+        if (BackupController.OnBackupListener.ERROR_AUTHENTICATION.equals(reason)) logout();
+    }
+
+    @Override public void onRestoreSuccess(@NonNull String backupName) {
+        AnswersProxy.get().logEvent("Restore Success");
+        Timber.d("Restore success.");
+        if (isFinishing()) return;
+
+        stopProgress();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(BackupActivity.this);
+        builder.setTitle(getString(R.string.backup_is_restored));
+        builder.setMessage(getString(R.string.backup_restored, backupName));
+        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override public void onDismiss(DialogInterface dialog) {
+                MtApp.get().buildAppComponent();
+                setResult(RESULT_OK);
+                finish();
+            }
+        });
+        builder.setPositiveButton(android.R.string.ok, null);
+        builder.show();
+    }
+
+    @Override public void onRestoreFailure(String reason) {
+        AnswersProxy.get().logEvent("Restore Failure");
+        Timber.d("Restore failure.");
+        if (isFinishing()) return;
+
+        stopProgress();
+        showToast(R.string.failed_restore_backup);
+
+        if (BackupController.OnBackupListener.ERROR_AUTHENTICATION.equals(reason)) logout();
+    }
+
+    @Override public void onRemoveSuccess() {
+        AnswersProxy.get().logEvent("Remove Success");
+        Timber.d("Remove success.");
+        if (isFinishing()) return;
+
+        stopProgress();
+        fetchBackups();
+    }
+
+    @Override public void onRemoveFailure(@Nullable String reason) {
+        AnswersProxy.get().logEvent("Remove Failure");
+        Timber.d("Remove failure.");
+        if (isFinishing()) return;
+
+        stopProgress();
+        showToast(reason);
+    }
+
+    @OnClick(R.id.btn_backup_now) public void backupNow() {
+        AnswersProxy.get().logButton("Make Backup");
+        startProgress(getString(R.string.making_backup));
+        backupController.makeBackup(dbClient);
+    }
+
+    @OnItemClick(R.id.list_view) public void restoreBackupClicked(int position) {
         AnswersProxy.get().logButton("Restore backup");
         final String backupName = listView.getAdapter().getItem(position).toString();
 
@@ -122,8 +188,7 @@ public class BackupActivity extends BaseBackActivity {
         builder.setTitle(getString(R.string.warning));
         builder.setMessage(getString(R.string.want_erase_and_restore, backupName));
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+            @Override public void onClick(DialogInterface dialog, int which) {
                 restoreBackup(backupName);
             }
         });
@@ -133,58 +198,17 @@ public class BackupActivity extends BaseBackActivity {
 
     private void restoreBackup(final String backupName) {
         startProgress(getString(R.string.restoring_backup));
-        backupController.restoreBackup(dbClient, backupName, new BackupController.OnRestoreBackupListener() {
-            @Override
-            public void onRestoreSuccess() {
-                AnswersProxy.get().logEvent("Restore Success");
-                Timber.d("Restore success.");
-                if (isFinishing()) return;
-
-                stopProgress();
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(BackupActivity.this);
-                builder.setTitle(getString(R.string.backup_is_restored));
-                builder.setMessage(getString(R.string.backup_restored, backupName));
-                builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        MtApp.get().buildAppComponent();
-                        setResult(RESULT_OK);
-                        finish();
-                    }
-                });
-                builder.setPositiveButton(android.R.string.ok, null);
-                builder.show();
-            }
-
-            @Override
-            public void onRestoreFailure(String reason) {
-                AnswersProxy.get().logEvent("Restore Failure");
-                Timber.d("Restore failure.");
-                if (isFinishing()) return;
-
-                stopProgress();
-                showToast(R.string.failed_restore_backup);
-
-                if (BackupController.OnRestoreBackupListener.ERROR_AUTHENTICATION.equals(reason))
-                    logout();
-            }
-        });
+        backupController.restoreBackup(dbClient, backupName);
     }
 
     private void fetchBackups() {
         startProgress(getString(R.string.fetching_backups));
-        backupController.fetchBackups(dbClient, new BackupController.OnFetchBackupListListener() {
-            @Override
-            public void onBackupsFetched(@NonNull List<String> backupList) {
-                if (isFinishing()) return;
+        backupController.fetchBackups(dbClient);
+    }
 
-                stopProgress();
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(BackupActivity.this,
-                        android.R.layout.simple_list_item_1, backupList);
-                listView.setAdapter(adapter);
-            }
-        });
+    private void removeBackup(String backupName) {
+        startProgress("");
+        backupController.removeBackup(dbClient, backupName);
     }
 
     private void logout() {
