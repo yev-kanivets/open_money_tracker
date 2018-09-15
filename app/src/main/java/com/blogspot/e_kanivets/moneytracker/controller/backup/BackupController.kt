@@ -3,6 +3,7 @@ package com.blogspot.e_kanivets.moneytracker.controller.backup
 import com.blogspot.e_kanivets.moneytracker.controller.FormatController
 import com.blogspot.e_kanivets.moneytracker.controller.backup.tasks.DropboxBackupAsyncTask
 import com.blogspot.e_kanivets.moneytracker.controller.backup.tasks.DropboxFetchBackupListAsyncTask
+import com.blogspot.e_kanivets.moneytracker.controller.backup.tasks.DropboxRemoveBackupAsyncTask
 import com.blogspot.e_kanivets.moneytracker.controller.backup.tasks.DropboxRestoreBackupAsyncTask
 import com.dropbox.core.v2.DbxClientV2
 
@@ -20,18 +21,19 @@ class BackupController(private val formatController: FormatController, filesDir:
 
     fun makeBackup(dbClient: DbxClientV2) {
         val fileName = formatController.formatDateAndTime(System.currentTimeMillis())
-        val asyncTask = DropboxBackupAsyncTask(dbClient, fileName, appDbFileName, onBackupListener)
-        asyncTask.execute()
+        DropboxBackupAsyncTask(dbClient, fileName, appDbFileName, onBackupListener).execute()
     }
 
     fun restoreBackup(dbClient: DbxClientV2, backupName: String) {
-        val asyncTask = DropboxRestoreBackupAsyncTask(dbClient, appDbFileName, backupName, onBackupListener)
-        asyncTask.execute()
+        DropboxRestoreBackupAsyncTask(dbClient, appDbFileName, backupName, onBackupListener).execute()
     }
 
     fun fetchBackups(dbClient: DbxClientV2) {
-        val asyncTask = DropboxFetchBackupListAsyncTask(dbClient, onBackupListener)
-        asyncTask.execute()
+        DropboxFetchBackupListAsyncTask(dbClient, onBackupListener).execute()
+    }
+
+    fun removeBackup(dbClient: DbxClientV2, backupName: String) {
+        DropboxRemoveBackupAsyncTask(dbClient, backupName, onBackupListener).execute()
     }
 
     interface OnBackupListener {
@@ -45,6 +47,10 @@ class BackupController(private val formatController: FormatController, filesDir:
         fun onRestoreSuccess(backupName: String)
 
         fun onRestoreFailure(reason: String?)
+
+        fun onRemoveSuccess()
+
+        fun onRemoveFailure(reason: String?)
 
         companion object {
             const val SUCCESS = "success"

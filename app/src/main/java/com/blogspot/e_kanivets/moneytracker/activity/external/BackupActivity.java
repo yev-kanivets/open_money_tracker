@@ -25,6 +25,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import timber.log.Timber;
 
 public class BackupActivity extends BaseBackActivity
@@ -86,7 +87,7 @@ public class BackupActivity extends BaseBackActivity
         builder.setMessage(getString(R.string.delete_backup_message, backupName));
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override public void onClick(DialogInterface dialog, int which) {
-                deleteBackup(backupName);
+                removeBackup(backupName);
             }
         });
         builder.setNegativeButton(android.R.string.cancel, null);
@@ -155,6 +156,24 @@ public class BackupActivity extends BaseBackActivity
         if (BackupController.OnBackupListener.ERROR_AUTHENTICATION.equals(reason)) logout();
     }
 
+    @Override public void onRemoveSuccess() {
+        AnswersProxy.get().logEvent("Remove Success");
+        Timber.d("Remove success.");
+        if (isFinishing()) return;
+
+        stopProgress();
+        fetchBackups();
+    }
+
+    @Override public void onRemoveFailure(@Nullable String reason) {
+        AnswersProxy.get().logEvent("Remove Failure");
+        Timber.d("Remove failure.");
+        if (isFinishing()) return;
+
+        stopProgress();
+        showToast(reason);
+    }
+
     @OnClick(R.id.btn_backup_now) public void backupNow() {
         AnswersProxy.get().logButton("Make Backup");
         startProgress(getString(R.string.making_backup));
@@ -187,8 +206,9 @@ public class BackupActivity extends BaseBackActivity
         backupController.fetchBackups(dbClient);
     }
 
-    private void deleteBackup(String backupName) {
-
+    private void removeBackup(String backupName) {
+        startProgress("");
+        backupController.removeBackup(dbClient, backupName);
     }
 
     private void logout() {
