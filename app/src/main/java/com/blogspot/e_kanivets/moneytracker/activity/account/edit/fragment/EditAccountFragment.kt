@@ -10,6 +10,7 @@ import com.blogspot.e_kanivets.moneytracker.activity.base.BaseFragment
 import com.blogspot.e_kanivets.moneytracker.controller.FormatController
 import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account
+import com.blogspot.e_kanivets.moneytracker.util.AnswersProxy
 import com.blogspot.e_kanivets.moneytracker.util.validator.EditAccountValidator
 import com.blogspot.e_kanivets.moneytracker.util.validator.IValidator
 import kotlinx.android.synthetic.main.fragment_edit_account.*
@@ -45,6 +46,7 @@ class EditAccountFragment : BaseFragment() {
     }
 
     private fun done() {
+        AnswersProxy.get().logButton("Edit Account")
         if (accountValidator.validate()) {
             val title = etTitle.text.toString().trim { it <= ' ' }
             val goal = etGoal.text.toString().toDouble()
@@ -55,6 +57,7 @@ class EditAccountFragment : BaseFragment() {
             )
             val updated = accountController.update(newAccount) != null
             if (updated) {
+                AnswersProxy.get().logEvent("Edit Account")
                 activity?.setResult(Activity.RESULT_OK)
                 activity?.finish()
             }

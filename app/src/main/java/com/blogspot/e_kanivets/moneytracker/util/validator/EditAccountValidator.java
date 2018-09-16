@@ -19,17 +19,12 @@ import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
 
 public class EditAccountValidator implements IValidator<Account> {
 
-    @NonNull
-    private final Context context;
+    @NonNull private final Context context;
 
-    @BindView(R.id.tilTitle)
-    TextInputLayout tilTitle;
-    @BindView(R.id.etTitle)
-    EditText etTitle;
-    @BindView(R.id.tilGoal)
-    TextInputLayout tilGoal;
-    @BindView(R.id.etGoal)
-    EditText etGoal;
+    @BindView(R.id.tilTitle) TextInputLayout tilTitle;
+    @BindView(R.id.etTitle) EditText etTitle;
+    @BindView(R.id.tilGoal) TextInputLayout tilGoal;
+    @BindView(R.id.etGoal) EditText etGoal;
 
     public EditAccountValidator(@NonNull Context context, @NonNull View view) {
         this.context = context;
@@ -37,8 +32,7 @@ public class EditAccountValidator implements IValidator<Account> {
         initTextWatchers();
     }
 
-    @Override
-    public boolean validate() {
+    @Override public boolean validate() {
         String title = etTitle.getText().toString().trim();
         double goal = Double.MAX_VALUE;
 
