@@ -52,6 +52,7 @@
     <string name="settings">设置</string>
     <string name="default_account">默认账户</string>
     <string name="default_currency">默认货币</string>
+    <string name="non_substitution_currency">NON 替代貨幣</string>
 
     <string name="title_charts">表格</string>
     <string name="incomes">收入</string>

@@ -22,34 +22,25 @@ import java.util.List;
 import javax.inject.Inject;
 
 public class SettingsActivity extends BaseBackActivity {
-    @SuppressWarnings("unused")
-    private static final String TAG = "SettingsActivity";
+    @SuppressWarnings("unused") private static final String TAG = "SettingsActivity";
 
-    @Override
-    protected int getContentViewId() {
+    @Override protected int getContentViewId() {
         return R.layout.activity_settings;
     }
 
-    @Override
-    protected void initViews() {
+    @Override protected void initViews() {
         super.initViews();
 
         // Display the fragment as the main content.
-        getFragmentManager().beginTransaction()
-                .replace(R.id.content, new SettingsFragment())
-                .commit();
+        getFragmentManager().beginTransaction().replace(R.id.content, new SettingsFragment()).commit();
     }
 
     public static class SettingsFragment extends PreferenceFragment {
-        @Inject
-        AccountController accountController;
-        @Inject
-        CurrencyController currencyController;
-        @Inject
-        PreferenceController preferenceController;
+        @Inject AccountController accountController;
+        @Inject CurrencyController currencyController;
+        @Inject PreferenceController preferenceController;
 
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
+        @Override public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
             MtApp.get().getAppComponent().inject(SettingsFragment.this);
@@ -59,18 +50,14 @@ public class SettingsActivity extends BaseBackActivity {
 
             setupDefaultAccountPref();
             setupDefaultCurrencyPref();
+            setupNonSubstitutionCurrencyPref();
             setupDisplayPrecision();
             setupAboutPref();
         }
 
-        private void setupAboutPref() {
-            Preference preference = findPreference(getString(R.string.pref_about));
-            preference.setSummary(getString(R.string.about_summary, BuildConfig.VERSION_NAME,
-                    Build.VERSION.RELEASE));
-        }
-
         private void setupDefaultAccountPref() {
-            ListPreference defaultAccountPref = (ListPreference) findPreference(getString(R.string.pref_default_account));
+            ListPreference defaultAccountPref =
+                    (ListPreference) findPreference(getString(R.string.pref_default_account));
             defaultAccountPref.setOnPreferenceChangeListener(preferenceChangeListener);
 
             List<Account> accountList = accountController.readActiveAccounts();
@@ -87,9 +74,9 @@ public class SettingsActivity extends BaseBackActivity {
             }
         }
 
-        @SuppressWarnings("ToArrayCallWithZeroLengthArrayArgument")
-        private void setupDefaultCurrencyPref() {
-            ListPreference defaultCurrencyPref = (ListPreference) findPreference(getString(R.string.pref_default_currency));
+        @SuppressWarnings("ToArrayCallWithZeroLengthArrayArgument") private void setupDefaultCurrencyPref() {
+            ListPreference defaultCurrencyPref =
+                    (ListPreference) findPreference(getString(R.string.pref_default_currency));
             defaultCurrencyPref.setOnPreferenceChangeListener(preferenceChangeListener);
 
             List<String> currencyList = currencyController.readAll();
@@ -101,9 +88,23 @@ public class SettingsActivity extends BaseBackActivity {
             defaultCurrencyPref.setSummary(defaultCurrency);
         }
 
-        @SuppressWarnings("ToArrayCallWithZeroLengthArrayArgument")
-        private void setupDisplayPrecision() {
-            ListPreference displayPrecisionPref = (ListPreference) findPreference(getString(R.string.pref_display_precision));
+        @SuppressWarnings("ToArrayCallWithZeroLengthArrayArgument") private void setupNonSubstitutionCurrencyPref() {
+            ListPreference nonSubstitutionCurrencyPref =
+                    (ListPreference) findPreference(getString(R.string.pref_non_substitution_currency));
+            nonSubstitutionCurrencyPref.setOnPreferenceChangeListener(preferenceChangeListener);
+
+            List<String> currencyList = currencyController.readAll();
+            nonSubstitutionCurrencyPref.setEntries(currencyList.toArray(new String[0]));
+            nonSubstitutionCurrencyPref.setEntryValues(currencyList.toArray(new String[0]));
+
+            String nonSubstitutionCurrency = currencyController.readNonSubstitutionCurrency();
+            nonSubstitutionCurrencyPref.setDefaultValue(nonSubstitutionCurrency);
+            nonSubstitutionCurrencyPref.setSummary(nonSubstitutionCurrency);
+        }
+
+        @SuppressWarnings("ToArrayCallWithZeroLengthArrayArgument") private void setupDisplayPrecision() {
+            ListPreference displayPrecisionPref =
+                    (ListPreference) findPreference(getString(R.string.pref_display_precision));
             displayPrecisionPref.setOnPreferenceChangeListener(preferenceChangeListener);
 
             List<String> precisionListValues = new ArrayList<>();
@@ -122,6 +123,11 @@ public class SettingsActivity extends BaseBackActivity {
                 displayPrecisionPref.setDefaultValue(getString(R.string.precision_math));
                 displayPrecisionPref.setSummary(getString(R.string.precision_math));
             }
+        }
+
+        private void setupAboutPref() {
+            Preference preference = findPreference(getString(R.string.pref_about));
+            preference.setSummary(getString(R.string.about_summary, BuildConfig.VERSION_NAME, Build.VERSION.RELEASE));
         }
 
         @SuppressWarnings("ToArrayCallWithZeroLengthArrayArgument")
@@ -146,16 +152,15 @@ public class SettingsActivity extends BaseBackActivity {
             return result.toArray(new String[0]);
         }
 
-        private Preference.OnPreferenceChangeListener preferenceChangeListener
-                = new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                // Previously we could set summary to default value,
-                // but now it's needed to display selected entry
-                preference.setSummary("%s");
-                getActivity().setResult(RESULT_OK);
-                return true;
-            }
-        };
+        private Preference.OnPreferenceChangeListener preferenceChangeListener =
+                new Preference.OnPreferenceChangeListener() {
+                    @Override public boolean onPreferenceChange(Preference preference, Object newValue) {
+                        // Previously we could set summary to default value,
+                        // but now it's needed to display selected entry
+                        preference.setSummary("%s");
+                        getActivity().setResult(RESULT_OK);
+                        return true;
+                    }
+                };
     }
 }
