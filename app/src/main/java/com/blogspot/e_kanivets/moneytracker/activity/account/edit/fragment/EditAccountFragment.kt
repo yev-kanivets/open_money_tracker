@@ -7,8 +7,11 @@ import android.view.View
 import com.blogspot.e_kanivets.moneytracker.R
 import com.blogspot.e_kanivets.moneytracker.R.layout
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseFragment
+import com.blogspot.e_kanivets.moneytracker.controller.FormatController
 import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account
+import com.blogspot.e_kanivets.moneytracker.util.validator.EditAccountValidator
+import com.blogspot.e_kanivets.moneytracker.util.validator.IValidator
 import kotlinx.android.synthetic.main.fragment_edit_account.*
 import javax.inject.Inject
 
@@ -16,6 +19,10 @@ class EditAccountFragment : BaseFragment() {
 
     @Inject
     internal lateinit var accountController: AccountController
+    @Inject
+    internal lateinit var formatController: FormatController
+
+    private lateinit var accountValidator: IValidator<Account>
 
     private lateinit var account: Account
 
@@ -28,22 +35,23 @@ class EditAccountFragment : BaseFragment() {
 
     override fun initViews(view: View) {
         etTitle.setText(account.title)
-        etGoal.setText(account.goal.toString())
+        etGoal.setText(formatController.formatPrecisionNone(account.goal))
         viewColor.setBackgroundColor(account.color)
 
         val fabDone = view.rootView.findViewById<FloatingActionButton>(R.id.fabDone)
         fabDone.setOnClickListener { done() }
+
+        accountValidator = EditAccountValidator(context!!, view)
     }
 
     private fun done() {
-        val title = etTitle.text.toString().trim { it <= ' ' }
+        if (accountValidator.validate()) {
+            val title = etTitle.text.toString().trim { it <= ' ' }
+            val goal = etGoal.text.toString().toDouble()
 
-        if (title.isEmpty()) {
-            tilTitle.error = getString(R.string.field_cant_be_empty)
-        } else {
             val newAccount = Account(
                 account.id, title, account.curSum.toDouble(),
-                account.currency, account.goal, account.isArchived, account.color
+                account.currency, goal, account.isArchived, account.color
             )
             val updated = accountController.update(newAccount) != null
             if (updated) {

@@ -27,10 +27,9 @@
   </android.support.design.widget.TextInputLayout>
 
   <android.support.design.widget.TextInputLayout
-      android:id="@+id/til_goal"
+      android:id="@+id/tilGoal"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:visibility="invisible"
       >
 
     <EditText
