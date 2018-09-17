@@ -51,16 +51,6 @@ public class CurrencyController {
         return currency;
     }
 
-    @NonNull public String readNonSubstitutionCurrency() {
-        // First of all read from Prefs
-        String currency = preferenceController.readNonSubstitutionCurrency();
-
-        // If don't have default currency, use NON
-        if (currency == null) currency = DbHelper.DEFAULT_ACCOUNT_CURRENCY;
-
-        return currency;
-    }
-
     @NonNull private List<String> fetchCurrencies() {
         Set<Currency> toret = new HashSet<>();
         Locale[] locs = Locale.getAvailableLocales();

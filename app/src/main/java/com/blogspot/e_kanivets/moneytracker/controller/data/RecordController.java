@@ -3,7 +3,7 @@ package com.blogspot.e_kanivets.moneytracker.controller.data;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController;
+import com.blogspot.e_kanivets.moneytracker.controller.PreferenceController;
 import com.blogspot.e_kanivets.moneytracker.repo.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.controller.base.BaseController;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
@@ -27,14 +27,14 @@ public class RecordController extends BaseController<Record> {
 
     private final CategoryController categoryController;
     private final AccountController accountController;
-    private final CurrencyController currencyController;
+    private final PreferenceController preferenceController;
 
     public RecordController(IRepo<Record> recordRepo, CategoryController categoryController,
-            AccountController accountController, CurrencyController currencyController) {
+            AccountController accountController, PreferenceController preferenceController) {
         super(recordRepo);
         this.categoryController = categoryController;
         this.accountController = accountController;
-        this.currencyController = currencyController;
+        this.preferenceController = preferenceController;
     }
 
     @Override @SuppressWarnings("SimplifiableIfStatement") public Record create(@Nullable Record record) {
@@ -110,7 +110,7 @@ public class RecordController extends BaseController<Record> {
 
             String currency = record.getCurrency();
             if (DbHelper.DEFAULT_ACCOUNT_CURRENCY.equals(currency)) {
-                currency = currencyController.readNonSubstitutionCurrency();
+                currency = preferenceController.readNonSubstitutionCurrency();
             }
 
             completedRecordList.add(

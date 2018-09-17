@@ -57,8 +57,8 @@ import dagger.Provides;
 
     @Provides @NonNull @Singleton
     public RecordController providesRecordController(IRepo<Record> recordRepo, CategoryController categoryController,
-            AccountController accountController, CurrencyController currencyController) {
-        return new RecordController(recordRepo, categoryController, accountController, currencyController);
+            AccountController accountController, PreferenceController preferenceController) {
+        return new RecordController(recordRepo, categoryController, accountController, preferenceController);
     }
 
     @Provides @NonNull @Singleton public TransferController providesTransferController(IRepo<Transfer> transferRepo,

@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 
+import com.blogspot.e_kanivets.moneytracker.repo.DbHelper;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -130,7 +131,7 @@ public class PreferenceController {
         String nonSubstitutionCurrencyPref = context.getString(R.string.pref_non_substitution_currency);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
-        return preferences.getString(nonSubstitutionCurrencyPref, null);
+        return preferences.getString(nonSubstitutionCurrencyPref, DbHelper.DEFAULT_ACCOUNT_CURRENCY);
     }
 
     public long readFirstTs() {

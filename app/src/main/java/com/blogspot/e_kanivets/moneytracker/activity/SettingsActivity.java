@@ -97,7 +97,7 @@ public class SettingsActivity extends BaseBackActivity {
             nonSubstitutionCurrencyPref.setEntries(currencyList.toArray(new String[0]));
             nonSubstitutionCurrencyPref.setEntryValues(currencyList.toArray(new String[0]));
 
-            String nonSubstitutionCurrency = currencyController.readNonSubstitutionCurrency();
+            String nonSubstitutionCurrency = preferenceController.readNonSubstitutionCurrency();
             nonSubstitutionCurrencyPref.setDefaultValue(nonSubstitutionCurrency);
             nonSubstitutionCurrencyPref.setSummary(nonSubstitutionCurrency);
         }
