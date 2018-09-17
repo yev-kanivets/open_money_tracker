@@ -63,13 +63,15 @@ public class CurrencyController {
             }
         }
 
-        List<String> currencyList = new ArrayList<>();
+        List<String> currencySet = new ArrayList<>();
         for (Currency currency : toret) {
-            currencyList.add(currency.getCurrencyCode());
+            currencySet.add(currency.getCurrencyCode());
         }
 
-        currencyList.add(DbHelper.DEFAULT_ACCOUNT_CURRENCY);
-        currencyList.add("BYN"); // New belorussian ruble
+        currencySet.add(DbHelper.DEFAULT_ACCOUNT_CURRENCY);
+        currencySet.add("BYN"); // New belorussian ruble
+
+        currencyList = new ArrayList<>(currencySet);
 
         Collections.sort(currencyList);
 
