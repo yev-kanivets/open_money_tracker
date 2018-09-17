@@ -3,6 +3,7 @@ package com.blogspot.e_kanivets.moneytracker.controller.data;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.blogspot.e_kanivets.moneytracker.controller.PreferenceController;
 import com.blogspot.e_kanivets.moneytracker.entity.Period;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Category;
@@ -34,6 +35,7 @@ public class RecordControllerTest {
     private RecordController recordController;
     private CategoryController categoryMock;
     private AccountController accountMock;
+    private PreferenceController preferenceMock;
     private TestRepo repo;
 
     @Before
@@ -41,8 +43,9 @@ public class RecordControllerTest {
         repo = new TestRepo();
         categoryMock = Mockito.mock(CategoryController.class);
         accountMock = Mockito.mock(AccountController.class);
+        preferenceMock = Mockito.mock(PreferenceController.class);
 
-        recordController = new RecordController(repo, categoryMock, accountMock);
+        recordController = new RecordController(repo, categoryMock, accountMock, preferenceMock);
     }
 
     @After

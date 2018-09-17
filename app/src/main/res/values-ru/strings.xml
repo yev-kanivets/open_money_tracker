@@ -56,6 +56,7 @@
   <string name="settings">Настройки</string>
   <string name="default_account">Счет по умолчанию</string>
   <string name="default_currency">Валюта по умолчанию</string>
+  <string name="non_substitution_currency">Замена валюты NON</string>
 
   <string name="title_charts">Итоги</string>
   <string name="incomes">Доходы</string>

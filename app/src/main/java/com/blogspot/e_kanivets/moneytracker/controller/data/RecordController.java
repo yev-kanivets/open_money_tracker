@@ -3,6 +3,7 @@ package com.blogspot.e_kanivets.moneytracker.controller.data;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.blogspot.e_kanivets.moneytracker.controller.PreferenceController;
 import com.blogspot.e_kanivets.moneytracker.repo.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.controller.base.BaseController;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
@@ -23,14 +24,17 @@ import java.util.List;
  * @author Evgenii Kanivets
  */
 public class RecordController extends BaseController<Record> {
+
     private final CategoryController categoryController;
     private final AccountController accountController;
+    private final PreferenceController preferenceController;
 
     public RecordController(IRepo<Record> recordRepo, CategoryController categoryController,
-            AccountController accountController) {
+            AccountController accountController, PreferenceController preferenceController) {
         super(recordRepo);
         this.categoryController = categoryController;
         this.accountController = accountController;
+        this.preferenceController = preferenceController;
     }
 
     @Override @SuppressWarnings("SimplifiableIfStatement") public Record create(@Nullable Record record) {
@@ -104,9 +108,14 @@ public class RecordController extends BaseController<Record> {
             Account account = null;
             if (record.getAccount() != null) account = accountController.read(record.getAccount().getId());
 
+            String currency = record.getCurrency();
+            if (DbHelper.DEFAULT_ACCOUNT_CURRENCY.equals(currency)) {
+                currency = preferenceController.readNonSubstitutionCurrency();
+            }
+
             completedRecordList.add(
                     new Record(record.getId(), record.getTime(), record.getType(), record.getTitle(), category,
-                            record.getPrice(), account, record.getCurrency(), record.getDecimals()));
+                            record.getPrice(), account, currency, record.getDecimals()));
         }
 
         return completedRecordList;
