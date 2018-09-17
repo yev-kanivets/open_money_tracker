@@ -33,102 +33,69 @@ import dagger.Provides;
  *
  * @author Evgenii Kanivets
  */
-@Module
-public class ControllerModule {
+@Module public class ControllerModule {
     private Context context;
 
     public ControllerModule(Context context) {
         this.context = context;
     }
 
-    @Provides
-    @NonNull
-    @Singleton
-    public AccountController providesAccountController(IRepo<Account> accountRepo,
-                                                       PreferenceController preferenceController) {
+    @Provides @NonNull @Singleton public AccountController providesAccountController(IRepo<Account> accountRepo,
+            PreferenceController preferenceController) {
         return new AccountController(accountRepo, preferenceController);
     }
 
-    @Provides
-    @NonNull
-    @Singleton
-    public CategoryController providesCategoryController(IRepo<Category> categoryRepo,
-                                                         PreferenceController preferenceController) {
+    @Provides @NonNull @Singleton public CategoryController providesCategoryController(IRepo<Category> categoryRepo,
+            PreferenceController preferenceController) {
         return new CategoryController(categoryRepo, preferenceController);
     }
 
-    @Provides
-    @NonNull
-    @Singleton
+    @Provides @NonNull @Singleton
     public ExchangeRateController providesExchangeRateController(IRepo<ExchangeRate> exchangeRateRepo) {
         return new ExchangeRateController(exchangeRateRepo);
     }
 
-    @Provides
-    @NonNull
-    @Singleton
-    public RecordController providesRecordController(IRepo<Record> recordRepo,
-                                                     CategoryController categoryController,
-                                                     AccountController accountController) {
-        return new RecordController(recordRepo, categoryController, accountController);
+    @Provides @NonNull @Singleton
+    public RecordController providesRecordController(IRepo<Record> recordRepo, CategoryController categoryController,
+            AccountController accountController, CurrencyController currencyController) {
+        return new RecordController(recordRepo, categoryController, accountController, currencyController);
     }
 
-    @Provides
-    @NonNull
-    @Singleton
-    public TransferController providesTransferController(IRepo<Transfer> transferRepo,
-                                                         AccountController accountController) {
+    @Provides @NonNull @Singleton public TransferController providesTransferController(IRepo<Transfer> transferRepo,
+            AccountController accountController) {
         return new TransferController(transferRepo, accountController);
     }
 
-    @Provides
-    @NonNull
-    @Singleton
+    @Provides @NonNull @Singleton
     public CurrencyController providesCurrencyController(AccountController accountController,
-                                                         PreferenceController preferenceController) {
+            PreferenceController preferenceController) {
         return new CurrencyController(accountController, preferenceController);
     }
 
-    @Provides
-    @NonNull
-    @Singleton
-    public PreferenceController providesPreferenceController() {
+    @Provides @NonNull @Singleton public PreferenceController providesPreferenceController() {
         return new PreferenceController(context);
     }
 
-    @Provides
-    @NonNull
-    @Singleton
+    @Provides @NonNull @Singleton
     public PeriodController providesPeriodController(PreferenceController preferenceController) {
         return new PeriodController(preferenceController);
     }
 
-    @Provides
-    @NonNull
-    @Singleton
+    @Provides @NonNull @Singleton
     public FormatController providesFormatController(PreferenceController preferenceController) {
         return new FormatController(preferenceController);
     }
 
-    @Provides
-    @NonNull
-    @Singleton
-    public ExportController providesExportController(RecordController recordController,
-                                                     CategoryController categoryController) {
+    @Provides @NonNull @Singleton public ExportController providesExportController(RecordController recordController,
+            CategoryController categoryController) {
         return new ExportController(recordController, categoryController);
     }
 
-    @Provides
-    @NonNull
-    @Singleton
-    public ImportController providesImportController(RecordController recordController) {
+    @Provides @NonNull @Singleton public ImportController providesImportController(RecordController recordController) {
         return new ImportController(recordController);
     }
 
-    @Provides
-    @NonNull
-    @Singleton
-    public BackupController providesBackupController(FormatController formatController) {
+    @Provides @NonNull @Singleton public BackupController providesBackupController(FormatController formatController) {
         return new BackupController(formatController, context.getApplicationInfo().dataDir);
     }
 }
