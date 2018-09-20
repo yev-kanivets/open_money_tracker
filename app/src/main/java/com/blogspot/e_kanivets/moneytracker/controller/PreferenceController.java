@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 
 import com.blogspot.e_kanivets.moneytracker.R;
 
+import com.blogspot.e_kanivets.moneytracker.repo.DbHelper;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -33,8 +34,7 @@ public class PreferenceController {
 
     private static final int RATE_PERIOD = 5;
 
-    @NonNull
-    private Context context;
+    @NonNull private Context context;
 
     public PreferenceController(@NonNull Context context) {
         this.context = context;
@@ -113,20 +113,25 @@ public class PreferenceController {
         return Long.parseLong(preferences.getString(defaultAccountPref, "-1"));
     }
 
-    @Nullable
-    public String readDefaultCurrency() {
+    @Nullable public String readDefaultCurrency() {
         String defaultCurrencyPref = context.getString(R.string.pref_default_currency);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         return preferences.getString(defaultCurrencyPref, null);
     }
 
-    @NonNull
-    public String readDisplayPrecision() {
+    @NonNull public String readDisplayPrecision() {
         String displayPrecisionPref = context.getString(R.string.pref_display_precision);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         return preferences.getString(displayPrecisionPref, FormatController.PRECISION_MATH);
+    }
+
+    @Nullable public String readNonSubstitutionCurrency() {
+        String nonSubstitutionCurrencyPref = context.getString(R.string.pref_non_substitution_currency);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+        return preferences.getString(nonSubstitutionCurrencyPref, DbHelper.DEFAULT_ACCOUNT_CURRENCY);
     }
 
     public long readFirstTs() {
@@ -137,28 +142,23 @@ public class PreferenceController {
         return getDefaultPrefs().getLong(KEY_LAST_TS, -1);
     }
 
-    @Nullable
-    public String readPeriodType() {
+    @Nullable public String readPeriodType() {
         return getDefaultPrefs().getString(KEY_PERIOD_TYPE, null);
     }
 
-    @Nullable
-    public String readDropboxAccessToken() {
+    @Nullable public String readDropboxAccessToken() {
         return getDefaultPrefs().getString(KEY_DROPBOX_ACCESS_TOKEN, null);
     }
 
-    @NonNull
-    public Set<String> readFilteredCategories() {
+    @NonNull public Set<String> readFilteredCategories() {
         // http://stackoverflow.com/questions/14034803/misbehavior-when-trying-to-store-a-string-set-using-sharedpreferences/14034804#14034804
         return new HashSet<>(getDefaultPrefs().getStringSet(KEY_FILTERED_CATEGORIES, new HashSet<String>()));
     }
 
-    @NonNull
-    public Map<String, String> readRecordTitleCategoryPairs() {
+    @NonNull public Map<String, String> readRecordTitleCategoryPairs() {
         Map<String, String> map = new TreeMap<>();
 
-        Set<String> set = getDefaultPrefs().getStringSet(KEY_RECORD_TITLE_CATEGORY_PAIRS,
-                new HashSet<String>());
+        Set<String> set = getDefaultPrefs().getStringSet(KEY_RECORD_TITLE_CATEGORY_PAIRS, new HashSet<String>());
         for (String entry : set) {
             String[] words = entry.split(";");
             if (words.length == 2) {
@@ -169,13 +169,11 @@ public class PreferenceController {
         return map;
     }
 
-    @NonNull
-    private SharedPreferences getDefaultPrefs() {
+    @NonNull private SharedPreferences getDefaultPrefs() {
         return context.getSharedPreferences(context.getPackageName(), Context.MODE_PRIVATE);
     }
 
-    @NonNull
-    private SharedPreferences.Editor getEditor() {
+    @NonNull private SharedPreferences.Editor getEditor() {
         return getDefaultPrefs().edit();
     }
 }

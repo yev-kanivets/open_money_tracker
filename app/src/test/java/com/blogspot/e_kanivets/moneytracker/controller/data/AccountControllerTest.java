@@ -174,11 +174,11 @@ public class AccountControllerTest {
     public void testReadDefaultAccount() throws Exception {
         assertNull(accountController.readDefaultAccount());
 
-        Account account1 = new Account(1, "a1", 100, "NON", 0, 0, false, 0);
+        Account account1 = new Account(1, "a1", 100, "UAH", 0, 0, false, 0);
         repo.create(account1);
         assertEquals(account1, accountController.readDefaultAccount());
 
-        Account account2 = new Account(2, "a2", 0, "NON", 0, 0, false, 0);
+        Account account2 = new Account(2, "a2", 0, "UAH", 0, 0, false, 0);
         repo.create(account2);
         assertEquals(account1, accountController.readDefaultAccount());
 

@@ -1,26 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <ListPreference
-        android:key="@string/pref_default_account"
-        android:summary="%s"
-        android:title="@string/default_account" />
+  <ListPreference
+      android:key="@string/pref_default_account"
+      android:summary="%s"
+      android:title="@string/default_account"/>
 
-    <ListPreference
-        android:key="@string/pref_default_currency"
-        android:summary="%s"
-        android:title="@string/default_currency" />
+  <ListPreference
+      android:key="@string/pref_default_currency"
+      android:summary="%s"
+      android:title="@string/default_currency"/>
 
-    <ListPreference
-        android:key="@string/pref_display_precision"
-        android:summary="%s"
-        android:title="@string/display_precision" />
+  <ListPreference
+      android:key="@string/pref_non_substitution_currency"
+      android:summary="%s"
+      android:title="@string/non_substitution_currency"/>
 
-    <Preference
-        android:key="@string/pref_about"
-        android:title="About">
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:targetClass="com.blogspot.e_kanivets.moneytracker.activity.AboutActivity"
-            android:targetPackage="com.blogspot.e_kanivets.moneytracker" />
-    </Preference>
+  <ListPreference
+      android:key="@string/pref_display_precision"
+      android:summary="%s"
+      android:title="@string/display_precision"/>
+
+  <Preference
+      android:key="@string/pref_about"
+      android:title="About">
+    <intent
+        android:action="android.intent.action.VIEW"
+        android:targetClass="com.blogspot.e_kanivets.moneytracker.activity.AboutActivity"
+        android:targetPackage="com.blogspot.e_kanivets.moneytracker"/>
+  </Preference>
+
 </PreferenceScreen>

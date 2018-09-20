@@ -25,8 +25,7 @@ public class CurrencyController {
     private AccountController accountController;
     private PreferenceController preferenceController;
 
-    @NonNull
-    private List<String> currencyList;
+    @NonNull private List<String> currencyList;
 
     public CurrencyController(AccountController accountController, PreferenceController preferenceController) {
         this.accountController = accountController;
@@ -34,13 +33,11 @@ public class CurrencyController {
         currencyList = fetchCurrencies();
     }
 
-    @NonNull
-    public List<String> readAll() {
+    @NonNull public List<String> readAll() {
         return currencyList;
     }
 
-    @NonNull
-    public String readDefaultCurrency() {
+    @NonNull public String readDefaultCurrency() {
         // First of all read from Prefs
         String currency = preferenceController.readDefaultCurrency();
 
@@ -54,8 +51,7 @@ public class CurrencyController {
         return currency;
     }
 
-    @NonNull
-    private List<String> fetchCurrencies() {
+    @NonNull private List<String> fetchCurrencies() {
         Set<Currency> toret = new HashSet<>();
         Locale[] locs = Locale.getAvailableLocales();
 
@@ -67,13 +63,15 @@ public class CurrencyController {
             }
         }
 
-        List<String> currencyList = new ArrayList<>();
+        List<String> currencySet = new ArrayList<>();
         for (Currency currency : toret) {
-            currencyList.add(currency.getCurrencyCode());
+            currencySet.add(currency.getCurrencyCode());
         }
 
-        currencyList.add(DbHelper.DEFAULT_ACCOUNT_CURRENCY);
-        currencyList.add("BYN"); // New belorussian ruble
+        currencySet.add(DbHelper.DEFAULT_ACCOUNT_CURRENCY);
+        currencySet.add("BYN"); // New belorussian ruble
+
+        currencyList = new ArrayList<>(currencySet);
 
         Collections.sort(currencyList);
 
