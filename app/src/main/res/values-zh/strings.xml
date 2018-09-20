@@ -52,6 +52,7 @@
     <string name="settings">设置</string>
     <string name="default_account">默认账户</string>
     <string name="default_currency">默认货币</string>
+    <string name="non_substitution_currency">NON 替代貨幣</string>
 
     <string name="title_charts">表格</string>
     <string name="incomes">收入</string>
@@ -89,6 +90,7 @@
     <string name="making_backup">生成备份……</string>
     <string name="restoring_backup">恢复备份中……</string>
     <string name="fetching_backups">正在获得备份……</string>
+    <string name="removing_backup">刪除備份……</string>
 
     <string name="about_summary">版本 %1$s (安卓 %2$s)</string>
     <string name="title_activity_about">关于</string>
@@ -112,4 +114,8 @@
     <string name="cant_archive_default_account">您无法获得默认帐户。</string>
     <string name="delete_account_title">删除帐户</string>
     <string name="delete_account_message">你确定要删除这个帐户吗？ 以后不能恢复。</string>
+
+    <string name="graph">圖形</string>
+    <string name="information">信息</string>
+    <string name="operations">操作</string>
 </resources>

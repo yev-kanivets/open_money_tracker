@@ -94,13 +94,11 @@ public class MainActivity extends BaseDrawerActivity {
 
         setTitle(R.string.title_records);
 
-        tvDefaultAccountTitle = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_default_account_title);
-        tvDefaultAccountSum = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_default_account_sum);
-        tvCurrency = (TextView) navigationView.getHeaderView(0).findViewById(R.id.tv_currency);
+        tvDefaultAccountTitle = navigationView.getHeaderView(0).findViewById(R.id.tv_default_account_title);
+        tvDefaultAccountSum = navigationView.getHeaderView(0).findViewById(R.id.tv_default_account_sum);
+        tvCurrency = navigationView.getHeaderView(0).findViewById(R.id.tv_currency);
 
         if (preferenceController.checkRateDialog()) showAppRateDialog();
-
-        //registerForContextMenu(listView);
 
         View summaryView = summaryPresenter.create(true);
         listView.addHeaderView(summaryView);

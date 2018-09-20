@@ -8,6 +8,7 @@ import com.blogspot.e_kanivets.moneytracker.controller.base.BaseController;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Transfer;
+import com.blogspot.e_kanivets.moneytracker.repo.DbHelper;
 import com.blogspot.e_kanivets.moneytracker.repo.base.IRepo;
 
 import java.util.ArrayList;
@@ -20,8 +21,7 @@ import java.util.List;
  * @author Evgenii Kanivets
  */
 public class AccountController extends BaseController<Account> {
-    @SuppressWarnings("unused")
-    private static final String TAG = "AccountController";
+    @SuppressWarnings("unused") private static final String TAG = "AccountController";
 
     private final PreferenceController preferenceController;
 
@@ -30,8 +30,22 @@ public class AccountController extends BaseController<Account> {
         this.preferenceController = preferenceController;
     }
 
-    @NonNull
-    public List<Account> readActiveAccounts() {
+    @Nullable @Override public Account read(long id) {
+        return substituteCurrency(super.read(id));
+    }
+
+    @NonNull @Override public List<Account> readAll() {
+        List<Account> accountList = super.readAll();
+
+        List<Account> result = new ArrayList<>();
+        for (Account account : accountList) {
+            result.add(substituteCurrency(account));
+        }
+
+        return result;
+    }
+
+    @NonNull public List<Account> readActiveAccounts() {
         List<Account> result = new ArrayList<>();
 
         for (Account account : readAll()) {
@@ -43,8 +57,7 @@ public class AccountController extends BaseController<Account> {
         return result;
     }
 
-    @NonNull
-    public List<Account> readArchivedAccounts() {
+    @NonNull public List<Account> readArchivedAccounts() {
         List<Account> result = new ArrayList<>();
 
         for (Account account : readAll()) {
@@ -128,15 +141,18 @@ public class AccountController extends BaseController<Account> {
         return true;
     }
 
-    @Nullable
-    public Account readDefaultAccount() {
+    @Nullable public Account readDefaultAccount() {
         long defaultAccountId = preferenceController.readDefaultAccountId();
 
-        if (defaultAccountId == -1) return getFirstAccount();
-        else {
+        if (defaultAccountId == -1) {
+            return getFirstAccount();
+        } else {
             Account account = read(defaultAccountId);
-            if (account == null) return getFirstAccount();
-            else return account;
+            if (account == null) {
+                return getFirstAccount();
+            } else {
+                return account;
+            }
         }
     }
 
@@ -162,7 +178,23 @@ public class AccountController extends BaseController<Account> {
 
     private Account getFirstAccount() {
         List<Account> accountList = readAll();
-        if (accountList.size() == 0) return null;
-        else return accountList.get(0);
+        if (accountList.size() == 0) {
+            return null;
+        } else {
+            return accountList.get(0);
+        }
+    }
+
+    private Account substituteCurrency(Account account) {
+        if (account == null) {
+            return null;
+        } else {
+            String currency = account.getCurrency();
+            if (DbHelper.DEFAULT_ACCOUNT_CURRENCY.equals(currency)) {
+                currency = preferenceController.readNonSubstitutionCurrency();
+            }
+            return new Account(account.getId(), account.getTitle(), account.getCurSum(), currency,
+                    account.getDecimals(), account.getGoal(), account.isArchived(), account.getColor());
+        }
     }
 }
