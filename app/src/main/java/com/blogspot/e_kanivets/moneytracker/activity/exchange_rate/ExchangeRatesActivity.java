@@ -37,7 +37,7 @@ public class ExchangeRatesActivity extends BaseBackActivity {
 
     private List<ExchangeRatePair> exchangeRateList;
 
-    @BindView(R.id.list_view)
+    @BindView(R.id.listView)
     ListView listView;
 
     @Override
@@ -93,7 +93,7 @@ public class ExchangeRatesActivity extends BaseBackActivity {
         startActivityForResult(intent, REQUEST_ADD_EXCHANGE_RATE);
     }
 
-    @OnItemClick(R.id.list_view)
+    @OnItemClick(R.id.listView)
     public void addExchangeRateOnBaseOfExisted(int position) {
         AnswersProxy.get().logButton("Edit Exchange Rate");
         if (position < 0 || position >= exchangeRateList.size()) return;

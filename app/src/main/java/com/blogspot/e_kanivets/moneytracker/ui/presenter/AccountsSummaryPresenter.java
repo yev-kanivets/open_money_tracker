@@ -120,7 +120,7 @@ public class AccountsSummaryPresenter extends BaseSummaryPresenter {
         AppCompatSpinner spinnerCurrency;
         @BindView(R.id.tv_total)
         TextView tvTotal;
-        @BindView(R.id.tv_currency)
+        @BindView(R.id.tvCurrency)
         TextView tvCurrency;
 
         public ViewHolder(View view) {

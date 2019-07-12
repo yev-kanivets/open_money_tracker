@@ -8,7 +8,7 @@
     tools:showIn="@layout/activity_main">
 
     <ListView
-        android:id="@+id/list_view"
+        android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
@@ -23,7 +23,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btn_add_income"
+            android:id="@+id/btnAddIncome"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -32,7 +32,7 @@
             android:text="@string/add_income" />
 
         <Button
-            android:id="@+id/btn_add_expense"
+            android:id="@+id/btnAddExpense"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
