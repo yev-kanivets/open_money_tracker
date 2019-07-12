@@ -38,7 +38,7 @@ public class BackupActivity extends BaseBackActivity
     private DbxClientV2 dbClient;
 
     @BindView(R.id.btn_backup_now) View btnBackupNow;
-    @BindView(R.id.list_view) ListView listView;
+    @BindView(R.id.listView) ListView listView;
 
     @Override protected int getContentViewId() {
         return R.layout.activity_backup;
@@ -180,7 +180,7 @@ public class BackupActivity extends BaseBackActivity
         backupController.makeBackup(dbClient);
     }
 
-    @OnItemClick(R.id.list_view) public void restoreBackupClicked(int position) {
+    @OnItemClick(R.id.listView) public void restoreBackupClicked(int position) {
         AnswersProxy.get().logButton("Restore backup");
         final String backupName = listView.getAdapter().getItem(position).toString();
 

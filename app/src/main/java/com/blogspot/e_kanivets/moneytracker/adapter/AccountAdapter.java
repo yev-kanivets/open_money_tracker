@@ -105,7 +105,7 @@ public class AccountAdapter extends BaseAdapter {
         TextView tvTitle;
         @BindView(R.id.tv_cur_sum)
         TextView tvCurSum;
-        @BindView(R.id.tv_currency)
+        @BindView(R.id.tvCurrency)
         TextView tvCurrency;
 
         public ViewHolder(View view) {
