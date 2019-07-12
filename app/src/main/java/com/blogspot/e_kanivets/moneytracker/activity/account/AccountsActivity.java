@@ -32,7 +32,7 @@ public class AccountsActivity extends BaseBackActivity {
 
     private AccountsSummaryPresenter summaryPresenter;
 
-    @BindView(R.id.list_view) ListView listView;
+    @BindView(R.id.listView) ListView listView;
 
     @Override protected int getContentViewId() {
         return R.layout.activity_accounts;
@@ -70,7 +70,7 @@ public class AccountsActivity extends BaseBackActivity {
         }
     }
 
-    @OnItemClick(R.id.list_view) public void onAccountClick(int position) {
+    @OnItemClick(R.id.listView) public void onAccountClick(int position) {
         Account account = accountController.readAll().get(position - 1);
         startActivityForResult(EditAccountActivity.Companion.newIntent(this, account), REQUEST_EDIT_ACCOUNT);
     }

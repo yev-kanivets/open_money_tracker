@@ -106,7 +106,7 @@ public class RecordAdapter extends BaseAdapter {
         TextView tvTitle;
         @BindView(R.id.tv_category)
         TextView tvCategory;
-        @BindView(R.id.tv_currency)
+        @BindView(R.id.tvCurrency)
         TextView tvCurrency;
 
         public ViewHolder(View view) {
