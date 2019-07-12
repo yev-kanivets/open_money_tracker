@@ -24,7 +24,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import javax.inject.Inject
 
-
 class MainActivity : BaseDrawerActivity() {
 
     private lateinit var recordList: List<Record>
@@ -51,16 +50,14 @@ class MainActivity : BaseDrawerActivity() {
     private lateinit var tvDefaultAccountSum: TextView
     private lateinit var tvCurrency: TextView
 
-    override fun getContentViewId(): Int {
-        return R.layout.activity_main
-    }
+    override fun getContentViewId(): Int = R.layout.activity_main
 
     override fun initData(): Boolean {
         super.initData()
-        appComponent.inject(this@MainActivity)
+        appComponent.inject(this)
 
         preferenceController.addLaunchCount()
-        summaryPresenter = ShortSummaryPresenter(this@MainActivity)
+        summaryPresenter = ShortSummaryPresenter(this)
 
         return super.initData()
     }
@@ -115,7 +112,7 @@ class MainActivity : BaseDrawerActivity() {
 
     private fun showReport() {
         AnswersProxy.get().logButton("Show Report")
-        val intent = Intent(this@MainActivity, ReportActivity::class.java)
+        val intent = Intent(this, ReportActivity::class.java)
         intent.putExtra(ReportActivity.KEY_PERIOD, period)
         startActivity(intent)
     }
@@ -125,10 +122,7 @@ class MainActivity : BaseDrawerActivity() {
 
         if (resultCode == AppCompatActivity.RESULT_OK) {
             when (requestCode) {
-                REQUEST_ACTION_RECORD -> {
-                    appComponent.inject(this@MainActivity)
-                    update()
-                }
+                REQUEST_ACTION_RECORD -> update()
 
                 REQUEST_BACKUP -> {
                     appComponent.inject(this@MainActivity)
@@ -142,11 +136,10 @@ class MainActivity : BaseDrawerActivity() {
     }
 
     override fun update() {
-        println("Hello update")
         recordList = recordController.getRecordsForPeriod(period)
         recordList = recordList.reversed()
 
-        listView.adapter = RecordAdapter(this@MainActivity, recordList)
+        listView.adapter = RecordAdapter(this, recordList)
 
         val currency = currencyController.readDefaultCurrency()
 
@@ -159,13 +152,13 @@ class MainActivity : BaseDrawerActivity() {
 
     private fun showAppRateDialog() {
         AnswersProxy.get().logEvent("Show App Rate Dialog")
-        val dialog = AppRateDialog(this@MainActivity)
+        val dialog = AppRateDialog(this)
         dialog.setCanceledOnTouchOutside(false)
         dialog.show()
     }
 
     private fun startAddRecordActivity(record: Record?, mode: AddRecordActivity.Mode, type: Int) {
-        val intent = Intent(this@MainActivity, AddRecordActivity::class.java)
+        val intent = Intent(this, AddRecordActivity::class.java)
         intent.putExtra(AddRecordActivity.KEY_RECORD, record)
         intent.putExtra(AddRecordActivity.KEY_MODE, mode)
         intent.putExtra(AddRecordActivity.KEY_TYPE, type)
