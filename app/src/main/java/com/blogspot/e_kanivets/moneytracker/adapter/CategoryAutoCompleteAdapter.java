@@ -98,7 +98,7 @@ public class CategoryAutoCompleteAdapter extends ArrayAdapter<String> implements
     }
 
     public static class ViewHolder {
-        @BindView(R.id.tv_category)
+        @BindView(R.id.tvCategory)
         TextView tvCategory;
         @BindView(R.id.iv_cancel)
         View ivCancel;

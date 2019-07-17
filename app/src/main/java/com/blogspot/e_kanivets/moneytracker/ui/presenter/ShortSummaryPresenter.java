@@ -1,12 +1,14 @@
 package com.blogspot.e_kanivets.moneytracker.ui.presenter;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
 import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
+import com.blogspot.e_kanivets.moneytracker.adapter.RecordAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.FormatController;
 import com.blogspot.e_kanivets.moneytracker.entity.Period;
 import com.blogspot.e_kanivets.moneytracker.report.record.IRecordReport;
@@ -19,6 +21,8 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 /**
  * Util class to create and manage summary header view for .
@@ -45,40 +49,67 @@ public class ShortSummaryPresenter extends BaseSummaryPresenter {
         green = context.getResources().getColor(R.color.green);
     }
 
-    public View create(boolean shortSummary) {
+    public View create(boolean shortSummary, RecordAdapter.HeaderViewHolder mainViewHolder) {
         view = layoutInflater.inflate(R.layout.view_summary_records, null);
         view.findViewById(R.id.iv_more).setVisibility(shortSummary ? View.VISIBLE : View.INVISIBLE);
 
-        ViewHolder viewHolder = new ViewHolder(view);
-        view.setTag(viewHolder);
+        if (mainViewHolder == null)
+            view.setTag(new ViewHolder(view));
+        else
+            view.setTag(mainViewHolder);
 
         return view;
     }
 
     public void update(IRecordReport report, String currency, List<String> ratesNeeded) {
-        ViewHolder viewHolder = (ViewHolder) view.getTag();
+        if (view.getTag() instanceof RecordAdapter.HeaderViewHolder) {
+            RecordAdapter.HeaderViewHolder viewHolder = (RecordAdapter.HeaderViewHolder) view.getTag();
+            if (report == null) {
+                viewHolder.getTvTotalIncome().setText("");
+                viewHolder.getTvTotalExpense().setText("");
 
-        if (report == null) {
-            viewHolder.tvTotalIncome.setText("");
-            viewHolder.tvTotalExpense.setText("");
+                viewHolder.getTvTotal().setTextColor(red);
+                viewHolder.getTvTotal().setText(createRatesNeededList(currency, ratesNeeded));
+            } else {
+                viewHolder.getTvPeriod().setText(formatPeriod(report.getPeriod()));
 
-            viewHolder.tvTotal.setTextColor(red);
-            viewHolder.tvTotal.setText(createRatesNeededList(currency, ratesNeeded));
+                viewHolder.getTvTotalIncome().setTextColor(report.getTotalIncome() >= 0 ? green : red);
+                viewHolder.getTvTotalIncome().setText(formatController.formatIncome(report.getTotalIncome(),
+                        report.getCurrency()));
+
+                viewHolder.getTvTotalExpense().setTextColor(report.getTotalExpense() > 0 ? green : red);
+                viewHolder.getTvTotalExpense().setText(formatController.formatExpense(report.getTotalExpense(),
+                        report.getCurrency()));
+
+                viewHolder.getTvTotal().setTextColor(report.getTotal() >= 0 ? green : red);
+                viewHolder.getTvTotal().setText(formatController.formatIncome(report.getTotal(),
+                        report.getCurrency()));
+            }
         } else {
-            viewHolder.tvPeriod.setText(formatPeriod(report.getPeriod()));
+            ViewHolder viewHolder = (ViewHolder) view.getTag();
+            if (report == null) {
+                viewHolder.getTvTotalIncome().setText("");
+                viewHolder.getTvTotalExpense().setText("");
 
-            viewHolder.tvTotalIncome.setTextColor(report.getTotalIncome() >= 0 ? green : red);
-            viewHolder.tvTotalIncome.setText(formatController.formatIncome(report.getTotalIncome(),
-                    report.getCurrency()));
+                viewHolder.getTvTotal().setTextColor(red);
+                viewHolder.getTvTotal().setText(createRatesNeededList(currency, ratesNeeded));
+            } else {
+                viewHolder.getTvPeriod().setText(formatPeriod(report.getPeriod()));
 
-            viewHolder.tvTotalExpense.setTextColor(report.getTotalExpense() > 0 ? green : red);
-            viewHolder.tvTotalExpense.setText(formatController.formatExpense(report.getTotalExpense(),
-                    report.getCurrency()));
+                viewHolder.getTvTotalIncome().setTextColor(report.getTotalIncome() >= 0 ? green : red);
+                viewHolder.getTvTotalIncome().setText(formatController.formatIncome(report.getTotalIncome(),
+                        report.getCurrency()));
 
-            viewHolder.tvTotal.setTextColor(report.getTotal() >= 0 ? green : red);
-            viewHolder.tvTotal.setText(formatController.formatIncome(report.getTotal(),
-                    report.getCurrency()));
+                viewHolder.getTvTotalExpense().setTextColor(report.getTotalExpense() > 0 ? green : red);
+                viewHolder.getTvTotalExpense().setText(formatController.formatExpense(report.getTotalExpense(),
+                        report.getCurrency()));
+
+                viewHolder.getTvTotal().setTextColor(report.getTotal() >= 0 ? green : red);
+                viewHolder.getTvTotal().setText(formatController.formatIncome(report.getTotal(),
+                        report.getCurrency()));
+            }
         }
+
     }
 
     private String formatPeriod(Period period) {
@@ -102,14 +133,34 @@ public class ShortSummaryPresenter extends BaseSummaryPresenter {
     }
 
     public static class ViewHolder {
-        @BindView(R.id.tv_period)
+
+        @BindView(R.id.tvPeriod)
         TextView tvPeriod;
-        @BindView(R.id.tv_total_income)
+
+        public TextView getTvPeriod() {
+            return tvPeriod;
+        }
+
+        @BindView(R.id.tvTotalIncome)
         TextView tvTotalIncome;
-        @BindView(R.id.tv_total_expense)
+
+        public TextView getTvTotalIncome() {
+            return tvTotalIncome;
+        }
+
+        @BindView(R.id.tvTotalExpense)
         TextView tvTotalExpense;
-        @BindView(R.id.tv_total)
+
+        public TextView getTvTotalExpense() {
+            return tvTotalExpense;
+        }
+
+        @BindView(R.id.tvTotal)
         TextView tvTotal;
+
+        public TextView getTvTotal() {
+            return tvTotal;
+        }
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
