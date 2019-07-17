@@ -5,6 +5,7 @@ import android.view.View
 import com.blogspot.e_kanivets.moneytracker.R
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseFragment
 import com.blogspot.e_kanivets.moneytracker.adapter.RecordAdapter
+import com.blogspot.e_kanivets.moneytracker.controller.FormatController
 import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController
 import com.blogspot.e_kanivets.moneytracker.controller.data.RecordController
 import com.blogspot.e_kanivets.moneytracker.controller.data.TransferController
@@ -23,6 +24,8 @@ class AccountOperationsFragment : BaseFragment() {
     internal lateinit var recordController: RecordController
     @Inject
     internal lateinit var transferController: TransferController
+    @Inject
+    internal lateinit var formatController: FormatController
 
     private lateinit var account: Account
 
@@ -30,11 +33,11 @@ class AccountOperationsFragment : BaseFragment() {
 
     override fun initData() {
         appComponent.inject(this@AccountOperationsFragment)
-        arguments?.let { arguments -> account = arguments.getParcelable(AccountOperationsFragment.KEY_ACCOUNT) }
+        arguments?.let { arguments -> account = arguments.getParcelable(KEY_ACCOUNT) }
     }
 
     override fun initViews(view: View) {
-        listView.adapter = RecordAdapter(activity, getRecords())
+        recyclerView.adapter = RecordAdapter(requireContext(), getRecords(), formatController, false)
     }
 
     private fun getRecords(): List<Record> {

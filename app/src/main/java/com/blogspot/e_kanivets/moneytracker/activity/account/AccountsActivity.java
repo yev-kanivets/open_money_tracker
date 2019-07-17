@@ -22,30 +22,36 @@ import butterknife.OnClick;
 import butterknife.OnItemClick;
 
 public class AccountsActivity extends BaseBackActivity {
-    @SuppressWarnings("unused") private static final String TAG = "AccountsActivity";
+    @SuppressWarnings("unused")
+    private static final String TAG = "AccountsActivity";
 
     private static final int REQUEST_ADD_ACCOUNT = 1;
     private static final int REQUEST_TRANSFER = 2;
     private static final int REQUEST_EDIT_ACCOUNT = 3;
 
-    @Inject AccountController accountController;
+    @Inject
+    AccountController accountController;
 
     private AccountsSummaryPresenter summaryPresenter;
 
-    @BindView(R.id.listView) ListView listView;
+    @BindView(R.id.listView)
+    ListView listView;
 
-    @Override protected int getContentViewId() {
+    @Override
+    protected int getContentViewId() {
         return R.layout.activity_accounts;
     }
 
-    @Override protected boolean initData() {
+    @Override
+    protected boolean initData() {
         boolean result = super.initData();
         getAppComponent().inject(AccountsActivity.this);
         summaryPresenter = new AccountsSummaryPresenter(AccountsActivity.this);
         return result;
     }
 
-    @Override protected void initViews() {
+    @Override
+    protected void initViews() {
         super.initViews();
 
         listView.addHeaderView(summaryPresenter.create());
@@ -54,23 +60,23 @@ public class AccountsActivity extends BaseBackActivity {
         update();
     }
 
-    @Override public boolean onCreateOptionsMenu(Menu menu) {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_accounts, menu);
         return true;
     }
 
-    @Override public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_transfer:
-                makeTransfer();
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_transfer) {
+            makeTransfer();
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
-    @OnItemClick(R.id.listView) public void onAccountClick(int position) {
+    @OnItemClick(R.id.listView)
+    public void onAccountClick(int position) {
         Account account = accountController.readAll().get(position - 1);
         startActivityForResult(EditAccountActivity.Companion.newIntent(this, account), REQUEST_EDIT_ACCOUNT);
     }
@@ -80,13 +86,15 @@ public class AccountsActivity extends BaseBackActivity {
         startActivityForResult(new Intent(AccountsActivity.this, TransferActivity.class), REQUEST_TRANSFER);
     }
 
-    @OnClick(R.id.btn_add_account) public void addAccount() {
+    @OnClick(R.id.btn_add_account)
+    public void addAccount() {
         AnswersProxy.get().logButton("Add Account");
         Intent intent = new Intent(AccountsActivity.this, AddAccountActivity.class);
         startActivityForResult(intent, REQUEST_ADD_ACCOUNT);
     }
 
-    @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == AppCompatActivity.RESULT_OK) {
