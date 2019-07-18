@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.blogspot.e_kanivets.moneytracker.MtApp
@@ -22,7 +21,7 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private var formatController: FormatController
 
-    private var itemClickListener: AdapterView.OnItemClickListener? = null
+    private var itemClickListener: OnItemClickListener? = null
 
     private var whiteRed: Int
     private var whiteGreen: Int
@@ -33,10 +32,10 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private var context: Context
 
     private var summaryPresenter: ShortSummaryPresenter
-    private var needHeaderView: Boolean = false
+    private var isHeaderViewNeeded: Boolean = false
     private lateinit var headerViewHolder: HeaderViewHolder
 
-    constructor(context: Context, records: List<Record>, formatController: FormatController, needHeaderView: Boolean) {
+    constructor(context: Context, records: List<Record>, formatController: FormatController, isHeaderViewNeeded: Boolean) {
         this.context = context
         this.records = records
 
@@ -49,18 +48,18 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         summaryPresenter = ShortSummaryPresenter(context)
 
-        if (needHeaderView) {
-            val summaryView = summaryPresenter.create(true, HeaderViewHolder(LayoutInflater.from(context).inflate(R.layout.view_summary_records, null)))
-            headerViewHolder = summaryView.tag as HeaderViewHolder
+        if (isHeaderViewNeeded) {
+            headerViewHolder = HeaderViewHolder(LayoutInflater.from(context).inflate(R.layout.view_summary_records, null), itemClickListener)
+            summaryPresenter.create(true, headerViewHolder)
         }
 
-        this.needHeaderView = needHeaderView
+        this.isHeaderViewNeeded = isHeaderViewNeeded
         this.formatController = formatController
     }
 
     override fun getItemCount() = records.size
 
-    override fun getItemViewType(position: Int): Int = if (position == 0 && needHeaderView) {
+    override fun getItemViewType(position: Int): Int = if (position == 0 && isHeaderViewNeeded) {
         TYPE_HEADER
     } else {
         TYPE_ITEM
@@ -70,26 +69,30 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
             if (viewType == TYPE_HEADER) {
                 headerViewHolder
             } else {
-                ViewHolder(LayoutInflater.from(context).inflate(R.layout.view_record, parent, false))
+                ViewHolder(LayoutInflater.from(context).inflate(R.layout.view_record, parent, false), itemClickListener)
             }
 
     override fun onBindViewHolder(rvViewHolder: RecyclerView.ViewHolder, position: Int) {
-        if (position == 0 && needHeaderView) {
+        if (position == 0 && isHeaderViewNeeded) {
             //adapter already bound to view
             return
         }
 
         val viewHolder = rvViewHolder as ViewHolder
-        val record: Record = records[position - if (needHeaderView) 1 else 0]
+        val record: Record = records[position - if (isHeaderViewNeeded) 1 else 0]
         viewHolder.container.setBackgroundColor(if (record.isIncome) whiteGreen else whiteRed)
         viewHolder.tvPrice.setTextColor(if (record.isIncome) green else red)
 
         viewHolder.tvDateAndTime.text = formatController.formatDateAndTime(record.time)
-        viewHolder.tvPrice.text = formatController.formatSignedAmount(
-                (if (record.isIncome) 1 else -1) * record.fullPrice)
+        val price = (if (record.isIncome) record.fullPrice else getNegative(record.fullPrice))
+        viewHolder.tvPrice.text = formatController.formatSignedAmount(price)
         viewHolder.tvTitle.text = record.title
         viewHolder.tvCategory.text = record.category?.name
         viewHolder.tvCurrency.text = record.currency
+    }
+
+    private fun getNegative(number: Double): Double {
+        return -1 * number
     }
 
     fun setRecords(recordsList: List<Record>, report: IRecordReport?, currency: String, ratesNeeded: List<String>) {
@@ -98,11 +101,11 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
         notifyDataSetChanged()
     }
 
-    fun setOnItemClickListener(itemClickListener: AdapterView.OnItemClickListener) {
+    fun setOnItemClickListener(itemClickListener: OnItemClickListener) {
         this.itemClickListener = itemClickListener
     }
 
-    inner class ViewHolder : RecyclerView.ViewHolder {
+    class ViewHolder : RecyclerView.ViewHolder {
 
         var container: LinearLayout
         var tvDateAndTime: TextView
@@ -111,7 +114,7 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
         var tvCategory: TextView
         var tvCurrency: TextView
 
-        constructor(view: View) : super(view) {
+        constructor(view: View, itemClickListener: OnItemClickListener?) : super(view) {
             container = view.container
             tvDateAndTime = view.tvDateAndTime
             tvPrice = view.tvPrice
@@ -120,32 +123,34 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
             tvCurrency = view.tvCurrency
 
             view.setOnClickListener {
-                itemClickListener?.onItemClick(null, null, adapterPosition, 0L)
+                itemClickListener?.onItemClick(adapterPosition)
             }
         }
 
     }
 
-    inner class HeaderViewHolder : RecyclerView.ViewHolder {
+    class HeaderViewHolder : RecyclerView.ViewHolder {
 
         var tvPeriod: TextView
         var tvTotalIncome: TextView
         var tvTotalExpense: TextView
         var tvTotal: TextView
 
-        constructor(view: View) : super(view) {
-
+        constructor(view: View, itemClickListener: OnItemClickListener?) : super(view) {
             tvPeriod = view.tvPeriod
             tvTotalIncome = view.tvTotalIncome
             tvTotalExpense = view.tvTotalExpense
             tvTotal = view.tvTotal
 
             view.setOnClickListener {
-                itemClickListener?.onItemClick(null, null, 0, 0L)
+                itemClickListener?.onItemClick(0)
             }
-
         }
 
+    }
+
+    interface OnItemClickListener {
+        fun onItemClick(position: Int)
     }
 
     companion object {

@@ -107,9 +107,14 @@ public class ExchangeRatesActivity extends BaseBackActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == AppCompatActivity.RESULT_OK) {
-            if (requestCode == REQUEST_ADD_EXCHANGE_RATE) {
-                update();
-                setResult(RESULT_OK);
+            switch (requestCode) {
+                case REQUEST_ADD_EXCHANGE_RATE:
+                    update();
+                    setResult(RESULT_OK);
+                    break;
+
+                default:
+                    break;
             }
         }
     }
