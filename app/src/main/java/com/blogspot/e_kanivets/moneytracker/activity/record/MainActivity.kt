@@ -2,7 +2,6 @@ package com.blogspot.e_kanivets.moneytracker.activity.record
 
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
-import android.widget.AdapterView
 import android.widget.TextView
 import com.blogspot.e_kanivets.moneytracker.R
 import com.blogspot.e_kanivets.moneytracker.activity.ReportActivity
@@ -72,9 +71,11 @@ class MainActivity : BaseDrawerActivity() {
         tvCurrency = navigationView.getHeaderView(0).findViewById(R.id.tvCurrency)
 
         recordAdapter = RecordAdapter(this, listOf(), formatController, true)
-        recordAdapter.setOnItemClickListener(AdapterView.OnItemClickListener { _, _, position, _ ->
-            if (position == 0) showReport()
-            else editRecord(position)
+        recordAdapter.setOnItemClickListener(object : RecordAdapter.OnItemClickListener {
+            override fun onItemClick(position: Int) {
+                if (position == 0) showReport()
+                else editRecord(position)
+            }
         })
         recyclerView.adapter = recordAdapter
 
@@ -93,6 +94,7 @@ class MainActivity : BaseDrawerActivity() {
     private fun editRecord(position: Int) {
         AnswersProxy.get().logButton("Edit Record")
 
+        // Minus one because of list view's header view
         val record = recordList[position - 1]
         startAddRecordActivity(record, AddRecordActivity.Mode.MODE_EDIT, record.type)
     }

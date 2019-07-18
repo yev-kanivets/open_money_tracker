@@ -22,7 +22,6 @@ import javax.inject.Inject
 import android.view.inputmethod.InputMethodManager
 import kotlinx.android.synthetic.main.fragment_edit_account.*
 
-
 class EditAccountActivity : BaseBackActivity() {
 
     @Inject
@@ -61,26 +60,27 @@ class EditAccountActivity : BaseBackActivity() {
             override fun onPageSelected(position: Int) {
                 if (position == 0) {
                     fabDone.show()
-                    showOrHideKeyboard(true)
+                    showKeyboard()
                 } else {
                     fabDone.hide()
-                    showOrHideKeyboard(false)
+                    hideKeyboard()
                 }
             }
         })
     }
 
-    private fun showOrHideKeyboard(showKeyboard: Boolean) {
+    private fun hideKeyboard() {
         val view: View? = currentFocus
         if (view != null) {
             val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-            if (showKeyboard)
-                imm.showSoftInput(etTitle, 0)
-            else
-                imm.hideSoftInputFromWindow(view.windowToken, 0)
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
         }
     }
 
+    private fun showKeyboard() {
+        val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(etTitle, 0)
+    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(if (account.isArchived) R.menu.menu_archived_account else R.menu.menu_account, menu)

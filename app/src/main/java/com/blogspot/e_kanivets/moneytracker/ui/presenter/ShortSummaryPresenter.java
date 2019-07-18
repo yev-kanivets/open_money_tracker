@@ -1,7 +1,6 @@
 package com.blogspot.e_kanivets.moneytracker.ui.presenter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -21,8 +20,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 /**
  * Util class to create and manage summary header view for .
@@ -135,7 +132,7 @@ public class ShortSummaryPresenter extends BaseSummaryPresenter {
     public static class ViewHolder {
 
         @BindView(R.id.tvPeriod)
-        TextView tvPeriod;
+        public TextView tvPeriod;
 
         public TextView getTvPeriod() {
             return tvPeriod;
@@ -165,5 +162,6 @@ public class ShortSummaryPresenter extends BaseSummaryPresenter {
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
+
     }
 }
