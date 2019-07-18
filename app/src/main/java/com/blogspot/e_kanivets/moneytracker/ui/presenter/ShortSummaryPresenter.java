@@ -145,14 +145,13 @@ public class ShortSummaryPresenter extends BaseSummaryPresenter {
     }
 
     public interface SummaryViewInterface {
-        public TextView getTvPeriod();
+        TextView getTvPeriod();
 
-        public TextView getTvTotalIncome();
+        TextView getTvTotalIncome();
 
-        public TextView getTvTotalExpense();
+        TextView getTvTotalExpense();
 
-        public TextView getTvTotal();
+        TextView getTvTotal();
     }
-
 
 }
