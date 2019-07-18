@@ -59,52 +59,27 @@ public class ShortSummaryPresenter extends BaseSummaryPresenter {
     }
 
     public void update(IRecordReport report, String currency, List<String> ratesNeeded) {
-        if (view.getTag() instanceof RecordAdapter.HeaderViewHolder) {
-            RecordAdapter.HeaderViewHolder viewHolder = (RecordAdapter.HeaderViewHolder) view.getTag();
-            if (report == null) {
-                viewHolder.getTvTotalIncome().setText("");
-                viewHolder.getTvTotalExpense().setText("");
+        SummaryViewInterface viewHolder = (SummaryViewInterface) view.getTag();
+        if (report == null) {
+            viewHolder.getTvTotalIncome().setText("");
+            viewHolder.getTvTotalExpense().setText("");
 
-                viewHolder.getTvTotal().setTextColor(red);
-                viewHolder.getTvTotal().setText(createRatesNeededList(currency, ratesNeeded));
-            } else {
-                viewHolder.getTvPeriod().setText(formatPeriod(report.getPeriod()));
-
-                viewHolder.getTvTotalIncome().setTextColor(report.getTotalIncome() >= 0 ? green : red);
-                viewHolder.getTvTotalIncome().setText(formatController.formatIncome(report.getTotalIncome(),
-                        report.getCurrency()));
-
-                viewHolder.getTvTotalExpense().setTextColor(report.getTotalExpense() > 0 ? green : red);
-                viewHolder.getTvTotalExpense().setText(formatController.formatExpense(report.getTotalExpense(),
-                        report.getCurrency()));
-
-                viewHolder.getTvTotal().setTextColor(report.getTotal() >= 0 ? green : red);
-                viewHolder.getTvTotal().setText(formatController.formatIncome(report.getTotal(),
-                        report.getCurrency()));
-            }
+            viewHolder.getTvTotal().setTextColor(red);
+            viewHolder.getTvTotal().setText(createRatesNeededList(currency, ratesNeeded));
         } else {
-            ViewHolder viewHolder = (ViewHolder) view.getTag();
-            if (report == null) {
-                viewHolder.getTvTotalIncome().setText("");
-                viewHolder.getTvTotalExpense().setText("");
+            viewHolder.getTvPeriod().setText(formatPeriod(report.getPeriod()));
 
-                viewHolder.getTvTotal().setTextColor(red);
-                viewHolder.getTvTotal().setText(createRatesNeededList(currency, ratesNeeded));
-            } else {
-                viewHolder.getTvPeriod().setText(formatPeriod(report.getPeriod()));
+            viewHolder.getTvTotalIncome().setTextColor(report.getTotalIncome() >= 0 ? green : red);
+            viewHolder.getTvTotalIncome().setText(formatController.formatIncome(report.getTotalIncome(),
+                    report.getCurrency()));
 
-                viewHolder.getTvTotalIncome().setTextColor(report.getTotalIncome() >= 0 ? green : red);
-                viewHolder.getTvTotalIncome().setText(formatController.formatIncome(report.getTotalIncome(),
-                        report.getCurrency()));
+            viewHolder.getTvTotalExpense().setTextColor(report.getTotalExpense() > 0 ? green : red);
+            viewHolder.getTvTotalExpense().setText(formatController.formatExpense(report.getTotalExpense(),
+                    report.getCurrency()));
 
-                viewHolder.getTvTotalExpense().setTextColor(report.getTotalExpense() > 0 ? green : red);
-                viewHolder.getTvTotalExpense().setText(formatController.formatExpense(report.getTotalExpense(),
-                        report.getCurrency()));
-
-                viewHolder.getTvTotal().setTextColor(report.getTotal() >= 0 ? green : red);
-                viewHolder.getTvTotal().setText(formatController.formatIncome(report.getTotal(),
-                        report.getCurrency()));
-            }
+            viewHolder.getTvTotal().setTextColor(report.getTotal() >= 0 ? green : red);
+            viewHolder.getTvTotal().setText(formatController.formatIncome(report.getTotal(),
+                    report.getCurrency()));
         }
 
     }
@@ -129,11 +104,12 @@ public class ShortSummaryPresenter extends BaseSummaryPresenter {
         }
     }
 
-    public static class ViewHolder {
+    public static class ViewHolder implements SummaryViewInterface {
 
         @BindView(R.id.tvPeriod)
         public TextView tvPeriod;
 
+        @Override
         public TextView getTvPeriod() {
             return tvPeriod;
         }
@@ -141,6 +117,7 @@ public class ShortSummaryPresenter extends BaseSummaryPresenter {
         @BindView(R.id.tvTotalIncome)
         TextView tvTotalIncome;
 
+        @Override
         public TextView getTvTotalIncome() {
             return tvTotalIncome;
         }
@@ -148,6 +125,7 @@ public class ShortSummaryPresenter extends BaseSummaryPresenter {
         @BindView(R.id.tvTotalExpense)
         TextView tvTotalExpense;
 
+        @Override
         public TextView getTvTotalExpense() {
             return tvTotalExpense;
         }
@@ -155,6 +133,7 @@ public class ShortSummaryPresenter extends BaseSummaryPresenter {
         @BindView(R.id.tvTotal)
         TextView tvTotal;
 
+        @Override
         public TextView getTvTotal() {
             return tvTotal;
         }
@@ -164,4 +143,16 @@ public class ShortSummaryPresenter extends BaseSummaryPresenter {
         }
 
     }
+
+    public interface SummaryViewInterface {
+        public TextView getTvPeriod();
+
+        public TextView getTvTotalIncome();
+
+        public TextView getTvTotalExpense();
+
+        public TextView getTvTotal();
+    }
+
+
 }
