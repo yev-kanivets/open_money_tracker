@@ -48,16 +48,11 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         summaryPresenter = ShortSummaryPresenter(context)
 
-        if (isHeaderViewNeeded) {
-            headerViewHolder = HeaderViewHolder(LayoutInflater.from(context).inflate(R.layout.view_summary_records, null), itemClickListener)
-            summaryPresenter.create(true, headerViewHolder)
-        }
-
         this.isHeaderViewNeeded = isHeaderViewNeeded
         this.formatController = formatController
     }
 
-    override fun getItemCount() = records.size
+    override fun getItemCount() = records.size + if (isHeaderViewNeeded) 1 else 0
 
     override fun getItemViewType(position: Int): Int = if (position == 0 && isHeaderViewNeeded) {
         TYPE_HEADER
@@ -96,6 +91,10 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     fun setRecords(recordsList: List<Record>, report: IRecordReport?, currency: String, ratesNeeded: List<String>) {
+        if (isHeaderViewNeeded && records.isEmpty()) {
+            headerViewHolder = HeaderViewHolder(LayoutInflater.from(context).inflate(R.layout.view_summary_records, null), itemClickListener)
+            summaryPresenter.create(true, headerViewHolder)
+        }
         records = recordsList
         summaryPresenter.update(report, currency, ratesNeeded)
         notifyDataSetChanged()
@@ -103,10 +102,6 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     fun setOnItemClickListener(itemClickListener: OnItemClickListener) {
         this.itemClickListener = itemClickListener
-        if (isHeaderViewNeeded) {
-            headerViewHolder = HeaderViewHolder(LayoutInflater.from(context).inflate(R.layout.view_summary_records, null), itemClickListener)
-            summaryPresenter.create(true, headerViewHolder)
-        }
     }
 
     class ViewHolder : RecyclerView.ViewHolder {
@@ -130,7 +125,6 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 itemClickListener?.onItemClick(adapterPosition)
             }
         }
-
     }
 
     class HeaderViewHolder : RecyclerView.ViewHolder, ShortSummaryPresenter.SummaryViewInterface {
@@ -140,21 +134,13 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private var tvTotalExpense: TextView
         private var tvTotal: TextView
 
-        override fun getTvPeriod(): TextView {
-            return tvPeriod
-        }
+        override fun getTvPeriod(): TextView = tvPeriod
 
-        override fun getTvTotalIncome(): TextView {
-            return tvTotalIncome
-        }
+        override fun getTvTotalIncome(): TextView = tvTotalIncome
 
-        override fun getTvTotalExpense(): TextView {
-            return tvTotalExpense
-        }
+        override fun getTvTotalExpense(): TextView = tvTotalExpense
 
-        override fun getTvTotal(): TextView {
-            return tvTotal
-        }
+        override fun getTvTotal(): TextView = tvTotal
 
         constructor(view: View, itemClickListener: OnItemClickListener?) : super(view) {
             tvPeriod = view.tvPeriod
@@ -166,7 +152,6 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 itemClickListener?.onItemClick(0)
             }
         }
-
     }
 
     interface OnItemClickListener {
@@ -177,7 +162,6 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private const val TYPE_HEADER = 0
         private const val TYPE_ITEM = 1
-
     }
 
 }
