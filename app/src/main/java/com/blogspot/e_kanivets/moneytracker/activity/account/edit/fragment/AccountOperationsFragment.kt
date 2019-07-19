@@ -24,8 +24,6 @@ class AccountOperationsFragment : BaseFragment() {
     internal lateinit var recordController: RecordController
     @Inject
     internal lateinit var transferController: TransferController
-    @Inject
-    internal lateinit var formatController: FormatController
 
     private lateinit var account: Account
 
@@ -37,7 +35,7 @@ class AccountOperationsFragment : BaseFragment() {
     }
 
     override fun initViews(view: View) {
-        recyclerView.adapter = RecordAdapter(requireContext(), getRecords(), formatController, false)
+        recyclerView.adapter = RecordAdapter(requireContext(), getRecords(), false)
     }
 
     private fun getRecords(): List<Record> {
@@ -86,4 +84,5 @@ class AccountOperationsFragment : BaseFragment() {
         }
 
     }
+
 }

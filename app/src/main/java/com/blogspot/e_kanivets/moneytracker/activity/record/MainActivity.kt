@@ -70,13 +70,12 @@ class MainActivity : BaseDrawerActivity() {
         tvDefaultAccountSum = navigationView.getHeaderView(0).findViewById(R.id.tvDefaultAccountSum)
         tvCurrency = navigationView.getHeaderView(0).findViewById(R.id.tvCurrency)
 
-        recordAdapter = RecordAdapter(this, listOf(), formatController, true)
-        recordAdapter.setOnItemClickListener(object : RecordAdapter.OnItemClickListener {
-            override fun onItemClick(position: Int) {
-                if (position == 0) showReport()
-                else editRecord(position)
-            }
-        })
+        recordAdapter = RecordAdapter(this, listOf(), true)
+
+        recordAdapter.setOnItemClickListener { position ->
+            if (position == 0) showReport()
+            else editRecord(position)
+        }
         recyclerView.adapter = recordAdapter
 
         spinner.setPeriodSelectedListener { period ->

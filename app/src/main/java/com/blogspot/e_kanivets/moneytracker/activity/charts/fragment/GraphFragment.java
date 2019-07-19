@@ -107,5 +107,4 @@ public class GraphFragment extends Fragment {
             barChart.setHighlightPerTapEnabled(false);
         }
     }
-
 }

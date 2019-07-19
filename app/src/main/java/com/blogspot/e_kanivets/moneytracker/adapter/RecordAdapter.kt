@@ -16,12 +16,14 @@ import com.blogspot.e_kanivets.moneytracker.report.record.IRecordReport
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.ShortSummaryPresenter
 import kotlinx.android.synthetic.main.view_record.view.*
 import kotlinx.android.synthetic.main.view_summary_records.view.*
+import javax.inject.Inject
 
 class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private var formatController: FormatController
+    @Inject
+    lateinit var formatController: FormatController
 
-    private var itemClickListener: OnItemClickListener? = null
+    private var itemClickListener: ((Int) -> Unit)? = null
 
     private var whiteRed: Int
     private var whiteGreen: Int
@@ -35,7 +37,7 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private var isHeaderViewNeeded: Boolean = false
     private lateinit var headerViewHolder: HeaderViewHolder
 
-    constructor(context: Context, records: List<Record>, formatController: FormatController, isHeaderViewNeeded: Boolean) {
+    constructor(context: Context, records: List<Record>, isHeaderViewNeeded: Boolean) {
         this.context = context
         this.records = records
 
@@ -49,7 +51,6 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
         summaryPresenter = ShortSummaryPresenter(context)
 
         this.isHeaderViewNeeded = isHeaderViewNeeded
-        this.formatController = formatController
     }
 
     override fun getItemCount() = records.size + if (isHeaderViewNeeded) 1 else 0
@@ -100,7 +101,7 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
         notifyDataSetChanged()
     }
 
-    fun setOnItemClickListener(itemClickListener: OnItemClickListener) {
+    fun setOnItemClickListener(itemClickListener: (Int) -> Unit) {
         this.itemClickListener = itemClickListener
     }
 
@@ -113,7 +114,7 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
         var tvCategory: TextView
         var tvCurrency: TextView
 
-        constructor(view: View, itemClickListener: OnItemClickListener?) : super(view) {
+        constructor(view: View, itemClickListener: ((Int) -> Unit)?) : super(view) {
             container = view.container
             tvDateAndTime = view.tvDateAndTime
             tvPrice = view.tvPrice
@@ -122,7 +123,7 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
             tvCurrency = view.tvCurrency
 
             view.setOnClickListener {
-                itemClickListener?.onItemClick(adapterPosition)
+                itemClickListener?.invoke(adapterPosition)
             }
         }
     }
@@ -142,20 +143,16 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         override fun getTvTotal(): TextView = tvTotal
 
-        constructor(view: View, itemClickListener: OnItemClickListener?) : super(view) {
+        constructor(view: View, itemClickListener: ((Int) -> Unit)?) : super(view) {
             tvPeriod = view.tvPeriod
             tvTotalIncome = view.tvTotalIncome
             tvTotalExpense = view.tvTotalExpense
             tvTotal = view.tvTotal
 
             view.setOnClickListener {
-                itemClickListener?.onItemClick(0)
+                itemClickListener?.invoke(0)
             }
         }
-    }
-
-    interface OnItemClickListener {
-        fun onItemClick(position: Int)
     }
 
     companion object {
@@ -163,5 +160,4 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private const val TYPE_HEADER = 0
         private const val TYPE_ITEM = 1
     }
-
 }
