@@ -50,10 +50,7 @@ public class ShortSummaryPresenter extends BaseSummaryPresenter {
         view = layoutInflater.inflate(R.layout.view_summary_records, null);
         view.findViewById(R.id.iv_more).setVisibility(shortSummary ? View.VISIBLE : View.INVISIBLE);
 
-        if (mainViewHolder == null)
-            view.setTag(new ViewHolder(view));
-        else
-            view.setTag(mainViewHolder);
+        view.setTag(mainViewHolder != null ? mainViewHolder : new ViewHolder(view));
 
         return view;
     }
@@ -107,7 +104,7 @@ public class ShortSummaryPresenter extends BaseSummaryPresenter {
     public static class ViewHolder implements SummaryViewInterface {
 
         @BindView(R.id.tvPeriod)
-        public TextView tvPeriod;
+        TextView tvPeriod;
 
         @Override
         public TextView getTvPeriod() {
@@ -141,7 +138,6 @@ public class ShortSummaryPresenter extends BaseSummaryPresenter {
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
-
     }
 
     public interface SummaryViewInterface {
