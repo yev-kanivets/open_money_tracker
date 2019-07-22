@@ -70,9 +70,7 @@ class MainActivity : BaseDrawerActivity() {
         tvDefaultAccountSum = navigationView.getHeaderView(0).findViewById(R.id.tvDefaultAccountSum)
         tvCurrency = navigationView.getHeaderView(0).findViewById(R.id.tvCurrency)
 
-        recordAdapter = RecordAdapter(this, listOf(), true)
-
-        recordAdapter.setOnItemClickListener { position ->
+        recordAdapter = RecordAdapter(this, listOf(), true) { position ->
             if (position == 0) showReport()
             else editRecord(position)
         }

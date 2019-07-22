@@ -35,9 +35,9 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private var summaryPresenter: ShortSummaryPresenter
     private var isHeaderViewNeeded: Boolean = false
-    private lateinit var headerViewHolder: HeaderViewHolder
+    private var headerViewHolder: HeaderViewHolder
 
-    constructor(context: Context, records: List<Record>, isHeaderViewNeeded: Boolean) {
+    constructor(context: Context, records: List<Record>, isHeaderViewNeeded: Boolean, itemClickListener: ((Int) -> Unit)?) {
         this.context = context
         this.records = records
 
@@ -50,7 +50,11 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         summaryPresenter = ShortSummaryPresenter(context)
 
+        this.itemClickListener = itemClickListener
         this.isHeaderViewNeeded = isHeaderViewNeeded
+
+        headerViewHolder = HeaderViewHolder(LayoutInflater.from(context).inflate(R.layout.view_summary_records, null), itemClickListener)
+        summaryPresenter.create(true, headerViewHolder)
     }
 
     override fun getItemCount() = records.size + if (isHeaderViewNeeded) 1 else 0
@@ -92,17 +96,9 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     fun setRecords(recordsList: List<Record>, report: IRecordReport?, currency: String, ratesNeeded: List<String>) {
-        if (isHeaderViewNeeded && records.isEmpty()) {
-            headerViewHolder = HeaderViewHolder(LayoutInflater.from(context).inflate(R.layout.view_summary_records, null), itemClickListener)
-            summaryPresenter.create(true, headerViewHolder)
-        }
         records = recordsList
         summaryPresenter.update(report, currency, ratesNeeded)
         notifyDataSetChanged()
-    }
-
-    fun setOnItemClickListener(itemClickListener: (Int) -> Unit) {
-        this.itemClickListener = itemClickListener
     }
 
     class ViewHolder : RecyclerView.ViewHolder {
