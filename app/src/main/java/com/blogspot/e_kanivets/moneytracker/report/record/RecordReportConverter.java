@@ -54,7 +54,7 @@ public class RecordReportConverter {
 
     @NonNull
     public int[] getGroupTo() {
-        return new int[]{R.id.tv_category, R.id.tv_total};
+        return new int[]{R.id.tvCategory, R.id.tvTotal};
     }
 
     @NonNull
@@ -89,7 +89,7 @@ public class RecordReportConverter {
 
     @NonNull
     public int[] getChildTo() {
-        return new int[]{R.id.tv_category, R.id.tv_total};
+        return new int[]{R.id.tvCategory, R.id.tvTotal};
     }
 
     private String getTitle(@NonNull SummaryRecord record) {

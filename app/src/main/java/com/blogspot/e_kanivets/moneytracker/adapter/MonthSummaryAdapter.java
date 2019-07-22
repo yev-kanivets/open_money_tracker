@@ -99,11 +99,11 @@ public class MonthSummaryAdapter extends BaseAdapter {
     }
 
     public static class ViewHolder {
-        @BindView(R.id.tv_month)
+        @BindView(R.id.tvMonth)
         TextView tvMonth;
-        @BindView(R.id.tv_total_income)
+        @BindView(R.id.tvTotalIncome)
         TextView tvTotalIncome;
-        @BindView(R.id.tv_total_expense)
+        @BindView(R.id.tvTotalExpense)
         TextView tvTotalExpense;
 
         public ViewHolder(View view) {

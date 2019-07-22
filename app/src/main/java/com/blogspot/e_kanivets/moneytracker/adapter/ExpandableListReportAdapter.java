@@ -95,9 +95,9 @@ public class ExpandableListReportAdapter extends SimpleExpandableListAdapter {
     }
 
     public static class ViewHolder {
-        @BindView(R.id.tv_category)
+        @BindView(R.id.tvCategory)
         TextView tvCategory;
-        @BindView(R.id.tv_total)
+        @BindView(R.id.tvTotal)
         TextView tvTotal;
 
         public ViewHolder(View view) {

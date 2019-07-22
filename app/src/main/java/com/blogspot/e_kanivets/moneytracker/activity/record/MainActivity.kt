@@ -18,7 +18,6 @@ import com.blogspot.e_kanivets.moneytracker.entity.Period
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record
 import com.blogspot.e_kanivets.moneytracker.report.ReportMaker
 import com.blogspot.e_kanivets.moneytracker.ui.AppRateDialog
-import com.blogspot.e_kanivets.moneytracker.ui.presenter.ShortSummaryPresenter
 import com.blogspot.e_kanivets.moneytracker.util.AnswersProxy
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
@@ -28,6 +27,7 @@ class MainActivity : BaseDrawerActivity() {
 
     private lateinit var recordList: List<Record>
     private lateinit var period: Period
+    private lateinit var recordAdapter: RecordAdapter
 
     @Inject
     lateinit var recordController: RecordController
@@ -44,8 +44,6 @@ class MainActivity : BaseDrawerActivity() {
     @Inject
     lateinit var formatController: FormatController
 
-    private lateinit var summaryPresenter: ShortSummaryPresenter
-
     private lateinit var tvDefaultAccountTitle: TextView
     private lateinit var tvDefaultAccountSum: TextView
     private lateinit var tvCurrency: TextView
@@ -57,7 +55,6 @@ class MainActivity : BaseDrawerActivity() {
         appComponent.inject(this)
 
         preferenceController.addLaunchCount()
-        summaryPresenter = ShortSummaryPresenter(this)
 
         return super.initData()
     }
@@ -73,9 +70,11 @@ class MainActivity : BaseDrawerActivity() {
         tvDefaultAccountSum = navigationView.getHeaderView(0).findViewById(R.id.tvDefaultAccountSum)
         tvCurrency = navigationView.getHeaderView(0).findViewById(R.id.tvCurrency)
 
-        val summaryView = summaryPresenter.create(true)
-        listView.addHeaderView(summaryView)
-        summaryView.setOnClickListener { showReport() }
+        recordAdapter = RecordAdapter(this, listOf(), true) { position ->
+            if (position == 0) showReport()
+            else editRecord(position)
+        }
+        recyclerView.adapter = recordAdapter
 
         spinner.setPeriodSelectedListener { period ->
             this.period = period
@@ -85,16 +84,13 @@ class MainActivity : BaseDrawerActivity() {
 
         spinner.setPeriod(periodController.readLastUsedPeriod())
 
-        listView.setOnItemClickListener { _, _, position, _ ->
-            editRecord(position)
-        }
-
         btnAddExpense.setOnClickListener { addExpense() }
         btnAddIncome.setOnClickListener { addIncome() }
     }
 
     private fun editRecord(position: Int) {
         AnswersProxy.get().logButton("Edit Record")
+
         // Minus one because of list view's header view
         val record = recordList[position - 1]
         startAddRecordActivity(record, AddRecordActivity.Mode.MODE_EDIT, record.type)
@@ -125,7 +121,7 @@ class MainActivity : BaseDrawerActivity() {
                 REQUEST_ACTION_RECORD -> update()
 
                 REQUEST_BACKUP -> {
-                    appComponent.inject(this@MainActivity)
+                    appComponent.inject(this)
                     update()
                 }
 
@@ -139,13 +135,12 @@ class MainActivity : BaseDrawerActivity() {
         recordList = recordController.getRecordsForPeriod(period)
         recordList = recordList.reversed()
 
-        listView.adapter = RecordAdapter(this, recordList)
-
         val currency = currencyController.readDefaultCurrency()
 
         val reportMaker = ReportMaker(rateController)
         val report = reportMaker.getRecordReport(currency, period, recordList)
-        summaryPresenter.update(report, currency, reportMaker.currencyNeeded(currency, recordList))
+
+        recordAdapter.setRecords(recordList, report, currency, reportMaker.currencyNeeded(currency, recordList))
 
         fillDefaultAccount()
     }
@@ -174,7 +169,6 @@ class MainActivity : BaseDrawerActivity() {
     }
 
     companion object {
-        private const val TAG = "MainActivity"
         private const val REQUEST_ACTION_RECORD = 6
     }
 

@@ -72,5 +72,4 @@ public class SummaryFragment extends Fragment {
             listView.setAdapter(new MonthSummaryAdapter(getActivity(), monthReport));
         }
     }
-
 }
