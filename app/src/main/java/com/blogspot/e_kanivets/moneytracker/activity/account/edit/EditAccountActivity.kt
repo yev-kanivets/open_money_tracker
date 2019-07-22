@@ -7,6 +7,7 @@ import android.content.Intent
 import android.support.v4.view.ViewPager.OnPageChangeListener
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.blogspot.e_kanivets.moneytracker.R
 import com.blogspot.e_kanivets.moneytracker.activity.account.edit.fragment.AccountOperationsFragment
 import com.blogspot.e_kanivets.moneytracker.activity.account.edit.fragment.EditAccountFragment
@@ -18,6 +19,8 @@ import kotlinx.android.synthetic.main.activity_edit_account.fabDone
 import kotlinx.android.synthetic.main.activity_edit_account.tabLayout
 import kotlinx.android.synthetic.main.activity_edit_account.viewPager
 import javax.inject.Inject
+import android.view.inputmethod.InputMethodManager
+import kotlinx.android.synthetic.main.fragment_edit_account.*
 
 class EditAccountActivity : BaseBackActivity() {
 
@@ -55,10 +58,28 @@ class EditAccountActivity : BaseBackActivity() {
             override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
 
             override fun onPageSelected(position: Int) {
-                if (position == 0) fabDone.show() else fabDone.hide()
+                if (position == 0) {
+                    fabDone.show()
+                    showKeyboard()
+                } else {
+                    fabDone.hide()
+                    hideKeyboard()
+                }
             }
-
         })
+    }
+
+    private fun hideKeyboard() {
+        val view: View? = currentFocus
+        if (view != null) {
+            val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+    }
+
+    private fun showKeyboard() {
+        val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(etTitle, 0)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

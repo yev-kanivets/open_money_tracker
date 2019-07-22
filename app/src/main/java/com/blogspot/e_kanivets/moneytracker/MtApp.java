@@ -6,7 +6,6 @@ import com.blogspot.e_kanivets.moneytracker.di.AppComponent;
 import com.blogspot.e_kanivets.moneytracker.di.DaggerAppComponent;
 import com.blogspot.e_kanivets.moneytracker.di.module.ControllerModule;
 import com.blogspot.e_kanivets.moneytracker.di.module.repo.CachedRepoModule;
-
 import com.blogspot.e_kanivets.moneytracker.util.AnswersProxy;
 import com.crashlytics.android.Crashlytics;
 

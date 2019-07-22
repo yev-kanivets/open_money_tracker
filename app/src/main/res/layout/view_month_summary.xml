@@ -4,13 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:paddingBottom="@dimen/half_margin"
-    android:paddingEnd="@dimen/activity_horizontal_margin"
     android:paddingStart="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/half_margin">
+    android:paddingTop="@dimen/half_margin"
+    android:paddingEnd="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/half_margin">
 
     <TextView
-        android:id="@+id/tv_month"
+        android:id="@+id/tvMonth"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|top"
@@ -20,7 +20,7 @@
         tools:text="Dec, 2016" />
 
     <TextView
-        android:id="@+id/tv_total_income"
+        android:id="@+id/tvTotalIncome"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -29,7 +29,7 @@
         tools:text="1000" />
 
     <TextView
-        android:id="@+id/tv_total_expense"
+        android:id="@+id/tvTotalExpense"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"

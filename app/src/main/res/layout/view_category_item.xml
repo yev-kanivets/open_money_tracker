@@ -5,17 +5,17 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingEnd="@dimen/half_margin"
     android:paddingStart="@dimen/normal_margin"
+    android:paddingEnd="@dimen/half_margin"
     tools:ignore="UseCompoundDrawables">
 
     <TextView
-        android:id="@+id/tv_category"
+        android:id="@+id/tvCategory"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:paddingBottom="@dimen/half_margin"
         android:paddingTop="@dimen/half_margin"
+        android:paddingBottom="@dimen/half_margin"
         android:theme="@style/Text_Body1" />
 
     <ImageView

@@ -5,13 +5,13 @@
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
     android:orientation="horizontal"
-    android:paddingBottom="@dimen/half_margin"
-    android:paddingEnd="@dimen/activity_horizontal_margin"
     android:paddingStart="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/half_margin">
+    android:paddingTop="@dimen/half_margin"
+    android:paddingEnd="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/half_margin">
 
     <TextView
-        android:id="@+id/tv_category"
+        android:id="@+id/tvCategory"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_gravity="center"
@@ -20,7 +20,7 @@
         android:theme="@style/Text_Body1" />
 
     <TextView
-        android:id="@+id/tv_total"
+        android:id="@+id/tvTotal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"

@@ -30,11 +30,11 @@ class AccountOperationsFragment : BaseFragment() {
 
     override fun initData() {
         appComponent.inject(this@AccountOperationsFragment)
-        arguments?.let { arguments -> account = arguments.getParcelable(AccountOperationsFragment.KEY_ACCOUNT) }
+        arguments?.let { arguments -> account = arguments.getParcelable(KEY_ACCOUNT) }
     }
 
     override fun initViews(view: View) {
-        listView.adapter = RecordAdapter(activity, getRecords())
+        recyclerView.adapter = RecordAdapter(requireContext(), getRecords(), false, null)
     }
 
     private fun getRecords(): List<Record> {
@@ -83,4 +83,5 @@ class AccountOperationsFragment : BaseFragment() {
         }
 
     }
+
 }

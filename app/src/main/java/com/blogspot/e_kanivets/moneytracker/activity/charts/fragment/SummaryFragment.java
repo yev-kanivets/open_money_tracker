@@ -26,7 +26,7 @@ public class SummaryFragment extends Fragment {
     @Nullable
     private IMonthReport monthReport;
 
-    @BindView(R.id.list_view)
+    @BindView(R.id.listView)
     ListView listView;
 
     public SummaryFragment() {
@@ -72,5 +72,4 @@ public class SummaryFragment extends Fragment {
             listView.setAdapter(new MonthSummaryAdapter(getActivity(), monthReport));
         }
     }
-
 }

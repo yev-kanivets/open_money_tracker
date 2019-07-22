@@ -7,14 +7,15 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_main">
 
-    <ListView
-        android:id="@+id/list_view"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
         android:layout_weight="1"
         android:background="@android:color/transparent"
-        android:drawSelectorOnTop="true" />
+        android:drawSelectorOnTop="true"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,7 +24,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btn_add_income"
+            android:id="@+id/btnAddIncome"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -32,7 +33,7 @@
             android:text="@string/add_income" />
 
         <Button
-            android:id="@+id/btn_add_expense"
+            android:id="@+id/btnAddExpense"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

@@ -101,11 +101,11 @@ public class AccountAdapter extends BaseAdapter {
     }
 
     public static class ViewHolder {
-        @BindView(R.id.tv_title)
+        @BindView(R.id.tvTitle)
         TextView tvTitle;
         @BindView(R.id.tv_cur_sum)
         TextView tvCurSum;
-        @BindView(R.id.tv_currency)
+        @BindView(R.id.tvCurrency)
         TextView tvCurrency;
 
         public ViewHolder(View view) {

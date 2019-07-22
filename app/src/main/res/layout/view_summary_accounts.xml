@@ -22,9 +22,9 @@
             style="@style/Text_Body1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_weight="1"
-            android:text="@string/currency"
-            android:layout_gravity="center_vertical" />
+            android:text="@string/currency" />
 
         <android.support.v7.widget.AppCompatSpinner
             android:id="@+id/spinner_currency"
@@ -48,7 +48,7 @@
             android:text="@string/total" />
 
         <TextView
-            android:id="@+id/tv_total"
+            android:id="@+id/tvTotal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="end"
@@ -56,13 +56,13 @@
             android:theme="@style/Text_Body2" />
 
         <TextView
-            android:id="@+id/tv_currency"
+            android:id="@+id/tvCurrency"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="monospace"
             android:gravity="end"
-            android:paddingEnd="@dimen/zero_margin"
             android:paddingStart="5dp"
+            android:paddingEnd="@dimen/zero_margin"
             android:text="New Text"
             android:theme="@style/Text_Body1" />
 
