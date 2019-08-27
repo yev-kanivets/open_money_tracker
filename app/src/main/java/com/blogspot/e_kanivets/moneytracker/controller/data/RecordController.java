@@ -92,7 +92,7 @@ public class RecordController extends BaseController<Record> {
     @NonNull @Override public List<Record> readWithCondition(String condition, String[] args) {
         List<Record> recordList = super.readWithCondition(condition, args);
 
-        // Sort record list by time field from smallest to biggest
+        // Sort record list by date field from smallest to biggest
         Collections.sort(recordList, new Comparator<Record>() {
             @Override public int compare(Record lhs, Record rhs) {
                 return lhs.getTime() < rhs.getTime() ? -1 : (lhs.getTime() == rhs.getTime() ? 0 : 1);

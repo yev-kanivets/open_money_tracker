@@ -126,7 +126,7 @@ public class Transfer extends BaseEntity implements Parcelable {
         StringBuilder sb = new StringBuilder();
         sb.append("Transfer {");
         sb.append("id = ").append(id).append(", ");
-        sb.append("time = ").append(time).append(", ");
+        sb.append("date = ").append(time).append(", ");
         sb.append("fromAccountId = ").append(fromAccountId).append(", ");
         sb.append("toAccountId = ").append(toAccountId).append(", ");
         sb.append("fromAmount = ").append(fromAmount).append(", ");

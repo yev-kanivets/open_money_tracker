@@ -14,7 +14,10 @@ import com.blogspot.e_kanivets.moneytracker.controller.PreferenceController
 import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController
 import com.blogspot.e_kanivets.moneytracker.controller.data.ExchangeRateController
 import com.blogspot.e_kanivets.moneytracker.controller.data.RecordController
+import com.blogspot.e_kanivets.moneytracker.entity.RecordAdapterData
+import com.blogspot.e_kanivets.moneytracker.entity.HeaderItem
 import com.blogspot.e_kanivets.moneytracker.entity.Period
+import com.blogspot.e_kanivets.moneytracker.entity.RecordItem
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record
 import com.blogspot.e_kanivets.moneytracker.report.ReportMaker
 import com.blogspot.e_kanivets.moneytracker.ui.AppRateDialog
@@ -26,6 +29,7 @@ import javax.inject.Inject
 class MainActivity : BaseDrawerActivity() {
 
     private lateinit var recordList: List<Record>
+    private val recordAdapterDataList: MutableList<RecordAdapterData> = mutableListOf()
     private lateinit var period: Period
     private lateinit var recordAdapter: RecordAdapter
 
@@ -91,8 +95,7 @@ class MainActivity : BaseDrawerActivity() {
     private fun editRecord(position: Int) {
         AnswersProxy.get().logButton("Edit Record")
 
-        // Minus one because of list view's header view
-        val record = recordList[position - 1]
+        val record = recordList[position - 1 - getCountHeadersItems(position - 1)]
         startAddRecordActivity(record, AddRecordActivity.Mode.MODE_EDIT, record.type)
     }
 
@@ -134,16 +137,42 @@ class MainActivity : BaseDrawerActivity() {
     override fun update() {
         recordList = recordController.getRecordsForPeriod(period)
         recordList = recordList.reversed()
+        updateRecordAdapterDataList()
 
         val currency = currencyController.readDefaultCurrency()
 
         val reportMaker = ReportMaker(rateController)
         val report = reportMaker.getRecordReport(currency, period, recordList)
 
-        recordAdapter.setRecords(recordList, report, currency, reportMaker.currencyNeeded(currency, recordList))
+        recordAdapter.setRecords(recordAdapterDataList, report, currency, reportMaker.currencyNeeded(currency, recordList))
 
         fillDefaultAccount()
     }
+
+    private fun getCountHeadersItems(position: Int): Int {
+        var countHeadersItems = 0
+        for (inOfData in 0 until position) {
+            if (recordAdapterDataList[inOfData] is HeaderItem) {
+                countHeadersItems++
+            }
+        }
+        return countHeadersItems
+    }
+
+    private fun updateRecordAdapterDataList() {
+        recordAdapterDataList.clear()
+
+        var lastDate = EMPTY_DATE
+        for (record in recordList) {
+            if (formatController.formatDateToString(record.time) != lastDate) {
+                lastDate = formatController.formatDateToString(record.time)
+                recordAdapterDataList.add(HeaderItem(lastDate))
+            }
+
+            recordAdapterDataList.add(RecordItem(record))
+        }
+    }
+
 
     private fun showAppRateDialog() {
         AnswersProxy.get().logEvent("Show App Rate Dialog")
@@ -170,6 +199,7 @@ class MainActivity : BaseDrawerActivity() {
 
     companion object {
         private const val REQUEST_ACTION_RECORD = 6
+        private const val EMPTY_DATE = "empty_date"
     }
 
 }

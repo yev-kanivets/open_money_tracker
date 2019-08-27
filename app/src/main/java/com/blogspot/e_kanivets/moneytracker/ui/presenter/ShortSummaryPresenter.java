@@ -46,10 +46,12 @@ public class ShortSummaryPresenter extends BaseSummaryPresenter {
         green = context.getResources().getColor(R.color.green);
     }
 
-    public View create(boolean shortSummary, RecordAdapter.HeaderViewHolder mainViewHolder) {
+    public View create(boolean shortSummary, RecordAdapter.SummaryViewHolder mainViewHolder) {
         view = layoutInflater.inflate(R.layout.view_summary_records, null);
         view.findViewById(R.id.iv_more).setVisibility(shortSummary ? View.VISIBLE : View.INVISIBLE);
-
+        view.setEnabled(false);
+        view.findViewById(R.id.lvSummary).setClickable(false);
+        view.findViewById(R.id.cvSummary).setClickable(true);
         view.setTag(mainViewHolder != null ? mainViewHolder : new ViewHolder(view));
 
         return view;

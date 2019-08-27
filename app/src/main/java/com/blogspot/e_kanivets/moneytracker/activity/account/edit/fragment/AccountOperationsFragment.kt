@@ -5,9 +5,13 @@ import android.view.View
 import com.blogspot.e_kanivets.moneytracker.R
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseFragment
 import com.blogspot.e_kanivets.moneytracker.adapter.RecordAdapter
+import com.blogspot.e_kanivets.moneytracker.controller.FormatController
 import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController
 import com.blogspot.e_kanivets.moneytracker.controller.data.RecordController
 import com.blogspot.e_kanivets.moneytracker.controller.data.TransferController
+import com.blogspot.e_kanivets.moneytracker.entity.HeaderItem
+import com.blogspot.e_kanivets.moneytracker.entity.RecordAdapterData
+import com.blogspot.e_kanivets.moneytracker.entity.RecordItem
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account
 import com.blogspot.e_kanivets.moneytracker.entity.data.Category
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record
@@ -23,6 +27,8 @@ class AccountOperationsFragment : BaseFragment() {
     internal lateinit var recordController: RecordController
     @Inject
     internal lateinit var transferController: TransferController
+    @Inject
+    internal lateinit var formatController: FormatController
 
     private lateinit var account: Account
 
@@ -34,17 +40,30 @@ class AccountOperationsFragment : BaseFragment() {
     }
 
     override fun initViews(view: View) {
-        recyclerView.adapter = RecordAdapter(requireContext(), getRecords(), false, null)
+        recyclerView.adapter = RecordAdapter(requireContext(), getRecordAdapterDataList(), false, null)
     }
 
-    private fun getRecords(): List<Record> {
+    private fun getRecordAdapterDataList(): List<RecordAdapterData> {
         val accountRecords = recordController.getRecordsForAccount(account)
         val accountTransfers = transferController.getTransfersForAccount(account)
 
         accountRecords += obtainRecordsFromTransfers(accountTransfers)
         accountRecords.sortByDescending { it.time }
 
-        return accountRecords
+        val recordAdapterData: MutableList<RecordAdapterData> = mutableListOf()
+
+        var lastDate = EMPTY_DATE
+
+        for (record in accountRecords) {
+            if (formatController.formatDateToString(record.time) != lastDate) {
+                lastDate = formatController.formatDateToString(record.time)
+                recordAdapterData.add(HeaderItem(lastDate))
+            }
+
+            recordAdapterData.add(RecordItem(record))
+        }
+
+        return recordAdapterData
     }
 
     private fun obtainRecordsFromTransfers(transfers: List<Transfer>): List<Record> {
@@ -73,6 +92,7 @@ class AccountOperationsFragment : BaseFragment() {
     companion object {
 
         private const val KEY_ACCOUNT = "key_account"
+        private const val EMPTY_DATE = "empty_date"
 
         fun newInstance(account: Account): AccountOperationsFragment {
             val fragment = AccountOperationsFragment()

@@ -60,7 +60,7 @@ public interface IRepo<T> {
      * Reads all records from storage that matches given condition. The same as in standard Android
      * {@link SQLiteOpenHelper}.
      *
-     * @param condition is a string of selection. For example - "time BETWEEN ? AND ?".
+     * @param condition is a string of selection. For example - "date BETWEEN ? AND ?".
      * @param args      is a string array with data to be inserted in condition string instead of '?'.
      * @return list of matched records. List can't be null, but may be zero sized.
      */
