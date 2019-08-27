@@ -7,9 +7,7 @@ import com.blogspot.e_kanivets.moneytracker.di.DaggerAppComponent;
 import com.blogspot.e_kanivets.moneytracker.di.module.ControllerModule;
 import com.blogspot.e_kanivets.moneytracker.di.module.repo.CachedRepoModule;
 import com.blogspot.e_kanivets.moneytracker.util.AnswersProxy;
-import com.crashlytics.android.Crashlytics;
 
-import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
 /**
@@ -39,7 +37,6 @@ public class MtApp extends Application {
             AnswersProxy.get().setEnabled(false);
         } else {
             Timber.plant(new ReleaseTree());
-            Fabric.with(this, new Crashlytics());
             AnswersProxy.get().setEnabled(true);
         }
     }

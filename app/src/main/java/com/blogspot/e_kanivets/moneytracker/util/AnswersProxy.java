@@ -2,8 +2,6 @@ package com.blogspot.e_kanivets.moneytracker.util;
 
 import android.support.annotation.Nullable;
 
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.ContentViewEvent;
 
 /**
  * Util class that wraps the Answers event analytic, to disable it in Debug mode and simplify
@@ -39,9 +37,6 @@ public class AnswersProxy {
 
     public boolean logEvent(@Nullable String eventName) {
         if (enabled) {
-            Answers.getInstance().logContentView(new ContentViewEvent()
-                    .putContentName(eventName)
-                    .putContentType("Event"));
             return true;
         } else {
             return false;
@@ -50,9 +45,6 @@ public class AnswersProxy {
 
     public boolean logButton(@Nullable String buttonName) {
         if (enabled) {
-            Answers.getInstance().logContentView(new ContentViewEvent()
-                    .putContentName(buttonName)
-                    .putContentType("Button"));
             return true;
         } else {
             return false;
