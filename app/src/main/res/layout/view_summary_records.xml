@@ -29,13 +29,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/iv_more"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_more" />
-
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -56,7 +49,16 @@
 
                 </LinearLayout>
 
+                <ImageView
+                    android:id="@+id/iv_more"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_more" />
+
             </LinearLayout>
+
+            <include layout="@layout/view_divider" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -99,6 +101,8 @@
 
             </LinearLayout>
 
+            <include layout="@layout/view_divider" />
+
             <TextView
                 android:id="@+id/tvTotal"
                 style="@style/Text_Body1"
@@ -106,10 +110,6 @@
                 android:layout_height="wrap_content"
                 android:gravity="end"
                 android:textAlignment="viewEnd" />
-
-            <include layout="@layout/view_divider" />
-
-            <include layout="@layout/view_divider" />
 
         </LinearLayout>
     </android.support.v7.widget.CardView>
