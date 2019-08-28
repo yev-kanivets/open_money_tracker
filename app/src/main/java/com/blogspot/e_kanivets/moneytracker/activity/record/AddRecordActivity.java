@@ -366,7 +366,7 @@ public class AddRecordActivity extends BaseBackActivity {
     }
 
     private void updateDateAndTime() {
-        tvDate.setText(formatController.formatDate(timestamp));
+        tvDate.setText(formatController.formatDateToNumber(timestamp));
         tvTime.setText(formatController.formatTime(timestamp));
     }
 

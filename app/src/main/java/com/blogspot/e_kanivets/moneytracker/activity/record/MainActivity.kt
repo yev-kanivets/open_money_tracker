@@ -15,10 +15,12 @@ import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController
 import com.blogspot.e_kanivets.moneytracker.controller.data.ExchangeRateController
 import com.blogspot.e_kanivets.moneytracker.controller.data.RecordController
 import com.blogspot.e_kanivets.moneytracker.entity.Period
+import com.blogspot.e_kanivets.moneytracker.entity.RecordItem
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record
 import com.blogspot.e_kanivets.moneytracker.report.ReportMaker
 import com.blogspot.e_kanivets.moneytracker.ui.AppRateDialog
 import com.blogspot.e_kanivets.moneytracker.util.AnswersProxy
+import com.blogspot.e_kanivets.moneytracker.util.RecordItemsBuilder
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import javax.inject.Inject
@@ -26,6 +28,7 @@ import javax.inject.Inject
 class MainActivity : BaseDrawerActivity() {
 
     private lateinit var recordList: List<Record>
+    private var recordItems: List<RecordItem> = listOf()
     private lateinit var period: Period
     private lateinit var recordAdapter: RecordAdapter
 
@@ -91,8 +94,7 @@ class MainActivity : BaseDrawerActivity() {
     private fun editRecord(position: Int) {
         AnswersProxy.get().logButton("Edit Record")
 
-        // Minus one because of list view's header view
-        val record = recordList[position - 1]
+        val record = recordList[position - 1 - getCountHeadersItems(position - 1)]
         startAddRecordActivity(record, AddRecordActivity.Mode.MODE_EDIT, record.type)
     }
 
@@ -134,15 +136,26 @@ class MainActivity : BaseDrawerActivity() {
     override fun update() {
         recordList = recordController.getRecordsForPeriod(period)
         recordList = recordList.reversed()
+        recordItems = RecordItemsBuilder().getRecordItems(recordList)
 
         val currency = currencyController.readDefaultCurrency()
 
         val reportMaker = ReportMaker(rateController)
         val report = reportMaker.getRecordReport(currency, period, recordList)
 
-        recordAdapter.setRecords(recordList, report, currency, reportMaker.currencyNeeded(currency, recordList))
+        recordAdapter.setRecords(recordItems, report, currency, reportMaker.currencyNeeded(currency, recordList))
 
         fillDefaultAccount()
+    }
+
+    private fun getCountHeadersItems(position: Int): Int {
+        var countHeadersItems = 0
+        for (inOfData in 0 until position) {
+            if (recordItems[inOfData] is RecordItem.Header) {
+                countHeadersItems++
+            }
+        }
+        return countHeadersItems
     }
 
     private fun showAppRateDialog() {
