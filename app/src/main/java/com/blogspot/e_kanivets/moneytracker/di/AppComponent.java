@@ -26,6 +26,7 @@ import com.blogspot.e_kanivets.moneytracker.ui.AppRateDialog;
 import com.blogspot.e_kanivets.moneytracker.ui.PeriodSpinner;
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.AccountsSummaryPresenter;
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.ShortSummaryPresenter;
+import com.blogspot.e_kanivets.moneytracker.util.RecordItemsBuilder;
 
 import javax.inject.Singleton;
 
@@ -87,4 +88,6 @@ public interface AppComponent {
     void inject(EditAccountFragment editAccountFragment);
 
     void inject(AccountOperationsFragment accountRecordsFragment);
+
+    void inject(RecordItemsBuilder recordItemsBuilder);
 }

@@ -9,13 +9,12 @@ import com.blogspot.e_kanivets.moneytracker.controller.FormatController
 import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController
 import com.blogspot.e_kanivets.moneytracker.controller.data.RecordController
 import com.blogspot.e_kanivets.moneytracker.controller.data.TransferController
-import com.blogspot.e_kanivets.moneytracker.entity.HeaderItem
-import com.blogspot.e_kanivets.moneytracker.entity.RecordAdapterData
 import com.blogspot.e_kanivets.moneytracker.entity.RecordItem
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account
 import com.blogspot.e_kanivets.moneytracker.entity.data.Category
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record
 import com.blogspot.e_kanivets.moneytracker.entity.data.Transfer
+import com.blogspot.e_kanivets.moneytracker.util.RecordItemsBuilder
 import kotlinx.android.synthetic.main.fragment_account_operations.*
 import javax.inject.Inject
 
@@ -40,30 +39,17 @@ class AccountOperationsFragment : BaseFragment() {
     }
 
     override fun initViews(view: View) {
-        recyclerView.adapter = RecordAdapter(requireContext(), getRecordAdapterDataList(), false, null)
+        recyclerView.adapter = RecordAdapter(requireContext(), getRecordItems(), false, null)
     }
 
-    private fun getRecordAdapterDataList(): List<RecordAdapterData> {
+    private fun getRecordItems(): List<RecordItem> {
         val accountRecords = recordController.getRecordsForAccount(account)
         val accountTransfers = transferController.getTransfersForAccount(account)
 
         accountRecords += obtainRecordsFromTransfers(accountTransfers)
         accountRecords.sortByDescending { it.time }
 
-        val recordAdapterData: MutableList<RecordAdapterData> = mutableListOf()
-
-        var lastDate = EMPTY_DATE
-
-        for (record in accountRecords) {
-            if (formatController.formatDateToString(record.time) != lastDate) {
-                lastDate = formatController.formatDateToString(record.time)
-                recordAdapterData.add(HeaderItem(lastDate))
-            }
-
-            recordAdapterData.add(RecordItem(record))
-        }
-
-        return recordAdapterData
+        return RecordItemsBuilder().getRecordItems(accountRecords)
     }
 
     private fun obtainRecordsFromTransfers(transfers: List<Transfer>): List<Record> {
@@ -92,7 +78,6 @@ class AccountOperationsFragment : BaseFragment() {
     companion object {
 
         private const val KEY_ACCOUNT = "key_account"
-        private const val EMPTY_DATE = "empty_date"
 
         fun newInstance(account: Account): AccountOperationsFragment {
             val fragment = AccountOperationsFragment()

@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/lvSummary"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="8dp">
+    android:paddingStart="@dimen/half_margin"
+    android:paddingTop="@dimen/half_margin"
+    android:paddingEnd="@dimen/half_margin"
+    android:paddingBottom="@dimen/quarter_margin">
 
-    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    <android.support.v7.widget.CardView
         android:id="@+id/cvSummary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,6 +28,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/iv_more"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_more" />
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -45,16 +56,7 @@
 
                 </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/iv_more"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_more" />
-
             </LinearLayout>
-
-            <include layout="@layout/view_divider" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -107,6 +109,8 @@
 
             <include layout="@layout/view_divider" />
 
+            <include layout="@layout/view_divider" />
+
         </LinearLayout>
     </android.support.v7.widget.CardView>
-</LinearLayout>
+</FrameLayout>

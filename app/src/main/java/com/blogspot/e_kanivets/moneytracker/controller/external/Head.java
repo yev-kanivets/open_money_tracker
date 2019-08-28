@@ -7,7 +7,7 @@ package com.blogspot.e_kanivets.moneytracker.controller.external;
  * @author Evgenii Kanivets
  */
 public interface Head {
-    String TIME = "date";
+    String TIME = "time";
     String TITLE = "title";
     String CATEGORY = "category";
     String PRICE = "price";

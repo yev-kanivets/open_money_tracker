@@ -171,7 +171,7 @@ public class Record extends BaseEntity implements Parcelable {
         }
         sb.append(", ");
 
-        sb.append("date = ").append(time).append(", ");
+        sb.append("time = ").append(time).append(", ");
         sb.append("category = ").append(category).append(", ");
         sb.append("price = ").append(price).append(", ");
         sb.append("account = ").append(account).append(", ");

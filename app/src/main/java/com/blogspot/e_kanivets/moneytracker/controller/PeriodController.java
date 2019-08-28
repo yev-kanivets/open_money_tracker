@@ -133,7 +133,7 @@ public class PeriodController {
     public Period allTimePeriod() {
         Calendar cal = Calendar.getInstance();
 
-        // set start of date by Jesus
+        // set start of time by Jesus
         cal.set(Calendar.YEAR, 2000);
         cal.set(Calendar.MONTH, Calendar.JANUARY);
         cal.set(Calendar.DAY_OF_MONTH, 1);
@@ -141,7 +141,7 @@ public class PeriodController {
 
         Date first = cal.getTime();
 
-        // set possible end of date
+        // set possible end of time
         cal.set(Calendar.YEAR, 3000);
         cal.set(Calendar.MONTH, Calendar.DECEMBER);
         cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));

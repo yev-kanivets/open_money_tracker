@@ -11,8 +11,6 @@ import android.widget.TextView
 import com.blogspot.e_kanivets.moneytracker.MtApp
 import com.blogspot.e_kanivets.moneytracker.R
 import com.blogspot.e_kanivets.moneytracker.controller.FormatController
-import com.blogspot.e_kanivets.moneytracker.entity.RecordAdapterData
-import com.blogspot.e_kanivets.moneytracker.entity.HeaderItem
 import com.blogspot.e_kanivets.moneytracker.entity.RecordItem
 import com.blogspot.e_kanivets.moneytracker.report.record.IRecordReport
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.ShortSummaryPresenter
@@ -34,14 +32,14 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private var red: Int
     private var green: Int
 
-    private var items: List<RecordAdapterData>
+    private var items: List<RecordItem>
     private var context: Context
 
     private var summaryPresenter: ShortSummaryPresenter
     private var isSummaryViewNeeded: Boolean = false
     private var summaryViewHolder: SummaryViewHolder
 
-    constructor(context: Context, items: List<RecordAdapterData>, isSummaryViewNeeded: Boolean, itemClickListener: ((Int) -> Unit)?) {
+    constructor(context: Context, items: List<RecordItem>, isSummaryViewNeeded: Boolean, itemClickListener: ((Int) -> Unit)?) {
         this.context = context
         this.items = items
 
@@ -65,7 +63,7 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     override fun getItemViewType(position: Int): Int = if (position == 0 && isSummaryViewNeeded) {
         TYPE_SUMMARY
-    } else if (items[position - if (isSummaryViewNeeded) 1 else 0] is HeaderItem) {
+    } else if (items[position - if (isSummaryViewNeeded) 1 else 0] is RecordItem.Header) {
         TYPE_HEADER
     } else {
         TYPE_RECORD
@@ -78,24 +76,24 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 else -> summaryViewHolder
             }
 
-    override fun onBindViewHolder(rvViewHolder: RecyclerView.ViewHolder, position: Int) {
+    override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
         if (position == 0 && isSummaryViewNeeded) {
             //adapter already bound to view
             return
         }
 
-        if (rvViewHolder is RecordViewHolder) {
-            val record = items[position - if (isSummaryViewNeeded) 1 else 0] as RecordItem
-            rvViewHolder.tvPrice.setTextColor(if (record.isIncome) green else red)
+        if (viewHolder is RecordViewHolder) {
+            val record = items[position - if (isSummaryViewNeeded) 1 else 0] as RecordItem.Record
+            viewHolder.tvPrice.setTextColor(if (record.isIncome) green else red)
 
             val price = (if (record.isIncome) record.fullPrice else getNegative(record.fullPrice))
-            rvViewHolder.tvPrice.text = formatController.formatSignedAmount(price)
-            rvViewHolder.tvTitle.text = record.title
-            rvViewHolder.tvCategory.text = record.categoryName
-            rvViewHolder.tvCurrency.text = record.currency
+            viewHolder.tvPrice.text = formatController.formatSignedAmount(price)
+            viewHolder.tvTitle.text = record.title
+            viewHolder.tvCategory.text = record.categoryName
+            viewHolder.tvCurrency.text = record.currency
         } else {
-            val headerViewHolder = rvViewHolder as HeaderViewHolder
-            val header = items[position - if (isSummaryViewNeeded) 1 else 0] as HeaderItem
+            val headerViewHolder = viewHolder as HeaderViewHolder
+            val header = items[position - if (isSummaryViewNeeded) 1 else 0] as RecordItem.Header
             headerViewHolder.tvDate.text = header.date
         }
     }
@@ -104,7 +102,7 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return -1 * number
     }
 
-    fun setRecords(itemsList: List<RecordAdapterData>, report: IRecordReport?, currency: String, ratesNeeded: List<String>) {
+    fun setRecords(itemsList: List<RecordItem>, report: IRecordReport?, currency: String, ratesNeeded: List<String>) {
         items = itemsList
         summaryPresenter.update(report, currency, ratesNeeded)
         notifyDataSetChanged()
