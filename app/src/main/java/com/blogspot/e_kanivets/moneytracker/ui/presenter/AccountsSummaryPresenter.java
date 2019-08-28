@@ -116,7 +116,7 @@ public class AccountsSummaryPresenter extends BaseSummaryPresenter {
     }
 
     public static class ViewHolder {
-        @BindView(R.id.spinner_currency)
+        @BindView(R.id.spinnerCurrency)
         AppCompatSpinner spinnerCurrency;
         @BindView(R.id.tvTotal)
         TextView tvTotal;
