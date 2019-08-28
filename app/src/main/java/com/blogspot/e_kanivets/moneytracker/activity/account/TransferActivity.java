@@ -13,7 +13,7 @@ import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.TransferController;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Transfer;
-import com.blogspot.e_kanivets.moneytracker.util.AnswersProxy;
+import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy;
 import com.blogspot.e_kanivets.moneytracker.util.validator.IValidator;
 import com.blogspot.e_kanivets.moneytracker.util.validator.TransferValidator;
 
@@ -104,9 +104,9 @@ public class TransferActivity extends BaseBackActivity {
     }
 
     private void tryTransfer() {
-        AnswersProxy.get().logButton("Done Transfer");
+        CrashlyticsProxy.get().logButton("Done Transfer");
         if (doTransfer()) {
-            AnswersProxy.get().logEvent("Done Transfer");
+            CrashlyticsProxy.get().logEvent("Done Transfer");
             setResult(RESULT_OK);
             finish();
         }

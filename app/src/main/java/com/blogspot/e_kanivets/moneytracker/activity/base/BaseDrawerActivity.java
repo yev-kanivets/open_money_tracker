@@ -16,7 +16,7 @@ import com.blogspot.e_kanivets.moneytracker.activity.external.ImportExportActivi
 import com.blogspot.e_kanivets.moneytracker.activity.SettingsActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.account.AccountsActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.exchange_rate.ExchangeRatesActivity;
-import com.blogspot.e_kanivets.moneytracker.util.AnswersProxy;
+import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy;
 
 import butterknife.BindView;
 
@@ -134,36 +134,36 @@ public abstract class BaseDrawerActivity extends BaseActivity
     }
 
     private void showAccounts() {
-        AnswersProxy.get().logButton("Show Accounts");
+        CrashlyticsProxy.get().logButton("Show Accounts");
         startActivityForResult(new Intent(BaseDrawerActivity.this, AccountsActivity.class),
                 REQUEST_ACCOUNTS);
     }
 
     private void showRates() {
-        AnswersProxy.get().logButton("Show Rates");
+        CrashlyticsProxy.get().logButton("Show Rates");
         startActivityForResult(new Intent(BaseDrawerActivity.this, ExchangeRatesActivity.class),
                 REQUEST_RATES);
     }
 
     private void showCharts() {
-        AnswersProxy.get().logButton("Show Charts");
+        CrashlyticsProxy.get().logButton("Show Charts");
         startActivity(new Intent(BaseDrawerActivity.this, ChartsActivity.class));
     }
 
     private void showBackup() {
-        AnswersProxy.get().logButton("Show Backup");
+        CrashlyticsProxy.get().logButton("Show Backup");
         startActivityForResult(new Intent(BaseDrawerActivity.this, BackupActivity.class),
                 REQUEST_BACKUP);
     }
 
     private void showImportExport() {
-        AnswersProxy.get().logButton("Show Import Export");
+        CrashlyticsProxy.get().logButton("Show Import Export");
         startActivityForResult(new Intent(BaseDrawerActivity.this, ImportExportActivity.class),
                 REQUEST_IMPORT_EXPORT);
     }
 
     private void showSettings() {
-        AnswersProxy.get().logButton("Show Settings");
+        CrashlyticsProxy.get().logButton("Show Settings");
         startActivityForResult(new Intent(BaseDrawerActivity.this, SettingsActivity.class),
                 REQUEST_SETTINGS);
     }

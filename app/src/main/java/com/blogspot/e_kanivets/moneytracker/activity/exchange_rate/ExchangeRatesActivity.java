@@ -14,7 +14,7 @@ import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.ExchangeRateAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.data.ExchangeRateController;
 import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRatePair;
-import com.blogspot.e_kanivets.moneytracker.util.AnswersProxy;
+import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy;
 import com.blogspot.e_kanivets.moneytracker.util.ExchangeRatesSummarizer;
 
 import java.util.Collections;
@@ -80,7 +80,7 @@ public class ExchangeRatesActivity extends BaseBackActivity {
     }
 
     public void deleteExchangeRate(int position) {
-        AnswersProxy.get().logButton("Delete Exchange Rate");
+        CrashlyticsProxy.get().logButton("Delete Exchange Rate");
         rateController.deleteExchangeRatePair(exchangeRateList.get(position));
         update();
         setResult(RESULT_OK);
@@ -88,14 +88,14 @@ public class ExchangeRatesActivity extends BaseBackActivity {
 
     @OnClick(R.id.btn_add_exchange_rate)
     public void addExchangeRate() {
-        AnswersProxy.get().logButton("Add Exchange Rate");
+        CrashlyticsProxy.get().logButton("Add Exchange Rate");
         Intent intent = new Intent(ExchangeRatesActivity.this, AddExchangeRateActivity.class);
         startActivityForResult(intent, REQUEST_ADD_EXCHANGE_RATE);
     }
 
     @OnItemClick(R.id.listView)
     public void addExchangeRateOnBaseOfExisted(int position) {
-        AnswersProxy.get().logButton("Edit Exchange Rate");
+        CrashlyticsProxy.get().logButton("Edit Exchange Rate");
         if (position < 0 || position >= exchangeRateList.size()) return;
         Intent intent = new Intent(ExchangeRatesActivity.this, AddExchangeRateActivity.class);
         intent.putExtra(AddExchangeRateActivity.KEY_EXCHANGE_RATE, exchangeRateList.get(position));

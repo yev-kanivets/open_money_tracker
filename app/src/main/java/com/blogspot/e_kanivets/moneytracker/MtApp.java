@@ -6,10 +6,8 @@ import com.blogspot.e_kanivets.moneytracker.di.AppComponent;
 import com.blogspot.e_kanivets.moneytracker.di.DaggerAppComponent;
 import com.blogspot.e_kanivets.moneytracker.di.module.ControllerModule;
 import com.blogspot.e_kanivets.moneytracker.di.module.repo.CachedRepoModule;
-import com.blogspot.e_kanivets.moneytracker.util.AnswersProxy;
-import com.crashlytics.android.Crashlytics;
+import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy;
 
-import io.fabric.sdk.android.Fabric;
 import timber.log.Timber;
 
 /**
@@ -36,11 +34,11 @@ public class MtApp extends Application {
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
-            AnswersProxy.get().setEnabled(false);
+            CrashlyticsProxy.get().setEnabled(false);
         } else {
             Timber.plant(new ReleaseTree());
-            Fabric.with(this, new Crashlytics());
-            AnswersProxy.get().setEnabled(true);
+            CrashlyticsProxy.startCrashlytics(this);
+            CrashlyticsProxy.get().setEnabled(true);
         }
     }
 

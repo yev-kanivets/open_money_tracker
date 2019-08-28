@@ -18,7 +18,7 @@ import com.blogspot.e_kanivets.moneytracker.entity.Period
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record
 import com.blogspot.e_kanivets.moneytracker.report.ReportMaker
 import com.blogspot.e_kanivets.moneytracker.ui.AppRateDialog
-import com.blogspot.e_kanivets.moneytracker.util.AnswersProxy
+import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import javax.inject.Inject
@@ -89,7 +89,7 @@ class MainActivity : BaseDrawerActivity() {
     }
 
     private fun editRecord(position: Int) {
-        AnswersProxy.get().logButton("Edit Record")
+        CrashlyticsProxy.get().logButton("Edit Record")
 
         // Minus one because of list view's header view
         val record = recordList[position - 1]
@@ -97,17 +97,17 @@ class MainActivity : BaseDrawerActivity() {
     }
 
     private fun addExpense() {
-        AnswersProxy.get().logButton("Add Expense")
+        CrashlyticsProxy.get().logButton("Add Expense")
         startAddRecordActivity(null, AddRecordActivity.Mode.MODE_ADD, Record.TYPE_EXPENSE)
     }
 
     private fun addIncome() {
-        AnswersProxy.get().logButton("Add Income")
+        CrashlyticsProxy.get().logButton("Add Income")
         startAddRecordActivity(null, AddRecordActivity.Mode.MODE_ADD, Record.TYPE_INCOME)
     }
 
     private fun showReport() {
-        AnswersProxy.get().logButton("Show Report")
+        CrashlyticsProxy.get().logButton("Show Report")
         val intent = Intent(this, ReportActivity::class.java)
         intent.putExtra(ReportActivity.KEY_PERIOD, period)
         startActivity(intent)
@@ -146,7 +146,7 @@ class MainActivity : BaseDrawerActivity() {
     }
 
     private fun showAppRateDialog() {
-        AnswersProxy.get().logEvent("Show App Rate Dialog")
+        CrashlyticsProxy.get().logEvent("Show App Rate Dialog")
         val dialog = AppRateDialog(this)
         dialog.setCanceledOnTouchOutside(false)
         dialog.show()

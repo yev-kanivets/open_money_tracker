@@ -49,6 +49,17 @@ android {
             signingConfig signingConfigs.releaseConfig
         }
     }
+
+    flavorDimensions "edition"
+    productFlavors {
+        free {
+            dimension "edition"
+        }
+        proprietary {
+            dimension "edition"
+        }
+    }
+
     lintOptions {
         checkReleaseBuilds false
         abortOnError false
@@ -65,7 +76,7 @@ apply plugin: 'com.getkeepsafe.dexcount'
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
+    proprietaryCompile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
         transitive = true
     }
 

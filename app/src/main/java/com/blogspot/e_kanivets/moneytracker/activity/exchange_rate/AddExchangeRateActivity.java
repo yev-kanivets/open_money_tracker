@@ -14,7 +14,7 @@ import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController;
 import com.blogspot.e_kanivets.moneytracker.controller.FormatController;
 import com.blogspot.e_kanivets.moneytracker.controller.data.ExchangeRateController;
 import com.blogspot.e_kanivets.moneytracker.entity.ExchangeRatePair;
-import com.blogspot.e_kanivets.moneytracker.util.AnswersProxy;
+import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy;
 import com.blogspot.e_kanivets.moneytracker.util.validator.ExchangeRatePairValidator;
 import com.blogspot.e_kanivets.moneytracker.util.validator.IValidator;
 
@@ -126,9 +126,9 @@ public class AddExchangeRateActivity extends BaseBackActivity {
     }
 
     private void tryAddExchangeRate() {
-        AnswersProxy.get().logButton("Done Exchange Rate");
+        CrashlyticsProxy.get().logButton("Done Exchange Rate");
         if (addExchangeRate()) {
-            AnswersProxy.get().logEvent("Done Exchange Rate");
+            CrashlyticsProxy.get().logEvent("Done Exchange Rate");
             setResult(RESULT_OK);
             finish();
         }

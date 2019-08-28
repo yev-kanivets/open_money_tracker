@@ -12,7 +12,7 @@ import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.BackupAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.backup.BackupController;
 import com.blogspot.e_kanivets.moneytracker.controller.PreferenceController;
-import com.blogspot.e_kanivets.moneytracker.util.AnswersProxy;
+import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy;
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.android.Auth;
 import com.dropbox.core.v2.DbxClientV2;
@@ -105,7 +105,7 @@ public class BackupActivity extends BaseBackActivity
     }
 
     @Override public void onBackupSuccess() {
-        AnswersProxy.get().logEvent("Backup success");
+        CrashlyticsProxy.get().logEvent("Backup success");
         Timber.d("Backup success.");
         if (isFinishing()) return;
 
@@ -114,7 +114,7 @@ public class BackupActivity extends BaseBackActivity
     }
 
     @Override public void onBackupFailure(String reason) {
-        AnswersProxy.get().logEvent("Backup failure");
+        CrashlyticsProxy.get().logEvent("Backup failure");
         Timber.d("Backup failure.");
         if (isFinishing()) return;
 
@@ -125,7 +125,7 @@ public class BackupActivity extends BaseBackActivity
     }
 
     @Override public void onRestoreSuccess(@NonNull String backupName) {
-        AnswersProxy.get().logEvent("Restore Success");
+        CrashlyticsProxy.get().logEvent("Restore Success");
         Timber.d("Restore success.");
         if (isFinishing()) return;
 
@@ -146,7 +146,7 @@ public class BackupActivity extends BaseBackActivity
     }
 
     @Override public void onRestoreFailure(String reason) {
-        AnswersProxy.get().logEvent("Restore Failure");
+        CrashlyticsProxy.get().logEvent("Restore Failure");
         Timber.d("Restore failure.");
         if (isFinishing()) return;
 
@@ -157,7 +157,7 @@ public class BackupActivity extends BaseBackActivity
     }
 
     @Override public void onRemoveSuccess() {
-        AnswersProxy.get().logEvent("Remove Success");
+        CrashlyticsProxy.get().logEvent("Remove Success");
         Timber.d("Remove success.");
         if (isFinishing()) return;
 
@@ -166,7 +166,7 @@ public class BackupActivity extends BaseBackActivity
     }
 
     @Override public void onRemoveFailure(@Nullable String reason) {
-        AnswersProxy.get().logEvent("Remove Failure");
+        CrashlyticsProxy.get().logEvent("Remove Failure");
         Timber.d("Remove failure.");
         if (isFinishing()) return;
 
@@ -175,13 +175,13 @@ public class BackupActivity extends BaseBackActivity
     }
 
     @OnClick(R.id.btn_backup_now) public void backupNow() {
-        AnswersProxy.get().logButton("Make Backup");
+        CrashlyticsProxy.get().logButton("Make Backup");
         startProgress(getString(R.string.making_backup));
         backupController.makeBackup(dbClient);
     }
 
     @OnItemClick(R.id.listView) public void restoreBackupClicked(int position) {
-        AnswersProxy.get().logButton("Restore backup");
+        CrashlyticsProxy.get().logButton("Restore backup");
         final String backupName = listView.getAdapter().getItem(position).toString();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(BackupActivity.this);
