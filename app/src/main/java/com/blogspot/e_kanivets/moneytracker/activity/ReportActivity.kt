@@ -26,14 +26,12 @@ class ReportActivity : BaseBackActivity() {
     @Inject
     lateinit var currencyController: CurrencyController
 
-    private lateinit var recordList: List<Record>
+    private var recordList: List<Record> = listOf()
     private var period: Period? = null
 
-    private lateinit var shortSummaryPresenter: ShortSummaryPresenter
+    private val shortSummaryPresenter: ShortSummaryPresenter = ShortSummaryPresenter(this)
 
-    override fun getContentViewId(): Int {
-        return R.layout.activity_report
-    }
+    override fun getContentViewId() = R.layout.activity_report
 
     override fun initData(): Boolean {
         super.initData()
@@ -52,7 +50,6 @@ class ReportActivity : BaseBackActivity() {
 
         initSpinnerCurrency()
 
-        shortSummaryPresenter = ShortSummaryPresenter(this)
         expListView.addHeaderView(shortSummaryPresenter.create(false, null))
     }
 
@@ -74,15 +71,12 @@ class ReportActivity : BaseBackActivity() {
     private fun initSpinnerCurrency() {
         val currencyList = currencyController.readAll()
 
-        spinnerCurrency.adapter = ArrayAdapter(this,
-                R.layout.view_spinner_item, currencyList)
+        spinnerCurrency.adapter = ArrayAdapter(this, R.layout.view_spinner_item, currencyList)
         spinnerCurrency.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                update(spinnerCurrency.selectedItem.toString())
-            }
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) =
+                    update(spinnerCurrency.selectedItem.toString())
 
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-            }
+            override fun onNothingSelected(p0: AdapterView<*>?) {}
         }
 
         val currency = currencyController.readDefaultCurrency()
