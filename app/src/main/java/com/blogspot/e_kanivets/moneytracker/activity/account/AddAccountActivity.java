@@ -12,7 +12,7 @@ import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity;
 import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController;
 import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
-import com.blogspot.e_kanivets.moneytracker.util.AnswersProxy;
+import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy;
 import com.blogspot.e_kanivets.moneytracker.util.validator.AccountValidator;
 import com.blogspot.e_kanivets.moneytracker.util.validator.IValidator;
 
@@ -83,9 +83,9 @@ public class AddAccountActivity extends BaseBackActivity {
     }
 
     private void tryAddAccount() {
-        AnswersProxy.get().logButton("Done Account");
+        CrashlyticsProxy.get().logButton("Done Account");
         if (addAccount()) {
-            AnswersProxy.get().logEvent("Done Account");
+            CrashlyticsProxy.get().logEvent("Done Account");
             setResult(RESULT_OK);
             finish();
         }

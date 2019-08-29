@@ -13,7 +13,7 @@ import com.blogspot.e_kanivets.moneytracker.adapter.AccountAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.AccountsSummaryPresenter;
-import com.blogspot.e_kanivets.moneytracker.util.AnswersProxy;
+import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy;
 
 import javax.inject.Inject;
 
@@ -82,13 +82,13 @@ public class AccountsActivity extends BaseBackActivity {
     }
 
     public void makeTransfer() {
-        AnswersProxy.get().logButton("Add Transfer");
+        CrashlyticsProxy.get().logButton("Add Transfer");
         startActivityForResult(new Intent(AccountsActivity.this, TransferActivity.class), REQUEST_TRANSFER);
     }
 
     @OnClick(R.id.btn_add_account)
     public void addAccount() {
-        AnswersProxy.get().logButton("Add Account");
+        CrashlyticsProxy.get().logButton("Add Account");
         Intent intent = new Intent(AccountsActivity.this, AddAccountActivity.class);
         startActivityForResult(intent, REQUEST_ADD_ACCOUNT);
     }

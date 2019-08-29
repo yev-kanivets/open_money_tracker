@@ -1,33 +1,40 @@
 package com.blogspot.e_kanivets.moneytracker.util;
 
+import android.content.Context;
 import android.support.annotation.Nullable;
 
+import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.ContentViewEvent;
+import io.fabric.sdk.android.Fabric;
 
 /**
- * Util class that wraps the Answers event analytic, to disable it in Debug mode and simplify
- * an interface.
+ * Util class that wraps all Crashlytics interactions to disable Answers in
+ * Debug mode and allow not including Crashlytics in free (fdroid) builds.
  * Created on 1/11/17.
  *
  * @author Evgenii Kanivets
  */
 
-public class AnswersProxy {
-    private static AnswersProxy instance;
+public class CrashlyticsProxy {
+    private static CrashlyticsProxy instance;
 
-    public static AnswersProxy get() {
+    public static CrashlyticsProxy get() {
         if (instance == null) {
-            instance = new AnswersProxy();
+            instance = new CrashlyticsProxy();
         }
         return instance;
     }
 
-    private AnswersProxy() {
+    private CrashlyticsProxy() {
 
     }
 
     private boolean enabled;
+
+    public static void startCrashlytics(Context context) {
+        Fabric.with(context, new Crashlytics());
+    }
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;

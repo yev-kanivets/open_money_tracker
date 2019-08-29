@@ -33,7 +33,7 @@ import com.blogspot.e_kanivets.moneytracker.entity.data.Account;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Category;
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record;
 import com.blogspot.e_kanivets.moneytracker.ui.AddRecordUiDecorator;
-import com.blogspot.e_kanivets.moneytracker.util.AnswersProxy;
+import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy;
 import com.blogspot.e_kanivets.moneytracker.util.CategoryAutoCompleter;
 import com.blogspot.e_kanivets.moneytracker.util.validator.IValidator;
 import com.blogspot.e_kanivets.moneytracker.util.validator.RecordValidator;
@@ -224,7 +224,7 @@ public class AddRecordActivity extends BaseBackActivity {
 
     @OnClick(R.id.tv_date)
     public void selectDate() {
-        AnswersProxy.get().logButton("Select Date");
+        CrashlyticsProxy.get().logButton("Select Date");
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(timestamp);
         DatePickerDialog dialog = new DatePickerDialog(AddRecordActivity.this, uiDecorator.getTheme(type),
@@ -251,7 +251,7 @@ public class AddRecordActivity extends BaseBackActivity {
 
     @OnClick(R.id.tv_time)
     public void selectTime() {
-        AnswersProxy.get().logButton("Show Time");
+        CrashlyticsProxy.get().logButton("Show Time");
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(timestamp);
         TimePickerDialog dialog = new TimePickerDialog(AddRecordActivity.this, uiDecorator.getTheme(type),
@@ -317,9 +317,9 @@ public class AddRecordActivity extends BaseBackActivity {
     }
 
     private void tryRecord() {
-        AnswersProxy.get().logButton("Done Record");
+        CrashlyticsProxy.get().logButton("Done Record");
         if (addRecord()) {
-            AnswersProxy.get().logEvent("Done Record");
+            CrashlyticsProxy.get().logEvent("Done Record");
             setResult(RESULT_OK);
             finish();
         }
