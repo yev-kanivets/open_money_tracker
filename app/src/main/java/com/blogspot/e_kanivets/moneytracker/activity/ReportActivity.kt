@@ -29,7 +29,7 @@ class ReportActivity : BaseBackActivity() {
     private var recordList: List<Record> = listOf()
     private var period: Period? = null
 
-    private val shortSummaryPresenter: ShortSummaryPresenter = ShortSummaryPresenter(this)
+    private lateinit var shortSummaryPresenter: ShortSummaryPresenter
 
     override fun getContentViewId() = R.layout.activity_report
 
@@ -41,6 +41,7 @@ class ReportActivity : BaseBackActivity() {
         if (period == null) return false
 
         recordList = recordController.getRecordsForPeriod(period)
+        shortSummaryPresenter = ShortSummaryPresenter(this)
 
         return true
     }

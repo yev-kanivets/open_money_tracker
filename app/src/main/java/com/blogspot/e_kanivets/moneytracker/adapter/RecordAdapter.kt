@@ -110,14 +110,12 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     class RecordViewHolder : RecyclerView.ViewHolder {
 
-        var container: LinearLayout
         var tvPrice: TextView
         var tvTitle: TextView
         var tvCategory: TextView
         var tvCurrency: TextView
 
         constructor(view: View, itemClickListener: ((Int) -> Unit)?) : super(view) {
-            container = view.container
             tvPrice = view.tvPrice
             tvTitle = view.tvTitle
             tvCategory = view.tvCategory
