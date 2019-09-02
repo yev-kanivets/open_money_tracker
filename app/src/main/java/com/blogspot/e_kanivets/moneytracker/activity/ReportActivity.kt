@@ -15,6 +15,8 @@ import com.blogspot.e_kanivets.moneytracker.report.ReportMaker
 import com.blogspot.e_kanivets.moneytracker.report.record.RecordReportConverter
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.ShortSummaryPresenter
 import kotlinx.android.synthetic.main.activity_report.*
+import java.util.ArrayList
+import java.util.HashMap
 import javax.inject.Inject
 
 class ReportActivity : BaseBackActivity() {
@@ -60,7 +62,22 @@ class ReportActivity : BaseBackActivity() {
 
         var adapter: ExpandableListReportAdapter? = null
 
+        //val childData = ArrayList<List<Map<String, String>>>()
+
         if (report != null) {
+            /*for (categoryRecord in report.summary) {
+                val childDataItem = ArrayList<Map<String, String>>()
+                for (summaryRecord in categoryRecord.summaryRecordList) {
+                    val m = HashMap<String, String>()
+                    //m[TITLE_PARAM_NAME] = summaryRecord.title
+                    //m[PRICE_PARAM_NAME] = java.lang.Double.toString(summaryRecord.amount)
+
+                    childDataItem.add(m)
+                }
+
+                childData.add(childDataItem)
+            }*/
+
             val recordReportConverter = RecordReportConverter(report)
             adapter = ExpandableListReportAdapter(this, recordReportConverter)
         }

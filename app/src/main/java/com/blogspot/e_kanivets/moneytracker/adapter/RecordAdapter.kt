@@ -76,7 +76,7 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
         if (position == 0 && isSummaryViewNeeded) {
-            //adapter already bound to view
+            //view holder already bound to view
             return
         }
 

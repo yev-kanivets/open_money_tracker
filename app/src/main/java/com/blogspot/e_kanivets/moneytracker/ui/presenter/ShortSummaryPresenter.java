@@ -1,6 +1,7 @@
 package com.blogspot.e_kanivets.moneytracker.ui.presenter;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -103,7 +104,7 @@ public class ShortSummaryPresenter extends BaseSummaryPresenter {
         }
     }
 
-    public static class ViewHolder implements SummaryViewInterface {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements SummaryViewInterface {
 
         @BindView(R.id.tvPeriod)
         TextView tvPeriod;
@@ -138,6 +139,7 @@ public class ShortSummaryPresenter extends BaseSummaryPresenter {
         }
 
         public ViewHolder(View view) {
+            super(view);
             ButterKnife.bind(this, view);
         }
     }
