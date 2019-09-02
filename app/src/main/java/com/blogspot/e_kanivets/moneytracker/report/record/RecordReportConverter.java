@@ -1,3 +1,4 @@
+
 package com.blogspot.e_kanivets.moneytracker.report.record;
 
 import android.support.annotation.LayoutRes;
@@ -18,6 +19,7 @@ import java.util.Map;
  *
  * @author Evgenii Kanivets
  */
+
 public class RecordReportConverter {
     public static final String TITLE_PARAM_NAME = "title";
     public static final String PRICE_PARAM_NAME = "price";
@@ -65,7 +67,7 @@ public class RecordReportConverter {
             List<Map<String, String>> childDataItem = new ArrayList<>();
             for (SummaryRecord summaryRecord : categoryRecord.getSummaryRecordList()) {
                 Map<String, String> m = new HashMap<>();
-                m.put(TITLE_PARAM_NAME, getTitle(summaryRecord));
+                m.put(TITLE_PARAM_NAME, summaryRecord.getTitle());
                 m.put(PRICE_PARAM_NAME, Double.toString(summaryRecord.getAmount()));
 
                 childDataItem.add(m);
@@ -92,9 +94,4 @@ public class RecordReportConverter {
         return new int[]{R.id.tvCategory, R.id.tvTotal};
     }
 
-    private String getTitle(@NonNull SummaryRecord record) {
-        int count = record.getRecordList().size();
-        if (count <= 1) return record.getTitle();
-        else return record.getTitle() + " (" + count + ")";
-    }
 }
