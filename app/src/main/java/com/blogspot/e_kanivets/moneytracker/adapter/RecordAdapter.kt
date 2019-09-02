@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
 import com.blogspot.e_kanivets.moneytracker.MtApp
 import com.blogspot.e_kanivets.moneytracker.R
@@ -16,7 +15,6 @@ import com.blogspot.e_kanivets.moneytracker.report.record.IRecordReport
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.ShortSummaryPresenter
 import kotlinx.android.synthetic.main.view_header_date.view.*
 import kotlinx.android.synthetic.main.view_record.view.*
-import kotlinx.android.synthetic.main.view_record.view.container
 import kotlinx.android.synthetic.main.view_summary_records.view.*
 import javax.inject.Inject
 

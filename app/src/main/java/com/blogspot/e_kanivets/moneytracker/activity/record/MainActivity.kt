@@ -93,8 +93,8 @@ class MainActivity : BaseDrawerActivity() {
 
     private fun editRecord(position: Int) {
         AnswersProxy.get().logButton("Edit Record")
-
-        val record = recordList[position - 1 - getCountHeadersItems(position - 1)]
+        // -1 because SummaryView
+        val record = recordList[getRecordPosition(position - 1)]
         startAddRecordActivity(record, AddRecordActivity.Mode.MODE_EDIT, record.type)
     }
 
@@ -148,14 +148,15 @@ class MainActivity : BaseDrawerActivity() {
         fillDefaultAccount()
     }
 
-    private fun getCountHeadersItems(position: Int): Int {
-        var countHeadersItems = 0
+    private fun getRecordPosition(position: Int): Int {
+        var recordPosition = 0
+
         for (inOfData in 0 until position) {
-            if (recordItems[inOfData] is RecordItem.Header) {
-                countHeadersItems++
+            if (recordItems[inOfData] is RecordItem.Record) {
+                recordPosition++
             }
         }
-        return countHeadersItems
+        return recordPosition
     }
 
     private fun showAppRateDialog() {
