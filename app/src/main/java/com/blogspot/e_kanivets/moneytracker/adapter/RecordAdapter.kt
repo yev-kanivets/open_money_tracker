@@ -11,11 +11,8 @@ import com.blogspot.e_kanivets.moneytracker.MtApp
 import com.blogspot.e_kanivets.moneytracker.R
 import com.blogspot.e_kanivets.moneytracker.controller.FormatController
 import com.blogspot.e_kanivets.moneytracker.entity.RecordItem
-import com.blogspot.e_kanivets.moneytracker.report.record.IRecordReport
-import com.blogspot.e_kanivets.moneytracker.ui.presenter.ShortSummaryPresenter
 import kotlinx.android.synthetic.main.view_header_date.view.*
 import kotlinx.android.synthetic.main.view_record.view.*
-import kotlinx.android.synthetic.main.view_summary_records.view.*
 import javax.inject.Inject
 
 class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -33,11 +30,10 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private var items: List<RecordItem>
     private var context: Context
 
-    private var summaryPresenter: ShortSummaryPresenter
     private var isSummaryViewNeeded: Boolean = false
-    private var summaryViewHolder: SummaryViewHolder
+    private lateinit var summaryViewHolder: RecyclerView.ViewHolder
 
-    constructor(context: Context, items: List<RecordItem>, isSummaryViewNeeded: Boolean, itemClickListener: ((Int) -> Unit)?) {
+    constructor(context: Context, items: List<RecordItem>, isSummaryViewNeeded: Boolean) {
         this.context = context
         this.items = items
 
@@ -48,13 +44,15 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
         red = ContextCompat.getColor(context, R.color.red)
         green = ContextCompat.getColor(context, R.color.green)
 
-        summaryPresenter = ShortSummaryPresenter(context)
-
-        this.itemClickListener = itemClickListener
         this.isSummaryViewNeeded = isSummaryViewNeeded
+    }
 
-        summaryViewHolder = SummaryViewHolder(LayoutInflater.from(context).inflate(R.layout.view_summary_records, null), itemClickListener)
-        summaryPresenter.create(true, summaryViewHolder)
+    fun addSummaryView(summaryView: View) {
+        this.summaryViewHolder = summaryView.tag as RecyclerView.ViewHolder
+    }
+
+    fun setOnItemClickListener(itemClickListener: ((Int) -> Unit)) {
+        this.itemClickListener = itemClickListener
     }
 
     override fun getItemCount() = items.size + if (isSummaryViewNeeded) 1 else 0
@@ -100,9 +98,8 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return -1 * number
     }
 
-    fun setRecords(itemsList: List<RecordItem>, report: IRecordReport?, currency: String, ratesNeeded: List<String>) {
+    fun setRecords(itemsList: List<RecordItem>) {
         items = itemsList
-        summaryPresenter.update(report, currency, ratesNeeded)
         notifyDataSetChanged()
     }
 
@@ -127,33 +124,6 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvDate: TextView = view.tvDate
-    }
-
-    class SummaryViewHolder : RecyclerView.ViewHolder, ShortSummaryPresenter.SummaryViewInterface {
-
-        private var tvPeriod: TextView
-        private var tvTotalIncome: TextView
-        private var tvTotalExpense: TextView
-        private var tvTotal: TextView
-
-        override fun getTvPeriod(): TextView = tvPeriod
-
-        override fun getTvTotalIncome(): TextView = tvTotalIncome
-
-        override fun getTvTotalExpense(): TextView = tvTotalExpense
-
-        override fun getTvTotal(): TextView = tvTotal
-
-        constructor(view: View, itemClickListener: ((Int) -> Unit)?) : super(view) {
-            tvPeriod = view.tvPeriod
-            tvTotalIncome = view.tvTotalIncome
-            tvTotalExpense = view.tvTotalExpense
-            tvTotal = view.tvTotal
-
-            view.cvSummary.setOnClickListener {
-                itemClickListener?.invoke(0)
-            }
-        }
     }
 
     companion object {

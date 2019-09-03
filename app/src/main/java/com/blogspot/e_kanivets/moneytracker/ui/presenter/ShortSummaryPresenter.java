@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
-import com.blogspot.e_kanivets.moneytracker.adapter.RecordAdapter;
 import com.blogspot.e_kanivets.moneytracker.controller.FormatController;
 import com.blogspot.e_kanivets.moneytracker.entity.Period;
 import com.blogspot.e_kanivets.moneytracker.report.record.IRecordReport;
@@ -37,7 +36,6 @@ public class ShortSummaryPresenter extends BaseSummaryPresenter {
     private int green;
     private View view;
 
-    @SuppressWarnings("deprecation")
     public ShortSummaryPresenter(Context context) {
         this.context = context;
         MtApp.get().getAppComponent().inject(ShortSummaryPresenter.this);
@@ -47,38 +45,42 @@ public class ShortSummaryPresenter extends BaseSummaryPresenter {
         green = context.getResources().getColor(R.color.green);
     }
 
-    public View create(boolean shortSummary, RecordAdapter.SummaryViewHolder viewHolder) {
+    public interface ItemClickListener {
+        void invoke();
+    }
+
+    public View create(boolean shortSummary, ItemClickListener itemClickListener) {
         view = layoutInflater.inflate(R.layout.view_summary_records, null);
         view.findViewById(R.id.iv_more).setVisibility(shortSummary ? View.VISIBLE : View.INVISIBLE);
         view.setEnabled(false);
         view.findViewById(R.id.lvSummary).setClickable(false);
         view.findViewById(R.id.cvSummary).setClickable(true);
-        view.setTag(viewHolder != null ? viewHolder : new ViewHolder(view));
+        view.setTag(new ViewHolder(view, itemClickListener));
 
         return view;
     }
 
     public void update(IRecordReport report, String currency, List<String> ratesNeeded) {
-        SummaryViewInterface viewHolder = (SummaryViewInterface) view.getTag();
+        ViewHolder viewHolder = (ViewHolder) view.getTag();
         if (report == null) {
-            viewHolder.getTvTotalIncome().setText("");
-            viewHolder.getTvTotalExpense().setText("");
+            viewHolder.tvTotalIncome.setText("");
+            viewHolder.tvTotalExpense.setText("");
 
-            viewHolder.getTvTotal().setTextColor(red);
-            viewHolder.getTvTotal().setText(createRatesNeededList(currency, ratesNeeded));
+            viewHolder.tvTotal.setTextColor(red);
+            viewHolder.tvTotal.setText(createRatesNeededList(currency, ratesNeeded));
         } else {
-            viewHolder.getTvPeriod().setText(formatPeriod(report.getPeriod()));
+            viewHolder.tvPeriod.setText(formatPeriod(report.getPeriod()));
 
-            viewHolder.getTvTotalIncome().setTextColor(report.getTotalIncome() >= 0 ? green : red);
-            viewHolder.getTvTotalIncome().setText(formatController.formatIncome(report.getTotalIncome(),
+            viewHolder.tvTotalIncome.setTextColor(report.getTotalIncome() >= 0 ? green : red);
+            viewHolder.tvTotalIncome.setText(formatController.formatIncome(report.getTotalIncome(),
                     report.getCurrency()));
 
-            viewHolder.getTvTotalExpense().setTextColor(report.getTotalExpense() > 0 ? green : red);
-            viewHolder.getTvTotalExpense().setText(formatController.formatExpense(report.getTotalExpense(),
+            viewHolder.tvTotalExpense.setTextColor(report.getTotalExpense() > 0 ? green : red);
+            viewHolder.tvTotalExpense.setText(formatController.formatExpense(report.getTotalExpense(),
                     report.getCurrency()));
 
-            viewHolder.getTvTotal().setTextColor(report.getTotal() >= 0 ? green : red);
-            viewHolder.getTvTotal().setText(formatController.formatIncome(report.getTotal(),
+            viewHolder.tvTotal.setTextColor(report.getTotal() >= 0 ? green : red);
+            viewHolder.tvTotal.setText(formatController.formatIncome(report.getTotal(),
                     report.getCurrency()));
         }
 
@@ -104,54 +106,28 @@ public class ShortSummaryPresenter extends BaseSummaryPresenter {
         }
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements SummaryViewInterface {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.tvPeriod)
         TextView tvPeriod;
-
-        @Override
-        public TextView getTvPeriod() {
-            return tvPeriod;
-        }
-
         @BindView(R.id.tvTotalIncome)
         TextView tvTotalIncome;
-
-        @Override
-        public TextView getTvTotalIncome() {
-            return tvTotalIncome;
-        }
-
         @BindView(R.id.tvTotalExpense)
         TextView tvTotalExpense;
-
-        @Override
-        public TextView getTvTotalExpense() {
-            return tvTotalExpense;
-        }
-
         @BindView(R.id.tvTotal)
         TextView tvTotal;
 
-        @Override
-        public TextView getTvTotal() {
-            return tvTotal;
-        }
-
-        public ViewHolder(View view) {
+        public ViewHolder(View view, final ItemClickListener itemClickListener) {
             super(view);
             ButterKnife.bind(this, view);
+            view.findViewById(R.id.cvSummary).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (itemClickListener != null)
+                        itemClickListener.invoke();
+                }
+            });
         }
-    }
-
-    public interface SummaryViewInterface {
-        TextView getTvPeriod();
-
-        TextView getTvTotalIncome();
-
-        TextView getTvTotalExpense();
-
-        TextView getTvTotal();
     }
 
 }

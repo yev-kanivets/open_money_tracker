@@ -19,11 +19,13 @@ import com.blogspot.e_kanivets.moneytracker.entity.RecordItem
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record
 import com.blogspot.e_kanivets.moneytracker.report.ReportMaker
 import com.blogspot.e_kanivets.moneytracker.ui.AppRateDialog
+import com.blogspot.e_kanivets.moneytracker.ui.presenter.ShortSummaryPresenter
 import com.blogspot.e_kanivets.moneytracker.util.AnswersProxy
 import com.blogspot.e_kanivets.moneytracker.util.RecordItemsBuilder
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import javax.inject.Inject
+
 
 class MainActivity : BaseDrawerActivity() {
 
@@ -50,6 +52,7 @@ class MainActivity : BaseDrawerActivity() {
     private lateinit var tvDefaultAccountTitle: TextView
     private lateinit var tvDefaultAccountSum: TextView
     private lateinit var tvCurrency: TextView
+    private lateinit var summaryPresenter: ShortSummaryPresenter
 
     override fun getContentViewId(): Int = R.layout.activity_main
 
@@ -73,10 +76,15 @@ class MainActivity : BaseDrawerActivity() {
         tvDefaultAccountSum = navigationView.getHeaderView(0).findViewById(R.id.tvDefaultAccountSum)
         tvCurrency = navigationView.getHeaderView(0).findViewById(R.id.tvCurrency)
 
-        recordAdapter = RecordAdapter(this, listOf(), true) { position ->
-            if (position == 0) showReport()
-            else editRecord(position)
+        recordAdapter = RecordAdapter(this, listOf(), true)
+        recordAdapter.setOnItemClickListener { position -> editRecord(position) }
+
+        summaryPresenter = ShortSummaryPresenter(this)
+        val summaryView = summaryPresenter.create(true) {
+            showReport()
         }
+        recordAdapter.addSummaryView(summaryView)
+
         recyclerView.adapter = recordAdapter
 
         spinner.setPeriodSelectedListener { period ->
@@ -143,7 +151,8 @@ class MainActivity : BaseDrawerActivity() {
         val reportMaker = ReportMaker(rateController)
         val report = reportMaker.getRecordReport(currency, period, recordList)
 
-        recordAdapter.setRecords(recordItems, report, currency, reportMaker.currencyNeeded(currency, recordList))
+        summaryPresenter.update(report, currency, reportMaker.currencyNeeded(currency, recordList))
+        recordAdapter.setRecords(recordItems)
 
         fillDefaultAccount()
     }
