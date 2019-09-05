@@ -6,9 +6,9 @@
     android:background="@android:color/transparent"
     android:orientation="horizontal"
     android:paddingStart="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/half_margin"
+    android:paddingTop="@dimen/quarter_margin"
     android:paddingEnd="@dimen/activity_horizontal_margin"
-    android:paddingBottom="@dimen/half_margin">
+    android:paddingBottom="@dimen/quarter_margin">
 
     <TextView
         android:id="@+id/tvCategory"

@@ -5,18 +5,18 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.blogspot.e_kanivets.moneytracker.R
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseBackActivity
-import com.blogspot.e_kanivets.moneytracker.adapter.ExpandableListReportAdapter
+import com.blogspot.e_kanivets.moneytracker.adapter.RecordReportAdapter
 import com.blogspot.e_kanivets.moneytracker.controller.CurrencyController
+import com.blogspot.e_kanivets.moneytracker.controller.FormatController
 import com.blogspot.e_kanivets.moneytracker.controller.data.ExchangeRateController
 import com.blogspot.e_kanivets.moneytracker.controller.data.RecordController
 import com.blogspot.e_kanivets.moneytracker.entity.Period
+import com.blogspot.e_kanivets.moneytracker.entity.RecordReportItem
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record
 import com.blogspot.e_kanivets.moneytracker.report.ReportMaker
-import com.blogspot.e_kanivets.moneytracker.report.record.RecordReportConverter
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.ShortSummaryPresenter
 import kotlinx.android.synthetic.main.activity_report.*
-import java.util.ArrayList
-import java.util.HashMap
+import java.util.*
 import javax.inject.Inject
 
 class ReportActivity : BaseBackActivity() {
@@ -27,9 +27,12 @@ class ReportActivity : BaseBackActivity() {
     lateinit var rateController: ExchangeRateController
     @Inject
     lateinit var currencyController: CurrencyController
+    @Inject
+    lateinit var formatController: FormatController
 
     private var recordList: List<Record> = listOf()
     private var period: Period? = null
+    private lateinit var adapter: RecordReportAdapter
 
     private lateinit var shortSummaryPresenter: ShortSummaryPresenter
 
@@ -44,6 +47,7 @@ class ReportActivity : BaseBackActivity() {
 
         recordList = recordController.getRecordsForPeriod(period)
         shortSummaryPresenter = ShortSummaryPresenter(this)
+        adapter = RecordReportAdapter(mutableListOf(), hashMapOf(), this)
 
         return true
     }
@@ -53,36 +57,35 @@ class ReportActivity : BaseBackActivity() {
 
         initSpinnerCurrency()
 
-        expListView.addHeaderView(shortSummaryPresenter.create(false, null))
+        adapter.addSummaryView(shortSummaryPresenter.create(false, null))
+        recyclerView.adapter = adapter
     }
 
     private fun update(currency: String) {
         val reportMaker = ReportMaker(rateController)
         val report = reportMaker.getRecordReport(currency, period, recordList)
 
-        var adapter: ExpandableListReportAdapter? = null
-
-        //val childData = ArrayList<List<Map<String, String>>>()
+        val data: HashMap<RecordReportItem.ParentRow, List<RecordReportItem.ChildRow>> = hashMapOf()
+        val items: MutableList<RecordReportItem> = mutableListOf()
 
         if (report != null) {
-            /*for (categoryRecord in report.summary) {
-                val childDataItem = ArrayList<Map<String, String>>()
-                for (summaryRecord in categoryRecord.summaryRecordList) {
-                    val m = HashMap<String, String>()
-                    //m[TITLE_PARAM_NAME] = summaryRecord.title
-                    //m[PRICE_PARAM_NAME] = java.lang.Double.toString(summaryRecord.amount)
+            for (categoryRecord in report.summary) {
 
-                    childDataItem.add(m)
+                val parentRow = RecordReportItem.ParentRow(categoryRecord.title, formatController.formatSignedAmount(categoryRecord.amount), false)
+                items.add(parentRow)
+
+                val childRows: MutableList<RecordReportItem.ChildRow> = mutableListOf()
+
+                for (summaryRecord in categoryRecord.summaryRecordList) {
+                    val childRow = RecordReportItem.ChildRow(summaryRecord.title, formatController.formatSignedAmount(summaryRecord.amount))
+                    childRows.add(childRow)
                 }
 
-                childData.add(childDataItem)
-            }*/
-
-            val recordReportConverter = RecordReportConverter(report)
-            adapter = ExpandableListReportAdapter(this, recordReportConverter)
+                data[parentRow] = childRows
+            }
         }
 
-        expListView.setAdapter(adapter)
+        adapter.setData(items, data)
         shortSummaryPresenter.update(report, currency, reportMaker.currencyNeeded(currency, recordList))
     }
 

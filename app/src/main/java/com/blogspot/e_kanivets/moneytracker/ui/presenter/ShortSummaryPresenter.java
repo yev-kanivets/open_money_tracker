@@ -83,7 +83,6 @@ public class ShortSummaryPresenter extends BaseSummaryPresenter {
             viewHolder.tvTotal.setText(formatController.formatIncome(report.getTotal(),
                     report.getCurrency()));
         }
-
     }
 
     private String formatPeriod(Period period) {
