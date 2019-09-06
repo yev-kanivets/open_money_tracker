@@ -2,6 +2,9 @@ package com.blogspot.e_kanivets.moneytracker.report.record.model;
 
 import android.support.annotation.NonNull;
 
+import com.blogspot.e_kanivets.moneytracker.MtApp;
+import com.blogspot.e_kanivets.moneytracker.R;
+
 /**
  * Entity class.
  * Created on 2/25/16.
@@ -33,7 +36,8 @@ public class SummaryRecord {
 
     private String makeTitle(String title, int recordsCount) {
         if (recordsCount <= 1) return title;
-        else return title + " (" + recordsCount + ")";
+        else
+            return MtApp.get().getResources().getString(R.string.title_summary_record, title, recordsCount);
     }
 
 }

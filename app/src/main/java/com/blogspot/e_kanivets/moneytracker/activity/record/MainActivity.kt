@@ -2,6 +2,7 @@ package com.blogspot.e_kanivets.moneytracker.activity.record
 
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.RecyclerView
 import android.widget.TextView
 import com.blogspot.e_kanivets.moneytracker.R
 import com.blogspot.e_kanivets.moneytracker.activity.ReportActivity
@@ -25,7 +26,6 @@ import com.blogspot.e_kanivets.moneytracker.util.RecordItemsBuilder
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import javax.inject.Inject
-
 
 class MainActivity : BaseDrawerActivity() {
 
@@ -77,13 +77,11 @@ class MainActivity : BaseDrawerActivity() {
         tvCurrency = navigationView.getHeaderView(0).findViewById(R.id.tvCurrency)
 
         recordAdapter = RecordAdapter(this, listOf(), true)
-        recordAdapter.setOnItemClickListener { position -> editRecord(position) }
+        recordAdapter.itemClickListener = { position -> editRecord(getPositionWithoutSummary(position)) }
 
         summaryPresenter = ShortSummaryPresenter(this)
-        val summaryView = summaryPresenter.create(true) {
-            showReport()
-        }
-        recordAdapter.addSummaryView(summaryView)
+        val summaryViewHolder = summaryPresenter.create(true) { showReport() }.tag as RecyclerView.ViewHolder
+        recordAdapter.summaryViewHolder = summaryViewHolder
 
         recyclerView.adapter = recordAdapter
 
@@ -99,10 +97,14 @@ class MainActivity : BaseDrawerActivity() {
         btnAddIncome.setOnClickListener { addIncome() }
     }
 
+    private fun getPositionWithoutSummary(position: Int): Int {
+        return position - 1
+    }
+
     private fun editRecord(position: Int) {
         AnswersProxy.get().logButton("Edit Record")
         // -1 because SummaryView
-        val record = recordList[getRecordPosition(position - 1)]
+        val record = recordList[getRecordPosition(position)]
         startAddRecordActivity(record, AddRecordActivity.Mode.MODE_EDIT, record.type)
     }
 
@@ -160,8 +162,8 @@ class MainActivity : BaseDrawerActivity() {
     private fun getRecordPosition(position: Int): Int {
         var recordPosition = 0
 
-        for (inOfData in 0 until position) {
-            if (recordItems[inOfData] is RecordItem.Record) {
+        for (indexOfItem in 0 until position) {
+            if (recordItems[indexOfItem] is RecordItem.Record) {
                 recordPosition++
             }
         }

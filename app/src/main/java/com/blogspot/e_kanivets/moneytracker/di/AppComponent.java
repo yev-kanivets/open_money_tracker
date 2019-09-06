@@ -87,4 +87,6 @@ public interface AppComponent {
     void inject(AccountOperationsFragment accountRecordsFragment);
 
     void inject(RecordItemsBuilder recordItemsBuilder);
+
+    void inject(ReportActivity.RecordReportConverter recordReportConverter);
 }

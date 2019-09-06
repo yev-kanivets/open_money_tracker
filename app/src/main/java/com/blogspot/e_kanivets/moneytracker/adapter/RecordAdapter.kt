@@ -20,7 +20,7 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Inject
     lateinit var formatController: FormatController
 
-    private var itemClickListener: ((Int) -> Unit)? = null
+    var itemClickListener: ((Int) -> Unit)? = null
 
     private var whiteRed: Int
     private var whiteGreen: Int
@@ -31,7 +31,7 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private var context: Context
 
     private var isSummaryViewNeeded: Boolean = false
-    private lateinit var summaryViewHolder: RecyclerView.ViewHolder
+    lateinit var summaryViewHolder: RecyclerView.ViewHolder
 
     constructor(context: Context, items: List<RecordItem>, isSummaryViewNeeded: Boolean) {
         this.context = context
@@ -45,14 +45,6 @@ class RecordAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder> {
         green = ContextCompat.getColor(context, R.color.green)
 
         this.isSummaryViewNeeded = isSummaryViewNeeded
-    }
-
-    fun addSummaryView(summaryView: View) {
-        this.summaryViewHolder = summaryView.tag as RecyclerView.ViewHolder
-    }
-
-    fun setOnItemClickListener(itemClickListener: ((Int) -> Unit)) {
-        this.itemClickListener = itemClickListener
     }
 
     override fun getItemCount() = items.size + if (isSummaryViewNeeded) 1 else 0
