@@ -1,7 +1,5 @@
 package com.blogspot.e_kanivets.moneytracker.report.record.model;
 
-import android.support.annotation.NonNull;
-
 import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
 
@@ -17,7 +15,7 @@ public class SummaryRecord {
     private double amount;
 
     public SummaryRecord(String title, String currency, double amount, int recordsCount) {
-        this.title = makeTitle(title, recordsCount);
+        this.title = buildTitle(title, recordsCount);
         this.currency = currency;
         this.amount = amount;
     }
@@ -34,7 +32,7 @@ public class SummaryRecord {
         return amount;
     }
 
-    private String makeTitle(String title, int recordsCount) {
+    private String buildTitle(String title, int recordsCount) {
         if (recordsCount <= 1) return title;
         else
             return MtApp.get().getResources().getString(R.string.title_summary_record, title, recordsCount);
