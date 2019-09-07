@@ -97,13 +97,10 @@ class MainActivity : BaseDrawerActivity() {
         btnAddIncome.setOnClickListener { addIncome() }
     }
 
-    private fun getPositionWithoutSummary(position: Int): Int {
-        return position - 1
-    }
+    private fun getPositionWithoutSummary(position: Int) = position - 1
 
     private fun editRecord(position: Int) {
         AnswersProxy.get().logButton("Edit Record")
-        // -1 because SummaryView
         val record = recordList[getRecordPosition(position)]
         startAddRecordActivity(record, AddRecordActivity.Mode.MODE_EDIT, record.type)
     }
