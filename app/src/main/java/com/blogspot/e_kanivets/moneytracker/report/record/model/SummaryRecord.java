@@ -1,11 +1,7 @@
 package com.blogspot.e_kanivets.moneytracker.report.record.model;
 
-import android.support.annotation.NonNull;
-
-import com.blogspot.e_kanivets.moneytracker.entity.data.Record;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.blogspot.e_kanivets.moneytracker.MtApp;
+import com.blogspot.e_kanivets.moneytracker.R;
 
 /**
  * Entity class.
@@ -17,17 +13,11 @@ public class SummaryRecord {
     private String title;
     private String currency;
     private double amount;
-    private List<Record> recordList;
 
-    public SummaryRecord(String title, String currency, double amount) {
-        this.title = title;
+    public SummaryRecord(String title, String currency, double amount, int recordsCount) {
+        this.title = buildTitle(title, recordsCount);
         this.currency = currency;
         this.amount = amount;
-        recordList = new ArrayList<>();
-    }
-
-    public void add(@NonNull Record record) {
-        recordList.add(record);
     }
 
     public String getTitle() {
@@ -42,17 +32,10 @@ public class SummaryRecord {
         return amount;
     }
 
-    public List<Record> getRecordList() {
-        return recordList;
+    private String buildTitle(String title, int recordsCount) {
+        if (recordsCount <= 1) return title;
+        else
+            return MtApp.get().getResources().getString(R.string.title_summary_record, title, recordsCount);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o instanceof SummaryRecord) {
-            SummaryRecord summaryRecord = (SummaryRecord) o;
-            return this.currency.equals(summaryRecord.getCurrency())
-                    && this.amount == summaryRecord.getAmount()
-                    && this.recordList.equals(summaryRecord.getRecordList());
-        } else return false;
-    }
 }

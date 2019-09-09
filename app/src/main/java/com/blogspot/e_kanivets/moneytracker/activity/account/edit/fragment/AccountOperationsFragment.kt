@@ -39,7 +39,7 @@ class AccountOperationsFragment : BaseFragment() {
     }
 
     override fun initViews(view: View) {
-        recyclerView.adapter = RecordAdapter(requireContext(), getRecordItems(), false, null)
+        recyclerView.adapter = RecordAdapter(requireContext(), getRecordItems(), false)
     }
 
     private fun getRecordItems(): List<RecordItem> {

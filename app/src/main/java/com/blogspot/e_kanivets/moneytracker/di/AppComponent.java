@@ -17,7 +17,6 @@ import com.blogspot.e_kanivets.moneytracker.activity.record.AddRecordActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.record.MainActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.AccountAdapter;
 import com.blogspot.e_kanivets.moneytracker.adapter.ExchangeRateAdapter;
-import com.blogspot.e_kanivets.moneytracker.adapter.ExpandableListReportAdapter;
 import com.blogspot.e_kanivets.moneytracker.adapter.MonthSummaryAdapter;
 import com.blogspot.e_kanivets.moneytracker.adapter.RecordAdapter;
 import com.blogspot.e_kanivets.moneytracker.di.module.repo.CachedRepoModule;
@@ -75,8 +74,6 @@ public interface AppComponent {
 
     void inject(AccountAdapter accountAdapter);
 
-    void inject(ExpandableListReportAdapter expandableListReportAdapter);
-
     void inject(ShortSummaryPresenter shortSummaryPresenter);
 
     void inject(ExchangeRateAdapter exchangeRateAdapter);
@@ -90,4 +87,6 @@ public interface AppComponent {
     void inject(AccountOperationsFragment accountRecordsFragment);
 
     void inject(RecordItemsBuilder recordItemsBuilder);
+
+    void inject(ReportActivity.RecordReportConverter recordReportConverter);
 }

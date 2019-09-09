@@ -4,32 +4,56 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
-    android:orientation="horizontal"
-    android:paddingStart="@dimen/zero_margin"
-    android:paddingTop="@dimen/half_margin"
-    android:paddingEnd="@dimen/activity_horizontal_margin"
-    android:paddingBottom="@dimen/half_margin">
+    android:orientation="vertical"
+    android:paddingStart="@dimen/activity_horizontal_margin"
+    android:paddingEnd="@dimen/activity_horizontal_margin">
 
-    <TextView
-        android:id="@+id/tvCategory"
-        android:layout_width="0dp"
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_height"
+        android:background="@color/divider_grey" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:layout_weight="1"
-        android:background="@android:color/transparent"
-        android:gravity="start"
-        android:minWidth="5dp"
-        android:paddingStart="?android:attr/expandableListPreferredItemPaddingLeft"
-        android:paddingEnd="@dimen/zero_margin"
-        android:theme="@style/Text_Body2" />
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/tvTotal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:background="@android:color/transparent"
-        android:gravity="end"
-        android:theme="@style/Text_Body2" />
+        <ImageView
+            android:id="@+id/ivArrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_downward_outline" />
+
+        <TextView
+            android:id="@+id/tvCategory"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:gravity="start"
+            android:layout_marginStart="4dp"
+            android:minWidth="5dp"
+            android:theme="@style/Text_Subheading" />
+
+        <TextView
+            android:id="@+id/tvTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@android:color/transparent"
+            android:gravity="end"
+            android:theme="@style/Text_Subheading" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/lowerDivider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_height"
+        android:background="@color/divider_grey"
+        android:visibility="gone" />
 
 </LinearLayout>
