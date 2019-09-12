@@ -37,7 +37,7 @@ public class TransferActivity extends BaseBackActivity {
 
     private List<Account> accountList;
 
-    @BindView(R.id.content)
+    @BindView(R.id.contentView)
     View contentView;
     @BindView(R.id.spinner_from)
     AppCompatSpinner spinnerFrom;

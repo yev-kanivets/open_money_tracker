@@ -44,7 +44,7 @@
     <string name="to">На рахунок</string>
     <string name="title_exchange_rates">Курси обміну</string>
     <string name="add_exchange_rate">Додати курс обміну</string>
-    <string name="account_was_removed">Рахунок було видалено</string>
+    <string name="account_removed">Рахунок видалено</string>
 
     <string name="short_summary">Короткий звіт</string>
     <string name="custom">Інший</string>

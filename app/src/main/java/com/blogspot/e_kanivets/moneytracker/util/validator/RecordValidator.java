@@ -28,17 +28,17 @@ public class RecordValidator implements IValidator<Record> {
 
     @BindView(R.id.til_title)
     TextInputLayout tilTitle;
-    @BindView(R.id.et_title)
+    @BindView(R.id.etTitle)
     EditText etTitle;
     @BindView(R.id.til_category)
     TextInputLayout tilCategory;
-    @BindView(R.id.et_category)
+    @BindView(R.id.etCategory)
     EditText etCategory;
     @BindView(R.id.til_price)
     TextInputLayout tilPrice;
-    @BindView(R.id.et_price)
+    @BindView(R.id.etPrice)
     EditText etPrice;
-    @BindView(R.id.spinner_account)
+    @BindView(R.id.spinnerAccount)
     AppCompatSpinner spinnerAccount;
 
     public RecordValidator(@NonNull Context context, @NonNull View view) {

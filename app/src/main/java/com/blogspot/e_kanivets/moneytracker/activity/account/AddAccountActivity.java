@@ -33,9 +33,9 @@ public class AddAccountActivity extends BaseBackActivity {
 
     private IValidator<Account> accountValidator;
 
-    @BindView(R.id.content)
+    @BindView(R.id.contentView)
     View contentView;
-    @BindView(R.id.et_title)
+    @BindView(R.id.etTitle)
     EditText etTitle;
     @BindView(R.id.et_init_sum)
     EditText etInitSum;
