@@ -5,6 +5,7 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.support.v4.content.ContextCompat
 import android.text.InputFilter
 import android.text.Spanned
@@ -107,14 +108,18 @@ class AddRecordActivity : BaseBackActivity() {
         tvTime.setOnClickListener { selectTime() }
 
         if (type == Record.TYPE_EXPENSE) {
-            fabDone.backgroundTintList = (ColorStateList.valueOf(ContextCompat.getColor(this, R.color.red_light)))
+            fabDone.backgroundTintList = (getColorForFab(R.color.red_light))
         } else {
-            fabDone.backgroundTintList = (ColorStateList.valueOf(ContextCompat.getColor(this, R.color.green_light)))
+            fabDone.backgroundTintList = (getColorForFab(R.color.green_light))
         }
 
         fabDone.setOnClickListener { tryRecord() }
 
         updateDateAndTime()
+    }
+
+    private fun getColorForFab(color: Int): ColorStateList {
+        return ColorStateList.valueOf(ContextCompat.getColor(this, color))
     }
 
     private fun initCategoryAutocomplete() {
@@ -290,8 +295,7 @@ class AddRecordActivity : BaseBackActivity() {
     private class SemicolonInputFilter : InputFilter {
 
         override fun filter(source: CharSequence?, start: Int, end: Int, dest: Spanned, dstart: Int, dend: Int): CharSequence? {
-            return if (source != null && ";" == source.toString()) ""
-            else null
+            return if (source != null && ";" == source.toString()) "" else null
         }
     }
 
