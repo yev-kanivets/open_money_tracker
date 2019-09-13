@@ -86,7 +86,9 @@ public class CategoryAutoCompleteAdapter extends ArrayAdapter<String> implements
                 if (results != null && results.count > 0) {
                     addAll((List) results.values);
                     notifyDataSetChanged();
-                } else notifyDataSetInvalidated();
+                } else {
+                    notifyDataSetInvalidated();
+                }
             }
         };
     }

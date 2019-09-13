@@ -33,15 +33,6 @@ import kotlinx.android.synthetic.main.content_add_record.*
 import java.util.*
 import javax.inject.Inject
 
-/**
- * Created on 1/26/16.
- *
- * @author Evgenii Kanivets
- *
- * Updated on 9/12/19
- *
- * @author Bogdan Evtushenko
- */
 class AddRecordActivity : BaseBackActivity() {
 
     private var record: Record? = null
@@ -66,15 +57,12 @@ class AddRecordActivity : BaseBackActivity() {
     private lateinit var uiDecorator: AddRecordUiDecorator
     private lateinit var autoCompleter: CategoryAutoCompleter
 
-    override fun getContentViewId(): Int {
-        return R.layout.activity_add_record
-    }
+    override fun getContentViewId() = R.layout.activity_add_record
+
 
     override fun initData(): Boolean {
         super.initData()
         appComponent.inject(this)
-
-        uiDecorator = AddRecordUiDecorator(this)
 
         record = intent.getParcelableExtra(KEY_RECORD)
         mode = intent.getSerializableExtra(KEY_MODE) as Mode
@@ -93,18 +81,32 @@ class AddRecordActivity : BaseBackActivity() {
 
         recordValidator = RecordValidator(this, contentView)
         autoCompleter = CategoryAutoCompleter(categoryController, preferenceController)
+        uiDecorator = AddRecordUiDecorator(this)
+
+        uiDecorator.decorateActionBar(supportActionBar, mode, type)
 
         if (mode == Mode.MODE_EDIT) {
             record?.let { record ->
                 etTitle.setText(record.title)
-                if (record.category != null) etCategory.setText(record.category?.name.orEmpty())
+                etCategory.setText(record.category?.name.orEmpty())
                 etPrice.setText(formatController.formatPrecisionNone(record.fullPrice))
             }
         }
 
-        uiDecorator.decorateActionBar(supportActionBar, mode, type)
+        initCategoryAutocomplete()
         presentSpinnerAccount()
 
+        // Restrict ';' for input, because it's used as delimiter when exporting
+        etTitle.filters = arrayOf<InputFilter>(SemicolonInputFilter())
+        etCategory.filters = arrayOf<InputFilter>(SemicolonInputFilter())
+
+        tvDate.setOnClickListener { selectDate() }
+        tvTime.setOnClickListener { selectTime() }
+
+        updateDateAndTime()
+    }
+
+    private fun initCategoryAutocomplete() {
         val categoryAutoCompleteAdapter = CategoryAutoCompleteAdapter(
                 this, R.layout.view_category_item, autoCompleter)
         etCategory.setAdapter(categoryAutoCompleteAdapter)
@@ -119,23 +121,12 @@ class AddRecordActivity : BaseBackActivity() {
         etCategory.onFocusChangeListener = View.OnFocusChangeListener { view, hasFocus ->
             if (hasFocus && etCategory.text.toString().trim().isEmpty()) {
                 val title = etTitle.text.toString().trim()
-                val prediction = autoCompleter.completeByRecordTitle(title)
-                if (prediction != null) {
+                autoCompleter.completeByRecordTitle(title)?.let { prediction ->
                     etCategory.setText(prediction)
                     etCategory.selectAll()
-                    etCategory.setAdapter(categoryAutoCompleteAdapter)
                 }
             }
         }
-
-        // Restrict ';' for input, because it's used as delimiter when exporting
-        etTitle.filters = arrayOf<InputFilter>(SemicolonInputFilter())
-        etCategory.filters = arrayOf<InputFilter>(SemicolonInputFilter())
-
-        tvDate.setOnClickListener { selectDate() }
-        tvTime.setOnClickListener { selectTime() }
-
-        updateDateAndTime()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -218,10 +209,7 @@ class AddRecordActivity : BaseBackActivity() {
     }
 
     private fun presentSpinnerAccount() {
-        val accounts = ArrayList<String>()
-        for (account in accountList) {
-            accounts.add(account.title)
-        }
+        val accounts = accountList.map { it.title }.toMutableList()
 
         var selectedAccountIndex = -1
 
@@ -241,8 +229,7 @@ class AddRecordActivity : BaseBackActivity() {
             accounts.add(getString(R.string.account_removed))
         }
 
-        spinnerAccount.adapter = ArrayAdapter(this,
-                R.layout.view_spinner_item, accounts)
+        spinnerAccount.adapter = ArrayAdapter(this, R.layout.view_spinner_item, accounts)
         spinnerAccount.setSelection(selectedAccountIndex)
     }
 
@@ -292,17 +279,13 @@ class AddRecordActivity : BaseBackActivity() {
         tvTime.text = formatController.formatTime(timestamp)
     }
 
-    enum class Mode {
-        MODE_ADD, MODE_EDIT
-    }
+    enum class Mode { MODE_ADD, MODE_EDIT }
 
     private class SemicolonInputFilter : InputFilter {
 
         override fun filter(source: CharSequence?, start: Int, end: Int, dest: Spanned, dstart: Int, dend: Int): CharSequence? {
-            return if (source != null && ";" == source.toString())
-                ""
-            else
-                null
+            return if (source != null && ";" == source.toString()) ""
+            else null
         }
     }
 
