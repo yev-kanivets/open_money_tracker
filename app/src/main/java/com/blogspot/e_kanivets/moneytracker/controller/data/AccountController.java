@@ -21,7 +21,8 @@ import java.util.List;
  * @author Evgenii Kanivets
  */
 public class AccountController extends BaseController<Account> {
-    @SuppressWarnings("unused") private static final String TAG = "AccountController";
+    @SuppressWarnings("unused")
+    private static final String TAG = "AccountController";
 
     private final PreferenceController preferenceController;
 
@@ -30,11 +31,15 @@ public class AccountController extends BaseController<Account> {
         this.preferenceController = preferenceController;
     }
 
-    @Nullable @Override public Account read(long id) {
+    @Nullable
+    @Override
+    public Account read(long id) {
         return substituteCurrency(super.read(id));
     }
 
-    @NonNull @Override public List<Account> readAll() {
+    @NonNull
+    @Override
+    public List<Account> readAll() {
         List<Account> accountList = super.readAll();
 
         List<Account> result = new ArrayList<>();
@@ -45,7 +50,8 @@ public class AccountController extends BaseController<Account> {
         return result;
     }
 
-    @NonNull public List<Account> readActiveAccounts() {
+    @NonNull
+    public List<Account> readActiveAccounts() {
         List<Account> result = new ArrayList<>();
 
         for (Account account : readAll()) {
@@ -57,7 +63,8 @@ public class AccountController extends BaseController<Account> {
         return result;
     }
 
-    @NonNull public List<Account> readArchivedAccounts() {
+    @NonNull
+    public List<Account> readArchivedAccounts() {
         List<Account> result = new ArrayList<>();
 
         for (Account account : readAll()) {
@@ -69,7 +76,7 @@ public class AccountController extends BaseController<Account> {
         return result;
     }
 
-    public boolean recordAdded(@Nullable Record record) {
+    boolean recordAdded(@Nullable Record record) {
         if (record == null || record.getAccount() == null) return false;
 
         Account account = repo.read(record.getAccount().getId());
@@ -93,8 +100,10 @@ public class AccountController extends BaseController<Account> {
         return true;
     }
 
-    public boolean recordDeleted(@Nullable Record record) {
-        if (record == null || record.getAccount() == null) return false;
+    boolean recordDeleted(@Nullable Record record) {
+        if (record == null) return false;
+
+        if (record.getAccount() == null) return true;
 
         Account account = repo.read(record.getAccount().getId());
         if (account == null) return false;
@@ -141,7 +150,8 @@ public class AccountController extends BaseController<Account> {
         return true;
     }
 
-    @Nullable public Account readDefaultAccount() {
+    @Nullable
+    public Account readDefaultAccount() {
         long defaultAccountId = preferenceController.readDefaultAccountId();
 
         if (defaultAccountId == -1) {
