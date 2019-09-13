@@ -104,9 +104,6 @@ public class AccountsActivity extends BaseBackActivity {
                     break;
 
                 case REQUEST_TRANSFER:
-                    update();
-                    setResult(RESULT_OK);
-                    break;
 
                 case REQUEST_EDIT_ACCOUNT:
                     update();
