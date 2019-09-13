@@ -3,8 +3,6 @@
     package="com.blogspot.e_kanivets.moneytracker">
 
     <!-- Used only for Dropbox backup -->
-    <uses-permission android:name="android.permission.INTERNET" />
-
     <application
         android:name=".MtApp"
         android:allowBackup="true"
@@ -32,7 +30,7 @@
             android:name=".activity.record.AddRecordActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Default"
-            android:windowSoftInputMode="stateVisible" />
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activity.account.AddAccountActivity"
             android:label="@string/title_add_account"
@@ -98,14 +96,18 @@
             android:launchMode="singleTask"
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
             <intent-filter>
-                <data android:scheme="db-5lqugcckdy9y6lj" />
-
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="db-5lqugcckdy9y6lj" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="955ae4864ae2a833aeda5b62631512524288adf8" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -117,10 +119,8 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="955ae4864ae2a833aeda5b62631512524288adf8" />
-
     </application>
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

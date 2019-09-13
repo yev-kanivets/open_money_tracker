@@ -8,10 +8,4 @@
         android:title="@string/delete"
         tools:showAsAction="ifRoom" />
 
-    <item
-        android:id="@+id/action_done"
-        android:icon="@drawable/ic_done"
-        android:title="@string/add"
-        tools:showAsAction="ifRoom" />
-
 </menu>

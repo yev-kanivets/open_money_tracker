@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.res.ColorStateList
+import android.support.v4.content.ContextCompat
 import android.text.InputFilter
 import android.text.Spanned
 import android.text.format.DateFormat
@@ -29,6 +31,7 @@ import com.blogspot.e_kanivets.moneytracker.util.AnswersProxy
 import com.blogspot.e_kanivets.moneytracker.util.CategoryAutoCompleter
 import com.blogspot.e_kanivets.moneytracker.util.validator.IValidator
 import com.blogspot.e_kanivets.moneytracker.util.validator.RecordValidator
+import kotlinx.android.synthetic.main.activity_add_record.*
 import kotlinx.android.synthetic.main.content_add_record.*
 import java.util.*
 import javax.inject.Inject
@@ -103,6 +106,14 @@ class AddRecordActivity : BaseBackActivity() {
         tvDate.setOnClickListener { selectDate() }
         tvTime.setOnClickListener { selectTime() }
 
+        if (type == Record.TYPE_EXPENSE) {
+            fabDone.backgroundTintList = (ColorStateList.valueOf(ContextCompat.getColor(this, R.color.red_light)))
+        } else {
+            fabDone.backgroundTintList = (ColorStateList.valueOf(ContextCompat.getColor(this, R.color.green_light)))
+        }
+
+        fabDone.setOnClickListener { tryRecord() }
+
         updateDateAndTime()
     }
 
@@ -145,21 +156,16 @@ class AddRecordActivity : BaseBackActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_done -> {
-                tryRecord()
-                return true
-            }
-
+        return when (item.itemId) {
             R.id.action_delete -> {
                 if (recordController.delete(record)) {
                     setResult(Activity.RESULT_OK)
                     finish()
                 }
-                return true
+                true
             }
 
-            else -> return super.onOptionsItemSelected(item)
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
