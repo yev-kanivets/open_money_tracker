@@ -22,7 +22,7 @@ android {
     buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId 'com.blogspot.e_kanivets.moneytracker'
-        minSdkVersion 17
+        minSdkVersion 21
         targetSdkVersion 26
 
         versionCode 31
