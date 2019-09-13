@@ -27,7 +27,7 @@ public class AccountValidator implements IValidator<Account> {
 
     @BindView(R.id.til_title)
     TextInputLayout tilTitle;
-    @BindView(R.id.et_title)
+    @BindView(R.id.etTitle)
     EditText etTitle;
     @BindView(R.id.til_init_sum)
     TextInputLayout tilInitSum;

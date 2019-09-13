@@ -44,7 +44,7 @@
     <string name="title_exchange_rates">Exchange rates</string>
     <string name="add_exchange_rate">Add exchange rate</string>
     <string name="arrow" translatable="false">" -> "</string>
-    <string name="account_was_removed">Account was removed</string>
+    <string name="account_removed">Account removed</string>
 
     <string name="short_summary">Short summary</string>
     <string name="custom">Custom</string>
