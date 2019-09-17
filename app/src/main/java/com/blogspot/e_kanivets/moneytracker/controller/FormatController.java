@@ -20,7 +20,9 @@ public class FormatController {
     public static final String PRECISION_NONE = "precision_none";
 
     @SuppressLint("SimpleDateFormat")
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private static final SimpleDateFormat shortDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    @SuppressLint("SimpleDateFormat")
+    private static final SimpleDateFormat fullDateFormat = new SimpleDateFormat("d MMMM yyyy");
     @SuppressLint("SimpleDateFormat")
     private static final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
     @SuppressLint("SimpleDateFormat")
@@ -72,8 +74,12 @@ public class FormatController {
         return (amount > 0 ? "+ " : "- ") + formatAmount(Math.abs(amount)) + " " + currency;
     }
 
-    public String formatDate(long timestamp) {
-        return dateFormat.format(new Date(timestamp));
+    public String formatDateToNumber(long timestamp) {
+        return shortDateFormat.format(new Date(timestamp));
+    }
+
+    public String formatDateToString(long timestamp) {
+        return fullDateFormat.format(new Date(timestamp));
     }
 
     public String formatTime(long timestamp) {

@@ -19,7 +19,7 @@
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
             <android.support.v7.widget.AppCompatSpinner
-                android:id="@+id/spinner_currency"
+                android:id="@+id/spinnerCurrency"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
@@ -33,15 +33,15 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/light_grey"
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <ExpandableListView
-            android:id="@+id/exp_list_view"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal" />
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
 
     </LinearLayout>
 

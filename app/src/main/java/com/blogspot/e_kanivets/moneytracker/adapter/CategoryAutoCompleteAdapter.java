@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.blogspot.e_kanivets.moneytracker.R;
 import com.blogspot.e_kanivets.moneytracker.util.CategoryAutoCompleter;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +28,6 @@ import butterknife.ButterKnife;
  */
 public class CategoryAutoCompleteAdapter extends ArrayAdapter<String> implements Filterable {
     private final CategoryAutoCompleter autoCompleter;
-    private List<String> resultList;
 
     public CategoryAutoCompleteAdapter(Context context, int resource, CategoryAutoCompleter autoCompleter) {
         super(context, resource);
@@ -34,7 +35,7 @@ public class CategoryAutoCompleteAdapter extends ArrayAdapter<String> implements
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NotNull ViewGroup parent) {
         ViewHolder viewHolder;
 
         if (convertView == null) {
@@ -43,14 +44,14 @@ public class CategoryAutoCompleteAdapter extends ArrayAdapter<String> implements
             convertView.setTag(viewHolder);
         } else viewHolder = (ViewHolder) convertView.getTag();
 
-        final String category = resultList.get(position);
+        final String category = getItem(position);
 
         viewHolder.tvCategory.setText(category);
         viewHolder.ivCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 autoCompleter.removeFromAutoComplete(category);
-                resultList.remove(category);
+                remove(category);
                 notifyDataSetChanged();
             }
         });
@@ -58,16 +59,7 @@ public class CategoryAutoCompleteAdapter extends ArrayAdapter<String> implements
         return convertView;
     }
 
-    @Override
-    public int getCount() {
-        return resultList.size();
-    }
-
-    @Override
-    public String getItem(int index) {
-        return resultList.get(index);
-    }
-
+    @NotNull
     @Override
     public Filter getFilter() {
         return new Filter() {
@@ -77,7 +69,8 @@ public class CategoryAutoCompleteAdapter extends ArrayAdapter<String> implements
 
                 List<String> tempList;
 
-                if (constraint != null) tempList = autoCompleter.completeByPart(constraint.toString());
+                if (constraint != null)
+                    tempList = autoCompleter.completeByPart(constraint.toString());
                 else tempList = new ArrayList<>();
 
                 filterResults.values = tempList;
@@ -88,11 +81,14 @@ public class CategoryAutoCompleteAdapter extends ArrayAdapter<String> implements
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
-                if (results != null) //noinspection unchecked
-                    resultList = (List<String>) results.values;
+                clear();
 
-                if (results != null && results.count > 0) notifyDataSetChanged();
-                else notifyDataSetInvalidated();
+                if (results != null && results.count > 0) {
+                    addAll((List) results.values);
+                    notifyDataSetChanged();
+                } else {
+                    notifyDataSetInvalidated();
+                }
             }
         };
     }

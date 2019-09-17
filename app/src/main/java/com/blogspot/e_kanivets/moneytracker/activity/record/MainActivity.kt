@@ -2,6 +2,7 @@ package com.blogspot.e_kanivets.moneytracker.activity.record
 
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.RecyclerView
 import android.widget.TextView
 import com.blogspot.e_kanivets.moneytracker.R
 import com.blogspot.e_kanivets.moneytracker.activity.ReportActivity
@@ -15,10 +16,13 @@ import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController
 import com.blogspot.e_kanivets.moneytracker.controller.data.ExchangeRateController
 import com.blogspot.e_kanivets.moneytracker.controller.data.RecordController
 import com.blogspot.e_kanivets.moneytracker.entity.Period
+import com.blogspot.e_kanivets.moneytracker.entity.RecordItem
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record
 import com.blogspot.e_kanivets.moneytracker.report.ReportMaker
 import com.blogspot.e_kanivets.moneytracker.ui.AppRateDialog
+import com.blogspot.e_kanivets.moneytracker.ui.presenter.ShortSummaryPresenter
 import com.blogspot.e_kanivets.moneytracker.util.CrashlyticsProxy
+import com.blogspot.e_kanivets.moneytracker.util.RecordItemsBuilder
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import javax.inject.Inject
@@ -26,6 +30,7 @@ import javax.inject.Inject
 class MainActivity : BaseDrawerActivity() {
 
     private lateinit var recordList: List<Record>
+    private var recordItems: List<RecordItem> = listOf()
     private lateinit var period: Period
     private lateinit var recordAdapter: RecordAdapter
 
@@ -47,6 +52,7 @@ class MainActivity : BaseDrawerActivity() {
     private lateinit var tvDefaultAccountTitle: TextView
     private lateinit var tvDefaultAccountSum: TextView
     private lateinit var tvCurrency: TextView
+    private lateinit var summaryPresenter: ShortSummaryPresenter
 
     override fun getContentViewId(): Int = R.layout.activity_main
 
@@ -70,10 +76,13 @@ class MainActivity : BaseDrawerActivity() {
         tvDefaultAccountSum = navigationView.getHeaderView(0).findViewById(R.id.tvDefaultAccountSum)
         tvCurrency = navigationView.getHeaderView(0).findViewById(R.id.tvCurrency)
 
-        recordAdapter = RecordAdapter(this, listOf(), true) { position ->
-            if (position == 0) showReport()
-            else editRecord(position)
-        }
+        recordAdapter = RecordAdapter(this, listOf(), true)
+        recordAdapter.itemClickListener = { position -> editRecord(getPositionWithoutSummary(position)) }
+
+        summaryPresenter = ShortSummaryPresenter(this)
+        val summaryViewHolder = summaryPresenter.create(true) { showReport() }.tag as RecyclerView.ViewHolder
+        recordAdapter.summaryViewHolder = summaryViewHolder
+
         recyclerView.adapter = recordAdapter
 
         spinner.setPeriodSelectedListener { period ->
@@ -88,11 +97,13 @@ class MainActivity : BaseDrawerActivity() {
         btnAddIncome.setOnClickListener { addIncome() }
     }
 
-    private fun editRecord(position: Int) {
-        CrashlyticsProxy.get().logButton("Edit Record")
+    private fun getPositionWithoutSummary(position: Int) = position - 1
 
-        // Minus one because of list view's header view
-        val record = recordList[position - 1]
+    private fun editRecord(position: Int) {
+
+        CrashlyticsProxy.get().logButton("Edit Record")
+        val record = recordList[getRecordPosition(position)]
+
         startAddRecordActivity(record, AddRecordActivity.Mode.MODE_EDIT, record.type)
     }
 
@@ -134,15 +145,28 @@ class MainActivity : BaseDrawerActivity() {
     override fun update() {
         recordList = recordController.getRecordsForPeriod(period)
         recordList = recordList.reversed()
+        recordItems = RecordItemsBuilder().getRecordItems(recordList)
 
         val currency = currencyController.readDefaultCurrency()
 
         val reportMaker = ReportMaker(rateController)
         val report = reportMaker.getRecordReport(currency, period, recordList)
 
-        recordAdapter.setRecords(recordList, report, currency, reportMaker.currencyNeeded(currency, recordList))
+        summaryPresenter.update(report, currency, reportMaker.currencyNeeded(currency, recordList))
+        recordAdapter.setRecords(recordItems)
 
         fillDefaultAccount()
+    }
+
+    private fun getRecordPosition(position: Int): Int {
+        var recordPosition = 0
+
+        for (indexOfItem in 0 until position) {
+            if (recordItems[indexOfItem] is RecordItem.Record) {
+                recordPosition++
+            }
+        }
+        return recordPosition
     }
 
     private fun showAppRateDialog() {

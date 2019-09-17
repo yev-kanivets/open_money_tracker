@@ -5,13 +5,16 @@ import android.view.View
 import com.blogspot.e_kanivets.moneytracker.R
 import com.blogspot.e_kanivets.moneytracker.activity.base.BaseFragment
 import com.blogspot.e_kanivets.moneytracker.adapter.RecordAdapter
+import com.blogspot.e_kanivets.moneytracker.controller.FormatController
 import com.blogspot.e_kanivets.moneytracker.controller.data.AccountController
 import com.blogspot.e_kanivets.moneytracker.controller.data.RecordController
 import com.blogspot.e_kanivets.moneytracker.controller.data.TransferController
+import com.blogspot.e_kanivets.moneytracker.entity.RecordItem
 import com.blogspot.e_kanivets.moneytracker.entity.data.Account
 import com.blogspot.e_kanivets.moneytracker.entity.data.Category
 import com.blogspot.e_kanivets.moneytracker.entity.data.Record
 import com.blogspot.e_kanivets.moneytracker.entity.data.Transfer
+import com.blogspot.e_kanivets.moneytracker.util.RecordItemsBuilder
 import kotlinx.android.synthetic.main.fragment_account_operations.*
 import javax.inject.Inject
 
@@ -23,6 +26,8 @@ class AccountOperationsFragment : BaseFragment() {
     internal lateinit var recordController: RecordController
     @Inject
     internal lateinit var transferController: TransferController
+    @Inject
+    internal lateinit var formatController: FormatController
 
     private lateinit var account: Account
 
@@ -34,17 +39,17 @@ class AccountOperationsFragment : BaseFragment() {
     }
 
     override fun initViews(view: View) {
-        recyclerView.adapter = RecordAdapter(requireContext(), getRecords(), false, null)
+        recyclerView.adapter = RecordAdapter(requireContext(), getRecordItems(), false)
     }
 
-    private fun getRecords(): List<Record> {
+    private fun getRecordItems(): List<RecordItem> {
         val accountRecords = recordController.getRecordsForAccount(account)
         val accountTransfers = transferController.getTransfersForAccount(account)
 
         accountRecords += obtainRecordsFromTransfers(accountTransfers)
         accountRecords.sortByDescending { it.time }
 
-        return accountRecords
+        return RecordItemsBuilder().getRecordItems(accountRecords)
     }
 
     private fun obtainRecordsFromTransfers(transfers: List<Transfer>): List<Record> {

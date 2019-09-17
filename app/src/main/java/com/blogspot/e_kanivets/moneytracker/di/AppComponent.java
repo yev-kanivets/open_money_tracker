@@ -17,7 +17,6 @@ import com.blogspot.e_kanivets.moneytracker.activity.record.AddRecordActivity;
 import com.blogspot.e_kanivets.moneytracker.activity.record.MainActivity;
 import com.blogspot.e_kanivets.moneytracker.adapter.AccountAdapter;
 import com.blogspot.e_kanivets.moneytracker.adapter.ExchangeRateAdapter;
-import com.blogspot.e_kanivets.moneytracker.adapter.ExpandableListReportAdapter;
 import com.blogspot.e_kanivets.moneytracker.adapter.MonthSummaryAdapter;
 import com.blogspot.e_kanivets.moneytracker.adapter.RecordAdapter;
 import com.blogspot.e_kanivets.moneytracker.di.module.repo.CachedRepoModule;
@@ -26,6 +25,7 @@ import com.blogspot.e_kanivets.moneytracker.ui.AppRateDialog;
 import com.blogspot.e_kanivets.moneytracker.ui.PeriodSpinner;
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.AccountsSummaryPresenter;
 import com.blogspot.e_kanivets.moneytracker.ui.presenter.ShortSummaryPresenter;
+import com.blogspot.e_kanivets.moneytracker.util.RecordItemsBuilder;
 
 import javax.inject.Singleton;
 
@@ -74,8 +74,6 @@ public interface AppComponent {
 
     void inject(AccountAdapter accountAdapter);
 
-    void inject(ExpandableListReportAdapter expandableListReportAdapter);
-
     void inject(ShortSummaryPresenter shortSummaryPresenter);
 
     void inject(ExchangeRateAdapter exchangeRateAdapter);
@@ -87,4 +85,8 @@ public interface AppComponent {
     void inject(EditAccountFragment editAccountFragment);
 
     void inject(AccountOperationsFragment accountRecordsFragment);
+
+    void inject(RecordItemsBuilder recordItemsBuilder);
+
+    void inject(ReportActivity.RecordReportConverter recordReportConverter);
 }

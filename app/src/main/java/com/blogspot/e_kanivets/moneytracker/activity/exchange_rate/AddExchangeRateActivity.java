@@ -44,7 +44,7 @@ public class AddExchangeRateActivity extends BaseBackActivity {
     @Nullable
     private ExchangeRatePair exchangeRatePair;
 
-    @BindView(R.id.content)
+    @BindView(R.id.contentView)
     View contentView;
     @BindView(R.id.spinner_from_currency)
     AppCompatSpinner spinnerFromCurrency;

@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/content"
+    android:id="@+id/contentView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -26,7 +26,7 @@
                 android:theme="@style/Text_Hint" />
 
             <TextView
-                android:id="@+id/tv_date"
+                android:id="@+id/tvDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -49,7 +49,7 @@
                 android:theme="@style/Text_Hint" />
 
             <TextView
-                android:id="@+id/tv_time"
+                android:id="@+id/tvTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -72,7 +72,7 @@
                 android:theme="@style/Text_Hint" />
 
             <android.support.v7.widget.AppCompatSpinner
-                android:id="@+id/spinner_account"
+                android:id="@+id/spinnerAccount"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spinner_height"
                 tools:listitem="@layout/view_spinner_item" />
@@ -87,7 +87,7 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/et_price"
+            android:id="@+id/etPrice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/price"
@@ -102,7 +102,7 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:id="@+id/et_title"
+            android:id="@+id/etTitle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="@string/title"
@@ -116,7 +116,7 @@
         android:layout_height="wrap_content">
 
         <AutoCompleteTextView
-            android:id="@+id/et_category"
+            android:id="@+id/etCategory"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:completionThreshold="1"

@@ -40,7 +40,7 @@
     <string name="to">至</string>
     <string name="title_exchange_rates">转换汇率</string>
     <string name="add_exchange_rate">添加汇率</string>
-    <string name="account_was_removed">账户已清空</string>
+    <string name="account_removed">账户已清空</string>
 
     <string name="short_summary">简要汇总</string>
     <string name="custom">个性化</string>
@@ -118,4 +118,7 @@
     <string name="graph">圖形</string>
     <string name="information">信息</string>
     <string name="operations">操作</string>
+
+    <string name="start_earlier_end">开始日期不能早于结束日期</string>
+
 </resources>

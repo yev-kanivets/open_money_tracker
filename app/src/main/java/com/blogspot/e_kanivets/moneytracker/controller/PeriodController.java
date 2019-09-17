@@ -43,7 +43,7 @@ public class PeriodController {
                     return allTimePeriod();
 
                 case Period.TYPE_CUSTOM:
-                    return weekPeriod();
+                    return customPeriod(first, last);
 
                 default:
                     return weekPeriod();
@@ -56,6 +56,16 @@ public class PeriodController {
         preferenceController.writeFirstTs(period.getFirst().getTime());
         preferenceController.writeLastTs(period.getLast().getTime());
         preferenceController.writePeriodType(period.getType());
+    }
+
+    public Period customPeriod(long firstTs, long lastTs) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(firstTs);
+        Date first = cal.getTime();
+        cal.setTimeInMillis(lastTs);
+        Date last = cal.getTime();
+
+        return new Period(first, last, Period.TYPE_CUSTOM);
     }
 
     public Period dayPeriod() {

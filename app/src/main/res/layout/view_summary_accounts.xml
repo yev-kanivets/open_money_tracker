@@ -27,7 +27,7 @@
             android:text="@string/currency" />
 
         <android.support.v7.widget.AppCompatSpinner
-            android:id="@+id/spinner_currency"
+            android:id="@+id/spinnerCurrency"
             android:layout_width="wrap_content"
             android:layout_height="25dp" />
 

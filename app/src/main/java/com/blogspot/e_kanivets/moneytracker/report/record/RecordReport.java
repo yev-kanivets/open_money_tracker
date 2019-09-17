@@ -190,20 +190,7 @@ public class RecordReport implements IRecordReport {
             amount += getAmount(record);
         }
 
-        SummaryRecord summaryRecord = new SummaryRecord(title, currency, amount);
-
-        for (Record record : recordList) {
-            summaryRecord.add(record);
-        }
-
-        Collections.sort(summaryRecord.getRecordList(), new Comparator<Record>() {
-            @Override
-            public int compare(Record lhs, Record rhs) {
-                return compareDoubles(getAmount(lhs), getAmount(rhs));
-            }
-        });
-
-        return summaryRecord;
+        return new SummaryRecord(title, currency, amount, recordList.size());
     }
 
     private double getAmount(Record record) {

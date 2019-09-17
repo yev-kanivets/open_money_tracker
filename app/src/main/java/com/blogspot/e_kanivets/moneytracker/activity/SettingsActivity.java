@@ -32,7 +32,7 @@ public class SettingsActivity extends BaseBackActivity {
         super.initViews();
 
         // Display the fragment as the main content.
-        getFragmentManager().beginTransaction().replace(R.id.content, new SettingsFragment()).commit();
+        getFragmentManager().beginTransaction().replace(R.id.contentView, new SettingsFragment()).commit();
     }
 
     public static class SettingsFragment extends PreferenceFragment {

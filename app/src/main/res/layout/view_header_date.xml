@@ -1,0 +1,19 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:gravity="center_vertical"
+    android:paddingStart="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/half_margin"
+    android:paddingEnd="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/half_margin">
+
+    <TextView
+        android:id="@+id/tvDate"
+        style="@style/Text_Heading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="7 June 2017" />
+</FrameLayout>
