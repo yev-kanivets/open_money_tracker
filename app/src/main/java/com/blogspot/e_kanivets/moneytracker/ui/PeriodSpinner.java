@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import com.blogspot.e_kanivets.moneytracker.MtApp;
 import com.blogspot.e_kanivets.moneytracker.R;
@@ -184,7 +185,11 @@ public class PeriodSpinner extends AppCompatSpinner {
                         cal.set(Calendar.SECOND, 59);
                         cal.set(Calendar.MILLISECOND, 999);
 
-                        updatePeriod(new Period(fromDate, cal.getTime(), Period.TYPE_CUSTOM));
+                        if (cal.getTime().getTime() < fromDate.getTime()) {
+                            Toast.makeText(context, R.string.start_earlier_end, Toast.LENGTH_SHORT).show();
+                        } else {
+                            updatePeriod(new Period(fromDate, cal.getTime(), Period.TYPE_CUSTOM));
+                        }
                     }
                 });
         dialog.show();

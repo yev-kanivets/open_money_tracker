@@ -129,4 +129,6 @@
     <string name="graph">Графік</string>
     <string name="information">Інформація</string>
     <string name="operations">Операції</string>
+
+    <string name="start_earlier_end">Дата початку не може бути раніше за дату кінця</string>
 </resources>
