@@ -81,6 +81,7 @@ public class PeriodSpinner extends AppCompatSpinner {
 
             case Period.TYPE_CUSTOM:
                 super.setSelection(5);
+                updatePeriod(period);
                 break;
         }
 
