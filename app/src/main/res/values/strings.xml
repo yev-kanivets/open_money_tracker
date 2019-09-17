@@ -145,5 +145,5 @@
     <string name="delete_backup_message">Are you sure about deleting this backup file %1$s? It can\'t be restored after.</string>
 
     <string name="title_summary_record" translatable="false">%1$s (%2$d)</string>
-    <string name="start_earlier_end">End date can\'t be earlier start date</string>
+    <string name="start_earlier_end">End date can\'t be earlier than start date</string>
 </resources>
