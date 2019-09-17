@@ -48,11 +48,14 @@ public class PeriodSpinner extends AppCompatSpinner {
         init(context);
     }
 
-    public void setPeriod(Period period) {
+    public void updatePeriod(Period period) {
         if (lastPeriod != null && lastPeriod.equals(period)) return;
         if (periodSelectedListener != null) periodSelectedListener.onPeriodSelected(period);
 
         lastPeriod = period;
+    }
+
+    public void setPeriod(Period period) {
 
         switch (period.getType()) {
             case Period.TYPE_DAY:
@@ -74,7 +77,12 @@ public class PeriodSpinner extends AppCompatSpinner {
             case Period.TYPE_ALL_TIME:
                 setSelection(4);
                 break;
+
+            case Period.TYPE_CUSTOM:
+                super.setSelection(5);
+                break;
         }
+
     }
 
     public void setPeriodSelectedListener(OnPeriodSelectedListener periodSelectedListener) {
@@ -107,23 +115,23 @@ public class PeriodSpinner extends AppCompatSpinner {
 
                 switch (position) {
                     case 0:
-                        setPeriod(periodController.dayPeriod());
+                        updatePeriod(periodController.dayPeriod());
                         break;
 
                     case 1:
-                        setPeriod(periodController.weekPeriod());
+                        updatePeriod(periodController.weekPeriod());
                         break;
 
                     case 2:
-                        setPeriod(periodController.monthPeriod());
+                        updatePeriod(periodController.monthPeriod());
                         break;
 
                     case 3:
-                        setPeriod(periodController.yearPeriod());
+                        updatePeriod(periodController.yearPeriod());
                         break;
 
                     case 4:
-                        setPeriod(periodController.allTimePeriod());
+                        updatePeriod(periodController.allTimePeriod());
                         break;
 
                     case 5:
@@ -176,7 +184,7 @@ public class PeriodSpinner extends AppCompatSpinner {
                         cal.set(Calendar.SECOND, 59);
                         cal.set(Calendar.MILLISECOND, 999);
 
-                        setPeriod(new Period(fromDate, cal.getTime(), Period.TYPE_CUSTOM));
+                        updatePeriod(new Period(fromDate, cal.getTime(), Period.TYPE_CUSTOM));
                     }
                 });
         dialog.show();
